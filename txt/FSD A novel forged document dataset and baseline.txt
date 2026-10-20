@@ -1,0 +1,1095 @@
+IEEE - 56998
+
+2023 14th International Conference on Computing Communication and Networking Technologies (ICCCNT) | 979-8-3503-3509-5/23/$31.00 ©2023 IEEE | DOI: 10.1109/ICCCNT56998.2023.10306408
+
+FSD: A novel forged document dataset and baseline
+Ankit Kumar Jaiswal
+School of Engineering,
+Jawaharlal Nehru University,
+New Delhi, India - 110067
+ankitjaiswal@jnu.ac.in
+
+Shiksha Singh
+Department of Electronics and
+Communication,
+JK Institute of Applied Physics and
+Techology Univeristy of Allahabad,
+Prayagraj, India
+shikshacse@allduniv.ac.in
+
+Abstract— Forgery detection in multimedia is an
+emerging research area in the field of digital content
+security. The current research focuses on finding several
+solutions to digital image forgery detection but a small
+number of works have been reported for scanned
+document forgery detection. The reason would be the
+unavailability of a forged scanned document (FSD)
+dataset. A scanned document can be manipulated in
+different ways: deleting a region, copy paste a region of
+the document either in the same document or in another
+document. Detection of these manipulations becomes
+arduous when a post-processing operation is performed
+on the manipulated region. To advance research in this
+field, we created a large dataset for the FSD. To generate
+such a dataset, we collected scanned documents from the
+FUNSD dataset (Publicly Available). The resolution of
+each sample of the dataset is of size 755x1000. The
+samples of the dataset are forged using different postprocessing operations. The dataset comprises 6656
+instances of manipulated scanned documents with their
+ground truth masks. To build the baseline for forged
+scanned document detection, we evaluated state-of-theart object segmentation algorithms on the FSD dataset.
+Experiments demonstrate that the FSD well represents
+forged scanned documents and is quite challenging.
+Keywords—Security, Digital Document, Authentication, Deep
+Learning
+
+I. INTRODUCTON
+Forgery detection in scanned documents refers to
+localizing the forged region in the digital document.
+Localization of the forged region in scanned documents is
+almost like localization of forged region in digital image and
+object segmentation of computer vision. However, the
+properties of the forged digital image are totally different than
+the properties of a forged scanned document. Thus, a dataset
+of forged digital images (natural scenes) can’t be used for the
+evaluation of forged scanned documents. A visual difference
+between a forged digital image and a forged scanned
+document is shown in Fig. 1. The digital image has foreground
+objects and a background. They are of different colors, shapes,
+and different edges of the objects, etc. However, in scanned
+documents, there are texts which are of very small edges and
+with dense information. So, they both are very different in
+nature with their properties and features. Also, a method to
+detect forged regions in a digital image or detection of an
+object in an image can’t be directly applied to detect forged
+regions in a scanned document. The reason is obvious and
+understood by an example: a little child who doesn’t know,
+how an apple or pear looks like. What is the color and shape
+of an apple or pear? Then he/she can’t differentiate between
+an apple and a pear.
+
+Santosh Kumar Tripathy
+School of Computing Science and
+Engineering, VIT Bhopal University,
+Bhopal-Indore Highway, Kothrikalan,
+Sehore Madhya Pradesh, India 466114
+santoshkumar.tripathy@vitbhopal.ac.in
+
+(a)
+
+(b)
+
+Fig. 1. Difference between (a) forged digital image and (b) forged
+scanned documents
+
+A limited number of solutions have been reported on
+document forgery detection [1]–[5]. Most of these solutions
+are statistical or conventional machine learning-based
+methods and validated on a very small number of samples.
+The cause is the lack of availability of large-scale datasets. In
+addition, the current research in any field focuses on deep
+learning techniques which require datasets of large scale. The
+verification of learning models trained on a small-scale dataset
+will lead to overfitting. Thus, we can summaries the following
+challenges,
+• Most of the techniques are based on the assumption
+that tampered regions have some distortion (i.e., noise
+or blur). However, if a forger is using a high-quality
+scanned document and copies a region without any
+post-processing operation, there is a possibility that
+tampering processes don’t introduce any distortion.
+• Techniques are not trained on the accurate dataset. For
+example, MIDV-500 [6] dataset is for identity
+documents that are not scanned document datasets.
+• Existing works are not trained or validated on forged
+scanned document datasets. This results in many false
+positives.
+Except for the aforementioned problems, detection
+methodologies have challenges like post-processing
+operations on copy-move or spliced forged regions. Internal
+properties and features of scanned document images are
+different from features of natural images captured using
+digital cameras. Therefore, it stands to reason that forged
+region detectors learned from natural images or identity
+documents are not suitable for scanned document images.
+To overcome the above challenges in forged document
+detection and for wide and in-depth research we generate a
+large dataset dedicated to forged documents only. We collect
+some original scanned documents from FUNSD [7] dataset
+and use Adobe Photoshop [8] to generate a forged document
+with their annotated ground truth mask. The original scanned
+documents are printed documents on an A4 sheet which are
+scanned through the scanner and collected as FUNSD dataset.
+
+14th ICCCNT IEEE Conference
+July 6-8, 2023
+IIT - Delhi, Delhi
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:01:27 UTC from IEEE Xplore. Restrictions apply.
+
+IEEE - 56998
+
+We observe that forgery is possible in multiple ways on
+scanned documents too. Based on this observation, we tamper
+scanned documents in the following ways• Copy-Move Forgery- In this type of document forgery,
+a region of a document is copied and pasted into the
+same document intentionally to hide any information
+about the document or to misguide someone with false
+information.
+• Splicing of document content: The content of one
+document is copied and pasted to another document.
+• Resampling of information: Information is resized in
+the form of either downscaled or upscaled.
+
+II. MOTIVATIONS
+The importance of datasets can’t be overstated in the case
+of data-driven techniques [9]–[14]. It is the task of a deep
+learning or machine learning model to learn features from a
+large variety of instances of a dataset. When it comes to the
+object segmentation task of computer vision area there are
+many datasets available in the public domain. These large
+datasets like [15], [16], and [12], [13] are being actively
+supported in the research community. If we talk about the
+datasets of forged images, then datasets like CoMoFoD [17],
+CASIA [18], IEEE-IFS [19], and CUD [20] are very
+remarkable datasets, which are being used in abundance in the
+research community.
+There is a scope for improvement in the research of
+detection and localization of forged documents which is
+affected due to the unavailability of a dataset. According to
+the forensic experts group [21], alteration to the pages or
+content of the document includes an example of tampering
+with the document. Since documents are highly used for
+verification and authorization, the increased use of tampering
+in such contents questions the integrity of such content.
+Hence, the detection of the altered region in the scanned
+document is a need of the world. Therefore, the unavailability
+of a scanned document dataset and detection benchmark being
+close to real-world application motivated us to work in this
+research direction.
+
+(a)
+
+(b)
+
+Fig. 2. Example of (a) Authenticated and (b) Forged Documents
+
+Along with these forgeries, four different preprocessing/post-processing operations and three different
+geometric transformations have been carried out over the
+forged documents. An example of forged and original
+documents is shown in Fig. 2. Details of operations
+implemented over the forged region using Adobe Photoshop
+are given in the third section of this paper. The dataset contains
+6656 images including all forged documents and their ground
+truth masks. The main contributions of this work are• To the best of our knowledge, there is no large dataset
+available for forged document detection. The
+generated dataset is having a wide variety of forged
+documents including multiple types of forgeries, preprocessing and post-processing operations on forged
+regions. That can be used to train and validate forged
+document detection models.
+• We also benchmark state-of-the-art object
+segmentation deep learning models on a generated
+dataset, which can be used as a baseline for future
+algorithm development.
+Additionally, the generated dataset can be used to develop
+an algorithm to secure scanned documents by utilizing the
+properties of different categories of forged documents.
+The second section of the manuscript discusses
+motivations and related works. The third section gives a
+detailed discussion about the annotated dataset and how it is
+generated. The fourth section defines experimental work and
+a baseline on the proposed dataset. The work is concluded in
+the fifth section with future research direction.
+
+A good benchmark dataset should have the following five
+characteristics:1) A large number of instances to train and
+validate a detection model. 2) Proper annotation of the forged
+region in the ground truth mask. 3) Different categories of
+forgery. 4) Each category (type of forgery) should have
+enough instances and 5) Instances should have pre-processing
+and post-processing operations on the forged region that make
+it approach real-world application.
+A dedicated dataset for identity documents is developed
+by Arlazarov et al. in 2019 [6] called MIDV-500. It is having
+500 video clips for 50 different identity document types with
+ground truth. Similarly, Sidere Et al. generate a dataset in
+2017. This was again for only identity documents. A method
+for text line forgery is developed by Van Beusekom J et al.
+[22]. This methodology was evaluated on five different types
+of datasets which is generated from different printers and at
+different depths. Although, these datasets are not available in
+the public domain which lags the research in this domain. In
+2021, a new dataset is developed by Mahfoudi et al. by
+introducing copy-move forgery in payslip documents.
+TABLE I gives a comparison of an already reported dataset
+and generated dataset in the field of forged document
+detection. Here abbreviations are• PA: Publically Available (Y: Yes, N: No)
+• Inst.: Number of Instances
+• Res.: Resolution
+• DT: Document Types (ID: Identity Documents, PSD:
+Printed Scanned Documents, HSD: Handwritten
+Scanned Document)
+• FT: Forgery Type (TA: Text Addition, CP: CopyPaste, SP: Splicing, R: Resampling)
+• LT: Level of Tampering (W: Word Level, R: Region
+Level)
+
+14th ICCCNT IEEE Conference
+July 6-8, 2023
+IIT - Delhi, Delhi
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:01:27 UTC from IEEE Xplore. Restrictions apply.
+
+IEEE - 56998
+TABLE I.
+
+COMPARISON OF FSD (PROPOSED) AND ANOTHER
+RELATED DOCUMENT DATASET
+
+Dataset
+MIDV-500
+[6]
+
+PA
+
+Inst.
+
+Y
+
+500
+
+TP300 [22]
+
+N
+
+43
+
+PPC300
+[22]
+
+N
+
+49
+
+TPLJ [22]
+
+N
+
+64
+
+TPCLJ [22]
+
+N
+
+50
+
+DTL [22]
+
+N
+
+196
+
+CIMD [23]
+
+Y
+
+1197
+
+SPD [24]
+
+Y
+
+477
+
+HDD [25]
+
+Y
+
+500
+
+ACPR [26]
+FCD [27]
+FSD
+(Proposed)
+
+N
+N
+
+200
+600
+
+Y
+
+6656
+
+Resolution
+1080 ×
+1920 px
+2480 ×
+3507 px
+2480 ×
+3507 px
+2480 ×
+3507 px
+2480 ×
+3507 px
+2480 ×
+3507 px
+1342 ×
+943 px
+2480 ×
+3507 px
+2480 ×
+3507 px
+𝟕𝟕𝟕 ×
+𝟏𝟎𝟎𝟎 px
+
+validate the model with non-tampered documents also. The
+directory tree structure is shown in Fig. 3 for the dataset which
+explains the number of documents and ground truth and
+location of documents in the dataset with their directory
+names.
+
+TD
+
+FT
+
+LT
+
+ID
+
+-
+
+-
+
+PSD
+
+TA
+
+W
+
+PSD
+
+CP, S
+
+W
+
+PSD
+
+CP, S
+
+W
+
+PSD
+
+CP, S
+
+W
+
+PSD
+
+CP, S
+
+W
+
+PSD
+
+CP
+
+R
+
+\img
+
+ID
+
+CP, S
+
+R
+
+\gt
+
+HSD
+
+CP, S
+
+R
+
+HSD
+PSD
+
+CP
+CP, S
+CP,
+S, R
+
+R
+W
+R,
+W
+
+\FD3
+\Auth
+\img
+
+\Train
+
+Most of the datasets have a smaller number of instances.
+These datasets have limitations- number of instances, type of
+forgery, or unavailability in the public domain. The published
+datasets are in the form of handwritten or identity documents
+and these datasets scanned can’t be used for the printed
+scanned document as they give a piece of wrong information
+related to the forged region or forged document. Keeping all
+these limitations and challenges, we decided to develop a
+dataset that should have a large number of instances with
+different types of forgery.
+III. ANNOTATION OF FSD DATASET
+A. Image Collection
+Deep learning models mimic human brains and almost
+depend on training. So, the overall dependency of deep
+learning models is either on the dataset or the architecture. A
+dataset of forged document data is very important to train the
+model and to the best of our knowledge, none of the forged
+digital document datasets exists online in the public domain
+(from where a model can learn). Hence, a dataset having a
+different type of forgeries is constructed. The FSD dataset1
+can be accessed after taking permission from the authors.
+Some pre-processing operations and geometrical
+transformations have been applied to the forged region in
+documents which effectuate the multitudinous of this dataset.
+This dataset is generated from the existing FUNSD dataset,
+which is dedicated to text detection, optical character
+recognition (OCR), spatial layer analysis, and form
+understanding. This dataset contains 149 documents for
+training and 50 document images for testing purposes. From
+these documents, we have fabricated 3284 forged documents
+and picked out 144 original documents as it is for the nontampered document. All presented documents and ground
+truth in the constructed dataset are in png format. Dedicated
+directories are created for the training and testing of the model.
+One more directory is created for authenticated documents
+that are not tampered with in any way and can be used to
+
+144 Authentic Documents
+144 Ground Truth
+
+\img
+\Test
+
+PSD
+
+\gt
+
+\gt
+
+2866 Forged Documents
+2866 Ground Truth
+
+318 Forged Documents
+318 Ground Truth
+
+Fig. 3. Tree structure of directory and content of the constructed dataset
+
+B. Category of Forgery
+Three types of basic forgeries have been constituted to
+construct a dataset: (i) Copy-Move Forgery- In this type of
+document forgery, a region of document is copied and pasted
+in the same document intentionally to hide any information of
+document or to misguide someone with false information. (ii)
+Splicing of document content: The content of one document
+is copied and pasted to another document. (iii) Resampling of
+information: Information is resized in the form of either
+downscaled or upscaled. Along with these forgeries, four
+different pre-processing/post-processing operations and three
+different geometric transformations have been carried out
+over the forged documents. Details of operations implemented
+over the forged region using Adobe Photoshop are as follows
+(measure for post-processing/pre-processing operations are
+used of Adobe Photoshop Application):
+• First is a simple forgery in which a region is copied from
+one document and pasted to the same document itself
+(copy-move) or another document (splicing) without any
+pre-processing or post-processing operations.
+• The second is brightness enhancement of the forged region
+of the document up to 100 points on the scale.
+• The third post-processing operation is contrasted
+stretching up to 100 points on the scale. This operation is
+implemented in a forged region like brightness
+enhancement.
+• The blurring of the forged region is the fourth operation
+that is brought out up to two neighboring pixels.
+• In the fifth operation, white Gaussian noise is added up to
+20% to the forged region of the document.
+• Except for these image processing operations, three
+geometrical transformations are carried over the forged
+region. Among these three operations, the first
+transformation is translation.
+
+1
+
+https://drive.google.com/file/d/1mCFH41b-v4OXeYAVFB2MppSQKaBHtLH/view?usp=sharing
+
+14th ICCCNT IEEE Conference
+July 6-8, 2023
+IIT - Delhi, Delhi
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:01:27 UTC from IEEE Xplore. Restrictions apply.
+
+IEEE - 56998
+
+• The second geometric transformation is the scaling of the
+forged region. This operation accomplishes the definition
+of the third type of forgery which is the resampling of
+information.
+• The last operation is the rotation of the forged region
+which is rotated up to 10° in the forged document.
+TABLE II.
+S.
+No.
+1
+2
+3
+4
+
+Copy
+-Paste
+
+1000 × 755
+to 1000 ×
+777
+
+5
+6
+7
+8
+9
+10
+11
+12
+
+Splici
+ng
+
+1000 ×
+755 to
+1000 × 777
+
+13
+14
+15
+16
+17
+
+Nontampe
+red
+
+1000 ×
+755 to
+1000 × 777
+
+Operations
+
+No.
+
+No.
+
+For the evaluation of the object segmentation models, the
+performance measure accuracy and validation accuracy scores
+are used here. Accuracy with loss value for the training,
+validation as well as testing of the standard models are used.
+Accuracy score can be calculated by the following formula
+when positive and negative pixels are known:
+
+DETAILS OF CONSTRUCTED DATASET
+
+Resolution
+(h x w)
+
+FT
+
+Python libraries that are used here are- Keras, os, numpy and
+OpenCV.
+
+Total
+
+Simple
+Brightness
+Enhancement
+Contrast
+Stretching
+Noise
+Addition
+Blurring
+Translation
+Rotation
+Scaling
+Simple
+Brightness
+Enhancement
+Contrast
+Stretching
+Noise
+Addition
+Blurring
+Translation
+Rotation
+Scaling
+
+199
+
+199
+
+398
+
+199
+
+199
+
+398
+
+199
+
+199
+
+398
+
+199
+
+199
+
+398
+
+199
+199
+199
+199
+199
+
+199
+199
+199
+199
+199
+
+398
+398
+398
+398
+398
+
+199
+
+199
+
+398
+
+199
+
+199
+
+398
+
+199
+
+199
+
+398
+
+199
+199
+199
+199
+
+199
+199
+199
+199
+
+398
+398
+398
+398
+
+Simple
+
+144
+
+144
+
+288
+
+Grand Total:
+
+3328
+
+3328
+
+6656
+
+TABLE II gives the overall detail of the dataset with the
+number of images in the dataset. Fig. 4 shows a visual
+demonstration of a forged document having all operations
+over the forged region and their ground truth masks.
+C. Dataset Splits
+It is important to distribute the dataset into training,
+validation, and test set. To ensure the training, validation, and
+test result, we distribute the dataset into two parts- one is the
+training set, and another is the test set. The training set can be
+further divided into training and validation sets based on the
+algorithm’s criteria. So, it is a researcher who is responsible
+for the further division of training sets into training and
+validation sets. We are providing the dataset in the public
+domain. We evaluate the dataset on a high computing server
+and set a benchmark on predefined object segmentation
+models.
+IV. EVALUATIONS AND BASELINE
+For the evaluation of the proposed dataset and to set a
+baseline, we take different object segmentation and deep
+learning models. On these standard deep learning
+segmentation models, we train our proposed dataset and find
+the training and validation evaluation results. For the
+evaluation and benchmark, a high-performance computing
+server is used. A continuous job pool is given to this server
+where the training of the model is done one by one. We take
+four different standard object segmentation models. These
+models are Unet [28], Unet++ [29] and Unet-attention [30].
+
+𝑎=
+
+23425
+
+(1)
+
+23425463465
+
+Except this during testing of the model on separate data IoU
+score is also calculated:
+23
+
+(2)
+
+𝐼𝑜𝑈 = 23463465
+
+Training results and training loss on different standard
+models are shown in the TABLE III.
+TABLE III.
+
+ACCURACY SCORE AND LOSS VALUES DURING
+TRAINING OF DIFFERENT STANDARD MODELS
+
+Model
+
+Accuracy
+
+Loss
+
+Train
+
+Validation
+
+Train
+
+Validation
+
+Unet
+
+0.9847
+
+0.9784
+
+0.0493
+
+0.0931
+
+Unet++
+
+0.9928
+
+0.9919
+
+0.0171
+
+0.0204
+
+Unet-Att
+
+0.9933
+
+0.9927
+
+0.0143
+
+0.0189
+
+Now for the baseline and evaluation of the trained model,
+we use a test dataset on trained models. The test dataset is
+separated from the training data and is neither used as train
+data nor as validation data. Now coming to the baseline, the
+performance of the trained models on test data is shown in
+TABLE IV. We use Unet, Unet++ and Unet-attention trained
+models to validate them on the test set as they give better
+training IoU scores rather than others.
+TABLE IV.
+
+IOU SCORE OF TEST SET ON DIFFERENT TYPE OF FORGERY
+OF DIFFERENT TRAINED MODELS
+
+Model
+
+Type of
+Forgery
+
+Accuracy
+
+IoU Score
+
+Copy-Move
+
+0.9606
+
+0.4702
+
+Splicing
+
+0.9617
+
+0.4522
+
+Copy-Move
+
+0.9708
+
+0.5455
+
+Splicing
+
+0.9693
+
+0.5275
+
+Copy-Move
+
+0.9709
+
+0.5522
+
+Splicing
+
+0.9714
+
+0.5509
+
+Unet
+
+Unet++
+
+Unetattention
+
+The higher the IoU score, the better the generalisation
+capability of any segmentation model. Although the basic
+models Unet [28], Unet++ [29], and Unet-attention [30]
+achieved improved accuracy, they lacked the ability to
+segment the faked areas more effectively. By looking at the
+IoU ratings of these models, this is clear. Due to the complex
+characteristics of scanned documents, you may thus get better
+training accuracy, but you may not achieve superior
+segmentation results on the validation test sets.
+
+14th ICCCNT IEEE Conference
+July 6-8, 2023
+IIT - Delhi, Delhi
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:01:27 UTC from IEEE Xplore. Restrictions apply.
+
+IEEE - 56998
+
+(a)
+
+(b)
+
+(c)
+
+(d)
+
+(e)
+
+(f)
+
+(g)
+
+(h)
+
+Fig. 4. Operation-wise forged documents and their ground truth mask (a) Simple (b) Brightness Enhancement (c )Contrast Stretching (d) Noise Addition
+(e) Blurring (f) Translation (g) Rotation (h) Scaling
+
+V. CONCLUSION AND FUTURE WORK
+The current research on digital content security focused on
+detecting forged images, whereas very limited works have
+been reported in the literature for forged document detection.
+Such works evaluated their model’s performance on a very
+small scale of forged document datasets. But the model can
+overfit if they are trained on a small dataset. Thus, to address
+such issues, this paper proposed to develop a largescale
+dataset for a forged document which will be available with the
+
+link given in the footnote on request. Several challenges are
+also included in the dataset. These are in the form of postprocessing operations on the forged region such as noise
+addition, rotation, scaling, brightness change and contrast
+adjustment. The proposed dataset contains a total sample of
+6656, out of which 60%, 20% and 20% of the dataset are
+considered for training, validation and testing respectively.
+Some of the state-of-the-art approaches have been coded and
+evaluated on the proposed dataset to find out the criticality of
+the proposed model. The highest accuracy on the proposed
+
+14th ICCCNT IEEE Conference
+July 6-8, 2023
+IIT - Delhi, Delhi
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:01:27 UTC from IEEE Xplore. Restrictions apply.
+
+IEEE - 56998
+
+dataset is obtained by the Unet-Attention whose IoU is 0.55.
+However, there is ample scope to develop more sophisticated
+models on the proposed dataset. Future work not only will
+focus on increasing the sample sizes further but also focus on
+proposing a new deep architecture to increase the performance
+of forged document detection. State-of-the-art-techniques are
+there for the natural images [31-34]. These techniques can also
+be used and compared with the baseline methods.
+DATA AVAILABILITY STATEMENT
+The dataset that supports the findings of this study is
+available on request from the given link on the footnote of the
+second page of the manuscript.
+REFERENCE
+[1]
+
+S. Shang, N. Memon, and X. Kong, “Detecting documents forged by
+printing and copying,” EURASIP J Adv Signal Process, vol. 2014, no.
+1, pp. 1–13, Sep. 2014, doi: 10.1186/1687-6180-2014-140.
+[2] M. Sirajudeen and R. Anitha, “Forgery document detection in
+information management system using cognitive techniques,” Journal
+of Intelligent and Fuzzy Systems, vol. 39, no. 6, pp. 8057–8068, 2020,
+doi: 10.3233/JIFS-189128.
+[3] S.-J. Ryu, H.-Y. Lee, I.-W. Cho, and H.-K. Lee, “Document Forgery
+Detection with SVM Classifier and Image Quality Measures,” 2008.
+[4] A. G. H. Ahmed and F. Shafait, “Forgery detection based on intrinsic
+document contents,” in Proceedings - 11th IAPR International
+Workshop on Document Analysis Systems, DAS 2014, 2014, pp. 252–
+256. doi: 10.1109/DAS.2014.26.
+[5] F. Cruz, N. Sidere, M. Coustaty, V. P. D’Andecy, and J. M. Ogier,
+“Local Binary Patterns for Document Forgery Detection,” in
+Proceedings of the International Conference on Document Analysis
+and Recognition, ICDAR, Jan. 2018, vol. 1, pp. 1223–1228. doi:
+10.1109/ICDAR.2017.202.
+[6] V. V. Arlazarov, K. B. Bulatov, T. S. Chernov, and V. L. Arlazarov,
+“MIDV-500: A dataset for identity document analysis and recognition
+on mobile devices in video stream,” Computer Optics, vol. 43, no. 5,
+pp. 818–824, Sep. 2019, doi: 10.18287/2412-6179-2019-43-5-818824.
+[7] G. Jaume, H. K. Ekenel, and J.-P. Thiran, “Funsd: A dataset for form
+understanding in noisy scanned documents,” in 2019 International
+Conference on Document Analysis and Recognition Workshops
+(ICDARW), 2019, vol. 2, pp. 1–6.
+[8] “Adobe
+Photoshop
+Express,”
+https://www.adobe.com/in/products/photoshop-express.html, Jan. 26,
+20022.
+[9] B. Yao, X. Yang, and S.-C. Zhu, “Introduction to a Large-Scale
+General Purpose Ground Truth Database: Methodology, Annotation
+Tool and Benchmarks.” [Online]. Available: http://www.lotushill.org
+[10] S. Yang, P. Luo, C. C. Loy, and X. Tang, “WIDER FACE: A Face
+Detection
+Benchmark.”
+[Online].
+Available:
+http://mmlab.ie.cuhk.edu.hk/projects/
+[11] B. Zhou, H. Zhao, X. Puig, S. Fidler, A. Barriuso, and A. Torralba,
+“Scene Parsing through ADE20K Dataset.” [Online]. Available:
+http://groups.csail.mit.edu/vision/datasets/ADE20K/
+[12] T.-Y. Lin et al., “Microsoft COCO: Common Objects in Context,”
+2014.
+[13] G.-S. Xia et al., “DOTA: A Large-scale Dataset for Object Detection
+in Aerial Images *.” [Online]. Available: https://captainwhu.github.io/DOTA.
+[14] A. K. Jaiswal and R. Srivastava, “Detection of Copy-Move Forgery in
+Digital Image Using Multi-scale, Multi-stage Deep Learning Model,”
+Neural Process Lett, vol. 54, no. 1, pp. 75–100, Feb. 2022, doi:
+10.1007/s11063-021-10620-9.
+[15] Y. Li, X. Hou, C. Koch, J. M. Rehg, and A. L. Yuille, “The secrets of
+salient object segmentation,” in Proceedings of the IEEE conference on
+computer vision and pattern recognition, 2014, pp. 280–287.
+[16] F. Perazzi, A. Khoreva, R. Benenson, B. Schiele, and A. SorkineHornung, “Learning video object segmentation from static images,” in
+Proceedings of the IEEE conference on computer vision and pattern
+recognition, 2017, pp. 2663–2672.
+
+[17] D. Tralic, I. Zupancic, S. Grgic, and M. Grgic, “CoMoFoD-New
+Database for Copy-Move Forgery Detection.” [Online]. Available:
+http://www.vcl.fer.hr/comofod.
+[18] J. Dong and W. Wang, “CASIA v1.0 and CASIA v2.0 Image Splicing
+Dataset,” National Laboratory of Pattern Recognition, Institute of
+Automation, Chinese Academy of Science, Corel Image Database.
+[19] T. IFS, “IEEE IFS-TC Image Forensics Challenge Database,” IEEE
+Signal Processing.
+[20] T.-T. Ng, J. Hsu, and S.-F. Chang, “Columbia Image Splicing
+Detection Evaluation Dataset,” DVMM Laboratory of Columbia
+University, CalPhotos Digital Library.
+[21] F. Experts, “Tampering and Forgery of Documents.”
+http://www.forensicexperts.com.sg/tampering-forgery-documents
+(accessed May 06, 2020).
+[22] J. van Beusekom, F. Shafait, and T. M. Breuel, “Text-line examination
+for document forgery detection,” International Journal on Document
+Analysis and Recognition, vol. 16, no. 2, pp. 189–207, Jun. 2013, doi:
+10.1007/s10032-011-0181-5.
+[23] G. Mahfoudi, F. Morain-Nicolier, F. Retraint, and M. Pic, “CMID: A
+NEW DATASET FOR COPY-MOVE FORGERIES ON ID
+DOCUMENTS,” in Proceedings - International Conference on Image
+Processing, ICIP, 2021, vol. 2021-September, pp. 3028–3032. doi:
+10.1109/ICIP42928.2021.9506723.
+[24] N. Sidere, F. Cruz, Coustaty, and J.-M. Ogier, “A Dataset for Forgery
+Detection and Spotting in Document Images,” in Seventh International
+Conference on Emerging Security Technologies (EST), 2017.
+[25] F. Kleber, S. Fiel, M. Diem, and R. Sablatnig, “Cvl-database: An offline database for writer retrieval, writer identification and word
+spotting,” in 2013 12th international conference on document analysis
+and recognition, 2013, pp. 560–564.
+[26] S. Kundu, P. Shivakumara, A. Grouver, U. Pal, T. Lu, and M.
+Blumenstein, “A new forged handwriting detection method based on
+Fourier spectral density and variation,” in Asian Conference on Pattern
+Recognition, 2020, pp. 136–150.
+[27] C. Artaud, N. Sidère, A. Doucet, J.-M. Ogier, and V. P. D. Yooz, “Find
+it! fraud detection contest report,” in 2018 24th International
+Conference on Pattern Recognition (ICPR), 2018, pp. 13–18.
+[28] O. Ronneberger, P. Fischer, and T. Brox, “U-net: Convolutional
+networks
+for
+biomedical
+image
+segmentation,”
+arXiv
+preprint:1505.04597v1, vol. 9351, pp. 234–241, 2015, doi:
+10.1007/978-3-319-24574-4_28.
+[29] Zhou, Zongwei, et al. "Unet++: Redesigning skip connections to
+exploit multiscale features in image segmentation." IEEE transactions
+on medical imaging 39.6 (2019): 1856-1867.
+[30] Jin, Qiangguo, et al. "RA-UNet: A hybrid deep attention-aware
+network to extract liver and tumor in CT scans." Frontiers in
+Bioengineering and Biotechnology 8 (2020): 1471.
+[31] Jaiswal, Ankit Kumar, and Rajeev Srivastava. "Fake region
+identification in an image using deep learning segmentation model."
+Multimedia Tools and Applications (2023): 1-21.
+[32] Jaiswal, Ankit Kumar, and Rajeev Srivastava. "Forensic image analysis
+using inconsistent noise pattern." Pattern Analysis and Applications 24
+(2021): 655-667.
+[33] Jaiswal, Ankit Kumar, and Rajeev Srivastava. "Time-efficient spliced
+image analysis using higher-order statistics." Machine Vision and
+Applications 31.7-8 (2020): 56.
+[34] Jaiswal, Ankit Kumar, et al. "Some Methods for Digital Image Forgery
+Detection and Localization." Proceedings of Data Analytics and
+Management: ICDAM 2022. Singapore: Springer Nature Singapore,
+2023. 119-127.
+
+14th ICCCNT IEEE Conference
+July 6-8, 2023
+IIT - Delhi, Delhi
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:01:27 UTC from IEEE Xplore. Restrictions apply.
+
+

@@ -1,0 +1,479 @@
+2026 1st International Conference on Artificial Intelligence & Machine Learning in Communication and Power Systems (AIMLCPS) | 979-8-3315-5920-5/26/$31.00 ©2026 IEEE | DOI: 10.1109/AIMLCPS68702.2026.11542440
+
+ML and CNN-Based Signature Verification System
+Subhakanta Panda
+Department of Computer Science and
+Engineering
+Centurion University of Technology
+and Management,
+Odisha, India
+subhakanta.panda@cutm.ac.in
+
+Pritam Kumar Nayak
+Department of Computer Science and
+Engineering
+Centurion University of Technology
+and Management
+Odisha, India
+pritam.nayak@cutm.ac.in
+
+Abstract—The handwritten signatures remain one of the key
+methods of authentication used in banking, legal documents and
+identity verification and therefore the reliability is essential.
+Paper-based verification can easily be subject to errors,
+subjectivity and time-consuming processes. These shortcomings
+are mitigated through ML- and CNN-based methods, which
+allow automated, objective, and highly accurate verification.
+The chapter starts with an introduction to the issues of signature
+verification such as intra-class differences (a natural variability
+in the signature of a person) and inter-class ones (skilled
+forgeries). ML techniques are presented as the tools on the
+principles of feature extraction, classification, and decisionmaking. Classical ML algorithms, including Support Vector
+Machines, k-Nearest neighbors, and Random Forests are
+mentioned in terms of their capability to process extracted
+geometric, statistical, and texture-based signatures features.
+One of the key areas that the chapter has concentrated on is the
+use of CNNs whereby manual feature engineering is not
+necessary as the feature learns discriminative spatial features
+directly using raw signature images. Architectures, training
+conditions, data augmentation and loss functions of CNNs are
+emphasized when it comes to verification tasks. The
+combination of ML classifiers and CNN-based feature vectors is
+also discussed, which helps to improve the accuracy of its
+verification.
+Keywords— Signature Checking, Convolutional Neural
+Network (CNN), Biometric Authentication, Forgery Detection,
+Deep Learning, Pattern Recognition.
+
+I.
+
+INTRODUCTION
+
+In a world that has been growing more digital, secure and
+reliable identity verification is now imperative in areas like
+banking, government services, corporate transactions and
+education. Signature verification is one of the most accepted
+and non-invasive and user-friendly biometric authentication
+methods among the many others. A handwritten signature is a
+personal characteristic and at the same time a legally
+admissible evidence of identity and intent. Nevertheless,
+manual or rule-based verification systems are often deficient
+in subjective interpretation, consistency and susceptible to
+forgery by experts. These have brought a great necessity of the
+automated and smart systems that can efficiently differentiate
+authentic signatures and falsified ones. As a result of the deep
+learning breakthrough, Convolutional Neural Networks
+(CNNs) have become a well-performing method of offline
+signature verification- in which a static image of a signature is
+being analyzed. The CNNs automatically acquire meaningful
+spatial patterns like strokes, curves, pressure variations and
+texture directly out of signature images, without any
+handcrafted feature extractor. Their hierarchical learning form
+allows them to learn low-level features (edges and contours)
+and high-level features (writing style and structural
+characteristics) making it suitable to deal with variations in
+authentic signatures and similarities in skilful forgeries. The
+Signature Verification System built on CNN usually involves
+data collection, pre-processing, learning features, model
+
+Ribhu Abhusan Panda
+Department of Electronics and
+Communication Engineering
+Centurion University of Technology
+and Management
+Odisha, India
+ribhuabhusan.panda@cutm.ac.in
+
+training, and classification. Features are further enhanced by
+noise filtering, grayscale conversion, normalization and edge
+boost which are some of the pre-processing steps that enhance
+clarity of the features. There are publicly available signature
+databases such as CEDAR, GPDS, and MCYT with various
+samples which enhance generalizability of the model. CNNbased verification systems are much better than conventional
+machine learning models (Support Vector Machines (SVMs)
+and Hidden Markov Models (HMMs) by using learned
+representations. They are better in terms of accuracy,
+robustness, and scalability and can be recommended as a
+potential solution to secure authentication and fraud detection.
+Finally, CNN-based signature verification increases trust and
+decreases human error and promotes safe digital
+transformation.
+II.
+
+PROBLEM STATEMENT
+
+Fingerprint authorization should be verified by signatures,
+and it is commonly applied in the fields of finance, law, and
+security. Some conventional signature verifying techniques
+are based on manually developed feature extraction or
+analysis techniques and are frequently time-consuming,
+unreliable, and subject to human error. Moreover, aging,
+health, or writing tools that cause changes in handwriting can
+render the process of determining whether certain signatures
+are authentic or skilful forgery difficult. Thus, there should be
+a reliable, automatic and accurate verification of signing
+mechanism to avoid fraud and unauthorized access.
+The most important aspect is to differentiate between real
+signatures and elaborate fakes like well-made imitations that
+can be quite similar to the original. Conventional machine
+learning often possesses problems of poor inter-class variables
+(similarities between a forged and authentic signature) and big
+intra-class variations (variance among signatures of a specific
+person). Such are the challenges then a more sophisticated
+method is required that would be able to automatically repose
+the complex structure and features of the signatures and does
+not require any human input.
+III.
+
+OBJECTIVES
+
+• To create a dependable CNN-based signature
+verification system, which can be used in the
+differentiation between a real and a fake signature.
+• To perform feature extraction with deep learning to
+automate the extraction and produce more accurate
+authentication.
+• To increase the accuracy and reliability by minimizing
+false acceptance and rejection with optimized CNN
+models.
+• To aid real time verification with effective feature
+extraction and processing methods.
+
+979-8-3315-5920-5/26/$31.00 ©2026 IEEE
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:59:09 UTC from IEEE Xplore. Restrictions apply.
+
+•
+
+To manage natural differences in handwriting by
+allowing the model to learn many signature patterns.
+
+• To enhance the efficiency of the powerful
+architectures, transfer learning, and hardware
+acceleration to run the large-scale applications.
+IV.
+
+LITERATURE REVIEW
+
+Traditional systems relied on handcrafted geometric,
+statistical, and texture-based features. Models such as SVMs,
+ANNs, and HMMs manually used attributes like stroke
+direction and velocity but showed inconsistency due to
+handwriting variations and environmental conditions [1], [2].
+Deep learning revolutionized signature verification by
+enabling automatic extraction of discriminative features from
+raw images. Kumar et al. (2019) developed a deep CNN
+model that captured fine-grained signature details and
+achieved nearly 95% accuracy in offline verification [3]. Dey
+et al. (2020) introduced CNN-based Siamese networks for
+one-shot learning, improving generalization to unseen
+signatures [4].
+Public datasets such as CEDAR, GPDS, and MCYT-75
+support training and testing, but class imbalance and intraclass variations remain major challenges. Researchers employ
+augmentation techniques such as rotation, scaling, and noise
+addition to enhance model diversity and generalization [5].
+CNN-based systems show reduced Equal Error Rate
+(EER), False Acceptance Rate (FAR), and False Rejection
+Rate (FRR) compared to classical models. Recent works
+integrate CNNs with attention mechanisms and RNNs to
+improve sequential feature learning. Future advancements
+include transformer models, multimodal biometrics, and
+graph neural networks for handling complex forgeries [6-7].
+V. METHODOLOGY
+To come up with a CNN-based Signature Verification
+System, there are a number of key processes involved, such as
+data collection, pre-processing, model construction, training
+and evaluation and implementation. The next systematic
+measure will guarantee that signature authentication will be
+precise, powerful, and strong.
+Data Preparation each of the three companies will be
+surveyed to collect data related to the comprehensive
+assessment of their information technology systems.
+
+Fig. 1. Project Overflow
+
+A. Data Collection and Preparation
+To make sure that the model has been trained on various
+and good quality examples, data collection and data
+preparation constitute an important step in designing a CNNbased Signature Verification System. Multiple publicly
+available datasets, e.g. CEDAR, GPDS, MCYT-75 and
+SigComp include both real and fake signatures, which make it
+possible to train strong and effective models. The CEDAR
+signature dataset has been experimented in this work. The
+total number of signature images is 2,645 consisting of 1,321
+genuine signatures and the rest of the samples are forged
+signatures. In order to guarantee successful learning and
+equitable data on performance evaluation, the data set has
+been split into 80 percent training and 20 percent testing.
+Moreover, under controlled circumstances, handwritten
+signatures may be gathered in order to produce customized
+datasets that reflect the variations in the real world. In order to
+improve the generalization of the models and to deal with the
+intra-class variation, several techniques of data augmentation,
+including rotation, scaling, addition of noise, and contrast
+adjustment are utilized. These augmentation techniques are
+employed to enhance the strength of the model and make it
+able to withstand any changes that are usually experienced in
+handwritten signatures. [8].
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:59:09 UTC from IEEE Xplore. Restrictions apply.
+
+B. CNN Model Design
+
+D. Model Training
+
+Design CNN Model is the very important step of creating
+a successful signature verification system since the model will
+be able to learn itself and to detect the most important
+information out of signature images. Using significant
+configuration such as edges, strokes, and texture, the
+convolutional layers enable the system to distinguish real
+signatures versus bogus signatures. To enhance efficiency,
+pooling layers conserve critical data and cut on computation
+time and dimensionality. After recovering the data, it is
+analyzed at each of the layers to determine whether it is an
+authentic signature or a fake one. Soft max or Sigmoid
+functions are used to handle classification and non-linearity is
+introduced using activation function such as ReLU to improve
+learning. [9-10]
+
+Model training It is a necessary step in the creation of a
+CNN-based signature verification system because it is what
+makes the model be trained to differentiate between authentic
+and fake signatures. Error minimization during training is
+achieved by a suitable loss function, which can be the binary
+system crossover entropy (when doing two-class
+classification) or categorical A cross-en (when doing multiclass classification). Optimizers such as Adam or RMSprop
+are effective in changing model parameters by dynamically
+changing learning rates to improve convergence. Training is
+performed with a good batch size (e.g., 32) and enough
+number of epochs (50-100) in order to enable the model to
+generalize. Before the final evaluation, a validation set is also
+employed so that the hyper parameters can be adjusted to
+avoid over fitting, as well as enhance the overall performance.
+
+C. Image Pre-processing
+Image pre-processing is essential to improve the accuracy
+and effectiveness of a CNN-based signature verification
+system because it improves the quality of the signature image
+prior to inputting it into the model. Grayscale conversion
+makes calculations easier by reducing the number of color
+channels to one channel of intensity-based representation.
+Normalization guarantees the homogeneity of inputs
+distribution and stabilization of model training through the
+normalization of pixel values, which lie in the range between
+0 and 1. The clarity of signatures is increased under noise
+reduction methods that remove the unwanted aberrations like
+ink blots or background smudges. Also, edge detection
+algorithms such as Sable method or Canny filters are
+employed to emphasize pattern of signature stroke, which
+increases the ability of feature extraction to distinguish
+between valid and inauthentic signature. [11]
+
+E. Performance Evaluation
+The performance evaluation is vital to the determination
+of the success rate in a CNN-based signature verification
+system distinguishing a genuine signature, and a fake
+signature. Recall and F1-score are essential evaluation
+measures that demonstrate the extent of reduction of false
+negatives and erroneous results by the model and accuracy is
+the general truthfulness of the model. The Equal Error
+Percentage (EER), which is a very essential parameter that is
+a composite of the False Acceptance Rate (the rate at which
+forged signatures are falsely accepted) and the False Rejection
+Rate (FRR), the rate at which authentic signatures are falsely
+rejected, is employed to offer the most appropriate trade-off
+between the security and the usability. Moreover, ROC Curve
+Analysis measures the quality of the model and assists to
+conclude about the reliability of the model in detecting
+forgery, as the results are presented in the form of the model
+performance at various choice thresholds. [12-13]
+VI. RESULTS AND ANALYSIS
+The analysis and results of the CNN-based Signature
+Verification System facilitate in evaluating the ability of the
+system to discriminate genuine and forged signatures. The
+performance is evaluated using key metrics, dataset analysis,
+and error analysis as well as comparison studies.
+
+Fig. 2. Image Processing of Signatures
+
+Fig. 3. Real Result of the Project
+
+A. Performance Metrics
+In determining the effectiveness of a CNN-based
+Signature Verification System, performance metrics are
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:59:09 UTC from IEEE Xplore. Restrictions apply.
+
+needed. The robustness of validation is achieved through the
+assessment of a different test data on the accuracy of the
+model. Accuracy measures the overall accuracy of detecting
+authentic or fake signatures. Recall and precision help
+evaluate the system with the ability to reduce the false
+acceptances and correctly recognize genuine signatures. The
+F1-score is useful in the management of unbalanced datasets
+as it is a combination of precision and recall to come up with
+balanced assessment.
+B. Dataset Evaluation
+Testing and dataset evaluation is a necessary element
+when assessing the effectiveness of a CNN-based Signature
+Verification System. To evaluate how well the model can
+adapt to real-world variations it is tested on both custom and
+publicly available data sets, such as CEDAR, GPDS, MCYT75 and Sign Comp. The model can be trained to distinguish
+between variousiating properties of such datasets that
+comprise genuine and forged signatures. There are several
+variables that influence performance of the model.
+C. Error Analysis
+To have a CNN-based Signature Verification System that
+is resilient, the analysis of errors is required. In case a forged
+signature is accepted as genuine, it may lead to a loss of
+security and False Acceptance (Type I Error). False Rejection
+(Type II Error) on the other hand is when the valid signature
+is incorrectly rejected which makes it hard to the user. These
+errors are mitigated by several methods: increasing the
+diversity of datasets with both a range of samples and methods
+of data augmentation are used to make the model more
+general; feature extraction methods are continually optimized
+to better represent the nuanced differences between authentic
+and fabricated signatures; decision threshold is fine-tuned to
+achieve a better trade-off between false and false positives.
+VII. APPLICATIONS
+Convolutional Neural Network (CNN)-based Signature
+Verification System can be applied in a number of fields and
+different situations, which need secure authentication. Some
+key uses of this project are as follows:
+A. Records of Government and Law
+This is the way that government agencies check the
+signature of voters, resolve picture identification and avoid
+illegal activity in executing administrative functions.
+Authentication of signatures reduces chances of fraud and
+disagreements during litigation processes by verifying
+authenticity of affidavits, will and court related documents.
+Government and legal organizations can use Convolutional
+Neural Networks (CNNs) to automate verification and make
+it more efficient and accurate.
+B. Education Sector
+Signature verification methods are applied in the
+education sector to confirm authenticity of academic records
+including tests, certificates, and records of students. This
+technology is used in universities and other institutions to curb
+the falsification of degree certificates, entrance forms and
+faculty approvals. Confirmation of signature can be used to
+verify government approvals and attendance of students and it
+is less likely to lead to fraud. Convolutional Neural Networks
+(CNNs) can be used to enhance the accuracy and efficiency of
+the verification process, which automation of the verification
+process can achieve.
+
+C. E-business and internet based transaction industry
+The online trade and transaction markets receive the
+benefits of enhanced digital security of payment and detection
+of frauds due to signature verification. This technology is used
+on online platforms to authenticate digitally signed documents
+during financial dealings and only authorized persons are
+allowed to sign contracts or purchase. Banking and payment
+gateway solutions use signature checking to reduce the
+chances of fraud and fraudulent access to accounts. The
+automation of the verification process through Convolutional
+Neural Networks (CNNs) helps businesses to increase the
+accuracy and minimize manual inspections. The technology
+improves cyber security, builds confidence in online
+transactions, and makes sure that digital signatures are reliable
+when carrying out e-commerce activities.
+VIII. CONCLUSION
+The CNN Signature Verification System is a much safer
+platform than existing applications like identity verification,
+finance, and law since it offers a much efficient, automated
+method of verifying a handwritten signature. By applying the
+deep learning techniques, the system can effectively
+differentiate between valid and fraudulent signature better
+than the traditional one, i.e. the SVMs and manually
+developed feature-based algorithm. The enhancement of the
+performance is done through hybrid models, preprocessing
+methods, and data augmentation to ensure that it is flexible to
+variations in the real world. However, some issues which need
+to be improved include signature variability, competent
+forgeries, and complexity of computations. The scalability
+and reliability of the system will be enhanced in the future
+because of block chain-based security, online signature
+verification, and multimodal authentication. Nevertheless, the
+flaws notwithstanding, the offered method is a major
+improvement of the biometric security and offers rapid,
+precise, and scalable means of coping with the contemporary
+authentication requirements. As the developments increased,
+CNN-based signature verification may have a big role to play
+in the secure identity verification systems around the world.
+REFERENCES
+[1]
+
+[2]
+
+[3]
+
+[4]
+
+[5]
+
+[6]
+
+[7]
+
+[8]
+
+L. G. Hafemann, R. Sabourin, and L. S. Oliveira, “Offline handwritten
+signature verification—Literature review,” IEEE Access, vol. 8, pp.
+159177–159193, 2020.
+S. Dey, A. Dutta, U. Pal, and M. Blumenstein, “A deep learning
+framework for offline signature verification,” in Proc. IEEE Int. Conf.
+on Pattern Recognition (ICPR), Milan, Italy, 2021, pp. 2563–2569.
+A. R. Abbas, M. A. Khan, and T. Akram, “Offline signature
+verification using deep convolutional neural networks,” in Proc. IEEE
+Int. Conf. on Image Processing (ICIP), Abu Dhabi, UAE, 2020, pp.
+1351–1355.
+P. Kumar, S. Kumar, and R. Singh, “CNN-based feature learning for
+offline handwritten signature verification,” in Proc. IEEE Int. Conf. on
+Computing, Communication and Automation (ICCCA), New Delhi,
+India, 2020, pp. 112–117.
+A. Soleimani, B. Araabi, and K. Fouladi, “Deep multitask metric
+learning for offline signature verification,” in Proc. IEEE Int. Joint
+Conf. on Biometrics (IJCB), Houston, TX, USA, 2021, pp. 1–8.
+Y. Guerbai, Y. Chibani, and B. Hadjadji, “The effective use of deep
+learning in offline signature verification,” in Proc. IEEE Int. Conf. on
+Systems, Man, and Cybernetics (SMC), Toronto, Canada, 2020, pp.
+2951–2956.
+M. Serdouk, A. Nemmour, and Y. Chibani, “Deep learning based
+signature verification system,” in Proc. IEEE Int. Conf. on Advanced
+Technologies for Signal and Image Processing (ATSIP), Sousse,
+Tunisia, 2020, pp. 1–6.
+S. Biswas, R. Sarkar, and M. Nasipuri, “Offline signature verification
+using Siamese neural networks,” in Proc. IEEE Int. Conf. on Intelligent
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:59:09 UTC from IEEE Xplore. Restrictions apply.
+
+Systems Design and Applications (ISDA), Vellore, India, 2019, pp. 1–
+6.
+[9] H. Khalid, S. Aslam, and M. A. Khan, “Offline handwritten signature
+verification using deep residual networks,” in Proc. IEEE Int. Conf. on
+Artificial Intelligence and Knowledge Engineering (AIKE), Irvine, CA,
+USA, 2021, pp. 174–179.
+[10] M. A. Hossain, M. A. Hossain, and M. A. Rahman, “CNN-based
+offline handwritten signature verification with data augmentation,” in
+Proc. IEEE Int. Conf. on Computer and Information Technology
+(ICCIT), Dhaka, Bangladesh, 2022, pp. 1–6.
+[11] R. Verma, A. Kumar, and V. K. Shukla, “Offline signature verification
+using hybrid CNN and machine learning classifiers,” in Proc. IEEE Int.
+
+Conf. on Smart Computing and Informatics (SCI), Jaipur, India, 2023,
+pp. 89–94.
+[12] A. AbdelRaouf and D. Salama, "Handwritten Signature Verification
+using Haar Cascade Classifier Approach," 2018 13th International
+Conference on Computer Engineering and Systems (ICCES), Cairo,
+Egypt, 2018, pp. 319-326, doi: 10.1109/ICCES.2018.8639437.
+[13] P. Misra, N. Panigrahi, S. Gopal Krishna Patro et al., “PETLFC:
+Parallel ensemble transfer learning based framework for COVID-19
+differentiation and prediction using deep convolutional neural network
+models,” Multimedia Tools and Applications, vol. 83, pp. 14211–
+14233, 2024, doi: 10.1007/s11042-023-16084-4.
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:59:09 UTC from IEEE Xplore. Restrictions apply.
+
+

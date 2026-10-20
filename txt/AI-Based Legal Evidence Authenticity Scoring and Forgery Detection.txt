@@ -1,0 +1,993 @@
+2026 4th International Conference on Knowledge Engineering and Communication Systems (ICKECS) | 979-8-3315-4777-6/26/$31.00 ©2026 IEEE | DOI: 10.1109/ICKECS70176.2026.11527849
+
+2026 – 4th IEEE International Conference on Knowledge Engineering and Communication Systems (ICKECS – 2026), April 24 – 25, 2026
+
+AI-Based Legal Evidence Authenticity Scoring
+and Forgery Detection
+Vijesh P
+Department of Artificial
+intelligence and data Science, Sri
+Shanmugha College of engineering and
+Technology,
+Salem, India
+p.vijesh2002@gmail.com
+
+Prakash N
+Department of Artificial
+Intelligence and Data science,Sri
+Shanmugha College of Engineering and
+Technology
+Salem, India
+prakashnarayanasamy258@gmail.com
+
+Latchiya I
+Department of Artificial
+Intelligence and Data Science,Sri
+Shanmugha college of Engineering and
+Technology,
+Salem, India
+latchiyaiyappan5@gmail.com
+
+Praveen S
+Department of Artificial
+Intelligence and Data Science,Sri
+Shanmugha College of Engineering and
+Technology
+Salem, India
+praveenkavirajan26@gmail.com
+
+Sakthivel M
+Department of Artificial
+Intelligence and Data Science,Sri
+Shanmugha College of Engineering and
+Technology,
+Salem, India
+sakthisalem@gmail.com
+
+Asha Rajamanickam
+Department of Artificial Intelligence
+and Data Science,Sri Shanmugha
+College of Engineering and
+Technology,
+Salem, India
+ashatvmd@gmail.com
+
+Abstract— The use of scanned and digitally stored documents
+in legal, government and administrative systems has raised the
+possibility of tampering and forging documents. The traditional
+manual verification approaches can be slow, subjective and fail
+to identify any manipulations at the pixel level. In order to
+overcome these shortcomings, this paper proposes an automated
+system of document authenticity verification, combining deep
+learning algorithms with image forensic verification. The
+proposed system uses Error Level Analysis (ELA) to detect the
+compression inconsistencies that can be used as evidence of
+tampering, and it is refined by a convolutional neural network
+(CNN) to detect the exact location of the forged areas at a finegrained level. Besides, metadata consistency validation like
+document creation date, history of modifications, and
+information about devices are also conducted in order to increase
+the forensic reliability. The major input to the system will be a
+visual forgery heatmap that shows suspicious areas, and an
+objective Authenticity Score of 0 to 100 that measures the
+chances of document integrity. Integrating visual interpretability
+with numerical evaluation, the suggested method will give
+qualitative and quantitative data, which will support scientifically
+valid and legally admissible decision-making. The system is also
+expected to minimize human error, enhance the efficiency of
+verification as well as a reliable digital document validation
+system to be used in real life legal and administrative application.
+Keywords—Image Forensics, Deep Learning, Legal
+Document Verification, Convolutional Neural Network, Error
+Level Analysis, Document Security, Authenticity Scoring.
+
+I. INTRODUCTION
+A. The surging threat of Document Forgery.
+The legal documents are also contractual, ID records,
+certificates and financial instruments, all of which would
+form the foundation of the administrative mechanism and the
+judicial system of the majority of countries worldwide. The
+documents have been facilitated by the workflow
+globalization making the digitization of the documents even
+
+979-8-3315-4777-6/26/$31.00 ©2026 IEEE
+
+faster process to enable faster storage, transmission and
+processing of the documents. This has however changed with
+other areas of weakness being generated. A high level of
+accuracy can now be achieved in manipulating revenue
+images through advanced image editing software that
+produces forgeries, which can not to be defined as the
+original of the forgery[1][4][12].
+These forgeries are either in the format of a simple
+manipulation of the text up to sophisticated copy-move
+forgeries and splicing[5][16][19]. This is a menace to the
+national security, money and the law[11][12]. Even the
+smallest of things like the rescheduling of a date, signature or
+a clause omission can be mammoth proportions in the courtroom.
+B. Weaknesses of existing Checking Systems.
+The current processes of document validation can be
+clustered into two and both protocols possess a drastic
+demerit .The most pervasive is the hand held one. Papers are
+compared by human analyser’s with reference model papers
+and in a bid to find visual differences[1][10]. It is not
+dynamic, professional and cannot be extended to this degree
+as Know Your Customer processing (KYC) or e-governance
+portal is. The most significant is that the manipulations of
+pixels (noise injection, compression artifacts, and localized
+retouching) that have been implemented by the modern
+editing programs and are undetected leave no trace
+whatsoever can never be tracked down by human experts in
+the domain[3][4][9].
+Rule based checks, checksum checks and simple
+metadata checks are the format checks that are common to
+the typical automated testing tools[2][10]. These methods are
+vulnerable to adversarial and invisible attacks of
+manipulation and can identify signature based forgeries only.
+Neither will either manual, or the least automated system
+provide:
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:00:41 UTC from IEEE Xplore. Restrictions apply.
+
+Localization: identifying what was done in the documents.
+Quantification: the creation of gauging of certainty of
+admissibility of law.
+Interpretability: which gives visual evidence, which can be
+understood by non-experts.
+The non-existence of such functions renders the weight
+of evidence of the digital documents in a court case
+meaningless and spoils the administrative systems in a
+systematic manner[8][12][14].
+C. PROPOSED APPROACH AND CONTRIBUTIONS.
+In the next presentation we offer an automated forensic
+system that fills out these lapses through the combination of
+three aspects:
+•
+
+The different compression discrepancies are
+detected by means of Error Level Analysis (ELA)
+and the differences are viewed as the sign of the
+tampering with the data[1][4].
+
+•
+
+The convolutional neural network that is based
+on U-Net detects[7][8][15] pixels that are forged
+.Metadata provenance Checking provides
+document
+provenance
+and
+modifies
+artifacts[10][21].
+
+•
+
+Two similar outputs will be generated by the
+system:
+Data
+of
+visual
+forgery
+heatmap[8][9][14]. A measure of 0-100 of
+Authenticity of documents in terms of integrity.
+
+•
+
+It is a two outputs test design that does not only
+have the capability of being investigated by the
+human eye to be able to do so but also has a
+quantitative
+evidence that meets the
+requirement of the legal admissibility
+condition[11][12].
+
+The following are the recommendations:
+1.
+
+2.
+3.
+
+4.
+
+5.
+
+Both ELA based feature enhancement and CNN
+based segmentation combined as forensic pipeline
+[1][4][6].
+A variated U-Net architecture to the localization
+of document forgery [7][15].
+Multi-dimensional scoring system of the pixelbased forensics framework and metadata analysis
+[12][21].
+Extensive tests on 15, 000 document images have
+been carried out in many forms of forgery
+[8][17][18].
+The training/validation protocols would be
+published publicly to allow them to be reproducible
+[16][19].
+
+D. Paper Organization
+Section II entails a literature review, which is linked to
+image forensics and deep learning-based detection. Section
+III will be a description of our methodology which will
+
+include preprocessing, network architecture and scoring. The
+fourth section will be the experimental set up, results and
+discussion. In section V, the mandates and instructions are
+filled in.
+II. LITERATURE SURVEY
+A. Passive Image Forensics
+The passive image forensics is the study of the natural
+marks created in the process of manipulation which do not
+imply the presence of any embedded watermark or the digital
+signature[1][4]. The idea that is constructed out of these
+techniques is that real pictures have certain statistical features
+which are disturbed when they are perturbed[1][4].
+These are some of the tools of the passive form of
+forensic
+analysis that are typically used, the Error Level
+Analysis (ELA)[1]. ELA exploits compression artefact of the
+JPEG compression and an image of a particular quality is
+saved and the disparities between the pixel values are made.
+On the aspects of the manipulated images, there exists the
+asymmetric distribution of errors as opposed to original areas
+in the case of manipulation happening in the course of the
+process[1][2]. The equation of ELA map E is calculated as: E
+=(8001-100)/100I)/100); mathematically it implies that an
+input image I must be provided.
+𝐸(𝑥, 𝑦) = |𝐼(𝑥 , 𝑦) − 𝐽𝑃𝐸𝐺_𝑄(𝐼)(𝑥, 𝑦)|
+JPEG compression reached by recompression with
+quality factor Q= JPEG Q-85 = (95-85) points to JPEG
+quality. It is also a good job that ELA has done because a
+damaged area would not possess an absolute copy of original
+compression properties. However, it cannot be considered as
+ELA sufficient[1][9][15]. It gives spurious posit on images
+with non-homogeneous histograms of compression and can
+be fooled by even advanced forgers who recreates
+compression artifacts. Besides that, ELA produces the
+qualitative heatmaps that are to be read by the experts, rather
+than providing the quantitative confidence, and automatically
+does the localization. The other forensic evidence is the
+aberration of the patterns of noises, deviation of camera
+response functions and demos icing effects [2,3,4]. It has the
+weakness of providing one with a hybrid solution with the
+individual efforts of the solutions.
+B. Deep Learning to identify Forgery.
+First forgery detectors were based on machine-based
+learning- based classical classifiers such as the Support
+Vector Machines [5][10]by hand. These techniques were not
+localised frequency-domain coefficients and statistical
+characteristics, e.g. noisy residues or edge artifacts .The
+CNNs had revolutionized the industry and innovated them.
+[6][7]
+The methods of detecting forgeries in the current world are:
+Classification: the identification of a picture of it is either
+real or not[6].
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:00:41 UTC from IEEE Xplore. Restrictions apply.
+
+Segmentation: small pixel masking .[7].The architectural
+designs through U-Net format have been useful in the
+localization of forgery in pixel-to-pixel basis. Another
+encoder-decoder architecture is U-Net, which has been
+developed based on the principle of the application of skip
+connections to retain the down sampling spatial data, which
+are lost. Some of the proposed variants were implemented in
+the forensic application like ManTraNet [9] and Constrained
+Neural Networks[10]. More precise, deep learning
+algorithms require huge quantities of data that are of
+heterogeneous nature. The inferences that have been
+extrapolated on the new forms of influence and reflect the
+results in a jurisprudential context are also challenging to
+make.
+C.
+
+Document Verification System.
+
+localization
+
+Traditional
+Forensics
+(ELA)
+
+Finds
+compression
+anomalies,
+easy to read
+
+False
+positives,
+defeated by
+re-saving
+
+Feature Map
+(Qualitative)
+
+Proposed
+Hybrid AI
+(ELA
++
+CNN)
+
+Scores
++
+heatmap,
+fast,low
+error, multitype
+
+Needs large
+dataset, high
+training cost
+
+Quantitative
+Score + Heatmap
+
+III. METHODOLOGY
+
+The most widespread commercial document verification
+processes are check of document by optical character
+recognition (OCR), checking of a barcode and crosschecking of a database[10][19].These strategies can only be
+used to compare the contents with the external materials but
+not such contents whose contents cannot be reproduced
+visually.
+Document forensics research prototypes have been
+conducted by specialists. Digital analysis is done with
+physical properties of documents (paper fibre structure, ink
+analysis) in other combinations [11]. The provenance
+tracking can also be realized through the blockchain
+technology [12], which will never recognize forgeries, but
+only prevent the further forgeries.
+
+A.System Overview
+These three stages pipeline are further referred to as the
+pipeline by fig 1. At the initial stage, the input documents are
+filtered with the assistance of ELA and their properties are
+enhanced. The resultant processed inputting forensic maps of
+features will be processed by a frame of a segmentation
+system created using U-Net that will lead to pixel wise
+hypothetical forgery mask. At the same time, the document
+provenance is also made with the help of metal data analysis
+module. Lastly is the component scoring that converts CNN
+output and CNN metadata anomalies and is expected to
+produce Authenticity Score, and visualization.
+
+D. Gap Analysis and Positioning.
+It is acute, in omissions in the specified literature:
+
+None of the systems that could be integrated
+presupposes the enhancement of functions with the help of
+ELA and being fragmented parts with the help of CNN. The
+standards of the practice are not present in the quantitative
+authenticity assurance of the legal admissibility .Document
+specific forensics is a field that has not received much
+research as compared to the natural image forging detecting
+.This is what we inject into it i.e. the proposal of hybrid
+ELA-CNN architecture on which we will impose the
+metadata addition and the quantitative scoring i.e. to certify
+legal documents.
+
+Table I: Comparison of verification strategies.
+System
+Category
+
+Strengths
+
+Weakness
+
+Output Type
+
+Manual
+Inspection
+
+Human
+judgment,
+detects
+obvious fraud
+
+Slow, errorprone, misses
+microforgeries
+
+Qualitative
+(Expert opinion)
+
+Fast, simple
+checks, low
+computation
+
+Fails
+on
+advanced
+edits,
+no
+
+Binary
+(Pass/Fail)
+
+Basic
+Automated
+Tools
+
+Fig.1 Document Forgery System Architecture
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:00:41 UTC from IEEE Xplore. Restrictions apply.
+
+B. Preprocessing and Additional Feature.
+
+b.Training Configuration
+
+1)Image Normalization
+It selects no things at all to whatever it may convey to
+the search to sift through the mass of the papers received
+:The rescaling of the 256x 256 size images is known as the
+rescaling Bilinear rescaling. It is an efficiency versus
+forensic description compromise .The input was fed by the
+RGB images and the three channel images respectively and
+the RGB images and the grayscale images respectively
+.Normalization of the intensities: It is brought to intensities [
+0,1].
+
+Loss Function: It is a loss in two components; A loss and
+a sum of Binary Cross-Entropy loss (BCE) and Dice
+coefficient:
+
+2)Error Level Analysis
+ELA transforms the forensic feature maps to 4 feature
+maps, provided by it in aid as contributing towards
+supporting the artifacts of the manipulation. We: in the
+image I normalised: we: S save/JPEG quality = Q = 95.And
+that of the withered looks I comp .Errors E = I – I comp.
+Scale E to [0,255] for visualization It has been chosen
+because of the finding, Quality=95, nearer the better the less
+compressible. The compression errors will be asymmetric
+and they will be appropriately considered in the CNN where
+the portions or areas that need to be manipulated will be
+rated high compared to the parts, which are not of interest
+.The current one being organized is the one, which is based
+on the Internet and is known as localization network.
+Network Forgery Nickel and Dimed.
+a. Architecture: Modified U-Net
+It has also been trained on U-Net optimum training as
+far as forensic segmentation is concerned fig 3. It is possible
+to determine the end of the architecture as shown in Table I
+below. Space dimensions will not go to waste because the
+padding will be used in all occasions to make up all the
+convolutional layers. The batches can also be normalized and
+hence, the training process presupposes the fastest training
+process besides the minimization of the overfitting. It is a
+dropout (rate=0.5) at each encoder block.
+
+𝐿 = 𝐿_𝐵𝐶𝐸 + 𝑙 𝐿_𝐷𝑖𝑐𝑒
+𝐿_𝐵𝐶𝐸 = − ∑ [𝑦 𝑙𝑜𝑔(𝑝) + (1 − 𝑦) 𝑙𝑜𝑔(1 − 𝑝)]
+𝐿_𝐷𝑖𝑐𝑒 = 1 − (2∑𝑦𝑝 + 𝑒) / (∑𝑦 + ∑𝑝 + 𝑒)
+We have selected l =1, e= 1/ 7, upon a particular
+numerical precision. This panacea is the equation of
+inharmony of the classes, (the regions, which are cut will
+have the greatest probability of containing less than 20
+percent of document space), and the extent of space overlap
+which is the most desirable.
+Optimizer: Learning rate=1e-4, β1=0.9, β2=0.999.
+Batches size: 16 (maximum size due to memory graphics
+card)
+Epoch: 50 and at early-stopping of learning (loss of
+validation= 10 on loss of validation)Data Augmentation To
+be sure that we are well generalizing we accept: Random
+rotation:+-15degHorizontal flip: 50 percent. Brightness
+adjustment: +- 10%Gaussian noise: σ = 0.01.
+c. Implementation
+With the help of the Tensorflow 2.13 / Keras, it is
+possible to apply this model. The training is done through the
+use of NVIDIA Tesla T4 and VRAM was 16GB which took
+approximately 8 hours to complete the 50 epochs
+C. Metadata Metanalysis.
+There is also metadata element filled with document
+properties which may be used to search the abuse:
+The EXIF signatures are also lost, the trace of photo
+manipulations programs (adobe Photoshop, Gimp, etc.) are
+also lost. The signature of the scanned documents is not
+verified.
+Timestamp Consistency: Timestamp documents may
+be checked on a time stamps. It is also in this that the flags
+get to know the impossibles; upon which is the day of rule of
+creation and the day of modification .The analysis is
+performed on internal object structure scanning to determine
+the abnormality of internal object structure including hidden
+layer, embedded object and broken cross-reference table
+retrieved by the analysis to form Pdf analysis and DOCX
+analysis .The above mentioned anomalies will be assigned
+the weight scores respectively in an effort to come up with
+the final score of the authenticity.
+The second forecasting method is so-called approach of
+authenticity score:
+
+Fig. 2. ELA visualization example
+
+A (Score Authenticity 0-100) is a combination of 3 items:
+
+A=w 1 C_cnn +w 2 C_meta +w 3 C_ela
+Where:
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:00:41 UTC from IEEE Xplore. Restrictions apply.
+
+•
+
+C_cnn = mean rate of average forgery between
+all pixels (inverted and scaled).
+
+•
+
+C_meta = normalized metadata anomaly score
+(0 = lots of anomalies, 100 = beyond reproach)
+
+•
+
+C_ela Confidence threshold analysis of ELA.
+
+•
+
+w 1, w 2, w 3 are the weights that are
+experimentally determined (0.5, 0.3, and 0.2).
+
+We scale to a ground truth set. The above 75 is
+regarded to be a genuine consideration and the points earned
+below 45 will be automatically deleted and medium score
+will be left to be considered by a human being.
+
+Image level measures are: Detection capability: Accuracy,
+Area Under ROC Curve (AUC),One to ninety-five false
+positive recall rate.
+C.Quantitative Results
+a). Main Results
+Table III: Performance comparison.
+
+Technique
+ELA thresholding
+
+Pixel F1
+
+IoU
+
+Image Acc
+
+AUC
+
+0.412
+
+0.261
+
+0.703
+
+0.712
+
+CFA-based
+
+0.567
+
+0.398
+
+0.811
+
+0.843
+
+ManTraNet
+
+0.783
+
+0.641
+
+0.921
+
+0.951
+
+Ours
+(ELA+UNet)
+
+0.892
+
+0.805
+
+0.973
+
+0.987
+
+Ours + metadata
+
+0.892
+
+0.805
+
+0.982
+
+0.991
+
+IV. EXPERIMENTS AND RESULTS
+A. Dataset Construction
+We have developed Data Document Copy-move
+Dataset (DCD-15K) 15,000 document image-images.
+TABLE II: Document dataset composition and forgery
+categories
+
+Category
+Authentic Documents
+
+Count
+
+Details
+
+9,000
+
+IDcards(2,500),
+contracts (2,500),
+receipts (2,000),
+certificates (2,000)
+
+-
+
+60% smartphone,
+40% scanner
+
+Capture method
+
+As per Table III Our system is a great one in everything
+to the least. The image level performance can also be
+improved with the addition of metadata as well as pixel
+localization is free (metadata is only document level).
+b). Per-Forgery-Type Analysis
+Table IV. Performance comparison across forgery types.
+
+Forged Documents
+
+6,000
+
+-
+
+Forgery Type
+
+Pixel F1
+
+IoU
+
+Notes
+
+Copy-move
+
+2,000
+
+Textblocks duplicated
+within document
+
+Copy-move
+
+0.911
+
+0.837
+
+Splicing
+
+2,000
+
+Signatures/logos
+inserted from external
+sources
+
+Best
+performance—
+duplicated
+regions create
+strong forensic
+traces
+
+Retouching
+
+2,000
+
+Text removal
+obfuscation
+
+Splicing
+
+0.883
+
+0.791
+
+Good—
+boundary
+artifacts
+detection
+
+or
+
+As per Table II Training: 10,500 (70%),Validation:
+2,250 (15%),Test: 2,250 (15%).Stratification offers even
+handed forms of forgery of splits.
+
+Retouching
+
+0.862
+
+0.757
+
+aid
+
+Challenging—
+small regions,
+subtle
+manipulations
+
+B. Evaluation metrics
+They are specified to be founded on two levels of
+performances:
+Localization accuracy: The accuracy of the localization pixel
+Intersection over Union (IoU),F1-score (harmonic average of
+the recall and the accuracy),Precision and Recall[14][17].
+
+As per Table IV Forgery type Pixel F1,human >IoU
+Notes Pixel F1,Copy-move 0.911 0.837 Ideal performanceleaves the solid forensic evidences in copied sections. The
+artifact 0.883 0.791 Good- boundary artifact has been
+justified. Retouching 0.862 0.757 Small distance, hard, fine
+movements.
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:00:41 UTC from IEEE Xplore. Restrictions apply.
+
+c) Ablation Study
+Table V: Ablation Results
+Configuration
+
+Pixel F1
+
+Image Acc
+
+Δ
+
+Full model
+
+0.892
+
+0.982
+
+-
+
+Remove ELA
+(raw
+image
+input)
+
+0.743
+
+0.891
+
+-0.149 / 0.091
+
+Remove
+metadata
+
+0.892
+
+0.973
+
+0 / -0.009
+
+No
+augmentation
+
+0.814
+
+0.942
+
+-0.078 / 0.040
+
+Skip connections between similar encoder and decoder
+layers are used to maintain critical spatial data, making it
+possible to recreate suspicious areas. The network produces a
+detection mask that marked forged sections in the document
+and hence authenticity assessment can be done with
+reliability and readability[7].
+
+As per Table V ELA also results in the accuracy of
+localization. The intensity of generalization is augmented.
+D. Qualitative Results
+Figure 4:Learning curves of the model
+
+The Figure 2 shows how ELA maps of original and fake
+document were presented. The population of distorted places
+is high and this is the main priority of CNN. The sample
+results of the type of forgery are found in figure 3.
+Localization of our localization points like minor retouching
+are precisely done .The suggested framework of document
+forgery detection uses the convolutional neural network with
+U-Net to locate distorted areas with high precision at the
+pixel level. The input document image is then passed through
+an encoder-decoder system whereby the encoder preserves
+high-level contextual and structural information by
+repeatedly coarse-graining the image whereas the decoder
+reinvigorates the spatial resolution to retrieve fine-grained
+information.
+
+Figure 4 presents the training curves. The 30 or so epochs
+permit the stability of the loss and the accuracy, and the
+overfitting is not important.
+A. Failure Analysis
+We know of three detestable grounds of failure: One of
+them has gone so far as to smuggle even forgeries (a halfdocument is all that is required) out of it--even vulgar
+imbalance in school will never serve it well in the net. The
+background was not contrasted and poorly created and
+disturbed (ex: writing white on white paper).In order to
+achieve the false positive and forgery effects, the original
+photos can be compressed twice by using the JPEG
+compression.
+B. Limitations
+Our approach has a number of limitations and includes:
+Data weaknesses: It is an internal data which is not
+published, DCD-15K. We journalize, so that we can have an
+opportunity of printing annotations and protocols.
+Depending on compression: It depends on the signature of
+JPEG manipulation, when a forgery of PNG (or the
+uncompressed picture) is done the principle is not so
+powerful anymore.
+Price: The computer graphics card can process documents
+within less than 2 seconds and it is unable to be calculated in
+real time.
+Domain specificity Domain trained: not trained on natural
+image or deepfake.
+
+Fig.3 CNN Localization Engine (U-Net)
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:00:41 UTC from IEEE Xplore. Restrictions apply.
+
+Table VI : Quantitative Performance Metrics
+
+Publication of datasets to expedite research: Anonymization
+and release of DCD-15K.
+
+Metric
+
+Meaning
+
+Result
+
+Implication
+
+Accuracy
+
+Correct pixel
+classification
+
+98.2
+
+Reliable forged
+vs real decision
+
+F1-Score
+
+Precision–
+recall balance
+
+92.5
+
+Good detection
+with low false
+hits
+
+AUC
+
+Performan
+across
+thresholds
+
+0.991
+
+Strong forged–
+authentic
+separation
+
+ce
+
+V.CONCLUSION AND FUTURE WORK
+A. Summary of contributions
+Our proposed system entailed the automated legal documents
+verification forensic system, which incorporated the U-Net
+segmentation and metadata analysis and the ELA-based
+feature enhancement. The F1-score of the system is 92.5%
+and AUC is 0.991 in a 15,000 images document test which is
+quite high when compared to the existing
+systems[12][19]. Both the visual heatmap and the
+numerical Authenticity Score are dual-output design because
+they can help in the interpretability of the quantitative and
+the human visual legal admissibility.
+B.Practical implications
+Our system possesses three legal and administrative
+workflow strengths.
+Less time of verification: It is through automated screening
+that the human knowledge is given attention to the
+documents marked.
+Lost subjectivity: There is the use of standardized
+quantitative scoring instead of the subjective knowledge.
+Admissible evidence: Heatmap gives a pictorial description
+to the forensic finding.
+C. Future Work
+We may single out four prospective directions:
+Deepfakes: Depending on the further development of the
+architecture, a video and a fake content in the form of a
+document can be revealed as made by an AI.
+Multi-lingual text forensics Multilingual text verification
+Semantic verification with a combination of OCR and frontend detection.
+Mobile installation:
+compression.
+
+The
+
+field
+
+verification
+
+Model
+
+Adversarial toughness: Score list on avoidance attacks.
+
+REFERENCES
+[1]
+[2]
+
+On Digital Image Forensics H. Farid. Mitchell Press, 2016.
+B. Mahdian and S. Saic, Blind authentication with periodic property
+of interpolation, IEEE Transactions in Information Forensics and
+Security, vol. 3, no. 3, pp. 529-538, 2008.
+[3] Color filter array interpolated images are exposed by digital forgeries,
+A. C. Popescu, H. Farid, Digital forgeries in color filter array
+interpolated images, exposing them, IEEE Transactions on Signal
+Processing, vol. 53, no.10, pp.3948-3959, 2005.
+[4] J. Fridrich, Digital image forensics in the IEEE Signal Processing
+Magazine, vol. 26, no. 2, pp. 26-37, 2009.[5] Z. W. Sun, X. Lu, and
+Z. He, Digital image splicing detection by Markov features, Pattern
+Recognition, vol. 45, no. 12, pp. 42924299, 2012.
+[5] Y. Rao and J. Ni, A deep learning methodology of splicing and copymove forgery detector! in Proc. IEEE international workshop on
+information forensics and security, 2016, pp. 1-6.
+[6] A Deep learning-based universal image manipulation detector A new
+convoluted layer by S. Bayar and M. C. Stamm, Proc. ACM
+Workshop on Information Hiding and Multimedia Security, 2016, pp.
+105-110.
+[7] O. Ronneberger, P. Fischer and T. Brox, U-Net: Convolutional
+networks to biomedical image segmentation, by the International
+Conference on Medical Image Computing and Computer-Assisted
+Intervention, 2015, pp. 234-241.
+[8] Y. Wu, W. AbdAlmageed and P. Natarajan, ManTraNet:
+Manipulation tracing network, image forgery detection, and
+localization, in Proc., IEEE Winter Conference on Applications of
+Computer Vision, 2019, pp. 799-808.
+[9] Multi-scale fusion to improve the localization of malicious tampering
+in digital images P. Korus and J. Huang, IEEE transactions on Image
+Processing, vol. 25, no. 3, pp. 1312-1326, 2016.
+[10] R. Kumar and R. Kaur, Document forgery detection using machine
+learning: A review, International journal of engineering research and
+technology, vol. 9 no. 6, pp. 456-462, 2020.
+[11] S. Tiwari and A. Shukla, 2021. Admitted, Grant, International Journal
+of Information Security Science, vol. 10, no. 2, pp. 78-89.
+[12] M. Verdolivia, Media forensics and deepfakes: An overview, IEEE
+Journal of Selected Topics in Signal Processing, vol. 14, no. 5, pp.
+910-932, 2020.
+[13] L. Bondi, S. Lameri, D. Guera, P. Bestagini, E. J. Delp and
+S. Tubaro, Tampering detection and localization with camera based
+CNN features clustering, Proc. IEEE Conference on Computer Vision
+and Pattern Recognition Workshops, 2017, p.1855-1864.
+[14] Localization of image forging through tampering possibility mapping
+H. Li, W. Luo, X. Qiu, and J. Huang, IEEE Transactions on
+Information Forensics and Security, vol. 12, no. 5, pp. 1240-1252,
+2017.
+[15] D. Cozzolino, G. Poggi and L. Verdoliva, Splicebuster: A new blind
+image splicing detector, in Proc. IEEE International Workshop on
+Information Forensics and Security, 2015, pp. 1-6.
+[16] M. Huh, A. Liu, A. Owens and A. A. Efros, Image splice detection in
+fake news: Learning a self-consistent image splice
+[17] detector, in Proc. European Conference on Computer Vision, 2018,
+pp. 101-117.
+[18] J. H. Bappy, A. K. Roy-Chowdhury, J. Bunk, L. Nataraj, and B. S.
+Manjunath, "Spatial structure-based localized local image
+manipulation targeting," at the Proc. IEEE International Conference
+on Computer Vision, 2017, pp. 4980-4989.
+[19] K. Deep residual learning Deep residual learning, Image recognition
+in Proc. IEEE Conference on Computer Vision and Pattern
+Recognition, 2016, pp. 770-778
+[20] S. Shinde and A. S. Pande, Legal document verification Deep
+learning and OCR in use, Journal of Artificial Intelligence and Data
+science, vol. 3, no. 1, pp. 45-52, 2023.
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:00:41 UTC from IEEE Xplore. Restrictions apply.
+
+

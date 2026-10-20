@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Literature Survey Report</title>
+<link href="https://fonts.googleapis.com/css2?family=Carlito:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  @page { size: letter; margin: 1in 1in 1in 1in; }
+  body { font-family: 'Carlito', 'Calibri', Arial, sans-serif; font-size: 11pt; line-height: 1.38; color: #000; background: #fff; margin: 0; }
+  h1 { font-size: 15pt; font-weight: 700; margin: 0 0 8pt; }
+  h2 { font-size: 13pt; font-weight: 700; margin: 16pt 0 6pt; page-break-after: avoid; }
+  h3 { font-size: 11.5pt; font-weight: 700; margin: 12pt 0 4pt; page-break-after: avoid; }
+  p { margin: 0 0 8pt; text-align: left; }
+  .sub { margin-bottom: 10pt; }
+  table { border-collapse: collapse; width: 100%; margin: 4pt 0 14pt; }
+  td { border: 0.75pt solid #000; padding: 3pt 5pt; vertical-align: top; width: 50%; }
+  ul { margin: 0 0 8pt; padding-left: 28pt; }
+  li { margin-bottom: 3pt; }
+  .ref p { padding-left: 0; }
+  .ref p, .rev p { page-break-inside: avoid; }
+</style>
+</head>
+<body>
+
+<h1>LITERATURE SURVEY AND REQUIREMENT ANALYSIS REPORT</h1>
+<p class="sub"><b>REVA Internship Opportunities (RIO)</b> | School of Computer Science and Engineering, REVA University, Bengaluru</p>
+
+<table>
+<tr><td>Particulars</td><td>Details</td></tr>
+<tr><td>Task</td><td>Task 2 (SL 2), Project Track: Literature Survey and Requirement Analysis of the Module</td></tr>
+<tr><td>Name of Student</td><td>{{NAME}}</td></tr>
+<tr><td>University Seat Number (USN)</td><td>{{USN}}</td></tr>
+<tr><td>Project Title</td><td>{{TITLE}}</td></tr>
+<tr><td>Track</td><td>{{TRACK}}</td></tr>
+<tr><td>Centre</td><td>{{CENTRE}}</td></tr>
+<tr><td>Faculty Guide</td><td>{{GUIDE}}</td></tr>
+<tr><td>Date of Submission</td><td>{{DATE}}</td></tr>
+</table>
+
+<h2>1. Introduction</h2>
+<p><b>1.1 Purpose.</b> This report records the literature survey carried out for the {{SHORT}} project and the functional and non-functional requirements derived from it. Its purpose is to show what existing research offers for automated document forgery detection and verification, where that research falls short, and how the shortfalls shape the requirements of the system.</p>
+<p><b>1.2 Background.</b> {{SHORT}} is a system that accepts a scanned or photographed document, such as an identity card, certificate, transcript, invoice or signed legal page, and decides whether it is genuine or forged. It combines image-forensic analysis that locates tampered regions, handwritten signature verification, OCR-based checks on the text and the arithmetic of the document, and an explainable authenticity score with a visual heatmap, presented to a verifier through a web interface and supported by a tamper-evident audit record.</p>
+<p><b>1.3 Scope.</b> The survey covers the whole system, because the assigned module depends on the other modules. It is organised under the following themes: offline handwritten signature verification; image tampering detection and localisation; document-level forgery detection for identity, financial and legal documents; and academic credential verification with blockchain anchoring.</p>
+<p><b>1.4 Method.</b> Candidate papers were searched in the IEEE Xplore database against the project problem statement, using terms such as document forgery, signature forgery, image tampering, splicing, copy-move and certificate verification. Fifty-one papers were identified and downloaded, covering the years 2018 to 2026. All fifty-one were read and are reviewed in Section 2, grouped by theme. For each paper, the approach, the principal findings and the limitation relative to {{SHORT}} are recorded.</p>
+
+<h2>2. Literature Survey</h2>
+<p>The fifty-one papers reviewed are summarised below under four themes. For each paper, the approach, the key findings and the limitation relative to {{SHORT}} are described in turn. The number in brackets corresponds to the reference number in Section 6.</p>
+
+<div class="rev">
+<h3>2.1 Offline Handwritten Signature Verification</h3>
+
+<p><b>[1] Dash et al., 2023 (ICAIHC).</b> The authors treat signature verification as binary classification and compare a frozen, pre-trained VGG-16 with a fully trainable VGG-16 on the CEDAR data set. The trainable model reached a test accuracy of 0.962, about 17.75% higher than the frozen model, showing that fine-tuning the whole network matters for signatures. However, the model is writer-independent and only tested on one small data set, with no comparison against a stored reference signature of the claimed signer.</p>
+
+<p><b>[2] Bag et al., 2023 (APSIT).</b> This paper compares a simple seven-layer CNN against pre-trained and trainable VGG-16 for signature forgery detection on CEDAR, and studies three optimisers and three train-test splits. The small CNN with SGD and an 80:20 split gave the best accuracy, outperforming both VGG-16 variants. The work is limited to one data set without augmentation, and a lightweight classifier of this kind has not been tested on signatures cropped from real documents.</p>
+
+<p><b>[3] Emberi et al., 2023 (ICICCS).</b> The authors build two Siamese networks, each made of twin CNNs with Optuna-tuned hyper-parameters, that compare a questioned signature with a genuine one. The two models reached 98.27% and 98.35% accuracy, and a rule-based layer that resolves cases where the models disagree raised this to 99.75%. The decision logic is hand-built for the data set used, and the approach still needs a genuine reference for every signer.</p>
+
+<p><b>[4] Tarek and Atia, 2022 (SETIT).</b> This forensic study compares five CNNs (VGG-16, ResNet50, Inception-v3, Xception and a custom CNN) for classifying handwritten signatures inside documents. ResNet50 performed best, with 82.3% and 86% accuracy on data sets of 300 and 140 images. The data sets are very small, the accuracy is modest, and the study stops at model selection without building a usable verification system.</p>
+
+<p><b>[5] Tehsin et al., 2024 (ICACS).</b> The authors propose a writer-dependent method that fuses hand-crafted features with one-dimensional CNN features and classifies them with a bagged ensemble that uses majority voting. The method was tested on BHSig260, CEDAR and SigComp2011 under rotation, scaling and noise, and outperformed earlier reported systems. Being writer-dependent, it needs a separately trained model per writer, which does not scale to a large number of signers.</p>
+
+<p><b>[6] Çağlayan and Uyanık, 2024 (SIU).</b> This paper detects wet-ink signature forgery with a Siamese ResNeXt-50 that takes the signature image, its frequency spectrum and its HOG features as inputs, concatenates the embeddings and classifies them with a linear layer. It was evaluated on CEDAR and the Hindi and Bengali parts of BHSig260 and proved effective across them. The paper is short, is written mainly in Turkish, and reports results only on clean benchmark crops rather than on full scanned documents.</p>
+
+<p><b>[7] Lakshmi et al., 2024 (ASSIC).</b> The authors verify signatures on bank cheques using geometric measures, such as distances and shape features, fed to a TensorFlow model. The paper motivates the use of geometric features for offline verification and discusses distance-based, feature-based and graph-based approaches. It reports no clear quantitative result or benchmark comparison, so its effectiveness cannot be judged.</p>
+
+<p><b>[8] Chauhan and Mishra, 2025 (ICBATS).</b> The paper presents CALSigNet, which combines a CNN for spatial features, an attention unit for important regions and an LSTM for sequential stroke patterns. It reached 99.60% test accuracy, against 97.60% for a basic CNN and 98.40% for a ResNet-like CNN, with a five-fold mean of 95.44% and a model size of only 1.55 MB. The gap between test and cross-validation accuracy suggests over-fitting, and the model was not tested separately on skilled forgeries.</p>
+
+<p><b>[9] Bhirud et al., 2025 (EAIC).</b> The authors use VGG-16 transfer learning with data augmentation and an adaptive threshold to compare a new signature against stored references. Two training phases led to near-perfect validation accuracy, and the adaptive threshold reduced false rejections. The evaluation is mostly shown as training curves, without a clear test-set comparison against other published methods.</p>
+
+<p><b>[10] Dasari et al., 2025 (I2ITCON).</b> This hybrid model uses a CNN to identify who signed and InceptionV3 to decide whether the signature is forged, so that both attribution and authenticity are checked in one pipeline. InceptionV3 reached 92% accuracy on GPDS-100, and results were better on a local data set with 140 samples per signer. The method depends on many samples per signer, which are rarely available in practice.</p>
+
+<p><b>[11] Harinadh, 2025 (ICECMSN).</b> The paper uses an autoencoder to create distorted copies of genuine signatures as synthetic forgeries and trains a writer-dependent CNN on them, with SVM and KNN on the learned features and a Flask interface. On a Persian data set with 22 genuine samples per user, the average accuracy was 83%, and it fell by 9.4% with only 9 samples. Accuracy is low, and synthetic distortions are not the same as skilled human forgeries.</p>
+
+<p><b>[12] Irene and Surendran, 2025 (ASIANCON).</b> The authors treat each writer as a class and train a CNN with an ArcFace angular-margin loss instead of Siamese pairs, and use Grad-CAM to explain decisions. On unseen writers from a 486-writer data set the model reached a ROC AUC of 0.9194 and an equal error rate of 0.1762, and Grad-CAM showed attention on meaningful strokes. The error rate is still high for a high-stakes check, and the study covers signatures only.</p>
+
+<p><b>[13] Mistry et al., 2025 (ICCUBEA).</b> This modular three-phase system first detects signatures on multilingual Indian documents with YOLOv5, then cleans them with K-means clustering, and finally matches them. Detection reached an mAP@0.5 of 92.71% across Hindi, Marathi, Gujarati and Urdu documents, and cleaning removed 82.39% of background noise. It is one of the few works that crops signatures from real document pages, but the matching stage is evaluated less thoroughly than detection.</p>
+
+<p><b>[14] Tanwar et al., 2025 (ICAICCIT).</b> The paper describes a signature verification system that combines object detection to locate the signature with CNN-based feature extraction and machine learning classification. It stresses the importance of data diversity, pre-processing and normalisation. It reports few concrete results of its own and acknowledges that skilled forgeries and computational cost remain open problems.</p>
+
+<p><b>[15] Khalid and Mittal, 2026 (IC3ECSBHI).</b> SIGNAUTH combines a CNN and a Vision Transformer to capture spatial and texture features of signatures and adds explainable visualisations of the regions that drove the decision. It reached 96.7% accuracy and generalised well across forgery types. The paper is short, gives limited detail of the data sets and training, and does not address documents beyond the signature crop.</p>
+
+<p><b>[16] Panda and Nayak, 2026 (AIMLCPS).</b> This chapter-style paper surveys classical classifiers (SVM, KNN, random forest) on hand-crafted signature features and CNN-based verification, including architectures, augmentation, loss functions and hybrids of CNN features with ML classifiers. It concludes that CNNs outperform hand-crafted methods. It is descriptive rather than experimental, and it lists signature variability and skilled forgeries as unsolved issues.</p>
+
+<p><b>[17] Nandanwar et al., 2024 (IEEE TNNLS).</b> The authors detect forged handwriting in noisy and blurred images using conformable moments, based on fractional calculus, together with a deep ensemble network that uses steganalysis kernels. The model classifies six classes (normal, altered, noisy, blurred, altered-noisy and altered-blurred) and outperformed existing methods on a new data set and on ACPR 2019, ICPR 2018-FDC and IMEI. It targets altered handwritten characters and words, not signatures or printed text, and the model is computationally heavy.</p>
+
+<h3>2.2 Image Tampering Detection and Localisation</h3>
+
+<p><b>[18] Ram and Gopakumar, 2022 (ICICICT).</b> This survey reviews image splicing detection and localisation from 2003 to 2022, covering watermarking, camera-response, lighting and colour-component methods, as well as CNN-based methods and common data sets. It concludes that CNN-based methods outperform traditional techniques in cost and accuracy, and that combining CNNs with traditional cues is promising. It concerns natural photographs, and its findings need adapting to document images with plain backgrounds and text.</p>
+
+<p><b>[19] Ahmed, 2021 (IEMECON).</b> The author classifies image patches as forged or authentic with EfficientNet transfer learning and localises spliced regions with a U-Net whose encoder is replaced by EfficientNet. Both classification and localisation achieved state-of-the-art results on splicing benchmarks. The work is limited to splicing in natural images, and the author notes that localisation accuracy can still be improved.</p>
+
+<p><b>[20] Rosli et al., 2021 (CRC).</b> The authors compare VGG-16 and ResNet50 transfer learning for detecting spliced images on 1,500 images that include 450 forgeries from the IEEE Image Forensics Challenge 2013. ResNet50 reached 95.08% and VGG-16 reached 94.65% accuracy. The study only classifies whole images, does not localise the tampering, and uses a small data set.</p>
+
+<p><b>[21] Prabu et al., 2023 (RMKMATE).</b> The paper detects forgeries through double-compression traces, training a lightweight network on the difference between an image and its recompressed version, with features tuned by Ant Lion Optimisation. It achieved 95.87% validation accuracy and was faster than earlier methods. It relies on JPEG recompression artefacts, which are absent in lossless or high-quality scans, so it cannot be used alone for documents.</p>
+
+<p><b>[22] Bisht et al., 2024 (IC3I).</b> The authors compare SIFT, SURF and A-KAZE keypoints for copy-move forgery detection, especially in homogeneous regions under large-scale attacks. On NB-CASIA, A-KAZE reached 98.98% accuracy against 93.9% for SURF and 89.2% for SIFT, at the lowest computational cost. Keypoint methods only detect copy-move within the same image and do not handle splicing or text replacement.</p>
+
+<p><b>[23] Aryan et al., 2025 (IEEE Access).</b> This lightweight Vision Transformer uses patch embedding, four encoder blocks and a classification head with only 69,793 trainable parameters for tampering detection. It reached an F1 score of 0.9587 on CASIA v1, 0.9914 on DEFACTO, 0.9097 on MICC-F2000 and 0.8319 on Columbia, and was compared against 59 models. Performance drops on Columbia, and it was evaluated on natural images rather than on scanned documents.</p>
+
+<p><b>[24] Katarya and Lal, 2020 (I-SMAC).</b> This survey explains the generative adversarial networks and autoencoders behind deepfakes and reviews detection methods, naming a spatial, temporal and steganalysis network as the best model at the time. It explicitly highlights document and signature forgery as threats that researchers had not yet explored. It focuses on face videos and offers no method for documents.</p>
+
+<p><b>[25] Devi et al., 2026 (ICEARS).</b> SafeSign is a web application that detects image tampering with EfficientNet, video deepfakes through frame-based analysis and signature forgery with a Siamese CNN, and produces confidence scores and forensic reports. The combined system reached 92.9% overall accuracy. Each modality runs as a separate model, so there is no joint reasoning across the visual content, text and signatures of a single document.</p>
+
+<h3>2.3 Document Forgery Detection for Identity, Financial and Legal Documents</h3>
+
+<p><b>[26] Saire and Tabbone, 2021 (ICPR).</b> The authors propose an end-to-end model based on AdapNet++ that detects counterfeit banknotes from a single low-resolution patch, using multi-scale residual units and a median-frequency-balanced loss for class imbalance. It was competitive with the state of the art, visualised discriminative regions, and generalised to identity and administrative documents. It classifies authenticity overall and does not localise where a document was edited.</p>
+
+<p><b>[27] Sridhar and Sanagavarapu, 2021 (ECAI).</b> This paper trains an artificial neural network on a banknote feature data set and then evolves its weights with a genetic algorithm. The model reached 94% accuracy with a fitness score of 95.2. It uses pre-extracted tabular features rather than images, so it does not transfer to document images.</p>
+
+<p><b>[28] Hamido et al., 2023 (ICAIIC).</b> The authors build a template of each document type from genuine samples, subtract the questioned image from it to expose background changes, and classify the result with a CNN on MIDV-2020 identity documents. Accuracy was 100% on aligned images and 95% on unaligned images. The method needs a template for every document type and depends on good alignment.</p>
+
+<p><b>[29] Jaiswal and Singh, 2023 (ICCCNT).</b> This paper introduces the Forged Scanned Document (FSD) data set of 6,656 manipulated documents built from FUNSD, with ground-truth masks and post-processing such as noise, rotation, scaling, brightness and contrast changes. State-of-the-art segmentation models were tested as baselines, and the best, a U-Net with attention, reached an IoU of only 0.55. The data set is valuable for training, but the low IoU shows that pixel-level localisation in documents is still hard.</p>
+
+<p><b>[30] Lalsudhesh et al., 2024 (ICICI).</b> The authors detect tampered PAN and Aadhaar cards with a custom CNN compared against ResNet50, VGG16, Xception and MobileNetV2. The custom CNN reported 100% accuracy. The data set holds only 40 real and 40 fake PAN cards and 29 Aadhaar cards, so the result is unlikely to generalise.</p>
+
+<p><b>[31] Kurvey et al., 2024 (WCONF).</b> Veripass verifies passports by combining a bilateral CNN for pre-processing, OCR to validate text fields and SIFT to match visual features, with thresholds on both. The paper shows how text and visual checks can be combined in one workflow. It gives no quantitative evaluation, so its accuracy is unknown.</p>
+
+<p><b>[32] Situ et al., 2025 (IEEE Trans. Big Data).</b> The authors propose a two-branch perceptual hash for document images: one branch reads text with OCR and encodes it with BERT, and the other extracts visual features with a ResNet and Vision Transformer cascade. The hash was robust to normal processing and discriminative against tiny text edits that pure image hashes miss. It needs the hash of the original to be stored in advance, so it cannot judge a document that was never registered.</p>
+
+<p><b>[33] Shaalan et al., 2025 (ICCR).</b> This dual-channel U-Net restores degraded historical legal documents in one channel and detects tampering through spatial and watermark inconsistencies in the other. It reported 96.5% restoration accuracy and 97.8% tamper-localisation performance. It is tailored to colonial-era watermarked archives and is not tested on modern identity or financial documents.</p>
+
+<p><b>[34] Neerakan et al., 2025 (IC2NC).</b> The authors detect forged receipts with a classical pipeline: local binary patterns and Canny edges from the image, structural features from the text, SMOTE for class imbalance and a tuned SVM. The best macro F1 score was only 0.5429. The work shows clearly that class imbalance is a central problem, and that hand-crafted features alone are not enough.</p>
+
+<p><b>[35] Autade and Gurajada, 2025 (ICETM).</b> This paper combines CNN, attention and GAN components into an ensemble for visual financial fraud such as forged cheques, fake currency and document forgery. The ensemble reached 95.4% accuracy and a 94.6% F1 score, ahead of a baseline CNN at 89.2%. The data set is described only as an internal financial visual data set, so the results cannot be reproduced.</p>
+
+<p><b>[36] Jadhav et al., 2025 (ICTBIG).</b> The authors add a behavioural authentication layer, the UserKey protocol, before verification, fetch documents through DigiLocker APIs, and classify them with CNN and OCR features together with SVM and random forest models. The system reported 98% accuracy and includes a feedback loop for retraining. The paper does not localise tampering, and blockchain auditing and attention models are left as future work.</p>
+
+<p><b>[37] Sampathkumar and Kotha, 2026 (CCWC).</b> For e-KYC onboarding, the authors pair a ResNet18 classifier for known forgeries with a convolutional autoencoder that flags unseen anomalies through reconstruction error, on passport, driving licence and bank statement data. The classifier reached 94.8% accuracy and the autoencoder reached an AUC of 0.92. It shows the value of an anomaly detector next to a classifier, but the decisions are not explained to the reviewer.</p>
+
+<p><b>[38] Koul et al., 2026 (I3CTCON).</b> This multimodal network fuses a MobileNet visual stream with CBAM attention and ASPP, an edge stream for geometric inconsistencies, and an OCR embedding stream for text anomalies, with normalised feature fusion. It improved robustness to print-scan recapture, local inpainting and font tampering over single-modality models. The authors note that larger, real-world data sets are still needed.</p>
+
+<p><b>[39] Gowtham et al., 2026 (ICDCA).</b> FORENSIQ verifies invoices with a triple-OCR consensus (Tesseract, EasyOCR and PaddleOCR), an arithmetic gate that checks that the gross total equals the net amount plus tax, visual forensics with ELA heatmaps, and vendor-context checks. Visual-only detection reached 74.2% and OCR-only 68.5%, while the full system reached 85.0% accuracy and an AUC of 0.926 on 3,786 images, verifying each invoice in under 30 seconds. It is specific to invoices, and the overall accuracy is still moderate.</p>
+
+<p><b>[40] Vijesh et al., 2026 (ICKECS).</b> The authors combine error level analysis, a U-Net or CNN to localise forged regions, and metadata checks on creation date, modification history and device, producing a heatmap and an authenticity score from 0 to 100. On 15,000 document images the system reached an F1 score of 92.5% and an AUC of 0.991. Metadata is easily stripped or faked, and ELA is weak on high-quality or re-saved scans.</p>
+
+<p><b>[41] Durga et al., 2026 (ICETEMS).</b> ForensicDocAI combines an ELA-CNN with Grad-CAM explanations, OCR with regular-expression checks on names, dates and ID numbers, signature verification with ResNet-50, and encrypted, blockchain-style logging of results. It achieved high accuracy across several forgery types with transparent, auditable output. The evaluation corpus and figures are not fully reported, and the signature model was trained on a small Roboflow data set.</p>
+
+<p><b>[42] Kamal et al., 2026 (I3CTCON).</b> This explainable agent uses a fine-tuned ResNet50 with SHAP and Grad-CAM to detect forged signatures and documents in e-communication and education services, trained on CEDAR and BHSig260 (Bengali and Hindi). It reached 95% accuracy and an AUC of 0.96, ahead of VGG19, MobileNetV2, random forest and logistic regression. Despite the title, the training data are signatures only, so whole-document forgery is not truly tested.</p>
+
+<p><b>[43] Schmidberger et al., 2025 (ICMLA).</b> The authors fine-tune Llama 3.1 8B and OpenCoder 8B on domain code and data to generate rule-based plausibility checks for documents on constrained hardware. The fine-tuned OpenCoder model generated correct checks for 100% of low- and mid-level tasks and 70% of high-level tasks, far ahead of the base models. The generated rules still need human review, and the work covers text-field plausibility only, not the image.</p>
+
+<p><b>[44] Amutha et al., 2026 (ICCRTEE).</b> This framework verifies legal documents by normalising formats, comparing their meaning with NLP-based semantic similarity, and checking the signatures. It found altered content and signature irregularities with high precision on contracts, agreements and certificates. It compares a document with a known version, so it cannot detect image-level tampering when no original exists.</p>
+
+<p><b>[45] Khan et al., 2018 (IEEE Access).</b> This review covers hyperspectral imaging and its uses, including forensic document examination, where ink-mismatch analysis can expose added or altered entries. It shows that spectral imaging detects forgeries invisible in colour images. It requires special hyperspectral cameras, so it is not practical for documents uploaded as ordinary photographs or scans.</p>
+
+<p><b>[46] Rubeshwaran et al., 2026 (TQCEBT).</b> The authors fine-tune a Qwen3-VL-4B vision-language model on 1,656 images of motorcycle parts to tell genuine from counterfeit parts, using a LLaMA-based pipeline to curate labels. It reached 92.3% accuracy, gave a written explanation for each decision, and ran in 1.42 s on a consumer GPU. The domain is physical products, not documents, but it shows that a vision-language model can explain counterfeit decisions in plain language.</p>
+
+<h3>2.4 Academic Credential Verification and Blockchain Anchoring</h3>
+
+<p><b>[47] Ahmad et al., 2024 (ICOIACT).</b> This system verifies diplomas by matching the holder's photograph with a Siamese network and detecting the perforated text with YOLOv8. The Siamese network reached 0.98 accuracy and YOLOv8 an mAP of 0.93 at an IoU of 0.5. It depends on security features specific to Indonesian diplomas, such as perforation, which other certificates lack.</p>
+
+<p><b>[48] Wattanacheep et al., 2025 (ICSEC).</b> The authors extract data from Thai and English transcripts with OCR, using pre-processing and post-correction, and check the result against registrar records. PaddleOCR reached 81.87% accuracy on English and Tesseract 81.11% on Thai, and enhancement plus correction gave gains of up to about 21%. OCR accuracy of about 82% is too low for field-level checks without correction, and the data set is synthetic.</p>
+
+<p><b>[49] VaddiReddy et al., 2026 (AIEI).</b> SRM-Net localises digital inpainting in academic certificates with two streams: fixed Spatial Rich Model filters that capture noise residuals, and a ResNet-18 RGB stream for semantic context, fused in an encoder-decoder that outputs a pixel mask. It reached an F1 score of 0.91, 97.5% recall and 99.8% pixel accuracy, and worked where ELA failed on clean scans. It was trained and tested only on a synthetic data set.</p>
+
+<p><b>[50] Alam et al., 2025 (ACET).</b> This dual-path framework issues certificates with cryptographic hashes, UUIDs, digital signatures and QR codes stored on IPFS and anchored on a blockchain, and verifies them with OCR, deep learning and a fuzzy-logic decision layer. It reported 97.2% fraud-detection accuracy, perfect recall, a ROC AUC of 0.9804 and a verification time of 3.8 s. It only protects certificates issued through the system and cannot judge documents from other issuers.</p>
+
+<p><b>[51] Mishra et al., 2026 (ICEARS).</b> The authors add a CNN-BiLSTM pre-validation step to the ElimuChain blockchain so that forged certificates are rejected before they are hashed to IPFS and recorded by smart contracts. It achieved 98.3% accuracy, 97.9% precision, 98.6% recall and an AUC of 0.987, ahead of CNN-only and Transformer baselines. The work rightly notes that blockchain immutability does not prove authenticity, but the forgery detector is a whole-image classifier that does not show where the forgery is.</p>
+</div>
+
+<h2>3. Literature Gaps Identified</h2>
+<p><b>3.1 Grouping of the Literature.</b> The fifty-one papers fall into four groups, each relating to a part of {{SHORT}}.</p>
+<ul>
+<li><b>Is the signature genuine?</b> Papers [1] to [17] verify handwritten signatures. They show a progression from fine-tuned CNNs in 2022 and 2023 ([1], [2], [4]) to Siamese, attention and metric-learning models in 2025 and 2026 ([3], [8], [12], [15]). Almost all are tested on clean, pre-cropped benchmark images such as CEDAR, BHSig260 and GPDS; only paper [13] finds the signature on a real document page.</li>
+<li><b>Where was the image edited?</b> Papers [18] to [25] detect and localise splicing, copy-move and recompression in natural photographs. Lightweight transformers ([23]) and keypoint methods ([22]) are accurate on these benchmarks, but none is tested on scanned documents, whose plain backgrounds and printed text behave differently.</li>
+<li><b>Is the document as a whole authentic?</b> Papers [26] to [46] address identity, financial and legal documents. The strongest recent systems combine several kinds of evidence: visual, edge, OCR text and arithmetic ([38], [39], [41]). Results range widely, from a macro F1 of 0.54 ([34]) to claimed 100% on tiny data sets ([30]), and the public FSD benchmark shows a localisation IoU of only 0.55 ([29]).</li>
+<li><b>Can a credential be trusted later?</b> Papers [47] to [51] verify certificates and transcripts and anchor them on a blockchain. They show that a hash on a ledger proves integrity only for documents issued through the system, and that an AI check is still needed before anchoring ([51]).</li>
+</ul>
+
+<p><b>3.2 Gaps and the Response of the Project.</b> Each gap is matched below with the decision taken for {{SHORT}}.</p>
+
+<p><b>Gap 1: Signatures verified only as clean crops.</b> Nearly all signature studies assume a cropped, clean signature and test on benchmark sets (papers [1] to [12] and [15]); only paper [13] detects and cleans signatures on real pages. {{SHORT}} therefore detects and cleans the signature region on the uploaded page before verification (FR-S1 and FR-S2).</p>
+
+<p><b>Gap 2: Signature models that are writer-dependent or need many samples.</b> Writer-dependent models need retraining per signer and many genuine samples (papers [5], [10] and [11]). {{SHORT}} uses a writer-independent similarity model of the Siamese or metric-learning type that compares a questioned signature with one to five stored references (FR-S3 and NFR-6), following papers [3], [6] and [12].</p>
+
+<p><b>Gap 3: Tamper localisation not proven on documents.</b> Localisation methods are tested on natural photographs (papers [19], [22] and [23]), and on the one document benchmark the best IoU is only 0.55 (paper [29]). {{SHORT}} trains and evaluates its localiser on document data (FSD and synthetic inpainting in the style of paper [49]) and outputs a pixel-level heatmap (FR-D2).</p>
+
+<p><b>Gap 4: Over-reliance on compression artefacts.</b> ELA and double-compression methods fail on clean, high-quality or lossless scans (papers [21], [40] and [49]). {{SHORT}} combines a noise-residual (SRM) stream with a semantic RGB stream, and uses ELA only as one supporting signal (FR-D1 and FR-D2).</p>
+
+<p><b>Gap 5: Single-modality decisions.</b> Image-only or text-only systems miss forgeries that leave no visual trace, such as edited PDF figures, or no textual trace, such as a pasted photo (papers [38] and [39]). {{SHORT}} fuses visual, signature and OCR evidence, including field-format and arithmetic consistency rules, into one score (FR-D3, FR-D4 and FR-D5).</p>
+
+<p><b>Gap 6: Opaque results.</b> Many models give only a genuine-or-forged label (papers [26], [30], [35] and [51]), which a verifier cannot defend. {{SHORT}} returns an authenticity score from 0 to 100, a heatmap, per-check sub-scores and a plain-language reason (FR-D5, FR-D6 and NFR-4), following papers [12], [40] and [42].</p>
+
+<p><b>Gap 7: Small and imbalanced data sets.</b> Several papers report very high accuracy on a few dozen samples (papers [4] and [30]), while class imbalance sharply lowers real performance (paper [34]). {{SHORT}} reports precision, recall, F1 and AUC on held-out data, uses class weighting or oversampling, and treats accuracy alone as insufficient (NFR-5).</p>
+
+<p><b>Gap 8: Unseen forgery types.</b> Supervised classifiers only learn the forgery types they were trained on (papers [21] and [37]). {{SHORT}} keeps the detector behind a replaceable interface so that an anomaly detector or a newer model can be added later without redesign (NFR-7).</p>
+
+<p><b>Gap 9: Integrity of the verification record.</b> Blockchain anchoring proves integrity only for documents issued through the system (papers [50] and [51]), and few detectors keep an auditable record of their own decisions. {{SHORT}} stores a SHA-256 hash of each verified document and its result in an append-only audit log (FR-A3 and NFR-8); full blockchain anchoring is left for Phase 2.</p>
+
+<h2>4. Requirement Analysis</h2>
+<p><b>4.1 Basis.</b> The requirements below are derived from the problem statement and from the gaps in Section 3. Each requirement is traced to the problem statement or to the paper that motivates it. The identifiers are used again in the System Design Document. Prefixes are: U for user (verifier), S for signature, D for detection, A for administrator, P for platform.</p>
+
+<p><b>4.2 Functional Requirements.</b></p>
+
+<p><b>FR-U1 (User).</b> The verifier can register, log in and manage a profile. Traced to the problem statement and paper [36].</p>
+<p><b>FR-U2 (User).</b> The verifier can upload a document as an image (JPEG or PNG) or as a PDF and choose its type, such as identity card, certificate, invoice or legal document. Traced to the problem statement and papers [31], [39] and [41].</p>
+<p><b>FR-U3 (User).</b> The verifier can view the result of each check, download a verification report as a PDF, and see past verifications. Traced to papers [25] and [39].</p>
+<p><b>FR-U4 (User).</b> The verifier can register one to five genuine reference signatures for a signer, to be used in signature verification. Traced to papers [3] and [9].</p>
+
+<p><b>FR-S1 (System).</b> The system detects and crops signature regions on the uploaded page. Traced to paper [13].</p>
+<p><b>FR-S2 (System).</b> The system removes background, lines and stamps from the signature crop. Traced to paper [13].</p>
+<p><b>FR-S3 (System).</b> The system compares the questioned signature with the stored references and returns a similarity score and a decision. Traced to papers [3], [6] and [12].</p>
+
+<p><b>FR-D1 (System).</b> The system pre-processes the document by deskewing, resizing and normalising it, and computes noise-residual (SRM) and ELA maps. Traced to papers [40] and [49].</p>
+<p><b>FR-D2 (System).</b> The system localises tampered regions and produces a pixel-level heatmap over the document. Traced to papers [19], [29], [33] and [49].</p>
+<p><b>FR-D3 (System).</b> The system extracts text with OCR and checks key fields, such as names, dates, ID numbers and amounts, against format rules. Traced to papers [39], [41] and [48].</p>
+<p><b>FR-D4 (System).</b> For financial documents, the system checks arithmetic consistency, for example that the total equals the net amount plus tax. Traced to papers [39] and [43].</p>
+<p><b>FR-D5 (System).</b> The system fuses the tamper, signature and OCR results into one authenticity score from 0 to 100 with a label: Genuine, Suspicious or Forged. Traced to papers [38], [40] and [50].</p>
+<p><b>FR-D6 (System).</b> The system explains each decision with a heatmap, per-check sub-scores and a short plain-language reason. Traced to papers [12], [42] and [46].</p>
+
+<p><b>FR-A1 (Administrator).</b> The administrator manages users and roles. Traced to the problem statement.</p>
+<p><b>FR-A2 (Administrator).</b> The administrator can review documents flagged as Suspicious and record a final decision, which is kept as feedback for retraining. Traced to papers [36] and [43].</p>
+<p><b>FR-A3 (Administrator).</b> The administrator can view analytics and the audit log of all verifications. Traced to papers [41] and [50].</p>
+
+<p><b>FR-P1 (System).</b> The web interface and any future mobile client use one common API to the backend. Traced to the problem statement.</p>
+<p><b>FR-P2 (System).</b> The system stores a SHA-256 hash of every verified document with its result, so that a later copy can be checked against the stored record. Traced to papers [32], [50] and [51].</p>
+
+<p><b>4.3 Non-Functional Requirements.</b></p>
+<p><b>NFR-1.</b> A full verification of a single-page document completes in under about 10 seconds on the server, so that a verifier can work interactively. Traced to papers [39] and [50].</p>
+<p><b>NFR-2.</b> The tamper-detection model is lightweight enough to run on a single consumer GPU or on CPU. Traced to papers [8] and [23].</p>
+<p><b>NFR-3.</b> Uploaded documents are encrypted in transit and at rest, and are deleted after a configurable retention period. Traced to papers [36] and [41].</p>
+<p><b>NFR-4.</b> Every decision is explainable to a non-expert reviewer. Traced to papers [12], [40] and [42].</p>
+<p><b>NFR-5.</b> Models are evaluated with precision, recall, F1 and AUC on held-out data, and class imbalance is handled explicitly. Traced to papers [29] and [34].</p>
+<p><b>NFR-6.</b> Signature verification works for a new signer with as few as one to five references and no retraining. Traced to papers [5], [11] and [12].</p>
+<p><b>NFR-7.</b> Each detector sits behind a replaceable interface, so that a model can be upgraded or added without changing the rest of the pipeline. Traced to papers [13] and [37].</p>
+<p><b>NFR-8.</b> Verification results and administrator decisions are written to an append-only audit log. Traced to papers [41] and [50].</p>
+<p><b>NFR-9.</b> Role-based access control separates verifier and administrator permissions. Traced to the problem statement.</p>
+<p><b>NFR-10.</b> The system is robust to common capture conditions, such as rotation, scaling, noise, blur and print-scan, and to documents in Indian scripts. Traced to papers [5], [13] and [17].</p>
+
+<p><b>4.4 Notes on Scope.</b></p>
+<ul>
+<li>Authenticity is decided by fusing several independent checks (FR-D5) rather than by one end-to-end classifier, because papers [38] and [39] show that combined evidence clearly outperforms any single stream.</li>
+<li>Very high accuracies reported on tiny data sets (papers [4] and [30]) are not used as targets. NFR-5 sets the evaluation standard instead.</li>
+<li>Blockchain anchoring (papers [50] and [51]) and hyperspectral ink analysis (paper [45]) are outside the scope of Phase 1. The document hash in FR-P2 keeps the design ready for anchoring later.</li>
+<li>Video and face deepfakes (papers [24] and [25]) are out of scope, because the system handles still document images only.</li>
+</ul>
+
+<p><b>4.5 Requirements of the Assigned Module.</b> {{MODULE_INTRO}}</p>
+<ul>
+{{MODULE_ITEMS}}
+</ul>
+
+<h2>5. Conclusion</h2>
+<p>The survey shows that existing research supplies strong individual techniques for signature verification, tamper localisation, OCR-based validation and certificate anchoring, but rarely combines them on real, full-page documents or explains the result to the person who must act on it. Most signature work assumes clean crops, most localisation work is tested on natural photographs, and many reported accuracies come from small or imbalanced data sets. The project therefore adopts a multi-evidence pipeline that detects and verifies signatures on the page, localises tampering with noise-residual and semantic features, checks text and arithmetic with OCR, and fuses these into an explainable authenticity score with an auditable record. Blockchain anchoring and support for new forgery types through anomaly detection are left for Phase 2.</p>
+
+<h2>6. References</h2>
+<div class="ref">
+<p>[1] R. Dash, M. Bag, D. Pattnayak, A. Mohanty, and I. Dash, "Automated signature inspection and forgery detection utilizing VGG-16: a deep convolutional neural network," in Proc. 2023 2nd Int. Conf. on Ambient Intelligence in Health Care (ICAIHC), 2023, doi: 10.1109/ICAIHC59020.2023.10431430.</p>
+<p>[2] M. Bag, R. Dash, D. Pattnayak, A. Mohanty, and I. Dash, "Handwritten signature forgery detection using deep neural network," in Proc. 2023 Int. Conf. in Advances in Power, Signal, and Information Technology (APSIT), 2023, doi: 10.1109/APSIT58554.2023.10201777.</p>
+<p>[3] N. B. Emberi, A. Mohan, C. A. Naphade, and R. Ransing, "Harnessing deep neural networks for accurate offline signature forgery detection," in Proc. 2023 7th Int. Conf. on Intelligent Computing and Control Systems (ICICCS), 2023, doi: 10.1109/ICICCS56967.2023.10142593.</p>
+<p>[4] O. Tarek and A. Atia, "Forensic handwritten signature identification using deep learning," in Proc. 2022 IEEE 9th Int. Conf. on Sciences of Electronics, Technologies of Information and Telecommunications (SETIT), 2022, doi: 10.1109/SETIT54465.2022.9875697.</p>
+<p>[5] S. Tehsin, A. Hassan, and F. Riaz, "Ensemble learning for offline signature verification using fused deep features," in Proc. 2024 5th Int. Conf. on Advancements in Computational Sciences (ICACS), 2024, doi: 10.1109/ICACS60934.2024.10473290.</p>
+<p>[6] S. C. Çağlayan and Ş. Uyanık, "Wet-ink signature forgery detection using Siamese ResNeXt," in Proc. 2024 32nd Signal Processing and Communications Applications Conf. (SIU), 2024, doi: 10.1109/SIU61531.2024.10600997.</p>
+<p>[7] A. A. Lakshmi, G. S. Reddy, M. S. Reddy, and N. Kathirisetty, "Offline signature forgery detection based on geometric measures using TensorFlow model," in Proc. 2024 Int. Conf. on Advancements in Smart, Secure and Intelligent Computing (ASSIC), 2024, doi: 10.1109/ASSIC60049.2024.10507928.</p>
+<p>[8] R. Chauhan and A. Mishra, "AI-driven signature forgery detection: a novel deep learning-based approach with CALSigNet," in Proc. 2025 3rd Int. Conf. on Business Analytics for Technology and Security (ICBATS), 2025, doi: 10.1109/ICBATS66542.2025.11258335.</p>
+<p>[9] S. Bhirud, S. Bijwe, T. Chavan, A. Bhonsle, S. Rukhande, and D. G., "Deep transfer learning for authenticating handwritten signatures," in Proc. 2025 Int. Conf. on Electronics, AI and Computing (EAIC), 2025, doi: 10.1109/EAIC66483.2025.11101688.</p>
+<p>[10] S. B. Dasari, H. S. Para, and D. Chaduvula, "Signature recognition and forgery detection with a hybrid approach using CNN and InceptionV3," in Proc. 2025 Int. Conf. on Information, Implementation, and Innovation in Technology (I2ITCON), 2025, doi: 10.1109/I2ITCON65200.2025.11210728.</p>
+<p>[11] T. Harinadh, "Offline signature verification with auto encoder CNN hybrid feature extraction for improved fake signature detection," in Proc. 2025 5th Int. Conf. on Evolutionary Computing and Mobile Sustainable Networks (ICECMSN), 2025, doi: 10.1109/ICECMSN68058.2025.11383202.</p>
+<p>[12] F. Irene G and R. Surendran, "Understanding offline signature verification models: an explainable AI study using ArcFace and Grad-CAM," in Proc. 2025 5th Asian Conf. on Innovation in Technology (ASIANCON), 2025, doi: 10.1109/ASIANCON66527.2025.11281314.</p>
+<p>[13] R. N. Mistry, N. More, S. Patil, and C. Desai, "Multilingual signature verification using deep learning: a three-phase modular approach," in Proc. 2025 9th Int. Conf. on Computing, Communication, Control and Automation (ICCUBEA), 2025, doi: 10.1109/ICCUBEA65967.2025.11283938.</p>
+<p>[14] P. Tanwar, D. Jindal, M. A. Ansari, and M. S. Sachdeva, "Signature verification system using object detection and machine learning," in Proc. 2025 3rd Int. Conf. on Advances in Computation, Communication and Information Technology (ICAICCIT), 2025, doi: 10.1109/ICAICCIT68829.2025.11434444.</p>
+<p>[15] F. Khalid and H. Mittal, "SIGNAUTH: an AI-based system for automated handwritten signature identification and forgery detection," in Proc. 2026 2nd Int. Conf. on Cognitive Computing in Engineering, Communications, Sciences and Biomedical Health Informatics (IC3ECSBHI), 2026, doi: 10.1109/IC3ECSBHI67834.2026.11469042.</p>
+<p>[16] S. Panda and P. K. Nayak, "ML and CNN-based signature verification system," in Proc. 2026 1st Int. Conf. on Artificial Intelligence &amp; Machine Learning in Communication and Power Systems (AIMLCPS), 2026, doi: 10.1109/AIMLCPS68702.2026.11542440.</p>
+<p>[17] L. Nandanwar, P. Shivakumara, H. A. Jalab, R. W. Ibrahim, R. Raghavendra, U. Pal, T. Lu, and M. Blumenstein, "A conformable moments-based deep learning system for forged handwriting detection," IEEE Trans. Neural Netw. Learn. Syst., vol. 35, no. 4, pp. 5407-5420, Apr. 2024, doi: 10.1109/TNNLS.2022.3204390.</p>
+<p>[18] K. Ram K and G. Gopakumar, "A survey on image splice forgery detection and localization techniques," in Proc. 2022 3rd Int. Conf. on Intelligent Computing, Instrumentation and Control Technologies (ICICICT), 2022, doi: 10.1109/ICICICT54557.2022.9917694.</p>
+<p>[19] M. S. Ahmed, "Image splicing detection and localisation using EfficientNet and modified U-Net architecture," in Proc. 2021 10th Int. Conf. on Internet of Everything, Microwave Engineering, Communication and Networks (IEMECON), 2021, doi: 10.1109/IEMECON53809.2021.9689172.</p>
+<p>[20] N. A. Rosli, S. N. H. S. Abdullah, A. N. Zamani, N. S. M. Othman, and N. A. A. A. M. Tajuddin, "Comparison multi transfer learning models for deep fake image recognizer," in Proc. 2021 3rd Int. Cyber Resilience Conf. (CRC), 2021, doi: 10.1109/CRC50527.2021.9392566.</p>
+<p>[21] R. T. Prabu, A. Balaji, K. M. Dhanalakshmi, S. Diwakaran, C. Prathima, and S. Vijayakumar, "Robust attack identification strategy to prevent document image forgeries by using enhanced learning methodology," in Proc. 2023 Int. Conf. on Research Methodologies in Knowledge Management, Artificial Intelligence and Telecommunication Engineering (RMKMATE), 2023, doi: 10.1109/RMKMATE59243.2023.10369395.</p>
+<p>[22] G. S. Bisht, A. Jain, V. Bansla, K. Sharma, R. Bhutia, and V. Kumar, "Enhanced keypoint-based approach for identifying copy-move forgery in digital images," in Proc. 2024 7th Int. Conf. on Contemporary Computing and Informatics (IC3I), 2024, doi: 10.1109/IC3I61595.2024.10829331.</p>
+<p>[23] P. Aryan, R. M. R. Yanamala, A. Pallakonda, R. D. A. Raj, and K. K. Prakasha, "Lightweight end-to-end patch-based self-attention network for robust image forgery detection," IEEE Access, vol. 13, pp. 157674-157686, 2025, doi: 10.1109/ACCESS.2025.3607206.</p>
+<p>[24] R. Katarya and A. Lal, "A study on combating emerging threat of deepfake weaponization," in Proc. 4th Int. Conf. on I-SMAC (IoT in Social, Mobile, Analytics and Cloud), 2020.</p>
+<p>[25] G. N. R. Devi, V. Sanjana, V. Kamtam, C. Tejaswi, and S. Rahul, "SafeSign: a multi-level forgery and deepfake detection system for images, videos, and handwritten signatures," in Proc. 2026 Int. Conf. on Electronics and Renewable Systems (ICEARS), 2026, doi: 10.1109/ICEARS67481.2026.11416587.</p>
+<p>[26] D. Saire and S. Tabbone, "Documents counterfeit detection through a deep learning approach," in Proc. 2020 25th Int. Conf. on Pattern Recognition (ICPR), 2021, doi: 10.1109/ICPR48806.2021.9412224.</p>
+<p>[27] S. Sridhar and S. Sanagavarapu, "Deep-neural genetic algorithm optimization analysis for forgery detection of banknotes," in Proc. 2021 13th Int. Conf. on Electronics, Computers and Artificial Intelligence (ECAI), 2021, doi: 10.1109/ECAI52376.2021.9515040.</p>
+<p>[28] M. Hamido, A. Mohialdin, and A. Atia, "The use of background features, template synthesis and deep neural networks in document forgery detection," in Proc. 2023 Int. Conf. on Artificial Intelligence in Information and Communication (ICAIIC), 2023, doi: 10.1109/ICAIIC57133.2023.10067120.</p>
+<p>[29] A. K. Jaiswal and S. Singh, "FSD: a novel forged document dataset and baseline," in Proc. 2023 14th Int. Conf. on Computing Communication and Networking Technologies (ICCCNT), 2023, doi: 10.1109/ICCCNT56998.2023.10306408.</p>
+<p>[30] H. A. Lalsudhesh, R. Keerthana, N. Radha, and R. Swathika, "PAN card tampering detection using machine learning techniques," in Proc. 2024 2nd Int. Conf. on Inventive Computing and Informatics (ICICI), 2024, doi: 10.1109/ICICI62254.2024.00059.</p>
+<p>[31] M. Kurvey, S. Malave, D. Mehta, E. Joshi, P. Mishra, and J. Mohitepatil, "Veripass: passport forgery detection using CNN, OCR, and SIFT," in Proc. 2024 2nd World Conf. on Communication &amp; Computing (WCONF), 2024, doi: 10.1109/WCONF61366.2024.10692007.</p>
+<p>[32] X. Situ, T. Liu, H. Yao, C. Qin, and X. Zhang, "Document-image perceptual hashing for content authentication," IEEE Trans. Big Data, vol. 11, no. 6, pp. 3474-3487, Nov./Dec. 2025, doi: 10.1109/TBDATA.2025.3596854.</p>
+<p>[33] K. Shaalan, O. Alhyari, A. Q. Saeed, M. Binhammad, A. M. Al-Zoghby, M. Elsersy, and T. M. Ghazal, "Legal document recovery and tamper detection using U-Net for historical watermarked archives," in Proc. 2025 3rd Int. Conf. on Cyber Resilience (ICCR), 2025, doi: 10.1109/ICCR67387.2025.11292073.</p>
+<p>[34] M. J. Neerakan, S. T, and L. J, "Unmasking the masked: a classical machine learning pipeline for detecting forged receipts," in Proc. 2025 Int. Conf. on NexGen Networks and Cybernetics (IC2NC), 2025, doi: 10.1109/IC2NC67409.2025.11376086.</p>
+<p>[35] R. Autade and H. N. H. Gurajada, "Computer vision for financial fraud prevention using visual pattern analysis," in Proc. 2025 Int. Conf. on Engineering, Technology &amp; Management (ICETM), 2025, doi: 10.1109/ICETM63734.2025.11051811.</p>
+<p>[36] A. Jadhav, R. Bhosale, S. Jagadale, and D. Lokare, "AI powered document verification: a behavioral and multi domain approach to automated fraud detection," in Proc. 2025 IEEE 5th Int. Conf. on ICT in Business Industry &amp; Government (ICTBIG), 2025, doi: 10.1109/ICTBIG68706.2025.11323606.</p>
+<p>[37] V. Sampathkumar and R. Kotha, "Reinforcing digital banking onboarding with generative AI fraud detection," in Proc. 2026 IEEE 16th Annual Computing and Communication Workshop and Conf. (CCWC), 2026, doi: 10.1109/CCWC67433.2026.11393774.</p>
+<p>[38] A. Koul, H. Prajapati, H. Shah, H. Swali, and S. Dehkane, "A multi-modal architecture for document forgery detection," in Proc. 2026 IEEE Int. Conf. for Convergence in Computing Technology (I3CTCON), 2026, doi: 10.1109/I3CTCON68242.2026.11507251.</p>
+<p>[39] C. S. Gowtham, T. Gurusankeeerth, G. L. Priya, and A. Samraj, "A multi-modal approach to automated financial document forgery detection using CNN and semantic validation," in Proc. 2026 Int. Conf. on Data Science for Cyber-Physical Systems Resilience using Advanced Applications (ICDCA), 2026, doi: 10.1109/ICDCA69396.2026.11620092.</p>
+<p>[40] P. Vijesh, N. Prakash, I. Latchiya, S. Praveen, M. Sakthivel, and A. Rajamanickam, "AI-based legal evidence authenticity scoring and forgery detection," in Proc. 2026 4th Int. Conf. on Knowledge Engineering and Communication Systems (ICKECS), 2026, doi: 10.1109/ICKECS70176.2026.11527849.</p>
+<p>[41] R. N. V. Durga, M. Bandaru, and G. Anitha, "ForensicDocAI: document forgery detection using deep learning and blockchain," in Proc. 2026 3rd Int. Conf. on Emerging Trends in Engineering and Medical Sciences (ICETEMS), 2026, doi: 10.1109/ICETEMS66917.2026.11469665.</p>
+<p>[42] N. Kamal, V. Aarthi, G. Yuvasri, S. N. Madhumitha, S. Rogini, and S. Rohini, "Explainable machine learning agent for forged document detection in e-communication and educational services," in Proc. 2026 IEEE Int. Conf. for Convergence in Computing Technology (I3CTCON), 2026, doi: 10.1109/I3CTCON68242.2026.11507731.</p>
+<p>[43] V. Schmidberger, M. Eberhardinger, S. Maghsudi, and J. Maucher, "Generation of programmatic rules for document forgery detection using large language models," in Proc. 2025 Int. Conf. on Machine Learning and Applications (ICMLA), 2025, doi: 10.1109/ICMLA66185.2025.00225.</p>
+<p>[44] S. Amutha, S. Manusha, and P. Abhilash, "An intelligent framework for legal document comparison and verification," in Proc. 2026 Int. Conf. on Computational Robotics, Testing and Engineering Evaluation (ICCRTEE), 2026, doi: 10.1109/ICCRTEE68719.2026.11566679.</p>
+<p>[45] M. J. Khan, H. S. Khan, A. Yousaf, K. Khurshid, and A. Abbas, "Modern trends in hyperspectral image analysis: a review," IEEE Access, vol. 6, pp. 14118-14129, 2018, doi: 10.1109/ACCESS.2018.2812999.</p>
+<p>[46] M. Rubeshwaran, R. Saravanan, D. Veerachandru, A. Maheswari, and K. K. Rehkha, "AI-based counterfeit detection system for bike parts," in Proc. 2026 Int. Conf. on Trends in Quantum Computing and Emerging Business Technologies (TQCEBT), 2026, doi: 10.1109/TQCEBT67648.2026.11681713.</p>
+<p>[47] M. I. Ahmad, I. Nurtanio, and Z. Zainuddin, "Diploma verification through multi-modal image processing: face detection, perforation text recognition, and system architecture evaluation," in Proc. 2024 7th Int. Conf. on Information and Communications Technology (ICOIACT), 2024, doi: 10.1109/ICOIACT64819.2024.10913411.</p>
+<p>[48] B. Wattanacheep, P. Komkris, I. Heymun, and W. Srimontrisanga, "An OCR-based framework for automated verification of Thai and English academic transcripts," in Proc. 2025 29th Int. Computer Science and Engineering Conf. (ICSEC), 2025, doi: 10.1109/ICSEC67360.2025.11298018.</p>
+<p>[49] P. VaddiReddy, N. Siliveri, D. Munaga, and R. A. Kumar, "SRM-Net: a dual-stream deep learning framework for localizing digital inpainting in academic credentials," in Proc. 2026 IEEE Int. Conf. on AI Engineering and Innovations (AIEI), 2026, doi: 10.1109/AIEI69164.2026.11497285.</p>
+<p>[50] F. Alam, D. Srivastava, S. Ahmad, and J. Kumar, "Blockchain and AI-enhanced dual-path framework for secure and intelligent certificate issuance and verification," in Proc. 2025 2nd Int. Conf. on Advanced Computing and Emerging Technologies (ACET), 2025, doi: 10.1109/ACET67282.2025.11430363.</p>
+<p>[51] N. Mishra, M. Gayathri, B. V. S. Reddy, B. S. Kumar, and B. Jaswanth, "AI-enhanced blockchain-based certificate verification using hybrid deep learning models," in Proc. 2026 Int. Conf. on Electronics and Renewable Systems (ICEARS), 2026, doi: 10.1109/ICEARS67481.2026.11416784.</p>
+</div>
+
+</body>
+</html>

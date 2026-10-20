@@ -1,0 +1,502 @@
+2025 2nd International Conference on Advanced Computing and Emerging Technologies (ACET) | 979-8-3315-6783-5/25/$31.00 ©2025 IEEE | DOI: 10.1109/ACET67282.2025.11430363
+
+Blockchain and AI-Enhanced Dual-Path Framework
+for Secure and Intelligent Certificate Issuance and
+Verification
+Farhad Alam
+Department of Computer Science &
+Engineering,
+JB Institute of Technology,
+Dehraudn 248197, Uttarakhand, India
+farhad.alam@gmail.com
+Durgesh Srivastava
+DCSE, Chitkara University, Punjab and
+Faculty of Computing and IT, Sohar
+University, Oman
+drdkumar.ptu@gmail.com
+
+Shariq Ahmad
+Database Administrator
+UP State Unit NIC Lucknow, India.
+ahmaddrshariq@gmail.com
+Jitendra Kumar
+Department of Computer Science and
+Engineering,
+ABES Engineering College,
+Ghaziabad, India
+jitendra.kumar@abes.ac.in
+
+Abstract— In the global digital era, we encounter ourselves
+in the necessary of ascertaining the secure issuance and
+verification of certificates, as these are crucial to checking
+credibility among institutions and preventing fraud. Traditional
+Paper-based and centralized digital systems are at High risk of
+forgery, duplication, and data breaches, emphasizing the
+requirement for a strong, scalable, tamper-proof framework.
+Therefore, in this paper, an advanced two-way glide path for
+certificate management is proposed that desegregates
+blockchain technology, cryptography, fuzzy logic, and artificial
+intelligence (AI) to accomplish more secure and round-the-clock
+issuance, as well as intelligent verification. In this paper, the
+appendage of issuance creates unique cryptographic hashes ,
+Universally Unique Identifiers (UUIDs) , and digital signatures,
+then cuts QR codes and uses fuzzy signatures to endure small
+repugnance‟s from physical or digital documents. Certificates
+are stored on a decentralized infrastructure (IPFS) and dropped
+anchor to blockchain networks for verifiable records. The
+verification process applied a two-stage methodology that
+combined blockchain validation with AI analysis, changing the
+use of Optical Character Recognition (OCR) and deep learning
+toolsets to verify both metadata integrity and visual
+authenticity. A fuzzy logic decision layer synthesizes these
+analyses, relegating certificates as Valid, Valid with Low
+Confidence, or Invalid. Experimental evaluation evidences the
+system’s superior performance, achieving a fraud detection
+accuracy of 97.2%, an average verification latency of 3.8
+seconds, perfect recall (zero false negatives), and high
+discriminative power with ROC AUC of 0.9804 and PR-AUC of
+0.9770. The proposed framework provides a scalable, secure,
+and user-friendly solution applicable across education,
+corporate, healthcare, government, and recruitment sectors.
+Future enhancements may include smart contract integration,
+multi-chain interoperability, and resilience against adversarial
+attacks, positioning the system as a future-ready platform for
+global certificate management and verification.
+Keywords— Blockchain Technology, Artificial Intelligence
+(AI), Dual-Path Framework, Secure Certificate Issuance,
+Intelligent Verification, Cryptography,
+
+I. INTRODUCTION
+Today, almost every organization depends on issuing and
+authenticating various types of certificates to prove
+achievements, competencies[1], or qualifications. These
+certificates range from academic degrees and professional
+training records to licenses, awards, and organizational
+
+Upinder Kaur
+School of Computer Science and
+Engineering, Lovely Professional
+University, Phagwara, Punjab 144411,
+India;
+upinderkaur45@gmail.com
+Amit Garg
+Department of CSE,
+Manipal University Jaipur, Jaipur,
+Rajasthan, India
+amit.garg@jaipur.manipal.edu
+
+achievements. The management of such credentials is
+required to be efficient, scalable, and secure, as fraudulent or
+manipulated certificates can harm the reputation of institutions
+and reduce trust in the overall certification ecosystem.
+Conventional accesses associated with the certificate
+management are paper-type or centralized type digital ones,
+which require high labor cost and is error-prone, forgeryprone, duplication-prone and tamper- prone. In addition,
+centralized solutions are prone to single-point failure as well
+as data leakage with lots of concern about reliability and
+trust[2] .
+To address these challenges, this paper proposes a novel
+organizational credit or merits based certification
+management[3] and verification framework by incorporating
+both Blockchain contributions/reputation system and machine
+learning [4]. The framework also acts as a full-circle solution
+that comprises the entire certificate lifecycle and can be used
+both from issuance to long-term verification[5].Every
+certificate granted through the system is uniquely connected
+to an cryptographic hash that remains forever in the
+blockchain [6]. The benefit of blockchain is that it’s
+unchangeable and decentralized, tracing capabilities away
+from records allows for a greater degree of trustworthiness,
+plus the elimination of file tampering[7]. Any tampering with
+the certificate or its related metadata would cause a hash
+mismatch, thus revealing fraud immediately[8].
+The addition of two machine learning models that
+heightened the certificate substantiation process distinguishes
+the proposed architectur[9]. To corroborate the authenticity of
+the record within its context, the first model assures structured
+metadata such as the recipient's name, issuer, certificate type,
+and period of validity[10]. Continuing the certificate visually
+intact is the focus of the second model. Such manipulation and
+anomalies are detected by taking into account significant
+features of the banknotes[11], including watermarks,
+embedded QR codes, seals , signatures, and logos. It also
+utilizes optical character recognition (OCR) to compare the
+text in the certificate image with recorded data for a higher
+level of reliability[12]. Together, these mechanisms provide a
+two-tier validation process to ensure both the appearance and
+content of the certificates[13].
+The system is composed of two functional modules. The
+first is the “Issue Certificate” module that allows companies
+to incorporate cryptographic security components when
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:04:18 UTC from IEEE Xplore. Restrictions apply.
+
+producing and issuing new certificates[14-15]. Each diploma
+is also instantly recorded on the blockchain and referenced
+using this information. (iii) Older certificates can be scanned
+and uploaded into the system. Organizations can upload older
+certificates into a system using this module's feature, which
+serves as a historical record integrator. Machine learning
+algorithms review these uploaded documents and validate[1518] .The system consists of two core functional modules. One
+is the “Issue Certificate” module, which allows an
+organization to generate & issue new certificates with various
+cryptographic security features. Linked to those are
+automatically attached metadata, which are recorded on the
+blockchain. This widget can also import data from history,
+allowing users to upload old certificates into the system. These
+records are analyzed upon upload using machine learning
+techniques to validate and ensure their legitimacy before being
+stored on the blockchain for secure curation. The system may
+be employed in a “credit” environment or a “merit”
+environment, such that points, scores, or the like are attached
+to certificates and associated with either credit and/or merit,
+providing incentives for educational institutions or other
+entities using the scores as metrics . The other is the
+“Verification” module, which allows checking certificates
+live during issuance or for legacy certificates. This module
+examines the blockchain record to ensure its validity, and uses
+these models for checking the integrity of metadata and
+identifying tampering in certificate images. After combining
+the power of blockchain verification with AI-based analysis,
+the blockchain 24/7 verification module creates a highly
+secure, safe, and auditable method for validation that can be
+embedded into institutional portals, mobile platforms, or
+recruitment systems.
+The proposed framework brings several benefits. It offers
+strong security through blockchain immutability, ensuring
+that issued certificates cannot be modified or counterfeited. It
+provides scalability , enabling the management of millions of
+certificates without the bottlenecks of traditional methods.
+Fraud prevention is strengthened by machine learning
+algorithms that adapt to new tampering techniques. The userfriendly interface makes the system accessible even to nontechnical staff, while its interoperability allows certificates to
+be verified across institutions and borders. Additionally, the
+framework maintains auditability, with every action traceable
+for future inspections, and ensures future-readiness by
+allowing easy integration of emerging technologies. The
+system has wide-ranging applications across education,
+corporate organizations, healthcare, government, and
+recruitment sectors. Universities can issue degrees and
+transcripts securely, corporations can manage employee skill
+certifications , healthcare authorities can validate professional
+licenses , and governments can ensure tamper-proof issuance
+of permits. Employers and recruitment agencies can instantly
+verify the authenticity of candidate credentials, saving time
+and building trust.
+The remainder of this work is organized as follows.
+Section II reviews existing literature and practices in
+certificate management along with their limitations. Section
+III presents the proposed methodology and describes the
+architectural integration of blockchain and machine learning.
+Section IV discusses the performance evaluation,
+experimental results, and security analysis. Section V explains
+the functionalities of the Issue Certificate and Verification
+modules. Section VI concludes the paper and highlights the
+
+future scope, including integration of smart contracts,
+federated learning, and multi-chain interoperability for global
+adoption.
+II. LITERTURE REVIW
+Many researchers in the past have worked in the areas of
+certificate validation on the blockchain and document forgery
+detection through machine learning. These works create the
+groundwork toward a robust system integrating metadata
+validation, visual anomaly detection, and decentralized
+storage. A brief depiction of some of their work goes as
+follows:We look at related study works and talk about them
+below. Cheng et al. [1] created a model that uses the
+Ethereum platform, which is run by EVM [2]. There are three
+types of users in the model: service providers who maintain
+the system, certification units that give out badges, and
+students who meet certain requirements. With a graphical
+user interface (GUI), it gives each student a unique serial
+number and QR code, checks the information, and adds it to
+the Blockchain. Padmavati et al. [3] wrote about a safe way
+to check a certificate that uses MetaMask, a solidity smart
+contract, and GUI-based Remix. When a student logs into the
+system to ask for a certificate, it is checked and approved by
+the person who issued it. Here, there are two kinds of users:
+admins and students. The administrator keeps data in blocks,
+gives out certificates, and sends the students the hash.
+Students can ask for and look at the award. Gayathiri et al. [4]
+offered a method for validating certificates that uses a mobile
+app. There were methods used to turn a paper award into a
+digital picture. After that, they made a hash number and put
+the certificates in the Blockchain. The certificate approval for
+digital certificates was done by the mobile app.
+T Rahman et al. [5] has proposed an academic
+credential verification system that operates on blockchain and
+IPFS with the aim of fighting against fake certificates in
+Southeast Asia. Certificates are hashed and stored on the
+IPFS, while the hash is recorded on the blockchain, allowing
+for tamper-proof verification. There should be ease of
+accessing verified credentials by employers- such a process
+being secure, cost-efficient, and fast, thereby cutting down on
+manual processes and fraud. A. Tariq et al. [6] has indicated
+that Cerberus is an efficient blockchain-based credential
+verification mechanism to shelve a very common credential
+fraud. Unlike traditional methods, Cerberus is designed to
+work alongside present verification ecosystems, using onchain smart contracts for revocation instead of requiring users
+to engage with any digital identity management. Cerberus
+improves privacy of data, transcript verification, and
+selective disclosure of data to give a better and more
+convenient option than existing methods and earlier
+blockchain alternatives. M. Ul Hassan et al. [7] has reviewed
+that how anomaly detection models lend blockchain
+applications with on-the-spot identification of suspicious
+activities. The role of anomaly detection in securing
+blockchain application is described with key metrics and
+requirements for evaluation, followed by the categorization
+of detection models at different blockchain layers. The paper
+finishes with existing challenges and research directions to
+take in developing reliable and secure blockchain systems.
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:04:18 UTC from IEEE Xplore. Restrictions apply.
+
+III. PROPOSED METHDOLDOGY
+This research employs a dual-path methodology for
+secure digital certificate management, consisting of two
+tightly integrated yet distinct processes: Issuance and
+Verification. Both processes are reinforced through the
+convergence of blockchain technology, cryptographic
+algorithms, fuzzy logic, and artificial intelligence (AI),
+ensuring that certificates are not only securely generated but
+also verifiable in a transparent, tamper-resistant, and
+intelligent manner. The overall methodology is depicted in
+Figure 1, which illustrates the step-by-step flow from
+certificate creation to its final verification, emphasizing the
+interplay between security mechanisms and AI-powered
+validation.
+Step 1: Collection of Certificate Metadata. The Certificate
+Issuance process begins with the collection of certificate
+metadata, which includes attributes such as the recipient’s
+name, issuing authority, course or program information,
+issued and expiration dates, and a serial or institutional
+reference code. After this data is ready, the system produces
+two fundamental security elements: a cryptographic hash and
+a UUID. The cryptographic hash (such as SHA-256) is a
+digital fingerprint of the certificate data and therefore
+provides integrity in case any change has occurred, because
+each small alteration would produce an entirely different
+hash. The UUID helps maintain this by providing an
+internationally unique tag that prevents references from being
+duplicated across institutions or contexts.
+Additionally, a digital signature is applied using the
+issuer's private key to secure further the certificate, which
+contains a digital trust anchor that can be verified against the
+public key of the prospect. As an added benefit, a QR code is
+incorporated into the design of the certificate, containing a
+compressed summary and a link to the blockchain record for
+easy verification. In addition to these standard cryptographic
+steps, our technique includes a novel fuzzy signature layer.
+Unlike a firm digital signature, the fuzzy signature resists
+some slight changes or destruction in the physical and digital
+certificates. For instance, even in the case where the
+certificate is scanned, poorly photographed, or OCR (Optical
+Character Recognition) misreads occur, and the fuzzy
+matching system – using OCR and metadata checks – can be
+employed where others would not allow such a certificate to
+be recognized and verified. This is the key feature that makes
+the framework robust to real-life conditions when documents
+won't always stay immaculate.
+After embedding these multilayered protections
+then the data from there certificate is uploaded on a stroke
+infrastructure which is decentralized, as like the
+InterPlanetary File System (IPFS), with Pinata ensuring
+reliable pinning and retrieval of data. So, to obtain
+immutability and public transparency, the certificate record is
+then devoted to a blockchain network, with the
+Sepolia/Ethereum Testnet serving as the favored
+environment for data-based deployment. Once this grounding
+is complete, the issuance process concludes, acquiring a
+certificate that is cryptographically secured, redundantly
+stored, and immutably recorded .
+The Certificate Verification process begins when a
+user, employer, or institution attempts to validate a
+
+certificate. Verification may be initiated by scanning the
+embedded QR code or by extracting textual content from a
+physical or digital certificate through OCR. The extracted
+metadata is then cross-checked against the blockchain record
+in two stages: first, by comparing the certificate metadata
+with the blockchain-stored metadata; and second, by
+validating the complete certificate against its on-chain
+representation. This ensures both surface-level integrity and
+deep structural consistency.
+
+Figure 1. Result Methodology
+
+Following blockchain validation, the procedure
+proceeds to the AI verification pipeline. First, a general
+intelligent model generates a commensurate analysis to
+evaluate the certificate in its entirety, assessing blatant
+anomalies [60]. This is then refined by more applicationtailored deep learning models—such as CNNs,
+MobileNetV2, or Transformer-based architectures—that
+examine the certificate in a fine-grained manner [61]. They
+can pick up on fine-grained distinctions, including changes to
+fonts or logos, shifts of watermarks that don’t quite fit, or
+discrepancies in electronic seals. After the AI models make
+their evaluations, those are piped into a fuzzy logic decisionsupport layer that combines results from both blockchain and
+AI pipelines.In contrast to a binary decision process , fuzzy
+logic suggests the possibility of allowing the system to sort
+certificates into somewhat graduated categories: Valid, Valid
+with Low Confidence (indicating an opportunity may exist
+but no critical inconsistency), and Invalid (which could
+require manual review). As shown in Figure 1, the two-way
+method enables a healthy business environment for
+establishing a digital certificate service. The generation
+process is secure, as the certificates are generated in a unique
+form and recorded in an unchangeable manner. Guidance by
+AI-enabled analysis, fuzzy decision-making support, and
+blockchain verification can provide multiple layers of
+protection against technology forgery. Together, these paths
+create a scalable, trusted, and intelligent solution that
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:04:18 UTC from IEEE Xplore. Restrictions apply.
+
+overcomes the limitations of traditional certificate-based
+solutions.
+The evaluation of the proposed system
+demonstrated its superiority across critical performance
+metrics, including detection accuracy, operational efficiency,
+and classification robustness. In terms of Fraud Detection
+Accuracy as so shown in Figure 2, the system achieved a
+leading performance of 97.2%, surpassing all existing
+comparable models. For instance, it outperformed [4], the
+next-best model, by a significant margin, and achieved a 12.2
+percentage point lead over the lowest-performing model, [3].
+This high level of accuracy establishes the system as highly
+effective in correctly identifying fraudulent activities.
+
+is vital for security applications where missing a threat is
+unacceptable. The overall discriminative power was
+quantified through standard classification curves. The ROC
+Curve as seen Figure 5 which yielded an AUC of 0.9804,
+indicating that the system's probability score for a randomly
+chosen positive instance is higher than that of a negative
+instance 98.04% of the time
+
+Figure 4. Confusion Matrix
+
+Figure 2. Detection Accuracy
+
+.
+
+The operational speed of the proposed system was
+also markedly superior. A comparison of Average
+Verification Latency as shown is Figure 3 revealed that the
+Your Proposed System processed verifications in just 3.8
+seconds. This time represents the fastest performance among
+the evaluated systems, which ranged from 6.2 seconds [3] to
+12.0 seconds [3]. The 3.8-second latency confirms that the
+system is not only highly accurate but also highly efficient,
+ensuring minimal delay in real-time applications.
+
+Figure 5. ROC Curve
+
+Similarly, the Precision-Recall (PR) Curve as seen in Figure
+6 which confirmed the model's performance on the positive
+class by achieving an Area Under the Curve (PR-AUC) of
+0.9770.
+
+Figure 3. Comparison of Average Verification Latency
+
+Further analysis of the system's classification ability
+using the Confusion Matrix as seen in Figure 4 which
+confirmed its exceptional ability to identify the positive class
+(invalid certificates). Out of the 200 samples tested, the
+system recorded 100 True Positives (TP) and 90 True
+Negatives (TN), resulting in only 10 False Positives (FP).
+Crucially, the system registered zero False Negatives (FN=0),
+meaning it successfully detected every single invalid
+certificate present in the test set. These zero false negative
+rates translate to perfect Recall for the positive class, which
+
+Figure 6. Precision-Recall Curve
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:04:18 UTC from IEEE Xplore. Restrictions apply.
+
+Both curve analyses, with AUC values extremely close to 1.0
+and significantly above their respective random baselines,
+robustly demonstrate the high quality and reliability of the
+proposed system's classification capabilities.
+IV. CONLCUSION
+Our Proposed system delivers a Fraud Detection Accuracy of
+97.2% with an Average Verification Latency of just 3.8
+seconds, making it well-suited for real-time applications. The
+model ensures perfect recall (no false negatives) and
+demonstrates strong discriminative ability with ROC AUC of
+0.9804 and PR-AUC of 0.9770. These results highlight its
+reliability, efficiency, and potential for secure digital
+certificate verification. Future work should focus on
+scalability, testing with larger and more diverse datasets, and
+exploring deployment on distributed frameworks like
+blockchain to maintain speed under heavy loads. Real-world
+applications could include e-commerce payment security or
+access control in critical infrastructure. Although only 10
+false positives were observed, refining the model to reduce
+them without compromising recall remains an important
+direction. Additionally, strengthening resilience against
+adversarial attacks will be essential for long-term robustness.
+
+[9]. V. Sapra et al., “Integrated approach using deep neural network and
+CBR for detecting severity of coronary artery disease,” Alexandria
+Engineering Journal, vol. 68. Elsevier BV, pp. 709–720, Apr. 2023.
+doi: 10.1016/j.aej.2023.01.029.
+[10]. S. Badotra et al., “A DDoS Vulnerability Analysis System against
+Distributed SDN Controllers in a Cloud Computing Environment,”
+Electronics, vol. 11, no. 19. MDPI AG, p. 3120, Sep. 29, 2022. doi:
+10.3390/electronics11193120.
+[11]. S. Bharany et al., "A Comprehensive Review on Big Data Challenges,"
+2023 International Conference on Business Analytics for Technology
+and Security (ICBATS), Dubai, United Arab Emirates, 2023, pp. 1-7,
+doi: 10.1109/ICBATS57792.2023.10111375.
+[12]. V. Mehra, P. Singh,and R. S. Sawhney, “A social media analytics
+application of impression management and social presence theories to
+Twitter interaction analysis,” Decision Analytics Journal, vol. 9.
+Elsevier
+BV,
+p.
+100321,
+Dec.
+2023.
+doi:
+10.1016/j.dajour.2023.100321.
+[13]. S. Kumar et al., “Exploitation of Machine Learning Algorithms for
+Detecting Financial Crimes Based on Customers’ Behavior,”
+Sustainability, vol. 14, no. 21. MDPI AG, p. 13875, Oct. 25, 2022. doi:
+10.3390/su142113875
+
+REFERENCES
+[1]. J.-C. Cheng, N.-Y. Lee, C. Chi, and Y.-H. Chen, “Blockchain and smart
+contract for digital certificate,” in 2018 IEEE international conference
+on applied system invention (ICASI), pp. 1046–1051, IEEE, 2018.
+[2]. L. S. Barbosa and S. A. Shaikh, “Selected contributions from the open
+source software certification (opencert) workshops.,” Sci. Comput.
+Program., vol. 91, pp. 139–140, 2014.
+[3]. P. E. Gundgurti, K. Alluri, P. E. Gundgurti, G. Vaishnavi, et al., “Smart
+and secure certificate validation system through blockchain,” in 2020
+Second International Conference on Inventive Research in Computing
+Applications (ICIRCA), pp. 862–868, IEEE, 2020.
+[4]. A. Gayathiri, J. Jayachitra, and S. Matilda, “Certificate validation using
+blockchain,” in 2020 7th International Conference on Smart Structures
+and Systems (ICSSS), pp. 1–4, IEEE, 2020.
+[5]. T. Rahman, S. I. Mouno, A. M. Raatul, A. K. Al Azad, and N. Mansoor,
+"Verifi-chain: A credentials verifier using blockchain and IPFS," in
+Proc. Int. Conf. Inf., Commun. Comput. Technol., Singapore: Springer
+Nature Singapore, pp. 361–371, 2023.
+[6]. A. Tariq, H. Binte Haq and S. T. Ali, "Cerberus: A Blockchain-Based
+Accreditation and Degree Verification System," in IEEE Transactions
+on Computational Social Systems, vol. 10, no. 4, pp. 1503-1514, Aug.
+2023.
+[7]. M. Ul Hassan, M. H. Rehmani and J. Chen, "Anomaly Detection in
+Blockchain Networks: A Comprehensive Survey," in IEEE
+Communications Surveys & Tutorials, vol. 25, no. 1, pp. 289-318,
+Firstquarter 2023.
+[8]. S. Bharany and S. Sharma, "Intelligent Green Internet of Things: An
+Investigation," in Machine Learning, Blockchain, and Cyber Security
+in Smart Environments, London, UK: Chapman and Hall/CRC, 2022,
+pp. 1–15.
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:04:18 UTC from IEEE Xplore. Restrictions apply.
+
+

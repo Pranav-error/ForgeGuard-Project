@@ -1,0 +1,669 @@
+2025 5th International Conference on Evolutionary Computing and Mobile Sustainable Networks (ICECMSN) | 979-8-3315-8242-5/25/$31.00 ©2025 IEEE | DOI: 10.1109/ICECMSN68058.2025.11383202
+
+Proceedings of the 5th International Conference on Evolutionary Computing and Mobile Sustainable Networks (ICECMSN-2025)
+IEEE Xplore Part Number: CFP254AH-ART; ISBN: 979-8-3315-8242-5
+
+Offline Signature Verification with Auto Encoder
+CNN Hybrid Feature Extraction for Improved Fake
+Signature Detection
+1T Harinadh
+M. Tech Student, Dept. of CSE,
+Chalapathi Institute of Technology,
+AR Nagar,mothadaka,
+Guntur-522016, A.P, India
+harinadh2497@gmail.com
+
+Abstract— Signature verification is also one of the most
+popular forms of biometric authentication, particularly when
+there is offline authentication, e.g. cheques, forms, letters and
+official documents. Accurate verification is essential since the
+signature of each person is unique, and this can help stop
+fraud. Nonetheless, the loss of human verification is usually
+susceptible to mistakes and irregularity. A hybrid solution to
+the offline signature verification through Convolutional Neural
+Networks (CNN) that integrates with Autoencoder-based data
+augmentation to enhance the detection of fake signatures is
+presented in this paper. A Writer-Dependent model is applied
+in which random distortions are produced on authentic
+signatures with the help of an autoencoder to produce
+counterfeit signatures. The CNN classifier is then trained using
+them. The paper describes the pre-processing procedures
+applied to the signature images, and gives experimental results
+under different conditions of varying the number of training
+samples. In the Persian signature dataset, the model was
+trained on 22 genuine images per user and its average test
+accuracy was 83%. At the lower reduction in the number of
+real training samples (9), accuracy was decreased by 9.4
+percent, which indicates that the amount of training data does
+affect verification performance.
+Keywords—Offline
+Signature
+Verification,
+Forgery
+Detection, Convolutional Neural Network (CNN), Autoencoder,
+Hybrid Feature Extraction.
+
+I.
+
+INTRODUCTION
+
+Handwritten signature is still used as the most popular
+biometric identifier for personal identification in banking,
+legal and administrative service. Signatures are used in a
+large number of cases in financial transactions, including
+checks, credits and legal contracts or agreements, even in the
+age digital transformation due to their simplicity and social
+acceptance. But handwritten signatures are extremely
+vulnerable to fraud and abuse, potentially leading to costly
+financial and legal repercussions. Hence, it is critical to
+develop robust and automated signatures verification system.
+The signature verification is a narrow pattern recognition
+task, the problem of learning discriminative features from
+real-signed signatures to separate them to fake-signed ones.
+According to the verification, methods can be divided into on
+and offline. The online methods are based on dynamic
+features of the signing process including pen pressure,
+velocity, direction and stroke order whereas the offline ones
+use only static signature image. Because offline signatures
+are deprived of temporal information and have irregular
+intra-class variation, verifying them is inherently more
+difficult. However, offline signatures are still in vast use
+
+2G Srinivasa Rao
+Asst. Professor, Dept. of CSE,
+Chalapathi Institute of Technology,
+AR Nagar,mothadaka,
+Guntur-522016, A.P, India
+anusgummadi@gmail.com
+
+even in the realms of real-life application where paper-based
+legal or financial documentation is needed.
+Conventional image processing and statistical feature
+extraction methods have not been very effective in handling
+the high variability and the complexity of offline signatures.
+In recent years, due to the rise of machine learning and
+especially deep learning fields, new tools for automated
+(signature) image feature extraction and description have
+emerged capable to learn from data about representative and
+invariant features. Convolutional Neural Networks (CNNs)
+have achieved stateof-the-art performance in image-based
+recognition, owing to their ability to automatically extract
+spatial hierarchies of features. Similarly, autoencoders have
+also demonstrated their success in unsupervised feature
+learning and data augmentation due to generation of realistic
+augments of input data.
+This paper proposes a hybrid framework for the
+Autoencoder CNN over offline signature verification. The
+automatic encoder creates distorted versions of real
+signatures which appear like forgeries. This makes the CNN
+classifier stronger during training. The staff of CNN has
+been taught to tell the difference between real and fake
+signatures based on the writer. The suggested technique was
+tested with the Persian offline signature dataset. While
+trained alongside 22 real signatures, the algorithm had an
+average accuracy for 83%. Whenever the number of real
+samples was cut down to 9, the accuracy dropped by only
+9.4%. These results show that the recommended hybrid
+framework could make offline signature verification methods
+more accurate and useful in general.
+II.
+
+LITERATURE SURVEY
+
+Signing was an important step that businesses use to keep
+data private and stop people from getting into it without
+permission. In the last ten years, offline handwritten
+signature verification has become a well-known biometric
+method for verifying someone's identity [1]. However,
+attaining high accuracy within these systems continues to be
+difficult, mainly because handwriting varies naturally from
+person for person; a single individual can't always produce
+the same signature.
+The authors of [1] suggested a Long Short-Term Memory
+(LSTM) neural network model over offline signature
+verification. They used the Histogram of Oriented Gradients
+(HOG) technique to get characteristics from signature images.
+The USTig as well as CEDAR datasets were used to train
+and test the model. The LSTM model accomplished
+classification accuracies of 92.4% on USTig with an average
+runtime of 1.67 seconds and 87.7% on CEDAR with a
+
+979-8-3315-8242-5/25/$31.00 ©2025 IEEE
+
+1813
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:02:45 UTC from IEEE Xplore. Restrictions apply.
+
+Proceedings of the 5th International Conference on Evolutionary Computing and Mobile Sustainable Networks (ICECMSN-2025)
+IEEE Xplore Part Number: CFP254AH-ART; ISBN: 979-8-3315-8242-5
+
+runtime of 2.98 seconds. This was better than other classical
+methods like K-Nearest Neighbor (KNN), Support Vector
+Machine (SVM), Convolutional Neural Network (CNN),
+Speeded-Up Robust Features (SURF), as well as Harris
+corner detection methods.
+
+stages: data acquisition, pre-processing, data augmentation
+via an autoencoder, feature extraction utilizing a CNN, and
+classification employing a writer-dependent model. Figure 1
+shows how the proposed system works as a whole.
+
+It is still hard to make sure that signatures upon official
+documents like bank checks, certificates, contracts, and
+bonds are real, especially when it comes to making sure they
+are both accurate and strong. The research in [2] presented an
+innovative feature set predicated upon the quasi-straightness
+about boundary pixel runs over signature verification. The
+suggested method used directional codes compared to
+signature boundary pixels to find quasi-straight line segments.
+These features did a great job of capturing the balance
+between straightness as well as small curvature, which made
+the verification system more reliable. The authors utilized an
+SVM classifier and exhibited enhanced performance upon
+standard datasets, including CEDAR and GPDS-100,
+surpassing multiple state-of-the-art methodologies [20].
+In [3], a new online signature verification system was put
+forth. It used fuzzy modeling to look at both the shape and
+the dynamic features found in digital signature data [4]. The
+signature divided at its geometric extremes, and fuzzy logic
+was used to extract and model features over each segment.
+We used Dynamic Time Warping (DTW) to line up two
+signature samples to determine the correspondence between
+segments. A threshold that depended on the user was then
+used to decide when a test sample had been real or fake.
+Validation experiments on benchmark datasets SVC2004 and
+SUSIG confirmed the efficacy associated with the proposed
+fuzzy-based method for both skilled as well as random
+forgeries [3,29].
+Another study proposed a new way to verify identity
+using dynamic signature partitioning, that takes into account
+things like pen speed and pressure over time [3,29]. This
+method makes verification more effective by breaking the
+signature up into several parts, each of which represents a
+different time when it was signed. A neuro-fuzzy
+classification system was made using fuzzy set theory, which
+made it possible to make flexible and understandable
+decisions. The SVC2004 and BioSecure databases were used
+to run simulations that showed the method could work well
+for high verification accuracy.
+•
+In addition, [5] introduced an improved signature
+partitioning method that uses hybrid partitions in order to test
+signature analysis more precise [6-8]. The partitions were
+made by putting together vertical and horizontal parts that
+comprised the signature [9-11]. The vertical parts showed the•
+beginning, middle, and end of the signing, whereas the top
+and bottom parts showed areas in which the pen moved at
+different speeds and pressures [3,4,12,13]. The suggested
+algorithm gave priority to stable signing areas, which made it
+more robust and improved the performance of verification
+[14-18]. The method was tested with the MCYT-100 and
+BioSecure datasets, which showed that it can improve the
+accuracy of dynamic signature verification systems [19, 20].
+III.
+
+METHODOLOGY
+
+Fig. 1. Proposed System Architecture.
+
+A. Dataset Preparation
+A complete dataset is put together using well-known sources
+like CEDAR and GPDS. It includes both real and fake
+signatures from different writers. To allow supervised
+learning, every signature sample has been identified by hand
+as either real or fake. In order to be sure the model has welltested, the dataset has been divided into training and testing
+parts that keep the class distribution the same. The dataset
+formulation is as follows if N has become the number of
+samples:
+𝐷 = {(𝑥𝑖 , 𝑦𝑖 ) ∣ 𝑥𝑖 ∈ R𝑀×𝑁 , 𝑦𝑖 ∈ {0,1}} where 𝑥𝑖 is the resized,
+pre-processed signature image and 𝑦𝑖 is the binary label (0
+for forged, 1 for genuine).
+B. Image Pre-processing
+All images go through a systematic pre-processing pipeline
+to make sure the input is consistent and of high quality:
+Grayscale conversion: Changes RGB images towards
+single-channel mode so that they can be processed more
+quickly.
+Noise filtering: Employs Gaussian blurring, formulated as:
+𝑥 ′ (𝑖, 𝑗 = ∑ 𝐺(𝑘, 𝑙) 𝑥(𝑖 − 𝑘, 𝑗 − 𝑙)
+𝑘,𝑙
+
+with 𝐺 being the Gaussian kernel.
+Binarization: Makes use Otsu's thresholding technique to
+get the most variance among classes, setting the global
+threshold 𝑡t as:
+
+OVERALL FRAMEWORK
+The suggested system uses a hybrid Autoencoder–CNN
+approach to offline signature verification to make it easier to
+find fake signatures. The approach comprises five principal
+
+1
+𝑥𝑏𝑖𝑛 (𝑖, 𝑗) = {
+0
+
+979-8-3315-8242-5/25/$31.00 ©2025 IEEE
+
+𝑥(𝑖, 𝑗) > 𝑡𝑂𝑡𝑠𝑢
+otherwise
+
+1814
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:02:45 UTC from IEEE Xplore. Restrictions apply.
+
+Proceedings of the 5th International Conference on Evolutionary Computing and Mobile Sustainable Networks (ICECMSN-2025)
+IEEE Xplore Part Number: CFP254AH-ART; ISBN: 979-8-3315-8242-5
+
+Resizing and normalization: Makes sure that the images
+have been the same size as well as that the pixel intensities
+follow
+𝑥𝑏𝑖𝑛 − 𝜇
+𝑥𝑛𝑜𝑟𝑚 =
+𝜎
+where 𝜇 and 𝜎 are global mean and standard deviation.
+C. Hybrid Feature Extraction
+A hybrid architecture has been used to gather discriminative
+features:
+•
+
+Autoencoder: Learns a compressed latent representation. For
+an input image 𝑥x, the encoding is:
+𝑧 = 𝑓𝑒𝑛𝑐 (𝑥𝑛𝑜𝑟𝑚 ; 𝜃𝑒𝑛𝑐 )
+
+•
+
+Convolutional Neural Network: Learns organizational spatial
+features compared to 𝑧. The standard convolution operation
+is:
+𝑘−1
+
+𝐹(𝑖, 𝑗) = 𝜎(∑
+𝑝=0
+
+𝑘−1
+
+∑ 𝑧(𝑖 + 𝑝, 𝑗 + 𝑞)𝑤(𝑝, 𝑞) + 𝑏)
+𝑞=0
+
+where 𝑤w are the convolutional kernel weights, 𝑏 is a bias
+term, and 𝜎σ denotes an activation function (e.g. ReLU).
+•
+
+Final feature vector: Concatenates autoencoder and CNN
+outputs for maximum discriminative power.
+D. Classification and Training
+The fully interconnected classifier gets the composite vector
+of features.
+Using softmax, the equation gives the
+probability for each class:
+𝑇
+
+𝑃(𝑦 = 𝑐 ∣ 𝑓) =
+
+𝑒 𝑊𝑐 𝑓+𝑏𝑐
+2
+
+∑
+
+𝑇
+
+𝑒 𝑊𝑘 𝑓+𝑏𝑘
+
+𝑘=1
+
+where 𝑓 is the learned feature vector, and 𝑊𝑐 , 𝑏𝑐 are weights
+and bias.
+Training is done by lowering the classification cross-entropy
+loss:
+𝑁
+
+1
+𝐿=− ∑
+𝑁
+𝑖=1
+
+2
+
+∑ 𝑦𝑖𝑐 log⁡ 𝑃(𝑦𝑖 = 𝑐 ∣ 𝑓𝑖 )
+𝑐=1
+
+Grid search upon the validation subset is used to choose
+hyperparameters like the learning rate, batch size, and epochs.
+E. Performance Evaluation
+Standard formulas are used to figure out system accuracy,
+recall, precision, and F1-score:
+𝑇𝑃 + 𝑇𝑁
+Accuracy =
+𝑇𝑃 + 𝑇𝑁 + 𝐹𝑃 + 𝐹𝑁
+Here, 𝑇𝑃, 𝑇𝑁, 𝐹𝑃, 𝐹𝑁 indicate true positives, true negatives,
+false positives, and false negatives, respectively. Also, the
+equal error rate (EER) can be utilized to give a strong
+
+assessment of how well a biometric system works. K-fold
+cross-validation helps prevent overfitting and makes sure the
+results are reliable. The highest test accuracy identified is 83%
+when there are enough real samples. Fewer training samples
+will likely lead to a lower accuracy, which shows that having
+enough data is important for strong signature verification.
+F. Algorithm
+1. Input:
+• Genuine and forged signature images for each writer
+• Hyperparameters (image size, learning rate, epochs,
+batch size, etc.)
+2. Output:
+• Trained writer-specific verification model
+• Classification result: Genuine or Forged
+3. Algorithm Steps:
+• Collect per-writer genuine and forged samples; divide
+into training, validation, and test sets.
+• Preprocess all images (convert to grayscale, blur, apply
+Otsu binarization, resize, and normalize).
+• Train an Autoencoder on genuine signatures to learn
+reconstruction patterns.
+• Generate synthetic forged samples by perturbing latent
+vectors and applying minor distortions.
+• Train a CNN feature extractor on genuine, synthetic, and
+forged samples.
+• Concatenate Autoencoder latent features and CNN
+features to form a hybrid representation.
+• Train a binary classifier using the hybrid features (label
+1 = genuine, 0 = forged).
+• Determine the optimal decision threshold where false
+acceptance rate ≈ false rejection rate (EER point).
+• Freeze the trained model parameters and threshold for
+each writer.
+• During testing, preprocess the input signature and
+extract hybrid features.
+• Classify using the trained model: if score ≥ threshold →
+Genuine, else → Forged.
+• Compute and report evaluation metrics (Accuracy,
+Precision, Recall, F1-Score, and EER).
+IV. EXPERIMENTAL SETUP
+The suggested offline signature verification system was
+evaluated utilizing publicly available datasets that included
+both real and fake signature images. The main parts of the
+experiment arrangement are as follows:
+Dataset
+The experiments utilized benchmark datasets like CEDAR
+and GPDS, which include handwritten offline signatures
+alongside designated genuine and forged samples. We split
+the dataset through training and testing sets, making sure that
+the classes were evenly distributed.
+Hardware and Software
+The system was set into place on a computer that included an
+Intel i7 processor and an NVIDIA GPU to speed up deep
+learning training. Python 3.8, TensorFlow, and Keras deep
+learning libraries were all part of the software environment.
+Data Preprocessing
+
+979-8-3315-8242-5/25/$31.00 ©2025 IEEE
+
+1815
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:02:45 UTC from IEEE Xplore. Restrictions apply.
+
+Proceedings of the 5th International Conference on Evolutionary Computing and Mobile Sustainable Networks (ICECMSN-2025)
+IEEE Xplore Part Number: CFP254AH-ART; ISBN: 979-8-3315-8242-5
+
+We changed the signature images to grayscale, cleaned them
+up with Gaussian filtering, turned them into black and white
+alongside Otsu thresholding, and then made them all the
+same size so they would work alongside the model. Images
+had been normalized before being sent to the network for
+processing.
+
+A. Classification Accuracy
+The model got about 83% accuracy regarding the Persian
+dataset, which had 22 real signatures over training.
+Accuracy went down when there were fewer training
+samples, which shows that it is sensitive to the size of the
+dataset [Fig 2].
+
+Model Training
+The Adam optimizer was utilized to train the power source
+Autoencoder-CNN hybrid model. The learning rate was
+0.001 and the batch size was 32. Training lasted for 50
+epochs, and early stopping was implemented to avoid
+overfitting according to validation loss.
+Evaluation Metrics
+We looked at performance by looking at accuracy, precision,
+recall, and F1-score. We also calculated the equal error rate
+(EER) as a way to measure how well biometric verification
+works. For robustness, we did cross-validation alongside 5
+folds.
+The formula for Equal Error Rate (EER) in biometric
+systems, in which both the False Acceptance Rate (FAR) and
+the False Rejection Rate (FRR) have been the same, is as
+follows:
+∗
+
+∗
+
+EER = FAR(𝑡 ) = FRR(𝑡 )
+∗
+
+where 𝑡 is the threshold at which
+FAR(𝑡) =
+
+𝐹𝑃
+𝐹𝑃 + 𝑇𝑁
+
+FRR(𝑡) =
+
+𝐹𝑁
+𝐹𝑁 + 𝑇𝑃
+
+Fig. 2. Classification Accuracy vs Number of Genuine Training Samples
+
+B. Equal Error Rate (EER)
+An EER of about 5.2% was found, which shows that the
+rates of false acceptance as well as false rejection were well
+balanced [Fig 3].
+
+and
+
+The EER is the value of the level of error that this threshold
+𝑡 ∗ . It is the point in which the system's false acceptance as
+well as false rejection errors have equal. See this point
+through the DET or ROC curve lines by looking for the point
+where the FAR and FRR lines cross.
+When can't find an exact match, a good way to get a
+numerical estimate about EER has to find the smallest
+variance between FAR and FRR across all thresholds. 𝑡t:
+𝑡 ∗ = arg⁡ min⁡ ∣ FAR(𝑡) − FRR(𝑡) ∣
+𝑡
+
+and then
+EER =
+
+Fig. 3. Detection Error Tradeoff (DET) curve showing FRR vs. FAR and
+marking the EER point.
+
+C. 5.3 Precision, Recall, and F1-Score
+Fig. 4 shows that Precision and recall were both over 0.80 in
+each of the tested datasets, or the F1-score confirmed that the
+classifier was working well.
+
+FAR(𝑡 ∗ ) + FRR(𝑡 ∗ )
+2
+
+This formula gives a number to the overall strength of the
+biometric system, having lower EER values meaning better
+verification accuracy and security.
+V. RESULTS AND DISCUSSIONS
+This section shows the experimental testing of the suggested
+Autoencoder-CNN offline signature verification method,
+using visual graphs to show how well it classifies and how
+strong it is.
+Fig. 4. Line plot comparing Precision, Recall, and F1-score across datasets
+or training conditions.
+
+979-8-3315-8242-5/25/$31.00 ©2025 IEEE
+
+1816
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:02:45 UTC from IEEE Xplore. Restrictions apply.
+
+Proceedings of the 5th International Conference on Evolutionary Computing and Mobile Sustainable Networks (ICECMSN-2025)
+IEEE Xplore Part Number: CFP254AH-ART; ISBN: 979-8-3315-8242-5
+
+D. 5.4 Confusion Matrix
+The confusion matrix analysis revealed that the majority of
+errors stemmed from skilled forgery cases which closely
+resembled authentic signatures [Fig 5].
+
+Fig. 5. Heatmap of confusion matrix displaying counts of true positives,
+false positives, true negatives, and false negatives.
+
+VI. CONCLUSION
+The suggested offline signature verification system uses a
+mix of Convolutional Neural Networks (CNN) and
+Autoencoders to identify strong features that can tell the
+difference between real and fake signatures. We used
+classical classifiers like Support Vector Machine (SVM) and
+K-Nearest Neighbors (KNN) to correctly sort signatures
+based on the features we learned. Tests showed that the
+system was reliable and strong because it had high accuracy,
+low equal error rates, and balanced precision, recall, and F1scores across benchmark datasets. A user-friendly Flaskbased interface alongside built-in secure authentication
+makes the system even easier to use and safer, making it
+ready for utilization in the real world. When compared to
+more advanced methods, the proposed framework shows that
+it works well. This sets a strong base for future
+improvements, such as adding more data and making it
+possible to verify signatures in real time.
+REFERENCES
+[1]
+
+[2]
+
+[3]
+
+[4]
+
+[5]
+
+Vellela, S. S., & Balamanigandan, R. (2024). Optimized
+clustering routing framework to maintain the optimal energy
+status in the wsn mobile cloud environment. Multimedia Tools
+and Applications, 83(3), 7919-7938.
+Vindhya, A. S., Vellela, S. S., Malathi, N., Vullam, N. R.,
+Vuyyuru, L. R., & Rao, T. (2025, September). Integrating
+Quantum Computing with Genomic Data Analysis: A NextGeneration Approach for Predicting Disease Susceptibility.
+In 2025 4th International Conference on Innovative Mechanisms
+for Industry Applications (ICIMIA) (pp. 1168-1173). IEEE.
+Vellela, S. S., & Balamanigandan, R. (2023). An intelligent
+sleep-awake energy management system for wireless sensor
+network. Peer-to-Peer Networking and Applications, 16(6),
+2714-2731.
+Mandava, R., Vellela, S. S., Malathi, N., Haritha, K., Gorintla,
+S., & Dalavai, L. (2025, May). Exploring the Role of XAI in
+Enhancing Predictive Model Transparency in Healthcare Risk
+Assessment. In 2025 International Conference on
+Computational Robotics, Testing and Engineering Evaluation
+(ICCRTEE) (pp. 1-5). IEEE.
+Vellela, S. S., & Balamanigandan, R. (2024). An efficient attack
+detection and prevention approach for secure WSN mobile
+cloud environment. Soft Computing, 28(19), 11279-11293.
+
+[6]
+
+Mandava, R., Vellela, S. S., Gorintla, S., Dalavai, L., Malathi,
+N., & Haritha, K. (2025, May). Evaluating the Impact of
+Explainable AI on User Trust in Financial Decision-Support
+Systems. In 2025 International Conference on Computational
+Robotics, Testing and Engineering Evaluation (ICCRTEE) (pp.
+1-6). IEEE.
+[7] Polasi, P. K., Vellela, S. S., Narayana, J. L., Simon, J.,
+Kapileswar, N., Prabu, R. T., & Rashed, A. N. Z. (2024). Data
+rates transmission, operation performance speed and figure of
+merit signature for various quadurature light sources under
+spectral and thermal effects. Journal of Optics, 1-11.
+[8] Vellela, S. S., Roja, D., Purimetla, N. R., Thalakola, S.,
+Vuyyuru, L. R., & Vatambeti, R. (2025). Cyber threat detection
+in industry 4.0: Leveraging GloVe and self-attention
+mechanisms
+in
+BiLSTM
+for
+enhanced
+intrusion
+detection. Computers and Electrical Engineering, 124, 110368.
+[9] Reddy, B. V., Kumar, A. H., Gopi, C., Prasad, Y. V. D., Vellela,
+S. S., & Roja, D. (2025, April). Machine learning based
+automated liver fibrosis stage diagnosis with prediction. In 2025
+International Conference on Advances in Modern Age
+Technologies for Health and Engineering Science
+(AMATHE) (pp. 1-6). IEEE.
+[10] Vellela, S. S., Malathi, N., Gorintla, S., Priya, K. K., Rao, T. S.,
+Thommandru, R., & Rao, K. N. S. (2025, March). A Novel
+Secure and Scalable Framework for a Cloud-Based Electronic
+Health Record Management System. In 2025 3rd International
+Conference on Device Intelligence, Computing and
+Communication Technologies (DICCT) (pp. 131-135). IEEE.
+[11] Vullam, N. R., Geetha, G., Rao, N., Vellela, S. S., Rao, T. S.,
+Thommandru, R., & Rao, K. N. S. (2025, February). Optimized
+Multitask Scheduling in Cloud Computing Using Advanced
+Machine Learning Techniques. In 2025 International
+Conference on Intelligent Control, Computing and
+Communications (IC3) (pp. 410-415). IEEE.
+[12] Vuyyuru, L. R., Purimetla, N. R., Reddy, K. Y., Vellela, S. S.,
+Basha, S. K., & Vatambeti, R. (2025). Advancing automated
+street crime detection: a drone-based system integrating CNN
+models and enhanced feature selection techniques. International
+Journal of Machine Learning and Cybernetics, 16(2), 959-981.
+[13] Vellela, S. S., Rao, M. V., Mantena, S. V., Reddy, M. J.,
+Vatambeti, R., & Rahman, S. Z. (2024). Evaluation of Tennis
+Teaching Effect Using Optimized DL Model with Cloud
+Computing System. International Journal of Modern Education
+and Computer Science (IJMECS), 16(2), 16-28.
+[14] Praveen, S. P., Sarala, P., Kumar, T. K. M., Manuri, S. G.,
+Srinivas, V. S., & Swapna, D. (2022, November). An adaptive
+load balancing technique for multi SDN controllers. In 2022
+International Conference on Augmented Intelligence and
+Sustainable Systems (ICAISS) (pp. 1403-1409). IEEE.
+[15] Praveen, S. P., Nakka, R., Chokka, A., Thatha, V. N., Vellela, S.
+S., & Sirisha, U. (2023). A novel classification approach for
+grape leaf disease detection based on different attention deep
+learning techniques. International Journal of Advanced
+Computer Science and Applications (IJACSA), 14(6), 2023.
+[16] Madhuri, A., Jyothi, V. E., Praveen, S. P., Sindhura, S.,
+Srinivas, V. S., & Kumar, D. L. S. (2024). A new multi-level
+semi-supervised learning approach for network intrusion
+detection system based on the ‘goa’. Journal of Interconnection
+Networks, 24(supp01), 2143047.
+[17] SrinivasVellela, S., Praveen, S. P., Roja, D., Krishna, A. R.,
+Purimetla, N., Rao, T., & Kumar, K. K. (2024, April). FusionInfused Hypnocare: Unveiling Real-Time Instantaneous Heart
+Rates for Remote Diagnosis of Sleep Apnea. In 2024
+International Conference on Knowledge Engineering and
+Communication Systems (ICKECS) (Vol. 1, pp. 1-5). IEEE.
+[18] Reddy, N. V. R. S., Chitteti, C., Yesupadam, S., Desanamukula,
+V. S., Vellela, S. S., & Bommagani, N. J. (2023). Enhanced
+speckle noise reduction in breast cancer ultrasound imagery
+using a hybrid deep learning model. Ingénierie des Systèmes
+d’Information, 28(4), 1063-1071.
+[19] Vellela, S. S., Reddy, V. L., Rao, G. R., Sk, K. B., & Kumar, K.
+K. (2023, August). A cloud-based smart IoT platform for
+personalized healthcare data gathering and monitoring system.
+In 2023 3rd Asian Conference on Innovation in Technology
+(ASIANCON) (pp. 1-5). IEEE.
+[20] Vellela, S. S., Vullam, N. R., Gorintla, S., Rao, T. S., & Harinadh, T.
+(2025, July). Exploring the Anti-Inflammatory Potential of Green-
+
+979-8-3315-8242-5/25/$31.00 ©2025 IEEE
+
+1817
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:02:45 UTC from IEEE Xplore. Restrictions apply.
+
+Proceedings of the 5th International Conference on Evolutionary Computing and Mobile Sustainable Networks (ICECMSN-2025)
+IEEE Xplore Part Number: CFP254AH-ART; ISBN: 979-8-3315-8242-5
+Synthesized Pyrazolines. In 2025 6th International Conference on Data
+Intelligence and Cognitive Informatics (ICDICI) (pp. 814-819). IEEE.
+
+979-8-3315-8242-5/25/$31.00 ©2025 IEEE
+
+1818
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:02:45 UTC from IEEE Xplore. Restrictions apply.
+
+

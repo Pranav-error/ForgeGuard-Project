@@ -1,0 +1,724 @@
+2026 3rd International Conference on Emerging Trends in Engineering and Medical Sciences (ICETEMS)
+
+2026 3rd International Conference on Emerging Trends in Engineering and Medical Sciences (ICETEMS) | 979-8-3315-9383-4/26/$31.00 ©2026 IEEE | DOI: 10.1109/ICETEMS66917.2026.11469665
+
+ForensicDocAI: Document Forgery Detection
+Using Deep Learning and Blockchain
+Reshma Naga venkata durga
+Department of Computer Science and
+Engineering
+Amrita School of Computing
+Amrita Vishwa Vidyapeetham
+Chennai,India
+mreshma0809@gmail.com
+
+Mokshitha Bandaru
+Department of Computer Science and
+Engineering
+Amrita School of Computing
+Amrita Vishwa Vidyapeetham
+Chennai,India
+mokshithabandaru129@gmail.com
+
+Anitha g
+Department of Computer Science and
+Engineering
+Amrita School of Computing
+Amrita Vishwa Vidyapeetham
+Chennai,India
+g_anitha@ch.amrita.edu
+
+in situations where legal and regulatory applications are used,
+where verifiable evidence and traceability are essential[9].
+The data integrity, transparency, and non-repudiation, the
+various requirements have been enhanced as highly reliable
+using blockchain technology. Blockchain, together with the
+machine learning systems, allows removing manipulation,
+unauthorized deletion, and unverifiable decisions of the
+model, thus, the verification process becomes credible and
+replicable [4][10].
+
+Abstract—As computers grow older, some vital documents
+such as identity credentials, certificates, documents of law etc
+are stored and transferred electronically and this exposes them
+to forgery. Traditional human verification is inefficient, prone
+to mistakes and cannot be used in mass-scale to verify
+documents. To address those issues, we recommend a hybrid
+method of document forgery recognition based on the
+combination of Error Level Analysis (ELA), Convolutional
+Neural Networks (CNNs), explainable AI, Optical Character
+Recognition (OCR), and encryption-based logging. ELA-CNN
+module identifies the possible points of tampering and GradCAM provides visual justification to enhance the
+interpretability . OCR is used to retrieve the key text fields such
+as names, dates, and identification numbers which are then
+checked by regular expressions to verify semantic accuracy [3].
+Metadata and the outcome of detection is securely stored and
+encrypted to offer tamper-evident records and auditable
+records [4]. Tests that have been conducted using a benchmark
+corpus are demonstrating that the proposed system can detect
+high accuracy in several types of forgery with transparency,
+semantic authentication, and secure storage and can be applied
+to banking, education, governance, and insurance cases.
+
+This has inspired the creation of ForensicDocAI a hybrid
+automated signature verification system that includes: A deep
+residual network (ResNet-50) used to do classification, which
+has been fine-tuned. Explainable analysis using Grad-CAM
+to interpret forensic information, SHA-256 and RSA/AES
+hybrid cryptography implementation, and Audit trail storage
+of verifiable records based on blockchain.
+Table I. Real-World Impact Statistics of Signature
+Forgery
+
+Sector
+
+Annua
+l Loss
+(USD)
+Banking & $4.2
+Finance
+Billion
+Insurance
+$1.8
+Billion
+Legal
+$2.5
+Documents Billion
+Healthcare $890
+Million
+Governme $1.1
+nt Services Billion
+
+Keywords—Document Forgery Detection, Explainable AI,
+CNN, OCR, Error Level Analysis, Grad-CAM, Encryption
+Tamper-Proof Logging.
+
+I. INTRODUCTION
+One of the most attractive authentication procedures is offline
+signatures, which is still commonly held in legal, financial,
+and governmental fields. In spite of the digital identity system
+development, handwritten signatures remain a universal
+signature and authorization[5].Nonetheless, forgery attempts,
+including those of a manually copied stroke to computers
+and/or programs to imitate, have drastically risen with the
+enhanced availability of scanning device, image editing
+platforms, and high quality printing[13].The traditional
+forensic examination procedures actively depend on inperson examination, which is not only time-intensive but also
+un-uniform and subjective[1].
+
+Detectio
+n Rate
+65%
+58%
+52%
+61%
+69%
+
+Average
+Investigatio
+n Cost
+$8,500 per
+case
+$12,000 per
+case
+$15,000 per
+case
+$6,200 per
+case
+$7,800 per
+case
+
+Recent technological advances have democratized forgery
+capabilities, enabling individuals with minimal expertise to
+produce convincing fakes using readily available software
+tools. Digital signature editing applications facilitate seamless
+signature extraction, manipulation, and insertion into target
+documents. Online marketplaces offer signature creation
+services where forgers produce custom signatures based on
+sample images. The proliferation of high-resolution scanners
+
+Verification models based on deep learning have been shown
+to have great potential in discerning between genuine
+signatures and fake ones on the basis of stroke geometry,
+consistency of curve continuity, consistency of texture,
+variations in pressure patterns[2][14].A lot of systems out
+there, however, are not quite transparent, and thus not suitable
+
+979-8-3315-9383-4/26/$31.00 ©2026 IEEE
+
+1
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:57:50 UTC from IEEE Xplore. Restrictions apply.
+
+According to Hossain et al. in case blockchain is coupled with
+machine-learning-controlled validation, the composite
+architecture guarantees inadmissibility of storage,
+traceability, and audit-friendly evidence trails that are
+applicable in banking and compliance-constrained settings
+[3]. Another more recent study by Pal and Sharma introduced
+a document verification framework based on blockchain
+security that includes both SHA-256 and RSA encryption and
+points out that cryptographic security is essential when the
+authentication response should be unmodifiable and
+verifiable
+many
+years
+after
+the
+original
+certification[10].These up-and-coming methods are evidence
+of the transition to the basic classification frameworks to
+complete trust-aware verification ecosystems, which is very
+well consistent with the objectives of the current study.
+
+and printers enables physical reproduction of forged
+signatures with sufficient quality to deceive casual
+inspection.
+II. LITERATURE SURVEY
+Offline signature verification has evolved to the statistical
+handcrafted feature engineering to the fully automated deep
+learning-based recognition. Early attempt was based on
+geometry stroke analysis, frequency breakdown and pen
+trajectory simulated[11] , [3]. Nevertheless, these techniques
+were based on manual feature extraction, which made them
+have little flexibility between writers and environments.
+Convolutional neural networks (CNNs) were introduced and
+greatly increased verification performance because it allowed
+automatic extraction of features directly out of pixel data.
+Such architectures include VGGNet [15], Siamese networks
+[15], and residual networks [1] exhibit high levels of
+generalization especially when fine-tuned on large-scale
+models[2].The latest publications are focused on the
+transparency of the system and hybrid verification systems.
+This is of particular importance where the results of the
+models have an impact on legal or compliance-guided
+decisions; methods like Grad-CAM are useful in visualizing
+feature salience maps that illustrate the decision making
+process [6].
+
+III. THEORETICAL BACKGROUND
+Offline signature verification is an image processing,
+machine learning, cryptography and secure storage
+technology. The suggested system is based on three
+theoretical elements of deep learning as a feature extractor,
+binary classification, and integrity protection through hashing
+and blockchain.
+A. Convolutional Neural Networks.
+A neural network (a convolutional neural network (CNN)) is
+used to extract significant visual features like the pressure of
+a pen, the smoothness of a curve, the distance between
+curves, and the continuity of strokes. The essence of the
+process is the convolution of an input image.
+
+Similar changes in the secure authentication system show that
+blockchain has the potential to become a decentralized and
+immutable verification registry. Research on combining
+blockchain and biometric systems proves the enhanced
+security and adherence to the regulations [4][16][12]. Even
+though there has been some development, the current
+solutions do not incorporate an integrated workflow that
+involves explainable AI, cryptographic validation, as well as
+distributed ledger verification. This is what ForensicDocAI
+fills.
+
+,
+
+=
+
+∗
+
+,
+
+1
+
+Such an operation assists the model in learning signaturespecific features without writing of rules.
+B. Depthwise Comparison of ResNet-50s in Residual
+Learning Depthwise.
+
+Recent research has also looked into hybrid systems of
+verification, in which more than one domain of features are
+combined in order to achieve higher accuracy and resilience
+to proficient forgery attacks. As an example, Dhieb et al.
+showed that the combination of geometric, texture-based and
+statistical features with neural network classifiers was much
+more robust when slant, pressure loss or stroke hesitation
+intra-writer variations were found in the signatures [7]. In a
+similar manner, both feature-level and score-level fusion
+strategies have demonstrated themselves to provide lower
+false acceptance rates, particularly in data set under visually
+close forged signatures [9].
+
+The reason why ResNet-50 is applied is that deeper networks
+tend to lose information throughout the training process.
+ResNet is the solution to this using shortcut connections. The
+learning it does is not everything, but what is missing in it,
+known as the residual.
+The residual learning concept is expressed as:
+=
+
++
+
+2
+
+This enables the network to learn better and enhances the
+performance of tasks with finer visual differences, such as
+forged signatures.
+
+These results indicate that one educational method might not
+be adequate to use with high-security authentication
+applications where one needs consistency, explainability, and
+legal defensibility. Another body of literature has been
+concerned with the relation of biometric authentication to
+systems of decentralized identity management. Verification
+systems based on blockchain are becoming increasingly
+popular due to the fact that they enhance trust and remove the
+centralized authorities [4],[16].
+
+C. Outputs of a binary classification model.
+The last layer of the model forecasts authenticity or forgery
+of a signature. The model output is converted into a
+probability value by a sigmoid activation:
+=
+
+2
+
+1
+1+
+
+3
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:57:50 UTC from IEEE Xplore. Restrictions apply.
+
+This renders the model applicable in the real-time decision
+making.
+
+IV. PROPOSED METHOD
+
+D. Grad-CAM Explainability
+Grad-CAM identifies the significant spots of the signature
+image that can affect the choice of the model. The weight
+value of feature map ( αk) is calculated as:
+α_k = (1 / Z) Σ_i Σ_j (∂y / ∂A_k^ij)
+
+4
+
+The final localization map is obtained by:
+_
+
+=
+
+! "_# $_# _#
+
+5
+
+E. SHA-256 Hashing for Integrity
+Once it has been verified, the system creates a unique hash of
+the document with the SHA-256 hash:
+&' = (
+
+256 *' |,
+
+&' - .
+
+6
+
+Once a single pixel is altered, the hash will be entirely
+different which aids in identifying tampering.
+F. Blockchain-Based Tamper-Proof Verification
+The proposed system has blockchain technology to guarantee
+non-repudiation, traceability and immutability of signature
+verification records. Once the authenticity of a signature is
+established a cryptographic hash of the validated document
+and classification metadata, including timestamp and
+confidence score is produced. The smart contract records this
+hash as a transaction in a ledger of blockchain such that
+verification records cannot be changed once they are written.
+The environment of a private Ethereum-based blockchain is
+deployed with the help of the Ganache framework, which
+allows controlled and low-latency confirmation of
+transactions. The smart contract logs the value of the hash and
+the result of the verification thus producing a tamper-evident
+audit trail. In further verification requests the previously
+stored hash of the document would be retrieved on the
+blockchain and compared to a newly calculated hash to verify
+integrity. Any mismatch is a sign of the unauthorized
+modification. The proposed system will offer long-term trust,
+auditability, and safe validation that are essential in legal,
+financial, and institutional authentication situations by
+combining blockchain and deep learning-based signature
+verification
+
+Fig.1.Architecture diagram
+Figure 1 demonstrates the topology of the proposed system,
+which describes the combined classification, cryptographic,
+and blockchain validation pipeline.
+The offered methodology was based on combining deep
+learning-based classification and secure verification to
+guarantee accuracy and tamper-resistant document
+validation. The processing flow starts by obtaining images of
+the signatures offline and then proceeds to process the image
+by removing noise, converting the image to grayscale, and
+normalizing the size of the image to less than its original size
+256×256, and contrast adjustment. These measures help to
+maintain consistency in different quality of input and writing
+styles. Upon preprocessing, the images are then passed to the
+ResNet-50 trained classification model which learns
+discriminative features and determines authenticity by
+comparing the learned representations based on the stroke
+width, writing rhythm, curvature patterns, and differences in
+spacing. The result of the classifier is a binary answergenuine or forged, as well as a confidence score, which
+indicates confidence in the model.
+To increase the system transparency and trust, explainability
+layer, based on the Grad-CAM visualization, is used to
+identify the signature regions which affected the
+classification decision. This gives visual justification to
+decisions particularly where there are ambiguous cases.
+There is the classification step after which, cryptographic
+hashing is used to create a digital fingerprint of the certified
+signature that is unique. The resulting hash, including
+classification metadata is stored in a blockchain network
+securely through a smart contract deployed on a local
+Ganache environment. This provides immutability,
+traceability and long term validation of verification results. A
+blockchain look up is activated by any further verification
+request, where the stored hash is compared to an additional
+computation, and this is used to verify document integrity and
+to avoid replaying or forgery attacks.A smart contract is also
+used to store the hash of the generated hash and verification
+metadata on a blockchain ledger permanently to provide
+tamper-proof storage and auditability.
+
+3
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October
+09,2026 at 06:57:50 UTC from IEEE Xplore. Restrictions apply.
+
+depended on the underlying core stroke structures, as
+opposed to noise or irrelevant parts.
+
+V. MATERIALS AND METHODS
+Dataset: Handwritten and digital signatures mixed together
+and classified into DigitalReal, DigitalFake, KertasReal and
+KertasFake.Training Aid: TensorFlow 2.10, NVIDIA GPU
+acceleration. Blockchain Stack Solidity smart contracts in
+Truffle suite on Ganache.
+
+Fig. 4 .Signature samples (real & forged)
+
+Frontend Interface: Fastapi backend and a React-based
+interface to simplify the process of uploading documents and
+validating them.
+
+Fig.4 presents a portion of the dataset used during model
+training. The samples show variations in stroke thickness,
+signature style, and medium type, which help the model learn
+meaningful distinguishing features.
+In the deployment testing, the blockchain-based record
+logging provided with consistency of integrity validation
+with no latency even when numerous verification requests
+were done. The component of hash SHA-256 had made sure
+that any alteration of the stored signature or the related
+metadata would automatically result in the inability to match
+and prove the irreversibility of stored identity evidence. In
+sum, explainable deep learning, cryptographic hashing, and
+blockchain storage have been combined to create a secure and
+reliable verification process applicable to the real world, i.e.
+academic credential validation, legal document processing,
+and secure identity screening.
+
+Fig.2. Visual Interpretation of Grad-CAM.
+Grad-CAM analysis shows a distinct difference between
+genuine and fake clusters of strokes (Fig. 2) to enhance
+interpretability and usability in forensics.
+
+Table II. Security and Cryptography Test Cases
+Test Case
+SHA-256 hash
+
+Fig. 3. Blockchain verification screen
+Storage integrity was verified using blockchain verification
+logs that offered immutable public verification receipts that
+have cryptographic hashes Fig. 3.
+
+Unique
+value
+
+Result
+
+hash
+
+Success
+
+Document alteration
+after hashing
+
+Hash mismatch
+
+Success
+
+AES
+encryption/decryption
+
+Original
+document
+retrieved
+Decryption
+fails
+
+Success
+
+Unauthorised RSA
+key access
+
+Findings indicate better traceability and trust than
+independent ML-based systems, which is consistent with
+findings [4],[16],[12].
+
+Expected
+Outcome
+
+Success
+
+From Table II is a reflection of the test cases of the
+cryptography that was carried out to test the security aspects
+of the proposed system. SHA-256 hash test ensured that all
+true signatures would generate a distinct and permanent hash
+value, which is data integrity. In a case where a document has
+been modified when hashed, the difference between the hash
+value was also a clear indication of a modified document. The
+encryption and decryption procedure with the help of AES
+was capable of restoring the original file and this
+demonstrates the uniformity of the encryption module.
+Finally, the errors in decryption of the data using the nonauthorised RSA key were attempted, which validated that the
+system is useful in deterring unauthorized access and keeping
+confidential data. These results suggest that cryptography
+layer is useful in the provision of integrity and confidentiality
+of documents.
+
+VI. RESULTS AND DISCUSSION
+An analysis with a curated dataset of real and forged offline
+signatures was done to evaluate the proposed system. Once
+the ResNet-50 model was trained with fine-tuning, the system
+should reach a consistent result on both accuracy and
+precision as well as recall and F1-score measures. The last
+accuracy was 97.8% which shows that the model can
+generalize to different handwriting styles as well as levels of
+forgery. The rates of false acceptance and false rejection were
+also much lower than baseline CNN models, and that is why
+the relevance of residual learning framework and
+preprocessing pipeline is justified. The Grad-CAM
+visualization also helped to strengthen the interpretability of
+the classifier, by demonstrating that the decisions made by it
+
+4
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:57:50 UTC from IEEE Xplore. Restrictions apply.
+
+VII. CONCLUSION AND FUTURE WORK
+Table III. Comparative analysis of signature verification
+techniques.
+
+System
+
+Architecture
+
+Dataset
+
+Key
+Advantage
+
+Template
+Matching
+
+Hand-crafted
+features
+
+CEDAR
+
+SVM +
+HOG
+
+Feature
+engineering
+
+GPDS
+
+SigNet
+
+Siamese CNN
+
+CEDAR
+
+Attentionbased CNN
+
+Self-attention
+
+BHSig26
+0
+
+Forensic
+DocAI
+
+ResNet-50
++GradCAM
+
+Roboflo
+w
+
+Simple
+implementati
+on
+Better
+generalizatio
+n
+Writerindependent
+Focus on
+signature
+regions
+End-to-end
+AI+
+cryptograpy+
+blockchain
+
+From Table III provides a comparative analysis of different
+signature verification systems based on their architectures,
+datasets, and key advantages. Traditional methods like
+Template Matching rely on hand-crafted features and are easy
+to implement but limited in scalability. The SVM with HOG
+approach introduces feature engineering, allowing better
+generalization across varied signatures. SigNet, built using a
+Siamese CNN, performs well in identifying writerindependent features.
+
+The suggested system exhibits a viable architecture of safe
+offline signature verification with the incorporation of deep
+learning-based classification, explicability, and blockchainsupported storage. ResNet-50 was able to differentiate
+between real and fake signatures with high scores on
+evaluation metrics, which means that it can effectively extract
+features and generalize them. Grad-CAM visualization,
+which was incorporated in the model, also contributed to
+improved transparency in the decisions made by the user
+since the crucial areas of the stroke were highlighted, which
+is especially significant in the context of the legal or auditlevel justification of the decisions made. Besides, the SHA256 hash and blockchain ledger system allowed making
+verification outputs unalterable, identifiable, and resistant to
+tampering. These elements form a reliable verification chain,
+which can be used in institutional, judicial and commercial
+authentication scenarios where reliability and integrity of
+data are important.
+Although the findings are encouraging, the framework has
+the potential of improvement. Future studies can cover the
+use of hybrid or transformer architecture to enhance
+sensitivity of features particularly in handling highly skilled
+forgeries or degraded input samples. More broadly,
+interoperability between different organizations that could be
+federated as a single system and deployed on public or
+consortium blockchains could be made possible through the
+extension of the system to trigger federation and
+interoperability between different entities. Others such
+directions are the integration of multimodal biometrics, realtime verification interfaces, adaptive explainability models,
+and the high-level adversarial defense strategies. The
+proposed system can be improved to become a scalable and
+standardized solution of secure digital authentication in
+various application domains with these advancements.
+REFERENCES
+[1]
+
+[2]
+
+Fig. 5. Comparison Prediction Grid.
+The Attention-based CNN enhances accuracy by focusing on
+crucial signature regions through self-attention mechanisms.
+The proposed ForensicDocAI model, which integrates
+ResNet-50 with Grad-CAM, combines deep learning with
+cryptography and blockchain for a complete, secure, and endto-end signature verification solution. This comparative
+evaluation highlights that ForensicDocAI not only improves
+signature classification accuracy but also integrates security
+and immutable logging, which existing systems lack.
+Logging was also based on blockchain, which ensured
+storage of the verification results as immutable so that
+consistency validation of integrity could be performed
+without the overhead of additional performance.
+
+[3]
+
+[4]
+
+[5]
+
+[6]
+
+Akhtar, N., Khalid, S. and Siddiqui, A. M., Offline
+Signature Verification Using Deep Residual Networks
+and Feature Fusion, International Journal of Advanced
+Computer Science and Applications, vol. 12 (4), pp. 45–
+53, 2021
+Alzubaidi, L., Zhang, J. and Humaidi, A. J., Review of
+Deep Learning: Concepts, CNN Architectures,
+Challenges, Applications, Future Directions, Journal of
+Big Data, vol. 8 (1), pp. 1–74, 2021.
+Abbaszadeh-Mir, Y., Mayer, J., Cloutier, G. and Fortin.
+C., Theory and Simulation for the Identification of the
+Link Geometric Errors for a Five-axis Machine Tool
+Using a Telescoping Magnetic Ball-bar, International
+Journal of Production Research, vol. 40 (18), pp. 4781–
+4797, 2002.
+Bhattacharya, T. and Mallick, P., Blockchain-Based
+Data Integrity Verification in Document Authentication
+Systems, IEEE Access, vol. 9, pp. 148732–148745,
+2021.
+Bibi, K., Naz, S. and Rehman, A., Biometric Signature
+Authentication Using Machine Learning Techniques:
+Current Trends, Challenges and Opportunities,
+Multimedia Tools and Applications, vol. 79 (1), pp. 1–
+25, 2020.
+Bouslimi, D., Coatrieux, G. and Roux, C., A Joint
+Encryption/Watermarking Algorithm for Verifying the
+Reliability of Medical Images: Application to DICOM
+
+5
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October
+09,2026 at 06:57:50 UTC from IEEE Xplore. Restrictions apply.
+
+Images, Computers in Biology and Medicine, vol. 41
+(12), pp. 1263–1272, 2011.
+[7] Dhieb, T., Boubaker, H., Njah, S. and Alimi, A. M.,
+Signature Verification Using Multi-Layer Neural
+Networks and Feature Fusion Techniques, Pattern
+Recognition Letters, vol. 150, pp. 45–55, 2021.
+[8] Di Lecce, V., Dimauro, G., Guerriero, A. and Salzo, A.,
+A Multi-Expert System for Dynamic Signature
+Verification, Proceedings of the International
+Conference on Pattern Recognition, pp. 1–4, 2000.
+[9] Dhieb, T., Boubaker, H., Njah, S. and Alimi, A. M., A
+Novel Biometric System for Signature Verification
+Based on Score Level Fusion Approach, Journal of
+Electronic Imaging, vol. 31 (4), pp. 041210, 2022.
+[10] Pal, A. and Sharma, M., A Secure Blockchain-Based
+Framework for Digital Document Verification Using
+SHA-256 and RSA Encryption, International Journal of
+Information Security Science, vol. 11 (3), pp. 102–115,
+2022.
+
+[11] Rashidi,
+
+S., Fallah, A. and Towhidkhah, F.,
+Authentication Based on Pole-Zero Models of Signature
+Velocity, Computers in Biology and Medicine, vol. 44,
+pp. 1–10, 2013.
+[12] Reddy, G. and Ramesh, K., Hybrid AI and Blockchain
+Model for Secure Identity Verification Systems,
+International Journal of Scientific & Technology
+Research, vol. 9 (10), pp. 560–567, 2020.
+[13] Sharma, N., Gupta, S., Mehta, P., Cheng, X., Shankar,
+A., Singh, P. and Nayak, S. R., Offline Signature
+Verification Using Deep Neural Network with
+Application to Computer Vision, Journal of Electronic
+Imaging, vol. 31 (4), pp. 041210, 2022.
+[14] Shigley, I. E. and Uicker Jr., J. J., Theory of Machines
+and Mechanisms, Second Edition, McGraw Hill, 1996.
+[15] Simonyan, K. and Zisserman, A., Very Deep
+Convolutional Networks for Large-Scale Image
+Recognition, arXiv preprint, arXiv:1409.
+
+6
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:57:50 UTC from IEEE Xplore. Restrictions apply.
+
+

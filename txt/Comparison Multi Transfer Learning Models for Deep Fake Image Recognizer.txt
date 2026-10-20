@@ -1,0 +1,643 @@
+2021 3rd International Cyber Resilience Conference (CRC) | 978-1-6654-1844-7/20/$31.00 ©2021 IEEE | DOI: 10.1109/CRC50527.2021.9392566
+
+Comparison Multi Transfer Learning Models for
+Deep Fake Image Recognizer
+Nur Aizah Rosli
+Digital Forensics Lab
+Center for Cyber Security
+Faculty of Information Science
+and Technology, Universiti
+Kebangsaan Malaysia,
+Bangi, Malaysia
+nur.aizah.rosli@gmail.com
+
+Siti Norul Huda Sheikh Abdullah
+Digital Forensics Lab
+Center for Cyber Security
+Faculty of Information Science
+and Technology, Universiti
+Kebangsaan Malaysia,
+Bangi, Malaysia
+snhsabdullah@ukm.edu.my
+
+Ahmad Nazri Zamani
+Cybersecurity Malaysia
+Level 7, Tower 1, Menara Cyber
+Axis, Jalan Impact, 63000
+Cyberjaya, Selangor
+nazrazam@gmail.com
+
+Nor Sakinah Md Othman
+Faculty of Information Science
+and Technology, Universiti
+Kebangsaan Malaysia,
+Bangi, Malaysia.
+p108639@siswa.ukm.edu.my
+
+Nor Alia Athirah Abdul Muariff
+Tajuddin
+Cybersecurity Malaysia
+Level 7, Tower 1, Menara Cyber
+Axis, Jalan Impact, 63000
+Cyberjaya, Selangor
+
+Abstract— The advancement of technologies nowadays cause
+image digitally to become essential as an official document
+many available applications used for image editing. Those
+applications have become a threat to detect image authenticity
+when dealing with an abundance of digital image evidence in
+cyber court. Hence, many researchers realize the
+importance of image authentication fields as deep fake is a
+powerful weapon for spreading misinformation on the digital
+platform. Deep learning has known to obtain relevant attributes
+automatically in placing handcrafted features in a deep
+network against other single-layer networks. The objective of
+the research is to compare two models from Convolutional
+Neural Network (CNN), which are VGG19 dan ResNet50 in
+deep learning with transfer learning for image fake
+detector. A total of 1500 random images consisting of 450
+forgery images from the IEEE Image Forensics Challenge in
+2013 were tested on the splicing technique. From this
+research, we used two transfer learning techniques to
+identify tamper images from image splicing. Based on model
+VGG16 and ResNet50 transfer learning, the accuracy achieved
+about 94.65% and 95.08%, respectively.
+Keywords—deep learning, neural network, deep fake a transfer
+learning
+
+I. INTRODUCTION
+Digital 2019 Reports reported that more than 4.39 billion
+internet users in the year 2019, which shows an increase of
+366 million users since January 2018. Another intriguing
+statistic mentioned by the Digital 2019 Reports is that there
+are 3.4 billion users of social media such as Facebook and
+Instagram (Hootsuite & We Are Social, 2019). With the
+increase of social media users, there is also an increase in
+image editing applications such as Lightroom and Adobe
+Photoshop because most social media requires an image to be
+uploaded. It has proven that social media tends to cause body
+image concerns, which lead to issues like eating disorders and
+photoshopping images (Bell, 2016). More editing applications
+emerge, and the amount of altered digital images increases on
+the internet, which requires forensic image analysis. Plenty of
+
+Anahita Ghazvini
+Digital Forensics Lab
+Center for Cyber Security
+Faculty of Information Science
+and Technology, Universiti
+Kebangsaan Malaysia,
+Bangi, Malaysia,
+p86698@siswa.ukm.edu.my
+
+methods and techniques that can determine the authenticity of
+a digital image are being discovered and researched (Mizher
+et. al, 2017; 2019). However, the usage of digital images is
+increasing at an alarming rate and currently are also being used
+in official documents for most occupations. Digital images are
+also being used as evidentiary support in legal cases; thus,
+more accurate forensic analysis methods are needed (Ghazali
+et. Al., 2012; Abdullah et. al, 2017).
+Deep learning has been known to perform well in handling
+images and achieving high precision in object detection,
+object counting, and image classification. It utilizes a very
+deep neural network model such as Residual Neural Network
+(ResNet), VGGNet, Inspection model, and others. There is a
+well-known deep learning technique called transfer learning,
+which can be used to develop a neural network model by
+reusing previously learned knowledge from the existing pretrained model (Pan & Yang, 2009). This is possible because a
+deep neural network is known to be able to learn transferable
+features. Thus, in this paper, two neural network models,
+namely VGG16 and ResNet50 are implemented using
+transfer learning, and the model will then be used to detect
+edited images. Detection of fake images consists of proving
+whether the images are edited and highlighting the edited
+region in the images.
+II.
+
+LITERATURE REVIEW
+
+Digital image forensic (DIF) is a discipline that conducts
+image processing and analysis on digital images through tools
+or techniques to identify if there are any elements of
+alterations (Redi et al., 2011; Mizher et al., 2017;2019,). DIF
+also consists of identifying the timestamp and location of the
+device that produces the edited image. Obtaining that
+information is difficult because image tampering tends only
+to leave a slight trace, which makes tracking difficult.
+Tampering an image occurs when the semantic content of an
+image has changed due to an addition or removal parts of an
+image (Redi et al., 2011). Detection of those tampered
+
+978-1-6654-1844-7/21/$31.00 ©2021 IEEE
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:00:41 UTC from IEEE Xplore. Restrictions apply.
+
+regions follows the general pipeline, namely feature
+extraction, feature matching, and post-processing (Cozzolino
+et al., 2015). In this section, two main topics are the
+techniques of image alteration and the performance of
+utilizing the deep network in performing DIF.
+Digital image processing (DIP) is a process of image
+alteration through programming or computer software to
+enhance, edit, analyze, and improve the quality of an image.
+DIF can identify those changes and assure that the image
+content is not altered. In general, there are two categories of
+digital forgeries, namely an active approach and a passive
+approach (Parashar et al., 2015). The active approach is not
+the primary concern as it is not able to identify the
+authenticity of a digital image. There are three main methods
+for the passive approach, which are copy-move, image
+splicing, and image retouching.
+A. Deep Learning Application in Forgery Detection
+Based on all the forgery detection techniques stated, those
+techniques utilize statistical data and statistical models.
+However, in this paper, a deep neural network is being used
+to conduct the detection. Deep learning has been known to
+have an impressive performance in object detection and
+obtained a very high accuracy. Currently, there are several
+efforts to integrate deep learning and digital image forensics
+(DIF). Yuan Rao proposed a work that uses a deep learning
+approach to conduct splicing and copy-move detection (Rao
+& Ni, 2016). The proposed convolutional neural network
+(CNN) contains 8 convolutional layers, 2 pooling layers, and
+a fully connected layer with a softmax classifier that takes
+RGB color images as an input. The first layer contains 30
+basic high-pass filters used in the spatial rich model (SRM)
+is applied to suppress the effect of complex image content.
+Compared to other CNNs used in other works, this neural
+network only exploits one fully connected layer due to the
+lack of the number of the training set. The modified CNN
+demonstrates outstanding performance in detecting forgeries
+on digital images.
+Moreover, Weize Quan et al. proposed another work that
+exploits CNN to obtain a high accuracy model for colorized
+image detection (Quan et al., 2019). They have decided to
+develop an “end-to-end” framework based on CNN to
+distinguish between natural and colorized images. This
+framework is also known as a unified framework where both
+recurrent neural networks (RNNs) and CNN's are combined
+(Wang J. et al., 2016). Thus, this framework learns the
+embedded joint image-label and model the label cooccurrence dependency in a joint label embedding space. The
+base network of CNN has improved by adding a new branch
+to attain better performance in the generalization capability.
+Another step in improving forensic performance is by
+including an additional auto-constructed negative sample into
+the original training dataset. Further and enhanced training of
+the network is then conducted for better generalization
+performance. With the presence of several precaution steps in
+improving generalization, the output model shows stable
+
+performance in handling blind detection scenarios; however,
+this approach reduced the classification accuracy slightly.
+Another approach was conducted by Jason Bunk et al.,
+which utilizes two methods to perform forgery detection
+(Bunk J. et al., 2017). The first step uses an end-to-end
+framework based on Radeon transform and deep learning,
+which localized the manipulated region. The following
+method applies resampling features from probability-maps
+and combining it with Long short-term memory (LSTM)
+model to classify altered patches. The resampling method
+requires interpolation, which presents periodic correlations
+among pixels (Mohammed et al., 2018). A linear or a cubic
+model can detect this correlation. But, in this work, a linear
+approach is being used. This work intended to identify the
+accuracy of both methods and comparing the results. It is safe
+to say that both methods perform well in detecting
+manipulated regions by utilizing resampling features.
+B. Transfer Learning
+In this work, the well-known deep learning technique, namely
+transfer learning, is used to develop the detection model. In
+simpler words, transfer learning allows the current model to
+learn from the previous model by transferring knowledge.
+Generally, there are two types of transfer learning:
+heterogeneous transfer learning and homogenous transfer
+learning (Weiss et al., 2016). Heterogeneous transfer learning
+is when the source project or model does not contain the same
+features as the target project, while homogenous transfer
+learning has the same values for both source and target
+models. However, another term is present with regards to
+transfer learning, which is called negative transfer. Negative
+transfer happens when the knowledge transferred from the
+source domain produces a negative impact on the target
+source due to the level of relativity between both sources.
+Thus, to obtain an accurate detection model, the transfer
+learning process needs to project a positive transfer from the
+source to the target model. This behavior can ensure that both
+the source and the target model features are related to one
+another. Deep networks such as AlexNet, ResNet, VGGNet,
+Inception and Xception have been regularly utilized by
+applying transfer learning.
+III. METHODOLOGY
+For the coding developed in this study, CNN's in-depth
+learning method proposed by Rao Yuan and Ni Jiangqun
+(2016) has been adopted into our CNN design proposal. Fig.
+1 below shows a CNN design containing eight convolutional
+layers, two pooling layers, and a fully interconnected layer
+together with two-way softmax classification. The number of
+inputs is 128 × 128 × 3. However, the above design with
+128 × 128 × 3 input volume is too large for this study.
+Accordingly, we changed the CNN's design by subtracting
+half of the above.
+Fig. 1 below shows a modified CNN design with an input
+of half of the original, 64 × 64 × 3. This design means the
+input for the CNN model in this study is 64 height×64 width
+× 3 channels. The 3 channels represent red, green, and blue
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:00:41 UTC from IEEE Xplore. Restrictions apply.
+
+(RGB). We selected this design by following the data set
+capacity used.
+
+proposed study aims to perform forgery detection thus, the
+source task is object detection, and the target task is tampered
+image detection.
+
+Fig. 1. Suggested CNN Model for Deep Fake detection.
+
+A. Idea of the transfer learning method
+Conventional machine learning and deep learning
+approach are often designed in separate modules. The transfer
+learning technique was then introduced to overcome the
+isolated learning paradigm. This technique is defined as
+applying the knowledge produced from past trained models
+(pre-trained) to solve a different yet related problem. The idea
+behind the transfer learning approach is shown in Fig. 2
+below. In the transfer learning environment (Pan & Yang,
+2009), the source domain will be represented as 𝐷! and the
+source task is indicated as 𝑇! . While the target domain is
+indicated as 𝐷" and 𝑇" as the target task. The main objective
+of transfer learning is to enhance the acquisition of
+knowledge of the target predictive function, 𝑓" (∙) which can
+also be represented as a probability distribution, 𝑃" (𝑋) ,
+where 𝑋 is the feature space. This can be done by utilizing
+the knowledge extracted from 𝐷! and 𝑇! .
+Estimation of 𝐻 -divergence (Jin et al., 2020) between
+source and target domain is defined in (1) which will aid in
+calculating the divergence of unlabeled data. 𝐻 represents the
+hypothesis class on feature space 𝑋 and the set for the
+characteristic function is notated as 𝐼(ℎ),where ℎ 𝜖 𝐻.
+𝑑# (𝐷! , 𝐷" ) = 2 𝑠𝑢𝑝|𝑃! [𝐼(ℎ)] − 𝑃" [𝐼(ℎ)]|
+$∈#
+
+(1)
+
+Moreover, the relationship between errors of target domain,
+𝑒& and source domain, 𝑒' can be defined based on equation
+(2) below. Let 𝑚( be the unlabeled sample sizes extracted
+from each domain.
+1
+𝑒& (ℎ) ≤ 𝑒' (ℎ) + 𝑑C#∆# (𝑢' , 𝑢& )
+2
+(2)
+2
+log
+𝛿+ 𝜆
++ 4D2𝑑 log(2𝑚( ) +
+𝑚(
+where 𝑢' and 𝑢& are unlabeled samples obtained from source
+domain and target domain. In order to find the difference in
+errors of each domain, equation (3) is represented as follows,
+1
+(3)
+|𝑒& − 𝑒' | ≈ 𝑑#∆# (𝐷! , 𝐷" )
+2
+𝑑#∆# is the calculated symmetric difference hypothesis space
+𝐻∆𝐻 that is beneficial for reasoning purposes. It is evident
+that transfer learning is applicable in various domains and is
+mathematically effective based on the equations stated. This
+
+Fig. 2. Learning Process of Deep Transfer Learning
+
+In this study, the deep learning methods have taken
+VGG16 and ResNet50 models as the study method (Sarkar
+D.J, 2018). The transfer learning methods used in this study
+are as follows:
+- Uses the bottleneck features from the pre-training
+series combine with the shallow series.
+-
+
+Performs fine-tuning on the last layer combine with
+the superficial network (the fine-tuning model)
+
+The usage of the final convolution layer results in VGG16
+and ResNet50 is also known as the feature input to the
+additional layer. The additional layer is known as the CNN
+superficial layer. This shallow layer input has only one
+channel—the design of the CNN shallow layer, as illustrated
+in Fig. 1 in the last three layers.
+The last layer selection in this study was to avoid
+overfitting as the whole network on the VGG16, and ResNet
+50 designs had very high entropy capacity. In this study, the
+modifications to the last layer use very low learning rates so
+as not to damage the other learning features.
+The amount of data used is not the CASIA data set used in
+previous studies. For the convolution layer, the ReLu
+activation function was subsequently employed. The
+activation function equated to the amount of weight that is
+placed on the input to determine which input can be processed.
+The use of ReLu as a function of activation in this study is
+because ReLu provides a linear computational function, so
+without complicated calculations, the learning model takes
+lesser time for data testing or training. Layers are known as
+pooling, and max-pooling layers are used as settings. This
+layer functions to lower the input size by modifying the new
+input scale.
+B. Set of Data
+During the first Image Forensic Challenge in 2013, the
+IEEE committee provided several digital image data sets with
+the following types and counterfeiting techniques: ContentAware Fill and PatchMatch (for copy/pasting), ContentAware Healing (for copy/pasting and splicing), Clone-Stamp
+(for copy/pasting), Seam carving (image retargeting),
+Inpainting (image reconstruction of damaged parts — a
+special case of copy/pasting) and Alpha Matting (for splicing).
+Alpha Matting digital image data set contains about 1050
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:00:41 UTC from IEEE Xplore. Restrictions apply.
+
+pieces of a digital image of the original and 450 pieces of the
+fake digital image along with a black and white-collar. Below
+are the samples of non-fake and fake images with its ground
+truth. Table 1 below shows the sample of images used for this
+paper which contains more original images than tampered
+images. The upper table contains non-fake images.
+Meanwhile, the bottom table shows the selection of fake
+images with the tampered region's splice in white and black
+colour.
+TABLE I.
+
+EXAMPLE OF (TOP) NON-FAKE AND (BOTTOM) FAKE
+IMAGE DATA SAMPLES
+Original (Non-fake)
+
+Fake Images
+
+IV. EXPERIMENTS & RESULTS
+The results of the study for deep learning are shown in Table
+2 below. Several models have been used to compare accuracy
+results. It summarizes the results of the study based on the
+trained data set and validation data set. For the traditional
+CNN models, the accuracy was 77.13%, with a loss rate of
+0.4678 of training data and accuracy of 75.68% and a
+relatively high loss rate of 0.5121.
+TABLE II.
+Model
+
+RESULTS OF IN-DEPTH LEARNING AND TRANSFER
+LEARNING ON THE DATASET
+Training Dataset
+Acc (%)
+
+Loss
+
+Validation Dataset
+Acc (%)
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:00:41 UTC from IEEE Xplore. Restrictions apply.
+
+Loss
+
+CNN Model
+
+77.13%
+
+0.4678
+
+75.68%
+
+0.5121
+
+Bottleneck model VGG16
+
+83.18%
+
+0.3230
+
+84.26%
+
+0.3833
+
+Bottleneck model
+ResNet50
+The fine-tuning model of
+the last layer of VGG16
+
+94.24%
+
+0.1297
+
+91.66%
+
+0.2483
+
+82.84%
+
+0.3282
+
+85.25%
+
+0.3398
+
+The fine-tuning model of
+the last layer of ResNet50
+Using Test Data Sets
+
+93.24%
+
+0.1351
+
+93.08%
+
+0.2228
+
+The fine-tuning model of
+the last layer of VGG16
+The fine-tuning model of
+the last layer of ResNet50
+
+94.65 %
+
+0.3122
+
+95.08%
+
+0.1938
+
+Transfer Learning
+
+(a)
+
+For the bottleneck model feature, the study carried out
+using VGG16 and ResNet50 design. Accuracy results for
+VGG16 were 83.18% for training data and increased by
+1.08% for validation data. The loss rate for this model was
+0.3230 for training data and 0.3833 for validation data.
+ResNet50 accuracy result for training data was 94.24%, but
+for validation, data accuracy decreased to 91.66%. The loss
+rate was 0.1297 for training data and 0.2483 for validation
+data. Based on those results, both models obtained accuracy
+of more than 80% and loss rate of lower than 0.5. Thus, a
+conclusion can be made that both models are relatively
+successful in detecting tampered images. The fine-tuning
+model of the last layer also uses the VGG16 and ResNet50
+designs. The results obtained for the VGG16 design are
+82.84% accuracy for training data and 85.25% for validation
+data, while loss rates for training data are 0.382 and 0.3398 for
+validation data. ResNet50's design study gained 93.24%
+accuracy for training data and 93.08% accuracy for validation
+data. The loss rate for training data was 0.1351 for training
+data and 0.2228 for validation data.
+Due to time constraints, studies using test data were
+run on finite tuning models in the last layer using the VGG16
+and ResNet50 designs. The results showed that the ResNet
+design gave a higher accuracy of 95.09% than the VGG16
+with 94.65% accuracy and the ResNet50 loss rate was 0.1938
+and the VGG19 was 0.3122. The epoch iteration set in this
+study was 35 because it shortened the coding process. If the
+number of epochs is too small, the learning process in the
+model may work improperly. Therefore the 35-epoch
+iteration in this study is sufficient for the learning process in
+VGG16 and ResNet50 models, and it does not take too long.
+Fig. 3 (a) summarized in the model of the VGG16
+bottleneck features, the accuracy results show an increase in
+each epoch, but at epoch 21, the resultant decomposition
+remains to the last epoch. This situation is very similar to the
+training and validation data sets. Meanwhile, the loss rate
+begins with low volatility in the last epoch, and the loss rate
+begins to decline until the last epoch.
+
+(b)
+
+(c)
+
+(d)
+Fig. 3. The epoch iteration of Bottleneck Models for (a) VGG16 and (b)
+ResNet50, and Fine-Tuning model of (c) VGG16 and (d) ResNet50
+subsequently.
+
+The same situation applies to the ResNet50 cube feature
+model, as shown in Fig. 3(b). The results of accuracy on
+training and validation data sets do not have many differences
+from the beginning until the end of the epoch.
+The epoch iteration of the fine-tuning model in the last
+layer of VGG16 is horizontal and has not many differences
+based on Fig. 3(c). This situation is very similar to the results
+of accuracy and loss rates for training sets and validation. For
+the fine-tuning model of the last layer in ResNet50 (Fig.
+3(d)), the resultant accuracy was only slightly different from
+0.16 for the training data set. Its accuracy results are
+increasing from the first epoch to the last epoch. The rate of
+loss also decreasing from the first epoch to the last epoch.
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:00:41 UTC from IEEE Xplore. Restrictions apply.
+
+[3]
+
+Fig. 4. Binary confusion matrix for fine-tuning models in the final layer of
+(top) VGG16 and (bottom) ResNet50 using the test data sets respectively.
+
+As stated before, the number of original images is more
+than tempered images on this database. Therefore, Binary
+Confusion Matrix is used to calculate true positive (TP), true
+negative (TN) and loss rate in this paper. The results of the
+accuracy and loss rates with the performance matrix are shown
+in Fig. 4 for (a) VGG16 and (b) ResNet50. We can conclude
+that this study gave a satisfactory result because the
+Performance Matrix of the accuracy achieves greater than
+88.96%, and the loss rate should be less than 0.4968.
+V. CONCLUSION
+In conclusion, the ResNet50 design produces higher
+accuracy compared to VGG16. This trend appears because of
+the deeper capabilities of the ResNet50 design network. At the
+same time, we are testing an unlabelled data set. Incoming
+Resnet can produce higher accuracy than VGG16 with a lower
+loss rate than VGG16. The main reason for choosing transfer
+learning in this study is that transfer learning can save time,
+cost, and it is a stable model of deep learning. The use of deep
+learning alone is impossible without adequate experience.
+ACKNOWLEDGMENT
+We would like to convey gratitude to Cyber Security
+Team, who contribute unanimously to this project. Apart from
+that, thank you to the Ministry of Higher Education, Malaysia,
+that support this project under Fundamental Research Grant
+Scheme (FRGS) FRGS/1/2019/ICT02/UKM/02/9 entitled
+“Convolution neural network enhancement based on adaptive
+convexity and regularization functions for fake video
+analytics”.
+REFERENCES
+[1]
+
+[2]
+
+Mizher, Manar Abduljabbar Ahmad, Choo, Ang Mei, Abdullah, Siti
+Norul Huda Sheikh, Ng, Kok Weng, 2017. Action Key Frames
+Extraction Using L1-Norm and Accumulative Optical Flow for
+Compact Video Shot Summarisation, Advances in Visual Informatics:
+5th International Visual Informatics Conference, IVIC 2017, Bangi,
+Malaysia, November 28–30, 2017, Proceedings, 10645( 364)
+[4] Mizher, Manar Abduljabbar Ahmad, Choo, Ang Mei, Abdullah, Siti
+Norul Huda Sheikh, Ng, Kok Weng, (2019). An Improved Action Key
+Frames Extraction Algorithm For Complex Colour Video Shot
+Summarization, Journal of Information and Communication
+Technology, 18(2):143-166
+[5] Ghazali, N.N.A.N, Zamani, N., A, Abdullah, S.N.S.H, Jameson, J.,
+(2012) Super-resolution combination methods for CCTV forensic
+interpretation, 12th International Conference on Intelligent Systems
+Design and Applications (ISDA), 853- 858.
+[6] Abdullah, S.N.S.H., Abdulameer, M.H., Zamani, N. A, Rahim, F,
+Ariffin, K. A. Z., Othman, Z., Nazri, M.Z,A, (2017) 2.5 D Facial
+Analysis via Bio-Inspired Active Appearance Model and Support
+Vector Machine for Forensic Application, International Journal of
+Advanced Computer Science and Applications, 8(7)
+[7] Pan, S. J., & Yang, Q. (2009). A survey on transfer learning. IEEE
+Transactions on knowledge and data engineering, 22(10), 1345-1359.
+[8] Redi, J. A., Taktak, W., & Dugelay, J. L. (2011). Digital image
+forensics: a booklet for beginners. Multimedia Tools and
+Applications, 51(1), 133-162.
+[9] Cozzolino, D., Poggi, G., & Verdoliva, L. (2015). Efficient dense-field
+copy–move forgery detection. IEEE Transactions on Information
+Forensics and Security, 10(11), 2284-2297.
+[10] Parashar, N., Tiwari, N., & Dubey, D. (2015). A survey of digital image
+tampering techniques. International Journal of Signal Processing,
+Image Processing and Pattern Recognition, 8(10), 91-96.
+[11] Rao, Y., & Ni, J. (2016, December). A deep learning approach to
+detection of splicing and copy-move forgeries in images. In 2016 IEEE
+International Workshop on Information Forensics and Security
+(WIFS) (pp. 1-6). IEEE.
+[12] Quan, W., Wang, K., Yan, D. M., Pellerin, D., & Zhang, X. (2019,
+September). Improving the Generalization of Colorized Image
+Detection with Enhanced Training of CNN.
+[13] Wang, J., Yang, Y., Mao, J., Huang, Z., Huang, C., & Xu, W. (2016).
+Cnn-rnn: A unified framework for multi-label image classification.
+In Proceedings of the IEEE conference on computer vision and pattern
+recognition (pp. 2285-2294).
+[14] Bunk, J., Bappy, J. H., Mohammed, T. M., Nataraj, L., Flenner, A.,
+Manjunath, B. S., ... & Peterson, L. (2017, July). Detection and
+localization of image forgeries using resampling features and deep
+learning. In 2017 IEEE Conference on Computer Vision and Pattern
+Recognition Workshops (CVPRW) (pp. 1881-1889). IEEE.
+[15] Mohammed, T. M., Bunk, J., Nataraj, L., Bappy, J. H., Flenner, A.,
+Manjunath, B. S., ... & Peterson, L. A. (2018). Boosting Image Forgery
+Detection
+using
+Resampling
+Features
+and
+Copy-move
+Analysis. Electronic Imaging, 2018(7), 1-7.
+[16] Weiss, K., Khoshgoftaar, T. M., & Wang, D. (2016). A survey of
+transfer learning. Journal of Big data, 3(1), 9.
+[17] Pan, S. J., & Yang, Q. (2009). A survey on transfer learning. IEEE
+Transactions on knowledge and data engineering, 22(10), 1345-1359.
+[18] Jin, B., Cruz, L., & Goncalves, N. (2020). Deep Facial Diagnosis: Deep
+Transfer Learning From Face Recognition to Facial Diagnosis. IEEE
+Access, 8, 123649-123661.
+[19] Sarkar, DJ (2018). A Comprehensive Hands-on Guide to Transfer
+Learning with Real-World Applications in Deep Learning.
+https://towardsdatascience.com/a-comprehensive-hands-on-guide-totransfer-learning-with-real-world-applications-in-deep-learning212bf3b2f27a
+
+Hootsuite & We Are Social (2019), “Digital 2019 Global Digital
+Overview,” retrieved from https://datareportal.com/reports/digital2019-global-digital-overview
+Bell, K. (2016). Social media and female body image.
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:00:41 UTC from IEEE Xplore. Restrictions apply.
+
+

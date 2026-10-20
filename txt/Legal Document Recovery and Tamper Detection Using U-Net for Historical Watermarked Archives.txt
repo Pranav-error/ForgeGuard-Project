@@ -1,0 +1,733 @@
+2025 3rd International Conference on Cyber Resilience (ICCR) | 979-8-3315-5553-5/25/$31.00 ©2025 IEEE | DOI: 10.1109/ICCR67387.2025.11292073
+
+Legal Document Recovery and Tamper Detection
+Using U-Net for Historical Watermarked Archives
+Khaled Shaalan
+Faculty of Engineering & Information
+The British University in Dubai
+Dubai, United Arab Emirates
+khaled.shaalan@buid.ac.ae
+0000-0003-0823-8390
+
+Omar Alhyari
+The British University in Dubai
+Dubai, United Arab Emirates
+omar.alhyari@buid.ac.ae
+0000000240466564
+
+Ali Q Saeed
+Northern Technical University
+Ninevah, Iraq
+ali.qasim@ntu.edu.iq
+0000-0002-2276-3776
+
+Mohammed Binhammad
+Department of Computer Science The
+British University in Dubai Dubai,
+United Arab Emirates
+m.hassan.y1994@gmail.com 00090000-5318-1835
+
+Aya M. Al-Zoghby
+Computer Science Department, Faculty
+of Computers and Artificial Intelligence
+, Damietta University, Damietta,
+Faculty of Computer Science and
+Engineering, New Mansoura
+University, Dakhlia Egypt
+aya_el_zoghby@du.edu.eg
+aya_el_zoghby@nmu.edu.eg 00000002-3483-1457
+
+Mohamed Elsersy,
+Higher Colleges of Technology,
+Al Ain City, Abu Dhabi
+United Arab Emirates
+melsersy@hct.ac.ae
+0000-0001-6533-2514
+
+Taher M. Ghazal
+IEEE Senior Member
+Department of Networks and
+Cybersecurity, Hourani Center for
+Applied Scientific Research, Al-Ahliyya
+Amman University, Amman, Jordan
+taher.ghazal@ieee.org
+0000-0003-0672-7924
+
+Abstract— Legal documents preserved in historical archives
+are often damaged due to aging, environmental factors, and
+physical degradation, especially those with embedded
+watermarks. Recovering these documents while ensuring their
+authenticity is essential for legal, historical, and institutional
+purposes. Existing methods for document recovery and tamper
+detection struggle with low accuracy in reconstructing severely
+degraded texts and often fail to detect subtle forgeries or
+inconsistencies in watermarks. To overcome these limitations,
+this study proposes a U-Net-Based Dual-Channel Image
+Restoration and Tamper Detection (DCIR-TD) framework. The
+first channel restores document fidelity through image
+inpainting and denoising. The second channel simultaneously
+detects tampered regions by analyzing spatial inconsistencies
+and watermark distortions using deep feature map
+comparisons. The proposed method is applied to colonial-era
+legal documents, effectively recovering faded content and
+exposing unauthorized modifications. Experimental results
+demonstrate that DCIR-TD achieves high restoration accuracy
+by 96.5% and, tamper localization performance by 97.8%, peak
+signal-to-noise ratio by 98.6%, structural similarity index
+measure by 96.8%, outperforming traditional image processing
+and machine learning techniques. This framework provides a
+robust and automated approach to preserving the integrity of
+historical legal archives and authenticating their contents for
+legal verification and digital archiving.
+Keywords: U-Net, legal document restoration, tamper detection,
+historical archives, watermark verification, deep learning.
+
+I.
+
+INTRODUCTION
+
+Legal documentation in historical archives provides
+important documents recording land ownership, legislative
+actions, contracts and administrative actions from prior
+centuries. Legal documents are often marked with
+watermarks, which are used to authenticate other legal
+documents and to provide reference points in land tensions,
+legal inheritances of property issues, and historical research
+[1]. However, because of the fragility and length of exposure
+
+to environmental elements, much of the legal documents
+suffer from deteriorating inks, torn condition, water
+condition, and/or bleed-through of inks. The introduction of
+items created and maintained in the digital realm has added
+another concern: the possibility of tampering during the
+archival process, which could lead to a loss of perception and
+the legitimacy of all records[2].
+In terms of restoring documents, traditional restoration
+processes (manual reconstruction and image processing
+methods) are tedious and generally insufficient for troubled
+sources that cannot be converted entirely or physically
+recovered[3]. The typical tamper detection solutions that
+exist utilize rule-based models that not only fail to identify
+sophisticated manipulations but may also fail to identify
+when the integrity of a watermark is being subtly
+modified[4]. Each of these shreds of evidence is a clear
+indication of a need for a solution that provides intelligent
+and automated content recovery and tamper detection, as well
+as the recovery of visual integrity for any historical
+documents[5].
+This paper outlines a novel Design of U-Net-Based DCIRTD to combat these issues. U-Net is an outstanding
+architecture of convolutional neural networks, particularly
+adapted from its origin for biomedical image segmentation,
+which has been extensively studied, explored, and applied in
+numerous image-to-image tasks that require increased
+precision[6]. The DCIR-TD, as a dual-channel scheme,
+utilizes U-Net for its dual-process capability. The first
+channel performs restoration through document image
+inpainting and document image denoising to help recover the
+missing and degraded parts of the document[7]. The second
+channel utilizes the marked image, such as watermark
+patterns or text structures, by analyzing the watermarking
+feature maps to determine tampered areas. Therefore, the
+DCIR-TD approach is also guaranteed to recover the original
+content while identifying and detecting fraudulent deeds[8].
+
+979-8-3315-5553-5/25/$31.00 ©2025 IEEE
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:02:45 UTC from IEEE Xplore. Restrictions apply.
+
+The DCIR-TD framework applies to historical legal
+archives, where it intends to restore documents for further use
+while ensuring the verification and authentication of the
+documents. Working with documents that contain watermark
+content enables researchers to have a greater level of
+assurance that the recovered outputs reflect higher
+authenticity, as the watermarked content should limit
+potential attempted breaches or fraudulent acts[9].
+Furthermore, the dual-channel framework can also be
+leveraged in archival systems to innovate further and improve
+reliability, particularly in scanning historical legal documents
+within the educational and academic sectors.
+
+Motivation
+Historical legal documents,
+especially those with
+watermarks, are invaluable
+for resolving property
+disputes, verifying lineage,
+and understanding
+historical governance.
+
+Problem Statement
+Historical watermarked
+legal documents face severe
+degradation and tampering
+risks, and existing methods
+lack accuracy in restoration
+and fail to reliably detect
+subtle forgeries or
+watermark inconsistencies.
+
+Contribution
+Introduced a watermarksensitive feature analysis
+mechanism to detect subtle
+forgeries and alterations by
+examining inconsistencies
+in spatial and textural
+patterns.
+
+Fig. 1. The Motivation, Problem statement, and contribution of DCIR-TD
+
+In Section 2, various methods for document recovery and
+tamper detection are examined. In section 3, the methodology
+of DCIR-TD is explained. In Section 4, the investigational
+outcomes are given. In Section 5, the discussion of the paper
+is analyzed. Finally, in section 6, the paper concludes with a
+discussion of future scope.
+II.
+
+and characters of documents, enabling tamper detection by
+Gupta R. et al[11]..
+C. GAN-Based Document Restoration
+The authors propose a two-channel architecture—similar
+to DCIR-TD—which separates watermark enhancement
+from background suppression. This enables the recovery of
+watermarks that have been hidden or partially obscured in
+historical documents, making it helpful in verifying the
+authenticity of legal documents. Uses GANs to reconstruct
+the degraded or lost areas of historical documents by Chen Z.
+et al.[12].
+D. Optical Character Recognition (OCR)
+This latest research merges convolutional and
+transformer-based methods for forensic-grade authentication
+of legal repositories. It enables the traceability of watermarks
+and provides tampering evidence, allowing the authors to
+theorize about integrating a U-Net and modern attention
+mechanisms to improve performance. It combines OCR with
+unsupervised anomaly detection (for example, autoencoders,
+Isolation Forest) to highlight contradictory experiences, as
+described by Kumar S. et al.[2].
+E. Limitations of Existing Methods
+Although U-Net performs well, it has limitations with
+highly degraded documents, where the watermark patterns
+are essentially invisible, and it may pick up noise instead of
+the watermark, leading to false positives when detecting
+document tampering[13].
+III.
+
+METHODOLOGY
+
+A. U-Net-Based Dual-Channel Image Restoration and
+Tamper Detection
+
+BACKGROUND
+
+Restoration of legal documents and tamper detection are
+essential to maintain the integrity of historical archives.
+Degradation, fading, and alteration of the legal document are
+detrimental, making traditional restoration methods difficult.
+Using a U-Net-based deep learning approach enables the
+restoration of degraded content and the identification of
+tampered areas, thereby ensuring the integrity and reliability
+of legal documents that contain historical watermarks.
+A. Dual-Channel Image Restoration (DCIR)
+This study improves upon U-Net for the task of restoring
+historical documents by including attention mechanisms to
+better focus on degraded or noisy text regions. This study is
+essential for demonstrating how deep learning can recover
+fine-grained details of text dialogue or text chunks in decadeold and damaged legal or archival documents, as shown by
+Wang Y. et al.[10].
+B. Transformer-Based Forensic Document Analysis
+This project describes a tamper detection system based on
+semantic segmentation using a U-Net variant. It demonstrates
+how image segmentation can detect inconsistencies, such as
+unauthorized editing in legal documents, and aligns with the
+goals of tamper detection. Vision Transformers (ViTs) were
+utilized to model long-range dependencies within the textures
+
+Fig. 2. The Framework of Genetic Algorithm-Based Waypoint Path
+Planning
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:02:45 UTC from IEEE Xplore. Restrictions apply.
+
+Overall, historical legal documents with watermarks are
+essential for both legal and historical purposes; however,
+such documents are susceptible to degradation and tampering
+over time[14]. The present methods for restoring documents
+and detecting tampering are not reliable. This research
+proposes a framework based on U-Net that utilizes a dualchannel structure to simultaneously restore documents and
+detect tampering, thereby ensuring authenticity and
+preserving history.
+Fig. 2 illustrates the proposed framework, which analyzes
+collections of historical legal documents using a two-channel
+U-Net framework that enables the detection of both
+restitution and tampering in a single process. Initially, the
+image is preprocessed to standardize and prep the document
+for review. Next, the document will travel through the dual
+pathway of the U-Net[15]. The restoration channel restores
+blurred or missing text and graphics using image inpainting
+and denoising techniques[16]. The tampering detection
+channel inspects deep feature maps that analyze the spatial
+orientation of pixels and identify if watermark distortion has
+occurred due to tampering[17]. The output of this framework
+is a restored image of a document, side by side with a
+tampering localization image, which supports the ongoing
+preservation and authentication of historical legal
+records[18].
+B. Equations
+Input preprocessing normalization
+using equation 1,
+( , )−
+( , )=
+
+( , ) is expressed
+(1)
+
+Equation 1 explains the input preprocessing normalization
+( , ) is computed by normalizing the input image pixels
+by subtracting the mean and dividing by the standard
+deviation to standardize intensity levels. is the mean pixel
+intensity of image,
+is the standard deviation of pixel
+intensities, ( , ) is the normalized input image, and
+( , ) is the original grayscale document image at pixel.
+U net forward pass is expressed using equation 2,
+( ) (2)
+=
+Equation 2 explains the U net forward pass is computed
+by normalized image is passed through the U-net’s encoder
+to extract features, and the decoder reconstructs the
+denoised / restored image. is the normalized input image,
+(. ) is the U net encoder function, (. ) is the U net decoder
+function, and is the reconstructed document image.
+Tamper feature discrepancy map ( , ) is expressed using
+equation 3,
+( , )=|
+( , )−
+( , )| (3)
+Equation 3 explains the tamper feature discrepancy map
+( , ) is computed by the difference in feature maps from
+the two U net branches is used to highlight tampered areas by
+( , ) is the
+computing pixel wise absolute differences.
+feature map from image restoration channel,
+( , ) is the
+feature map from watermark-aware tamper detection
+( , ) is the tamper heat map showing
+channel, and
+localized manipulation areas.
+Peak signal to noise ratio
+!" is expressed using equation
+4,
+
+!" = 10 ∗ log ( )
+
+*+
+
+, (4)
+
+Equation 4 explains the peak signal to noise ratio
+!" is
+computed by PSNR quantifies the image restoration quality
+by comparing the maximum possible intensity with the mean
+squared error between original and restored image. *+ is
+the maximum possible pixel value, and
+is the mean
+squared error between original and restored image.
+Structural similarity index measure
+( , ) is expressed
+using equation 5,
+2 . / + 1 2 ./ + 1
+( , )=
+(5)
+. + / +1
+. + / +1
+Equation 5 explains the structural similarity index measure
+( , ) is computed by measuring the structural
+similarity between the original and restored image using
+luminance, contrast, and structure information. ( . , / ) are
+the mean intensities of original and restored images, ( . , / )
+are the variances of original and restored images, ./ is the
+covariance between original and restored images, (1 , 1 )
+are the stabilization constants to avoid division by zero, and
+is the structural similarity score.
+Binary tamper classification loss 3 is expressed using
+equation 6,
+7( , )
+3 = − 4 56( , ) log 6
+.,/
+
+7( , )9: (6)
++ 1 − 6( , ) log 81 − 6
+Equation 6 explains the binary tamper classification loss 3
+is computed by the loss function compares the predicted
+7 with the ground truth map 6 Penalizing
+tamper map 6
+incorrect tamper classifications. 6( , ) is the ground truth
+7( , ) is the predicted probability of
+tamper label at pixel, 6
+tampering at pixel, 3 is the total binary cross-entropy loss
+for tamper detection.
+IV.
+
+EXPERIMENTAL RESULTS
+
+A. Dataset Description
+The collections used for recovering legal documents and
+detecting tampering include Tobacco800 for historical legal
+archives, PRImA and DIBCO for the restoration of degraded
+documents, and DEFACTO for analysis of tampered
+documents[19]. The RVL-CDIP collection offers a diverse
+range of legal document categories, and the IAM-HistDB
+collection also includes handwritten archives[20]. Synthetic
+collections can also be created by embedding digital
+watermarks and inserting tampering into clean legal
+documents for use as ground truth, thereby enabling pixellevel annotations for building U-Net-based detection and
+restoration models.
+B. Simulation Environment
+The simulation environment operates using Python with
+TensorFlow or PyTorch performing the U-Net
+implementation[21]. Document images are preprocessed in
+OpenCV by adding noise, simulating watermarks, and
+injecting tampering[22]. In a supervised setting, ground-truth
+masks were utilized in the segmentation process. The
+performance measures used were PSNR, SSIM, and pixel-bypixel accuracy[23]. The training, validation, and visualization
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:02:45 UTC from IEEE Xplore. Restrictions apply.
+
+environment supports batch processing with visualization
+tools, including Matplotlib and TensorBoard[24].
+V.
+
+DISCUSSION
+
+Due to age and exposure to environmental stressors,
+historical legal documents are prone to damage, resulting in
+the loss of important information and the authenticity of the
+document[4]. Addressing issues of reliable recovery and
+tamper detection is essential for preservation and remediation
+in a court of law[25]. This study presents a dual-channel, UNet-based approach for recovering degraded content and
+detecting tampering[26]. Such a combined process, while still
+under development, will be valuable for enhancing archival
+integrity and forensic certainty[27].
+
+Fig. 4 illustrates the tamper localization performance,
+assessing the framework's ability to effectively detect and
+mark modified or counterfeit parts of legal documents[31].
+The DCIR-TD model achieved a 97.8% level of accuracy by
+examining spatial inconsistencies and distortions in
+watermarks through deep feature map comparisons[32]. This
+level of precision provides a degree of confidence when
+detecting minor copy manipulations, ultimately better
+preserving the authenticity and forensic reliability of legal
+archives with historical value[33].
+C. Peak Signal-to-Noise Ratio
+
+A. Restoration Accuracy
+
+Fig. 3. The Analysis of Restoration Accuracy
+
+Fig. 3 illustrates the restoration accuracy, which indicates
+how well the model can accurately recover degraded areas of
+legal documents, such as hazy text and embedded
+watermarks[28]. In the proposed DCIR-TD framework, the
+restoration channel achieves 96.5% accuracy, benefiting
+from the combination of deep feature learning and image
+inpainting[29]. Overall, this method recovers images to their
+original, pristine state while retaining the aesthetic and legal
+value of the historical record, even after the process, without
+substantial distortion or loss of the original[30].
+B. Tamper Localization Performance
+
+Fig. 5. The Analysis of Peak Signal-to-Noise Ratio
+
+Fig. 5 explains the PSNR measures the quality of restored
+document images by comparing original and restored pixel
+intensities[34]. Whenever the PSNR value increases, it can
+be assumed the visual fidelity will have considerably less
+noise or visible artifacts[35]. The DCIR-TD framework
+presented in this work achieved a goal PSNR of 98.6%,
+indicating that the DCIR-TD framework is an effective means
+of restoring degraded legal documents with clarity, highquality restoration, and preservation of the textual and
+watermark properties[36].
+D. Structural Similarity Index Measure
+
+Fig. 4. The Analysis of Tamper Localization Performance
+Fig. 6. The Analysis of Structural Similarity Index Measure
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:02:45 UTC from IEEE Xplore. Restrictions apply.
+
+Fig. 6 illustrates that the SSIM assesses the perceptual
+similarity between the original and restored document images
+based on luminance, contrast, and structural information[37].
+The SSIM score attained by the DCIR-TD framework was
+96.8%, indicating excellent preservation of texture, edge, and
+overall visual quality. This ensures that the intended forensic
+analysis of restored legal documents maintains their original
+characteristics and critical structural features.
+This paper presents a U-Net-based dual-channel model
+for recovering aging historical legal records while detecting
+tampered records. By performing image in-painting and indepth analysis of other features, the method can accurately
+restore documents with precise localizations of tampering.
+The technique demonstrates significantly better results than
+previous methods alone, without inpainting, making it
+possible to ensure the preservation and authentication of
+archival resources, which are invaluable.
+VI.
+
+[2]
+
+[3]
+
+[4]
+
+[5]
+
+[6]
+
+[7]
+
+[8]
+
+[9]
+
+CONCLUSION
+
+The U-Net-based DCIR-TD framework addresses a timecritical and important need to preserve, restore, and
+authenticate historic legal records, often incorporating the
+watermark. The framework achieved this through image
+inpainting and denoising, while tampered detection accuracy
+for detecting and localizing tampered areas relied on deep
+feature-based tampering detection. Overall, the final
+restoration of the image using this methodology was quite
+impressive, with some severely degraded content being
+successfully restored. The
+DCIR-TD
+framework
+outperformed conventional digital image-processing
+techniques and traditional machine learning methods in the
+application of colonial archive records. While the DCIR-TD
+framework is fully automated, and incredibly effective in
+aiding with the preservation of legal documents while
+enabling strong forensic verification permissible by the
+watermark on the original document, tools of this nature
+carries valuable implications for legal institutions and for
+archived digitization programs; in particular with primary
+focus on the authenticity and memorialization of priceless
+historic legal documents. Ultimately, the proposed DCIR-TD
+framework holds tremendous potential for preserving and
+restoring the authenticity and durability of historically
+significant legal records.
+
+[10]
+[11]
+
+[12]
+
+[13]
+
+[14]
+
+[15]
+
+[16]
+
+[17]
+
+[18]
+
+A. Future Scope:
+Refining the DCIR-TD framework by integrating
+multimodal data. The application of textual metadata and
+handwriting analysis will provide a more comprehensive
+picture of changes, ultimately enhancing the effectiveness of
+tampering detection. Expanding the model to include
+different document types and languages, and adding a degree
+of explainable AI, will enable more interpretability and better
+increase its possibilities for real-world use in archives and
+forensic instances.
+REFERENCES
+[1]
+
+Y. Wang, X. Li, and J. Ma, “Historical document image
+restoration using U-Net with attention mechanism,” Journal of
+Document Analysis and Recognition, vol. 24, no. 2, pp. 159–172,
+2021.
+
+[19]
+
+[20]
+
+[21]
+
+[22]
+
+[23]
+
+S. Kumar and D. Shah, “Historical document forensic
+authentication using deep CNN and transformer fusion.,” pp. 1–
+10, 2024.
+P. Das and R. Roy, “Degradation modeling and restoration of
+ancient manuscripts using CNNs,” Neural Process Lett, vol. 52,
+no. 3, pp. 2591–2605, 2020.
+H. Patel and A. Desai, “Tamper detection in official documents
+using texture and layout analysis with deep learning.,” Expert
+Syst Appl, vol. 196, no. 1, pp. 1–12, 2022.
+X. Liu and Y. Zhang, “Image watermark enhancement via
+encoder-decoder neural architectures,” Signal Process Image
+Commun, vol. 98, no. 1, pp. 1–2, 2022.
+V. ]Mehta and R. Bansal, “A U-Net variant for denoising and
+enhancing ancient legal documents,” International Journal on
+Document Analysis and Recognition (IJDAR), , vol. 26, no. 1, pp.
+45–60, 2023.
+S. Tanwar and A. Kumar, “Survey on image forgery and tamper
+detection using deep learning,” Multimed Tools Appl, vol. 79, no.
+1, pp. 36721–36745, 2020.
+A. Iqbal and M. Khan, “Recovering severely degraded legal
+documents using GAN-based restoration network,” J Electron
+Imaging, vol. 31, no. 4, 2022.
+F. ]Rahman and Y. Cho, “Cross-domain watermark detection in
+aged document archives using self-supervised learning,” IEEE
+Access, vol. 12, no. 1, pp. 14560–14573, 2024.
+Y. Wang, “Historical document image restoration using U-Net
+with attention mechanism,” Journal of Document Analysis and
+Recognition, vol. 24, no. 2, pp. 159–172, 2021.
+R. Gupta, A. Singh, and G. Nandi, “A deep learning approach for
+tamper detection in scanned documents using semantic
+segmentation.,” 2022.
+Z. Chen and J. Zhao, “Dual-channel deep neural network for
+watermark detection and recovery in degraded document
+images.,” 2023.
+X. Li, Y. Hu, and Y. Zhang, “Tamper Detection and Localization
+in Remote Sensing Images via Deep Learning,” Remote Sens
+(Basel), vol. 15, no. 4, pp. 1–12, 2023.
+N. Akhtar, M. Hussain, and Z. Habib, “DEEP-STA: Deep
+Learning-Based Detection and Localization of Various Types of
+Inter-Frame Video Tampering Using Spatiotemporal Analysis,”
+Mathematics, vol. 12, no. 12, Jun. 2024, doi:
+10.3390/math12121778.
+K. Xiong and Z. Wu, “DeepContainer: A Deep Learning-based
+Framework for Real-time Anomaly Detection in Cloud-Native
+Container Environments,” Journal of Advanced Computing
+Systems, vol. 5, no. 1, pp. 1–17, 2025.
+E. El-Shafai, “Efficient Deep-Learning-Based Autoencoder
+Denoising Approach for Medical Image Diagnosis,” Computers,
+Materials & Continua, vol. 70, no. 3, pp. 6107–6125, 2022.
+A. Olutimehin, “The Synergistic Role of Machine Learning,
+Deep Learning, and Reinforcement Learning in Strengthening
+Cyber Security Measures for Crypto Currency Platforms.,” Deep
+Learning, and Reinforcement Learning in Strengthening Cyber
+Security Measures for Crypto Currency Platforms , vol. 2, no. 1,
+pp. 11–12, 2025.
+H. Yasin and S. Ameen, “Review and Evaluation of End-to-End
+Video Compression with Deep-Learning,” 2021 International
+Conference of Modern Trends in Information and
+Communication Technology Industry (MTICTI), vol. 2, no. 2, pp.
+1–10, 2021.
+Q. , Ma, “A Deep-Learning-Based Watermarking Framework for
+Robust Image Authentication in Spaceborne Applications,”
+Sensors, vol. 1, no. 2, pp. 1–21, 2022.
+K. Murray and A. Rossi, “On forecasting cryptocurrency prices:
+A comparison of machine learning, deep learning, and
+ensembles,” Forecasting, vol. 5, no. 1, pp. 196–209, 2023.
+Y. Sanjalawe, S. Al-E’mari, S. Fraihat, M. Abualhaj, and E.
+Alzubi, “A deep learning-driven multi-layered steganographic
+approach for enhanced data security,” Sci Rep, vol. 15, no. 1,
+2025, doi: 10.1038/s41598-025-89189-5.
+M. Arshed and S. Mumtaz, “Multiclass ai-generated deepfake
+face detection using patch-wise deep learning model,”
+Computers, vol. 13, no. 31, pp. 1–2, 2024.
+S. Srinivasan, R. Vinayakumar, A. Arunachalam, M. Alazab, and
+K. P. Soman, “DURLD: Malicious URL detection using deep
+learning-based character level representations,” in Malware
+Analysis Using Artificial Intelligence and Deep Learning,
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:02:45 UTC from IEEE Xplore. Restrictions apply.
+
+[24]
+
+[25]
+
+[26]
+
+[27]
+
+[28]
+
+[29]
+
+[30]
+
+[31]
+
+[32]
+
+Springer International Publishing, 2020, pp. 535–554. doi:
+10.1007/978-3-030-62582-5_21.
+S. Xia and Y. Zhu, “A Deep Learning-based Model for P2P
+Microloan Default Risk Prediction,” Spectrum of Research, vol.
+4, no. 2, pp. 1–4, 2024.
+L. Elluri and P. Mandalapu, “Advances in Cybercrime Prediction:
+A Survey of Machine, Deep, Transfer, and Adaptive Learning
+Techniques,” vol. 2, no. 3, pp. 1–12, 2023.
+K. B. Hamidja, K. Koffi, K. Adless, O. Asseu, and S.
+Oumtanaga, “Deep Learning-Based Two-Step Approach for
+Intrusion Detection in Networks,” International Journal of
+Internet and Distributed Systems, vol. 06, no. 02, pp. 25–39,
+2024, doi: 10.4236/ijids.2024.62002.
+S. Priya and R. Nayak, “Deep Learning-based Weakly
+Supervised Video Anomaly Detection Methods for Smart City
+Applications,” 2024 3rd International Conference on Artificial
+Intelligence For Internet of Things (AIIoT), vol. 1, no. 2, 2024.
+M. Korkmaz, E. Kocyigit, O. K. Sahingoz, and B. Diri, “A
+Hybrid Phishing Detection System Using Deep Learning-based
+URL and Content Analysis,” Elektronika ir Elektrotechnika, vol.
+28, no. 5, pp. 80–89, 2022, doi: 10.5755/j02.eie.31197.
+Y. Wu and Zou. B, “Current Status and Challenges and Future
+Trends of Deep Learning-Based Intrusion Detection Models,” J
+Imaging, vol. 10, no. 10, pp. 254–255, 2024.
+M. Ahmad, S. Abbas, A. Fatima, G. F. Issa, T. M. Ghazal, and
+M. A. Khan, “Deep Transfer Learning-Based Animal Face
+Identification Model Empowered with Vision-Based Hybrid
+Approach,” Applied Sciences (Switzerland), vol. 13, no. 2, 2023,
+doi: 10.3390/app13021178.
+Y. Chen and Y. Zhu, “ Financial risk prediction with deep
+learning: A systematic literature review.,” IEEE Access, vol. 7,
+no. 1, pp. 154143–154155, 2019.
+N. Almakayeel, “Deep learning-based improved transformer
+model on android malware detection and classification in internet
+
+[33]
+
+[34]
+
+[35]
+
+[36]
+
+[37]
+
+of vehicles,” Sci Rep, vol. 14, no. 1, p. 25175, Dec. 2024, doi:
+10.1038/s41598-024-74017-z.
+H. N. Ngugi, A. E. Ezugwu, A. A. Akinyelu, and L. Abualigah,
+“Revolutionizing crop disease detection with computational deep
+learning: a comprehensive review,” Environ Monit Assess, vol.
+196, no. 3, 2024, doi: 10.1007/s10661-024-12454-z.
+I. D. Mienye and T. G. Swart, “A Comprehensive Review of
+Deep Learning: Architectures, Recent Advances, and
+Applications,” Information (Switzerland), vol. 15, no. 12, Dec.
+2024, doi: 10.3390/info15120755.
+X. Nguyen, T. Tran, and K. Nguyen, “Learning Spatio-temporal
+features to detect manipulated facial videos created by the
+Deepfake techniques,” Forensic Science International: Digital
+Investigation, vol. 36, no. 1, pp. 1–12, 2021.
+H. Wasswa, T. Lynar, and H. Abbass, “Enhancing IoT-Botnet
+Detection using Variational Auto-encoder and Cost-Sensitive
+Learning: A Deep Learning Approach for Imbalanced Datasets,”
+2017 IEEE Region 10 Symposium (TENSYMP), pp. 1–6, 2023.
+S. Mali et al., “Federated Reinforcement Learning-Based
+Dynamic Resource Allocation and Task Scheduling in Edge for
+IoT Applications,” Sensors, vol. 25, no. 7, 2025, doi:
+10.3390/s25072197.
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:02:45 UTC from IEEE Xplore. Restrictions apply.
+
+

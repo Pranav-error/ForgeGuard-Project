@@ -1,0 +1,1375 @@
+IEEE TRANSACTIONS ON NEURAL NETWORKS AND LEARNING SYSTEMS, VOL. 35, NO. 4, APRIL 2024
+
+5407
+
+A Conformable Moments-Based Deep Learning
+System for Forged Handwriting Detection
+Lokesh Nandanwar, Palaiahnakote Shivakumara , Senior Member, IEEE, Hamid A. Jalab , Rabha W. Ibrahim,
+Ramachandra Raghavendra , Senior Member, IEEE, Umapada Pal , Senior Member, IEEE,
+Tong Lu , Member, IEEE, and Michael Blumenstein , Senior Member, IEEE
+
+Abstract— Detecting forged handwriting is important in a
+wide variety of machine learning applications, and it is challenging when the input images are degraded with noise and
+blur. This article presents a new model based on conformable
+moments (CMs) and deep ensemble neural networks (DENNs) for
+forged handwriting detection in noisy and blurry environments.
+Since CMs involve fractional calculus with the ability to model
+nonlinearities and geometrical moments as well as preserving
+spatial relationships between pixels, fine details in images are
+preserved. This motivates us to introduce a DENN classifier,
+which integrates stenographic kernels and spatial features to
+classify input images as normal (original, clean images), altered
+(handwriting changed through copy-paste and insertion operations), noisy (added noise to original image), blurred (added
+blur to original image), altered-noise (noise is added to the
+altered image), and altered-blurred (blur is added to the altered
+image). To evaluate our model, we use a newly introduced dataset,
+which comprises handwritten words altered at the character level,
+as well as several standard datasets, namely ACPR 2019, ICPR
+2018-FDC, and the IMEI dataset. The first two of these datasets
+include handwriting samples that are altered at the character
+and word levels, and the third dataset comprises forged International Mobile Equipment Identity (IMEI) numbers. Experimental
+results demonstrate that the proposed method outperforms the
+existing methods in terms of classification rate.
+
+Manuscript received 30 January 2021; revised 18 May 2021, 6 September
+2021, 22 November 2021, and 21 February 2022; accepted 22 August
+2022. Date of publication 21 September 2022; date of current version 5 April 2024. This work was supported in part by the Ministry
+of Higher Education of Malaysia for the Generous Grant Fundamental
+Research Grant Scheme (FRGS) under Grant FRGS/1/2020/ICT02/UM/02/4.
+(Corresponding author: Tong Lu.)
+Lokesh Nandanwar, Palaiahnakote Shivakumara, and Hamid A. Jalab
+are with the Department of Computer System and Information
+Technology, University of Malaya, Kuala Lumpur 50603, Malaysia (e-mail:
+lokeshnandanwar150@gmail.com;
+shiva@um.edu.my; hamidjalab@um.
+edu.my).
+Rabha W. Ibrahim is with the Department of Mathematical Sciences,
+University of Malaya, Kuala Lumpur 50603, Malaysia (e-mail:
+rabhaibrahim@yahoo.com).
+Ramachandra Raghavendra is with the Faculty of Information Technology and Electrical Engineering, IIK, Norwegian University of Science
+and Technology (NTNU), 7034 Trondheim, Norway (e-mail: raghavendra.
+ramachandra@ntnu.no).
+Umapada Pal is with the Computer Vision and Pattern Recognition Unit, Indian Statistical Institute, Kolkata 700108, India (e-mail:
+umapada@isical.ac.in).
+Tong Lu is with the National Key Laboratory for Novel Software Technology, Nanjing University, Nanjing 210093, China (e-mail: lutong@nju.edu.cn).
+Michael Blumenstein is with the School of Computer Science, University of Technology Sydney, Ultimo, NSW 2007, Australia (e-mail:
+michael.blumenstein@uts.edu.au).
+Digital Object Identifier 10.1109/TNNLS.2022.3204390
+
+Index Terms— Conformable moments (CMs), convolutional
+neural networks (CNNs), deep learning, forged handwriting,
+fractional calculus, handwritten documents.
+
+I. I NTRODUCTION
+
+I
+
+T IS noted from previous work [1] that developing systems
+for detecting suspicious activities is gaining popularity in
+the field of machine learning and forensic security applications
+[2], [3]. This indicates that the alteration or tampering of content in images is a serious threat for forensic applications, such
+as forging property, insurance, certificates, banking documents,
+and other sensitive documents such as creating fake suicide
+notes and fake answer scripts. In addition, there are several
+occasions, such as gender, writer, nationality identification, age
+estimation, behavior identification using handwriting analysis, which can assist forensic investigation teams to identify
+criminals. In these situations, altering, tampering and forging
+of content can have tragic consequences, and it may even
+cause death of a person. Therefore, robust forged handwriting
+detection, which is invariant to noise and blur, is essential.
+There are methods available for detecting forgeries in document images, video, and general images [4], [5], [6], [7], [8],
+[9], [10], [11], [12]. Most of the methods rely on image
+features such as texture, color, and distortion at the edges
+for detecting forgeries in the images. However, these features
+may not be adequate for detecting forgeries in handwritten document images due to large variations in the writing
+[13], [14]. To overcome this limitation, a few methods have
+been developed that work based on inconsistency and irregular
+patterns of forged texts [15], [16]. But these techniques are not
+robust to handwritten documents affected by noise and blur
+because of inconsistencies and irregular patterns, which are
+used as a cue for forgery detection.
+Moreover, it can be observed that handwritten documents
+are comprised of words affected by noise, blur, text with poor
+quality, and degradations due to errors in devices, flaws in
+the process of image acquisition, paper quality, and camera
+movements while capturing images. The factors make the
+problem of forged handwritten text detection in noisy and
+blurred environments complex and challenging. In addition,
+the forgery at a character level adds more complexity to
+the problem. This is because character-level forgeries do not
+provide noticeable differences compared to word and text lines
+forgery for detection. Thus, there is a need for addressing the
+
+2162-237X © 2022 IEEE. Personal use is permitted, but republication/redistribution requires IEEE permission.
+See https://www.ieee.org/publications/rights/index.html for more information.
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:01:27 UTC from IEEE Xplore. Restrictions apply.
+
+5408
+
+Fig. 1.
+
+IEEE TRANSACTIONS ON NEURAL NETWORKS AND LEARNING SYSTEMS, VOL. 35, NO. 4, APRIL 2024
+
+Examples of sample images of the six classes.
+
+challenges of forged handwritten text detection in noisy and
+blurry environment.
+Therefore, we define six classes, namely: 1) Normal words
+that are not affected by noise or alterations; 2) Altered words
+created through standard copy-paste and insertion operations;
+3) Noisy words where different noise densities are added to
+the original image; 4) Blurred words where the original image
+is blurred to various levels; 5) Altered-Noisy words created by
+adding noise to previously altered images of handwriting; and
+6) Altered-Blurred words created by adding blur effects to
+handwriting that has been altered. For example, the images
+for the above six classes can be seen in Fig. 1, where the
+naked eye can easily detect blurred and noisy words but has
+more difficulty in identifying words that have been altered.
+Overall, to the best of our knowledge, this is the first work
+focusing on forged handwriting detection in noisy and blurred
+environments.
+The key contributions of the proposed work are as follows: 1) conformable moments (CMs) are employed here for
+enhancing the finer details in images irrespective of degradations introduced by forgeries, noise, and blur; 2) a new deep
+learning model is developed by exploring the combination of
+stenographic kernels and spatial filters; 3) to the best of our
+knowledge, the existing forgery detection methods have not
+explicitly considered noisy and blurred input images. Thus,
+this work is new in this respect; and 4) since it is the first
+of its kind, the creation of a dataset with its ground truth for
+forgery detection is a cumbersome task. We have done this,
+and we shall release the code and dataset publicly to support
+research reproducibility.
+The remainder of this work is structured as follows.
+A review of the related methods of fraudulent document
+identification, source printer identification, and forged text
+detection is presented in Section II. Section III introduces a
+new model of CMs for enhancing the finer details in the
+input images and deep ensemble neural networks (DENNs) for
+detection of forged handwritten text. To validate the proposed
+method, experimental analysis on different benchmark datasets
+is discussed in Section IV. Lastly, Section V summarizes the
+proposed work.
+II. R ELATED W ORK
+In the past decade, we can see extensive research being
+undertaken for fraudulent document identification, source
+printer identification, and forged text detection in document images. The methods can be classified into two broad
+
+categories, namely genuine document identification and printer
+identification.
+Loc et al. [17] proposed an approach for securing genuine documents by exploring adversarial networks. It embeds
+watermarking to hide secret information in the document.
+However, the method is sensitive to distorted documents.
+Berenguel et al. [18] proposed a method for detecting counterfeit documents based on a deep learning model. Due to the use
+of high-quality printers, fraudulent documents were expected
+that did not leave any noticeable mistakes. However, the work
+assumed that when a counterfeit document is created, some
+abrupt changes in the background texture of the document
+would be evident. Raghunandan et al. [4] aim to identify
+fraudulent handwritten documents by considering them as a
+two-class problem. The approach uses Fourier coefficients for
+studying the quality of handwritten documents. Quality-based
+features may not be robust for documents affected by adverse
+factors, such as distortions, noise, blur, and forgery operations.
+The above review on fraudulent document identification
+methods show that most approaches use documents that do
+not suffer from degradations, poor quality, and aging for
+forgery detection. This is because the methods work on the
+assumption that the forgery operations introduce distortions.
+This assumption may not be true for documents with noise,
+blur, and degradations.
+In a similar way, there is another set of methods that
+identifies the source printer for detecting forged documents.
+Wang et al. [12] propose a method for printer identification
+based on different texture features and passing extracted features to an SVM for the classification of documents printed
+by different printers. Bibi et al. [19] focus on developing a
+method that identifies the source printer, which is text independent. To achieve this, the approach uses deep convolutional
+neural networks (CNNs) in contrast to hand-crafted features.
+Joshi and Khanna [20] propose a method for source printer
+classification by defining local texture descriptors. However,
+the extracted features are sensitive to document aging and
+degradation. One can note from the review on the methods
+of source printer identification that none of the methods
+uses handwritten documents for altered text detection. This is
+because the methods expect unique noise or distortions created
+by different printers.
+Recently, Shivakumara et al. [21] targeted forged International Mobile Equipment Identity (IMEI) number detection by
+exploring color features and fusion concepts. Similar to [21],
+Nandanwar et al. [16] propose an altered text detection method
+in document images. It considers PDF documents for altered
+text detection. The method uses the input image and the
+image reconstructed by DCT for finding differences between
+input and reconstructed images. To address the challenges
+of forged handwritten documents in noisy and blurry environments, Kundu et al. [15] proposed a method based on
+pixel distributions corresponding to the Fourier spectrum and
+its shape. Although the method is robust to blur and noisy
+words, it does not perform well for character-level forgeries
+and altered-noise, blurry images. Megahed et al. [22] proposed
+a method for forgery detection in handwritten documents
+based on ink color features. These features are extracted
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:01:27 UTC from IEEE Xplore. Restrictions apply.
+
+NANDANWAR et al.: CMs-BASED DEEP LEARNING SYSTEM FOR FORGED HANDWRITING DETECTION
+
+from the R, G, and B color spaces for differentiating text
+written by different writers. Nandanwar et al. [23] proposed
+a method for forged international mobile equipment number
+and altered air ticket detection employing DCT phase-based
+features. However, these methods were developed assuming
+clean input images and may not work well for images affected
+by noise and blur.
+Considering the above review, most existing methods do
+not perform well for documents that suffer from poor quality,
+degradation, and distortions because distortions created by
+forgery operations create confusion with the actual distortion
+of documents. Furthermore, variations in handwriting make the
+problem more challenging, and to the best of our knowledge,
+these are still considered as open issues. Hence, inspired by
+the special properties of CMs, which can preserve salient
+information, such as fine edges irrespective of distortion,
+noise, and blur [24], [25], we explore CMs for preserving
+structures of characters in noisy and blurry environments. This
+is promising because CMs involve fractional calculus which
+can solve the nonlinear complexity problem [26], [27], and
+geometric moments which help to define a spatial relationship
+between pixels. Since CMs assist in finding the finer details
+in noisy and blurry environments, it results in unique edge
+patterns for images of different classes. This motivated us to
+propose a new architecture based on stenographical kernels
+and spatial filters [28] for extracting such unique patterns.
+III. P ROPOSED M ETHOD
+Since there are several powerful word segmentation
+approaches that work well irrespective of script, orientation,
+degradation, and distortion [29], [30], [31], we consider words
+as the inputs for the purpose of altered text detection. The
+proposed work considers six classes as discussed in the introduction section namely: 1) Normal words; 2) Altered words;
+3) Noisy words; 4) Blurred words; 5) Altered-Noisy words;
+and 6) Altered-Blurred words.
+Inspired by the fact that CMs can find solutions to complex
+problems such as nonlinear complexities [24], [25], we explore
+CMs for altered text detection. It is expected that CMs provide
+enhanced images for the six classes by preserving the finer
+details [26], [27] of characters. This results in the unique
+edge patterns for all the six classes, which can be used for
+the classification of altered words from normal, noisy, and
+blurred words. Motivated by stenographical kernels and spatial
+kernels, which help us to extract contextual information with
+the help of local spatial information, we propose to design
+a DENN. This approach integrates stenographic residual features, and features extracted by the CNN from photograph
+montages for detecting altered images from other images.
+The proposed method extracts statistical features using
+Stenographic Residuals with High Pass Filters for both input
+and enhanced images given by CMs. At the same time,
+to increase the strength of stenographic residual features,
+we generate a photograph montage using inputs and CM
+images from which the proposed method extracts Spatial
+CNN features using the EfficientNet [32] backbone trained
+on the ImageNet dataset as a feature extractor. The motivation
+
+Fig. 2.
+
+5409
+
+Framework of the proposed method.
+
+to propose EfficientNet over Densenet, Resnet, etc., is that
+EfficientNet is designed through a neural architecture search
+for getting the best combination of blocks and layers. It is
+based on a model scaling method using effective compound
+coefficients, which means we can increase the model size
+as per the requirements and needs. It has a low number of
+parameters compared to other SOTA methods and has high
+accuracy, which implies less training time and an improvement
+in real-time performance. The features are then fed to a
+DENN classifier, which consists of two sets of classifiers for
+Stenographic features and CNN features, along with the fusion
+layer for classification. The framework of the proposed method
+can be seen in Fig. 2.
+A. Theory of CMs
+As we have discussed earlier, when we perform forgery
+operations on an input image in noisy and blurry environments,
+the quality of the images degrades. When the quality degrades,
+a variance increases between the distortion created by the
+forgery operation, and the noisy, blurry handwriting variations.
+Therefore, to cope with this challenge, we introduce CMs to
+improve the quality of the image, spatially. In the case of
+CMs, the basis function with an alpha power is important to
+enhance the edge pixel values. It is stated due to Anderson and
+Ulness [25] that the CMs are derived from Conformable Calculus (CC) based on control theory to estimate the performance
+of the proportional-differentiation controllers in terms of a
+well-known error function. We explore this idea to formulate
+a new CM and derive interesting results by establishing a
+relationship between the class of CC and control theory and
+use it for altered text detection. We briefly present a summary
+of CMs here to convey the idea of the operation using CC.
+Details about CC can be found in [25].
+Overall, fractional calculus reduces the influence of backgrounds and distortion, while moments preserve spatial information of the finer details (edges) in the images such that one
+can expect unique patterns for each of the classes.
+As per [25], considering ψ1 , ψ0 as the fractional functions
+of fine-tuning quantities and I as a differentiable function and
+I  as the first derivative of I, conformable derivative can be
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:01:27 UTC from IEEE Xplore. Restrictions apply.
+
+5410
+
+IEEE TRANSACTIONS ON NEURAL NETWORKS AND LEARNING SYSTEMS, VOL. 35, NO. 4, APRIL 2024
+
+formulated in the subsequent form
+α I (x) = ψ1 (α, x)I (x) + ψ0 (α, x)I  (x)
+
+(1)
+
+for the following limits of the functions ψ1 : [0, 1]X R →
+[0, ∞) and ψ0 : [0, 1]X R → [0, ∞)
+lim ψ0 (α, x) = 0,
+
+lim ψ0 (α, x) = 1
+
+α→0
+
+α→1
+
+α→0
+
+α→1
+
+lim ψ1 (α, x) = 1,
+
+lim ψ1 (α, x) = 0.
+
+To reach the above-mentioned definitions, we will introduce
+the following cases in view of our approach:
+ψ0 (α, x) = αx 1−α , ψ 1 (α, x) = (1 − α)x α .
+
+(2)
+
+The CM-generating function 
+M X (t), t ∈ R of any random
+variable X is defined by
+
+M
+X (t) = [eλ (Xt, 0; α)] := [eλ (Xt; α)]
+where
+
+ X t
+
+λ − ψ1 (α, x)
+dx .
+eλ (Xt; α) = exp
+ψ0 (α, x)
+0
+
+Substituting (2) in (3), we have
+
+
+λ
+(1 − α)
+α
+2α
+(Xt) −
+(Xt)
+.
+eλ (Xt; α) = exp
+α2
+2α 2
+
+Fig. 3. Examples of the enhanced images by the proposed CMs for the input
+images of six classes. (a) Input images of six classes and (b) result of CMs.
+
+(3)
+TABLE I
+Q UALITY M EASURES FOR I NPUT AND E NHANCED I MAGES OF ALL THE S IX
+C LASSES (N: NIQUE, B: BRISQUE, P: PSNR, AND S: SSIM)
+
+(4)
+
+The discrete behavior of the (x, y) can be studied by
+dividing it into pixels having a discrete intensity level. Twodimensional moments of a digitally sampled M × N image that
+has gray function f (x, y), (x, y = 0, . . . , M − 1), is given as
+
+M
+pq =
+
+N
+M 
+
+
+λ, pq (x, y; α) · I (x, y)
+
+(5)
+
+x=1 y=1
+
+where M × N is the size of the image, λ, pq (x, y; α) is
+the basis function of the discrete formula, and I (x, y) is the
+intensity of a pixel in the digital feature at the xth row and
+yth column.
+To be consistent with the application of this study, the power
+term (2α) of the exponential function in (4) has been approximated into (α) by using the local linear approximation [33].
+Hence, we approximate the basis function as follows:
+
+
+λ α p α q (1 − α) α p α q
+(x ) (y ) −
+(x ) (y )
+λ, pq (x, y; α) =
+α2
+2α 2
+
+
+2λ − (1 − α)
+=
+(x α ) p (y α )q
+2α 2
+
+
+λ − 0.5(1 − α)
+(x α ) p (y α )q , α = 0.
+=
+α2
+(6)
+Consequently, using (6), (5) can be written as follows:
+
+
+λ − 0.5(1 − α)   α p α q
+
+M
+=
+(x ) (y ) · I (x, y) (7)
+pq
+α2
+x
+y
+where (x α ) p (y α )q is the basis function, and λ > 1/2(1 − α).
+Equation (7) defines CMs, which are used to enhance the
+input image. The main advantage of CMs lies in their ability
+to accurately describe the information contained in the image
+features, which makes them an efficient image-enhancing
+
+algorithm in the case of degraded images. In the proposed
+CM image enhancement model, the key parameter is α, where
+the performance of the CM basis function of the α power is
+utilized to enhance the illumination value of the pixels of the
+image, which might influence the accuracy of the detection
+process.
+The effect of the proposed CMs for sample images of the
+six classes, shown in Fig. 3(a), can be seen in Fig. 3(b). It is
+noted from Fig. 3(a) that one does not notice abrupt changes or
+inconsistency patterns caused by forgery operations in altered
+images compared to the normal ones. However, from the
+results of CMs shown in Fig. 3(b), a greater level of brightness
+can be observed for the normal words, while there is a fainter
+level for the altered words. At the same time, when we observe
+the input and enhanced images affected by noise and blur in
+Fig. 3(a) and (b), it can be noted that the brightness is increased
+for enhanced images compared to the input images. Due to the
+brightness in CM images, the structures of characters can be
+preserved and can be extracted, despite the fact that the images
+are affected by noise and blur.
+To demonstrate how CMs help in preserving structural
+details and spatial information for the altered images through
+statistical analysis, we estimate different measures namely,
+NIQUE, Blind Reference less Image Spatial Quality Evaluator
+(BRISQUE), PSNR, and SSIM for the images shown in
+Fig. 3. The results are reported in Table I. It is evident from
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:01:27 UTC from IEEE Xplore. Restrictions apply.
+
+NANDANWAR et al.: CMs-BASED DEEP LEARNING SYSTEM FOR FORGED HANDWRITING DETECTION
+
+Algorithm 1 CMs
+1: Initialization: I =Input image, set the fractional power
+α = 0.6
+2: For each Input do
+3:
+{B1 , B2 , . . . , Bn }←split I into non-overlapped
+blocks size of 4 × 4 pixels
+4:
+For i = 1 to n do
+5: M pq ← I // Conformable Moments is calculated for
+each block of pixels as defined in Equation (7), where
+i denotes the i th block of 4 × 4 dimensions.
+6:
+EndFor
+7: Calculate the sum of the M pq for all image blocks
+8: EndFor
+9: Display enhanced image
+
+Table I that the NIQUE and BRISQUE are reporting low
+values for the enhanced images of all the classes compared
+to the input images, except for the altered class for which
+only BRISQUE does not score low values. The low values
+of NIQUE and BRISQUE indicate better quality. To verify
+the same observation, we also estimate PSNR and SSIM for
+the images shown in Fig. 3. The reason to consider PSNR
+and SSIM is that these two measures are defined exclusively
+for measuring pixel signal-to-noise ratios and the structural
+similarity index between input and enhanced images. For this
+experiment, we considered input images of the normal class
+as a ground truth for calculating measures; and the results
+are reported in Table I. The PSNR and SSIM are calculated
+by comparing enhanced images of all the classes with the
+input image of the original class. In contrast to NIQUE and
+BRISQUE, high values of PSNR and SSIM indicate better
+quality. Therefore, Table I illustrates that the PSNR and SSIM
+score almost similar values for all the classes, compared to the
+normal class. With the results of NIQUE, BRISQUE, PSNR,
+and SSIM, one can infer that the proposed CMs preserve the
+finer details and spatial information for the altered images,
+which facilitates successful classification of altered images.
+The method divides the whole image into a number of
+nonoverlapping blocks with size of 4 × 4, and then it extracts
+CMs for each block as defined in (7). The steps for obtaining
+enhanced images using the proposed CMs are presented in
+the Algorithm below. The block size of 4 × 4 is determined
+empirically.
+B. DENN for Classification of Altered Handwriting
+In the case of handwriting, pixel values and their neighboring values play a key role in defining a spatial relationship between pixels, which can be used to extract structures
+of characters. In our work, the altered images affected by
+forgery operations, noise, and blurred images, are considered
+for classification, which affect the structures of characters.
+At the same time, since a normal word is not affected by
+any forgery operations, noise, and blur, the character structures are not affected, and hence the word is not affected.
+In this work, it is expected that forgery at the character level,
+and the alteration caused by forgery operations, may not be
+
+5411
+
+noticeable. These are the observations for classifying images.
+Inspired by the special properties of Stenographic kernels that
+are popular for extracting the spatial dependency of pixels,
+which can be named as spatial context features, we explore
+stenographic kernels through residuals using different orders
+of high-pass filters [28]. We extract stenographic features
+by merging several smaller residuals of high-pass filters and
+then concatenating all the residuals to obtain the feature
+vector. Therefore, stenographic features are the combination
+of sub-models known as residuals.
+The stenographic residual sub-model R is computed from
+noise residuals, as defined as follows:
+ 
+(8)
+R = Ii j ∈ Rn 1 ×n 2 .
+Based on high pass filters as described in [25], we extract
+stenographic features as defined below:
+ 
+Ii j = X̂ i j Ni j − cX i j
+(9)
+where c ∈ N is a residual order, Ni j is a local neighborhood
+of the pixel X i j , X i j ∈
+/ Ni j and X̂ i j (.) is a predictor of cX i j
+defined on Ni j . The {X i j + Ni j } set is called the support of
+the residual. The advantage of modeling residual instead of
+pixel values is that image content is largely suppressed in R,
+which has a much narrower dynamic range, thus allowing a
+more compact and robust statistical description. All residuals
+are built as locally supported linear filters, whose outputs are
+possibly combined using minimum and maximum operators
+to increase their diversity. The residuals are divided into
+six classes, depending on the central pixel predictor. The
+classes are labeled as 1st, 2nd, 3rd, SQUARE, EDGE3 × 3,
+and EDGE5 × 5. The description of all the 39 residuals
+can be obtained in [28]. The proposed method calculates all
+the 39 residuals to extract stenographic features of different
+dimensions for both the input and enhanced images given by
+CMs. This results in a feature vector of length 12 753, and then
+the feature vectors are concatenated into a single dimension
+vector of size n = 25 506.
+It is true that each pixel value contributes to defining
+character structures in handwriting images. For example, intensity values are almost the same for pixels of each character
+in word images. Therefore, to strengthen the stenographic
+features, motivated by CNNs, which demonstrate promising
+performance for image classification [32], we explore CNNs
+for extracting features by feeding the images as inputs. The
+proposed method uses the EfficientNet neural network architecture, trained on a large ImageNet dataset without the top
+classifier, which acts as a backbone feature extractor in this
+work. The extracted features are then passed through the GlobalMP layers to obtain the feature vector of a single dimension
+size, f . In this work, the proposed method passes a montage
+of input images and CM images as shown in Fig. 4 to the
+EfficientNet CNN backbone to extract convolutional features.
+To analyze the contribution of stenographic features, and the
+features of photograph montage images, we calculate the standard deviations for feature vectors given by the stenographic
+residuals of different kernels. The feature matrix contains 39
+feature vectors extracted from input images, and 39 more
+feature vectors extracted from CM images, which results in
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:01:27 UTC from IEEE Xplore. Restrictions apply.
+
+5412
+
+IEEE TRANSACTIONS ON NEURAL NETWORKS AND LEARNING SYSTEMS, VOL. 35, NO. 4, APRIL 2024
+
+Fig. 4. Photograph montage creation using input and enhanced CM images.
+
+Fig. 6.
+
+Fig. 5. Effects of stenographic features and the histogram of photograph
+montage images for classification. (a) Line graph for the standard deviation
+of stenographic features for the respective six classes. (b) Histogram for
+Photograph Montage images of six classes.
+
+78 feature vectors. The line graphs for the standard deviations
+of the respective 78 feature matrices of the six classes are
+illustrated in Fig. 5(a), where we can see differences in the line
+graph behavior for all the six images in terms of variations.
+This indicates that the stenographic features contribute to the
+image classification of the six classes. Similarly, for the pixel
+values of the photograph montage images of six classes, the
+proposed method performs a histogram operation, as shown
+in Fig. 5(b). It is noted from Fig. 5(b) that the shapes of
+the histograms are different for all the six images. Therefore,
+one can assert that the features of the photograph montage
+images are effective in differentiating the six classes. Overall,
+we can conclude that the features extracted from stenographic
+residuals and the features extracted from the photograph
+montage images have the ability to differentiate the images of
+six classes, and hence both sets of features contribute equally
+toward classification.
+
+DENN Architecture.
+
+To integrate the stenographic features and CNN-based features, we propose a DENN Architecture as shown in Fig. 6,
+where one can see how the proposed method combines both
+the features. The stenographic features extracted from input
+and CM images results in a feature vector of size n, which
+is then passed through the fully connected neural network
+(F-CNN-1). It consists of six fully connected (FC) layers.
+The final layer of this FC network contains 16 neurons.
+Conversely, the features extracted using the efficient net CNN
+backbone from the montage of inputs and CM images are
+fed to a fully connected neural network (F-CNN-2) having
+global max pooling (MP) and three FC layers. The final layer
+of F-CNN-2 has 16 neurons. The DENN fuses the outputs of
+F-CNN-1 and -2 and subsequently passes through the FC layer
+to the final output layer (multilabel classification) containing
+six neurons, one for each of the six labels (i.e., normal,
+altered, noisy, blurred, altered noisy, and altered blurred).
+This architecture uses the “ReLU” activation function for
+all the layers except for the output layer, where we use the
+“Softmax” [34] activation function. With “ADAM” [35] as an
+optimizer and “Categorical Cross Entropy” [36] as the loss
+function (), which is defined in (9), where p represents the
+labels and p̂ are the predicted probabilities for the respective
+C classes used in this work. The dropout rate of 0.2 is added
+in between the layers to reduce over fitting, which also results
+in the generalization of our model
+C
+
+ 
+
+
+pi log p̂i
+ p, p̂ = −
+i=1
+
+where C is the number of classes.
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:01:27 UTC from IEEE Xplore. Restrictions apply.
+
+(10)
+
+NANDANWAR et al.: CMs-BASED DEEP LEARNING SYSTEM FOR FORGED HANDWRITING DETECTION
+
+We use the cyclical learning rate (CLR) [37] strategy to
+train the proposed architecture. CLR dramatically reduces
+the number of experiments required for tuning and finds an
+optimal learning rate. This strategy allows the learning rate
+to oscillate back and forth between upper and lower bounds
+when training, slowly increasing and decreasing the learning
+rate after every batch update. This leads to an optimal way of
+improving model performance. To find the upper and lower
+bounds, we have utilized the same approach as defined in
+CLR, where we train our network for a small number of
+epochs with a very low learning rate, such as 1e-10, which
+starts increasing our learning rate exponentially after each
+batch update. Training will continue until we reach a very
+high learning rate (1e + 01).
+Testing the plot of smoothed loss over time enables us
+to determine the lower and upper bounds of the learning
+rate. When the learning rate is large enough for the loss to
+decrease, it is considered as a lower bound of the learning
+rate. When the learning rate is too large to the point where
+the loss starts to increase, it is considered as an upper bound
+of the learning rate. For this work, the upper bound of the
+learning rate is determined to be 5e-2 and the lower bound is
+found to be 1e-5. Then the proposed method employs CLR
+for 96 epochs for a step size of 8 epochs and a batch size
+of N = 16 images, leading to 6 full CLR cycles to oscillate
+back and forth between upper and lower bounds. For all the
+experiments, we use a system with the Nvidia Quadro M5000
+GPU for training and testing of the architecture and a python
+framework along with TensorFlow-v2.1 for this application.
+The datasets are divided into 80% and 20% for training and
+testing for all the experiments in this work. The parameters
+used in this work, namely image size, the number of FC layers,
+neurons, batch size, learning rate, etc., used in this work are
+determined experimentally. The system takes approximately
+1.5 min for each epoch on the proposed dataset, for a total of
+2 h 20 min to complete all the experiments.
+To analyze the time complexity of the proposed method,
+we considered the following key steps: 1) CMs enhanced
+image; 2) stenographic feature extraction; and 3) deep CNN
+ensemble for classification. Since the parameters of the CMs
+depend on the number of overlaps in the blocks of a ×a pixels,
+the time complexity for an image is O(n) in the worst case,
+and the same for the best case, which is (n). It is noted that
+the time complexity of stenographic feature extraction for an
+image is O(n 2 ), where n is the number of pixels in the image.
+Therefore, the time complexity for extracting Stenographic
+features from the image is O(n 2 ) in the best case, and O(n 3 )
+in the worst case. In addition, the time complexity for the
+classification step using a Deep CNN ensemble is (n). In
+summary, the overall time complexity of the proposed method
+in the best case is O(n) + O(n 2 ) + O(n) ⇔ O(n 2 ), and in
+the worst case is O(n) + O(n 3 ) + O(n) ⇔ O(n 3 ).
+IV. E XPERIMENTAL R ESULTS
+There is no publicly available standard dataset for detecting
+altered handwriting at the character level in noisy and blurry
+environments. In this work, we created a new dataset for
+
+5413
+
+Fig. 7. Procedure and operations involved in creating altered text for our
+dataset. (For better, use 300%.) (a) For original text, we manually inserted
+the character “e” using the brush stroke of the same color as that of source
+image, (b) source image to be altered, (c) character to be inserted, (d) cropping
+character, and (e) altered text using copy-paste.
+
+evaluating the proposed method. We use the standard forgery
+operations, namely, copy-paste which copies characters either
+from the same document or different documents to paste
+them to target locations in the original image. The insertion
+operation inserts characters at appropriate locations in the
+original image using Microsoft Paint. The process we used
+in creating our dataset can be seen in Fig. 7, where (a) shows
+how a character “e” is inserted at the end of a word to obtain
+an altered word. In the same way, the snapshots in (b) and
+(e) show the steps for performing a copy-paste operation.
+For an original image shown in Fig. 7(b), the character to
+be inserted in the original image is chosen from a different
+image as shown in Fig. 7(c). The chosen character is cropped
+manually and carefully as shown in Fig. 7(d), and then the
+cropped character is pasted at the beginning of the original
+image as shown in Fig. 7(e), resulting in a word altered
+through a copy-paste operation.
+This is the approach we used to create our dataset of
+altered handwritten images. To test our proposed method
+for detecting alterations in noisy and blurred environments,
+we used Gaussian functions to add different levels of noise
+and blur to the original and altered images, yielding four more
+classes, namely: noisy, blurred, altered-noisy, and alteredblurred. We added noise and blur to the entire image in each
+case [38], [39], [40] as is standard practice when testing for
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:01:27 UTC from IEEE Xplore. Restrictions apply.
+
+5414
+
+IEEE TRANSACTIONS ON NEURAL NETWORKS AND LEARNING SYSTEMS, VOL. 35, NO. 4, APRIL 2024
+
+robustness. The original, clean images are designated as the
+Normal class. Therefore, in total, six classes are employed
+for our experiments in this work. Each class consists of
+500 images, hence there is a total of 3000 images. Since we
+use datasets originally developed for writer identification and
+word spotting research [41], one can expect large variations in
+the handwriting. This makes the data even more challenging
+for our work. Note that the code and the dataset developed for
+this work will both be made freely available.
+To test the effectiveness of the proposed method, we also
+considered the benchmark datasets for forged word detection
+created by performing forgeries at the word level, in this case,
+the ACPR 2019 dataset [15]. This dataset consists of four
+classes as in the proposed work, namely: normal, forged, noisy,
+and blurred images. However, the forged words are created by
+tampering the whole word in contrast to our dataset, where
+forgeries are performed at the character level. However, for
+noisy and blurred images creation, the same operations are
+used as in the proposed work. As a result, the proposed dataset
+is much more challenging for altered handwriting detection
+compared to the ACPR 2019 dataset. The dataset comprises
+800 images, which includes 200 images for each class.
+There is one further benchmark dataset created for detecting altered prices on receipts. It is published in the
+ICPR 2018 Fraud Contest Data (FCD) report [42]. Most
+of the receipts have numerals of two-five digits, date-time,
+and some character text, which includes forged digits and
+characters. This dataset is different from ours and the ACPR
+2019 datasets because a receipt contains printed or typed digits
+but not handwriting. In addition, distortions created by forgery
+operations are noticeable as compared to ours and the ACPR
+2019 datasets. However, the challenge of this dataset is that
+the length of the digits can be shorter than that of handwritten
+words considered in ours and the ACPR 2019 datasets. The
+dataset includes 527 originals and 302 forged images, which
+results in a total of 829 images for experimentation.
+The above-mentioned datasets are created for detecting
+forged text in document images, but not images with a
+cluttered background. To test the proposed method for forged
+text detection in cluttered background images, we considered
+one further standard dataset, namely, the forged IMEI number
+dataset [21]. The forged IMEI numbers are created by altering
+2–3 numerals either by copy-paste or insertion operations.
+The main challenge of this dataset is that the numerals are
+embedded in mobile images, and hence it is expected that
+these are more complex when compared to document images
+where we can see plain backgrounds. This dataset consists
+of 500 original images and 500 forged IMEI number images,
+which gives a total of 1000 images for experimentation.
+In summary, we consider four datasets, including our
+dataset, ACPR-2019, ICPR 2018-FDC, and IMEI number
+datasets, which give 3000, 800, 829, and 1000 images,
+respectively, for evaluating the proposed method. In total,
+5629 images are considered for experimentation. Since all the
+four datasets are different in nature and challenges, we believe
+that the datasets considered are substantial enough to demonstrate that the proposed method is application-independent, and
+
+it can detect altered images at the word and the character levels
+in noisy, and blurred environments.
+The proposed work consists of two stages, namely enhancement by CMs, and altered handwriting detection by a DENN.
+To demonstrate that the proposed enhancement is effective and
+useful, we implemented three existing enhancement methods,
+which were developed for improving poor-quality images.
+These include Raghunandan et al.’s [27] method, which proposes fractional calculus for enhancing the poor quality of
+license plate images, Shamasneh et al.’s [26] method, which
+proposes different fractional calculus for enhancing the poor
+quality of Kidney images, and Chowdhury et al.’s [43] method,
+which exploits a deep learning model for enhancing degraded
+license plate images. We chose the above three methods
+for a comparative study because the primary objective of
+these existing methods is to improve poor-quality images. The
+methods [26], [27] use fractional calculus for addressing the
+issues of poor quality. To show that fractional calculus alone is
+not sufficient to handle the challenges of altered text detection
+in handwritten images, we compared the proposed method
+with the existing methods. Similarly, the method [43] which
+exploits deep learning models is popular for finding solutions
+to complex issues and is compared to demonstrate that a deep
+learning model alone is not adequate to improve the quality
+of handwritten images in noisy and blurry environments.
+For altered handwriting detection, to show that the proposed method is effective and useful, we implemented the
+following existing methods for a comparative study in this
+work. Wang et al. [12] proposed texture features and a
+support vector machine classifier for printer source identification. Shivakumara et al. [21] used a fusion approach for
+forged IMEI number detection. Kundu et al. [15] proposed
+Fourier spectral density for forged handwritten word detection in noisy and blurry environments. Megahed et al. [22]
+proposed ink color-based features for handwriting forgery
+detection. Nandanwar et al. [23] explored DCT-phase statistics for altered air ticket detection. The reason to choose these
+methods for our comparative study is that they share a similar
+aim: detecting forgeries. For Megahed et al. [22], we extracted
+features as defined in the method, but for classification we
+used a linear neural network classifier because the heuristics
+used in the method work for two-class classification, namely:
+altered and original, but not for the six classes used in our
+work. Since feature extraction is the main contribution of
+this method, we replaced heuristics with the above-mentioned
+classifier for multiclass classification in this work. The classifier consists of two linear layers with “Softmax” [34] as an
+activation function. During training, it uses “ADAM” [35] as
+an optimizer and “Categorical Cross Entropy” [36] as the loss
+function defined in (9).
+For validating the enhancement results given by the proposed CM approach, we considered the standard quality measures, namely: naturalness image quality evaluator (NIQE),
+which measures image quality affected by arbitrary distortion,
+and BRISQUE, which measures perceptual quality (visual) of
+images affected by specific distortions. The reason for defining
+these measures to evaluate the enhancement results is that
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:01:27 UTC from IEEE Xplore. Restrictions apply.
+
+NANDANWAR et al.: CMs-BASED DEEP LEARNING SYSTEM FOR FORGED HANDWRITING DETECTION
+
+5415
+
+TABLE II
+E FFECT OF D IFFERENT VALUES OF A LPHA FOR
+B LURRED AND N OISY S AMPLE I MAGES
+
+Fig. 8. Illustration to determine the value of alpha experimentally using the
+NIQE score.
+
+they do not require ground truth, nor the original images for
+evaluation [44], [45]. In addition, since the handwriting images
+being considered are affected by both arbitrary distortions
+caused by forgery operations and specific operations caused
+by noise and blur, along with high variations in handwriting,
+NIQE and BRISQUE are suitable measures for judging the
+quality of enhanced images given by the proposed CM-based
+approach. It is noted that a low score of NIQE and BRISQUE
+indicates better quality of the enhanced images. For validating
+altered handwriting detection, we used well-known measures,
+namely, the confusion matrix of six classes and two classes,
+and the average classification rate (ACR), which is the mean
+of diagonal elements in the confusion matrix.
+In the proposed CM image enhancement model, the parameter α plays a vital role in achieving better enhancement
+results. As described in (7), the key parameter α is the power
+parameter of the proposed CM basis function. The role of the
+basis function is to represent the image features.
+To choose optimal values, which can give better results
+across datasets, the proposed method chooses 500 random
+samples from all the datasets, and estimates the NIQE measure
+for varying alpha values, as shown in Fig. 8. It is observed
+from Fig. 8 that when the alpha value is 0.9, the proposed
+method reaches the best NIQE score, which is the lowest value
+compared to the other NIQE scores of different alpha values.
+Therefore, the value of alpha is chosen as 0.9 and the same is
+set for all the experiments in this work. In Fig. 8, the proposed
+method uses the NIQE measure because it measures image
+quality affected by arbitrary distortions, unlike the BRISQUE
+measure, which measures the quality when affected by specific
+distortions.
+To validate the hypothesis and to understand the effectiveness of alpha defined in (7), we present qualitative results by
+varying the alpha values in Table II for sample images, which
+are blurred and noisy. It is observed from Table II that as
+the value of alpha changes, the brightness of the content and
+the respective quality measure values change. For the value of
+alpha as 9, the image quality is better in terms of brightness
+compared to the results of other alpha values. The same is true
+for NIQE and BRISQUE. This infers that the value of alpha
+as 9 is feasible for achieving better results.
+A. Experiments on Enhanced CM Images
+Qualitative results of the proposed method for our dataset,
+the ACPR-2019, ICPR 2018-FDC, and IMEI datasets are
+
+Fig. 9. Examples of the input images and the enhanced images of CMs.
+(a) Sample input images of different datasets and (b) enhanced images for
+the corresponding images in (a).
+
+shown in Fig. 9. When we look at the input images shown
+in Fig. 9(a) and the corresponding enhanced images shown in
+Fig. 9(b), the brightness of finer details, such as edge pixel
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:01:27 UTC from IEEE Xplore. Restrictions apply.
+
+5416
+
+IEEE TRANSACTIONS ON NEURAL NETWORKS AND LEARNING SYSTEMS, VOL. 35, NO. 4, APRIL 2024
+
+TABLE III
+
+TABLE VII
+
+Q UALITY M EASURES FOR THE I NPUT I MAGES OF O UR D ATASET, THE
+ACPR 2019, ICPR 2018-FDC, AND IMEI D ATASETS . (N AND B
+D ENOTE NIQE AND BRISQUE Q UALITY M EASURES ,
+R ESPECTIVELY, “–”I NDICATES T HAT THE D ATASET
+D OES NOT I NCLUDE A C LASS )
+
+S TUDYING E FFECTIVENESS OF THE K EY S TEPS OF THE P ROPOSED W ORK
+ON O UR D ATASET ( IN %). (NR: N ORMAL , A: A LTERED , N: N OISY,
+B: B LURRED , AN: A LTERED -N OISY, AB:
+A LTERED -B LURRED , AND ACR)
+
+TABLE VIII
+C OMPARING THE K EY S TEPS W ITH THE P ROPOSED
+M ETHOD ON O UR D ATASET ( IN %)
+TABLE IV
+Q UALITY M EASURES FOR E NHANCED I MAGES OF O UR D ATASET
+
+TABLE V
+Q UALITY M EASURES FOR E NHANCED I MAGES
+OF THE ACPR 2019 D ATASET
+
+TABLE VI
+Q UALITY M EASURES FOR E NHANCED I MAGES OF
+THE ICPR2018-FDC AND IMEI D ATASETS
+
+increases, are compared to the edge pixels in the input images
+irrespective of content and application. Therefore, we can
+conclude that the proposed method is robust, effective, and
+independent of content and application.
+Quantitative results of the proposed and the existing methods for input images of different classes of our dataset, the
+ACPR-2019, ICPR 2018-FDC, and IMEI datasets, as well as
+the enhanced images of the respective datasets, are reported
+in Tables III–VI. Note that ours and the ACPR-2019 datasets
+
+provide four classes, namely: normal, altered, noisy, and
+blurred, while the ICPR 2018-FDC and IMEI datasets provide
+normal and altered classes. It is observed from Table II that
+the BRISQUE measure scores low values for normal, and high
+values for the other classes on all the datasets. This confirms
+that the images of altered, noisy, blurred, altered-noisy, and
+altered-blurred classes are suffering from poor quality due to
+distortion effects.
+When we look at the results reported in Tables IV–VI, the
+proposed method achieves the best NIQE and BRISQUE for
+almost all the classes across the datasets compared to the existing methods. However, for the IMEI dataset, the performance
+of the proposed method degrades slightly compared to the
+existing methods. This is because the images are complex
+compared to the other datasets, and forgeries are limited to
+only numerals, unlike many character variations. This shows
+that the proposed method performs better regardless of dataset,
+content, and applications. This is because the proposed CMs
+enhance the finer details in the images, although they are
+affected by noise and blur. However, since the existing methods focus on specific applications and situations, the methods
+suffer from inherent limitations for achieving better results on
+the datasets considered in this work.
+B. Ablation Study
+The key steps of the proposed method are CMs for enhancing the finer details in the input images, a DENN which
+involves two sub-steps, namely: stenographic residual and
+photograph montage for feature extraction. To analyze the
+contribution of the key steps, we estimate the confusion
+matrix of classification, and we calculate the ACR for our
+dataset with different combinations; the results are reported
+in Tables VII and VIII. The results using only DENN (which
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:01:27 UTC from IEEE Xplore. Restrictions apply.
+
+NANDANWAR et al.: CMs-BASED DEEP LEARNING SYSTEM FOR FORGED HANDWRITING DETECTION
+
+5417
+
+TABLE IX
+
+TABLE XI
+
+C ONFUSION M ATRIX AND ACR OF THE E XISTING
+M ETHODS [21], [23] ON O UR D ATASET ( IN %)
+
+C ONFUSION M ATRIX AND ACR OF THE P ROPOSED AND THE E XISTING
+M ETHODS ON THE ACPR 2019 DATASET ( IN %). (NR: N ORMAL ,
+A: A LTERED , N: N OISY, B: B LURRED , AND ACR)
+
+TABLE X
+
+TABLE XII
+
+C ONFUSION M ATRIX AND ACR OF THE E XISTING M ETHODS
+[12], [15], [22] ON O UR D ATASET ( IN %)
+
+C ONFUSION M ATRIX AND ACR OF THE E XISTING M ETHODS
+ON THE ACPR 2019 D ATASET ( IN %)
+
+considers input images directly for classification without
+enhancement) shows that the ACR is lower than the proposed
+method. Therefore, we can confirm that CMs are effective and
+contribute to achieving better results for classification. In the
+same way, we compute the confusion matrix and the ACR
+for the features extracted using stenographic residuals and a
+Photograph Montage from both input and enhanced images,
+as reported in Table VII. It is noted from Tables VII and VIII
+that both the features contribute almost equally, as ACR is
+higher than DENN and lower than the proposed method to
+achieve better classification rates. However, when we compare
+the contributions of stenographic and photograph montage
+features, the Stenographic features contribute in a greater
+way than the photograph montage. This makes sense because
+Stenographic features are more powerful than the conventional
+features as they extract high-level context features, while
+photograph montage extracts low-level features. In summary,
+we can conclude that the key steps are essential in achieving
+the better results for the proposed method, as it scores the
+overall highest ACR compared to each of the individual steps.
+C. Evaluating the Proposed Model for Altered Handwriting
+Detection
+Tables IX and X report the results of the existing methods
+on our dataset. In comparison, our proposed method is better
+in terms of the ACR. The method [22] is better than all
+other existing methods listed in Tables IX and X. This is
+because the method [22] extracts feature at the character level
+rather than at the word level, in contrast to the other methods,
+providing more local information for detecting character-level
+forgeries. However, the performance of the method in [22]
+is lower than the proposed method. The reason is that the
+features of the method in [22] are not robust to noise and
+blur. It can be observed from the results on the ACPR
+
+TABLE XIII
+C ONFUSION M ATRIX AND ACR OF THE P ROPOSED AND THE E XISTING
+M ETHODS ON THE ICPR 2018-FDC DATASET ( IN %)
+
+2019 dataset reported in Tables XI and XII that the method
+in [23] achieves the best performance. This is because this
+method is robust to forgeries at the word and character levels,
+like our proposed method. But the method in [23] is not robust
+to degradations and hence it reports poor results compared
+to our proposed method. Note also that our method performs
+better on the ACPR 2019 dataset than on our own dataset. This
+is because our dataset contains character-level forgeries which
+are harder to detect, while the ACPR 2019 dataset contains
+word-level forgeries. The reason for the poor results of the
+existing methods compared to the proposed method is that
+the objective of the existing methods was to consider a twoclass classification problem but not for performing six-class
+classification.
+For the ICPR 2018-FDC and IMEI datasets, the proposed
+method is better than the existing methods in terms of ACR
+as reported in Tables XIII and XIV, respectively. However,
+it is noted that although IMEI is a two-class classification
+problem, the proposed method scores slightly lower results
+because this dataset contains more complex images, and the
+forgeries are limited to numerals. However, for all of the
+other datasets, including our own dataset, the proposed method
+scores consistent results. Interestingly, the method in [22] is
+better than the other existing methods on our dataset while the
+method in [23] is better than all the other existing methods
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:01:27 UTC from IEEE Xplore. Restrictions apply.
+
+5418
+
+IEEE TRANSACTIONS ON NEURAL NETWORKS AND LEARNING SYSTEMS, VOL. 35, NO. 4, APRIL 2024
+
+TABLE XIV
+C ONFUSION M ATRIX AND ACR OF THE P ROPOSED AND THE E XISTING
+M ETHODS ON THE IMEI D ATASET ( IN %)
+
+Fig. 11.
+Examples of successful and unsuccessful classification by the
+proposed method. (a) Successfully classified samples and (b) unsuccessfully
+classified samples.
+
+respectively. In this experiment, noise and blur are added to the
+images of noisy and blurred classes. The ACR of all the classes
+is computed for measuring the performance of the methods.
+It is observed from Fig. 10(a) and (b) that our method and
+Kundu et al.’s [15] methods can sustain the same performance
+up to certain levels, while other existing methods do not. This
+shows that our approach has the ability to cope with the effect
+of dense noise and blur. Since the existing methods are not
+robust to noise, they fail to obtain consistent results when the
+noise and blur levels increase. However, the performance of
+the methods decreases after certain levels of noise and blur.
+This is because images lose vital information and hence the
+extracted features overlap with the features of other classes.
+When abrupt changes caused by forgery operations are
+small, the method misclassifies images, such as the examples shown in Fig. 11, where we can see both successful
+and unsuccessful images. Since the dataset being considered
+is comprised of handwriting, speed and writing force may
+introduce distortions and create problems for correct classification. Therefore, there is scope for studying the effects
+of speed, writing force, and age of people for altered text
+detection in handwriting document images in noisy and blurred
+environments.
+Fig. 10. Performance of the proposed and the existing methods on images
+affected by different levels of noise and blur on our dataset. Increasing
+(a) noise density and (b) blur level.
+
+D. Discussion
+
+for ACPR 2019. However, both the methods deliver lower
+results than Wang et al.’s [12] method for the ICPR 2018-FDC
+and IMEI datasets. The reason is that the method in [22] is
+developed for detecting forged handwriting and the method
+in [23] is sensitive to degradations, while Wang et al.’s [12]
+method is developed for forgery detection in printed document
+images such as the images in ICPR 2018-FDC and IMEI. For
+the IMEI dataset, Shivakumara et al.’s [21] method gives better
+results than the other two methods because it was developed
+specifically to detect forged IMEI numbers.
+In summary, for a range of different datasets, our proposed
+method achieves the best overall results in terms of ACR. This
+shows that the method works well for detecting forgeries in
+handwriting images, including in situations where there are
+noise and blur effects.
+To test the ability of the proposed and existing methods on
+whether they can withstand the effects of different noise and
+blur levels, we conducted experiments by increasing Gaussian
+noise and blur levels as shown in Fig. 10(a) and Fig. 10(b),
+
+In order to show the proposed method can be used for many
+applications, we have used a handwriting dataset containing
+six classes (our dataset), a dataset of four classes (ACPR
+2019 dataset), and a benchmark dataset (ICPR 2018 FDC),
+which is comprised of tampered receipts, which is in contrast
+to ours and the ACPR 2019 dataset. In addition, the IMEI
+dataset is considered, which is comprised of IMEI number
+images but not plain documents. This shows that the proposed
+method is independent of applications, and it works well
+irrespective of content such as handwriting images, printed
+text images, and text images with complex backgrounds. It is
+evident from the results on all the datasets that the proposed
+method outperforms the existing methods for different datasets
+in terms of ACR. Similarly, the experiments on six, four, and
+two classes on different datasets, with the results of existing
+methods, demonstrate that the proposed method does not
+depend on the number of classes. Furthermore, the results of
+the proposed and existing methods on images affected by noise
+and blur illustrate that the proposed method is invariant to
+noise and blur for altered text detection in the images. Overall,
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:01:27 UTC from IEEE Xplore. Restrictions apply.
+
+NANDANWAR et al.: CMs-BASED DEEP LEARNING SYSTEM FOR FORGED HANDWRITING DETECTION
+
+the proposed method is robust across different applications,
+datasets, the number of classes, noise, and blur.
+However, when the proposed method does not find inconsistent patterns created by forgery operations, it misclassifies
+forged images into other classes. This is possible when forgery
+operations create only a little distortion, at the same time,
+noise and blur levels increase. It is true that due to free-style
+writing, there is a chance of generating poor quality because
+of variations in the speed of writing, writing force, paper, ink,
+age, gender, etc. This leads to confusion for the classification
+of forged images. Sometimes, there is a chance of introducing
+both noise and blur in the original or forged images. In this
+case, the number of classes and complexities increase. This
+challenge is beyond the scope of the proposed work, and
+thus the scope of the proposed work does not include the
+class of altered-noisy-blurred. These are the limitations of the
+proposed work, but this will be the target of our future work.
+In addition, future research will include a study on the effect
+of age, gender, and online handwriting for forgery detection
+in document images.
+V. C ONCLUSION AND F UTURE W ORK
+In this work, we have proposed a novel method for altered
+handwriting detection in noisy and blurry environments based
+on CMs, and a DENN. In order to preserve structures of characters in handwriting images, irrespective of noise, blur, and
+large handwriting variations, we have introduced a novel CM
+model involving Fractional calculus and geometric moments.
+The proposed CMs enhance the finer details such as edges in
+images of six classes, namely normal, altered, noisy, blurred,
+altered-noisy, and altered-blurred. To extract edge patterns
+in all the images of all the classes, we have proposed a
+new deep architecture that combines features extracted from
+stenographic residuals of the input and the CM images,
+and a photograph montage. Experimental results on different
+datasets, such as our dataset, the standard ACPR-2019 dataset,
+the ICPR 2018-FDC, and the IMEI datasets demonstrate that
+the proposed CMs and the altered detection approach outperform the existing methods. When the single image affected
+by multiple forgeries (copy-paste and insertion), the proposed
+method may not be effective. This will be considered as part
+of our future work.
+ACKNOWLEDGMENT
+The authors acknowledge the partial help of Dr. Saumik
+Bhattacharya, IIT Kharagpur, Kharagpur, India, for this work.
+R EFERENCES
+[1] D. B. Tariang, R. S. Chakraborty, and R. Naskar, “A robust residual
+dense neural network for countering antiforensic attack on median filtered images,” IEEE Signal Process. Lett., vol. 26, no. 8, pp. 1132–1136,
+Aug. 2019.
+[2] C. Peng, X. Gao, N. Wang, D. Tao, X. Li, and J. Li, “Multiple
+representations-based face sketch–photo synthesis,” IEEE Trans. Neural
+Netw. Learn. Syst., vol. 27, no. 11, pp. 2201–2215, Nov. 2016.
+[3] B. Cao, N. Wang, J. Li, and X. Gao, “Data augmentation-based joint
+learning for heterogeneous face recognition,” IEEE Trans. Neural Netw.
+Learn. Syst., vol. 30, no. 6, pp. 1731–1743, Jun. 2019.
+
+5419
+
+[4] K. S. Raghunandan et al., “Fourier coefficients for fraud handwritten
+document classification through age analysis,” in Proc. 15th Int. Conf.
+Frontiers Handwriting Recognit. (ICFHR), Oct. 2016, pp. 25–30.
+[5] X. Liu, B. Hu, Q. Chen, X. Wu, and J. You, “Stroke sequencedependent deep convolutional neural network for online handwritten
+Chinese character recognition,” IEEE Trans. Neural Netw. Learn. Syst.,
+vol. 31, no. 11, pp. 4637–4648, Nov. 2020.
+[6] C. Wah Wu, “On the design of content-based multimedia authentication systems,” IEEE Trans. Multimedia, vol. 4, no. 3, pp. 385–393,
+Sep. 2002.
+[7] B. Zhu, J. Wu, and M. Kankanhalli, “Render sequence encoding for
+document protection,” IEEE Trans. Multimedia, vol. 9, no. 1, pp. 16–24,
+Jan. 2007.
+[8] J. Chen, X. Kang, Y. Liu, and Z. J. Wang, “Median filtering forensics
+based on convolutional neural networks,” IEEE Signal Process. Lett.,
+vol. 22, no. 11, pp. 1849–1853, Nov. 2015.
+[9] B. Chen, W. Tan, G. Coatrieux, Y. Zheng, and Y.-Q. Shi, “A serial image
+copy-move forgery localization scheme with source/target distinguishment,” IEEE Trans. Multimedia, vol. 23, pp. 3506–3517, 2021.
+[10] F. Matern, C. Riess, and M. Stamminger, “Gradient-based illumination
+description for image forgery detection,” IEEE Trans. Inf. Forensics
+Security, vol. 15, pp. 1303–1317, 2020.
+[11] O. Mayer and M. C. Stamm, “Forensic similarity for digital images,”
+IEEE Trans. Inf. Forensics Security, vol. 15, pp. 1331–1346, 2020.
+[12] Z. Wang, P. Shivakumara, T. Lu, M. Basavanna, U. Pal, and M. Blumenstein, “Fourier-residual for printer identification,” in Proc. 14th IAPR Int.
+Conf. Document Anal. Recognit. (ICDAR), Nov. 2017, pp. 1114–1119.
+[13] A. Chahi, Y. El Merabet, Y. Ruichek, and R. Touahni, “Local gradient full-scale transform patterns based off-line text-independent writer
+identification,” Appl. Soft Comput., vol. 92, Jul. 2020, Art. no. 106277.
+[14] I. P. Morns and S. S. Dlay, “The DSFPN: A new neural network and
+circuit simulation for optical character recognition,” IEEE Trans. Signal
+Process., vol. 51, no. 12, pp. 3198–3209, Dec. 2003.
+[15] S. Kundu, P. Shivakumara, A. Grouver, U. Pal, T. Lu, and
+M. Blumenstein, “A new forged handwriting detection method based
+on Fourier spectral density and variation,” in Pro. ACPR, 2019,
+pp. 136–150.
+[16] L. Nandanwar et al., “A new method for detecting altered text in
+document images,” in Proc. ICPRAI, 2020, pp. 93–108.
+[17] V. L. Cu, J.-C. Burie, J.-M. Ogier, and C.-L. Liu, “A robust data
+hiding scheme using generated content for securing genuine documents,”
+in Proc. Int. Conf. Document Anal. Recognit. (ICDAR), Sep. 2019,
+pp. 787–892.
+[18] A. Berenguel Centeno, O. Ramos Terrades, J. Llados Canet, and
+C. Canero Morales, “Recurrent comparator with attention models to
+detect counterfeit documents,” in Proc. Int. Conf. Document Anal.
+Recognit. (ICDAR), Sep. 2019, pp. 1332–1337.
+[19] M. Bibi, A. Hamid, M. Moetesum, and I. Siddqi, “Document
+forgery detection using printer source identification—A text-independent
+approach,” in Proc. ICDARW, Sep. 2019, pp. 7–12.
+[20] S. Joshi and N. Khanna, “Source printer classification using printer
+specific local texture descriptor,” IEEE Trans. Inf. Forensics Security,
+vol. 15, pp. 160–171, 2020.
+[21] P. Shivakumara, V. Basavaraja, H. S. Gowda, D. S. Guru, U. Pal, and
+T. Lu, “A new RGB based fusion for forged IMEI number detection in
+mobile images,” in Proc. 16th Int. Conf. Frontiers Handwriting Recognit.
+(ICFHR), Aug. 2018, pp. 386–391.
+[22] A. Megahed, S. M. Fadl, Q. Han, and Q. Li, “Handwriting forgery
+detection based on ink colour features,” in Proc. ICSESS, Nov. 2017,
+pp. 141–144.
+[23] L. Nandanwar et al., “DCT-phase statistics for forged IMEI numbers
+and air ticket detection,” Expert Syst. Appl., vol. 164, Feb. 2021,
+Art. no. 114014, doi: 10.1016/j.eswa.2020.114014.
+[24] G. A. Anastassion, “Conformable fractional approximations by maxproduct operators using convexity,” Arabian J. Math., vol. 7,
+pp. 159–174, Feb. 2018.
+[25] D. R. Anderson and D. J. Ulness, “Newly defined conformable derivatives,” Adv. Dyn. Syst. Appl., vol. 10, no. 2, pp. 109–137, 2015.
+[26] A. R. A. Shamasneh, H. A. Jalab, P. Shivakumara, U. H. B. Obaidellah,
+R. W. Ibrahim, and M. T. E. Melegy, “A new local fractional entropybased model for kidney MRI image enhancement,” Entropy, vol. 20,
+no. 5, p. 344, 2018.
+[27] K. S. Raghunandan et al., “Riesz fractional based model for enhancing
+license plate detection and recognition,” IEEE Trans. Circuits Syst. Video
+Technol., vol. 28, no. 9, pp. 2276–2288, Sep. 2018.
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:01:27 UTC from IEEE Xplore. Restrictions apply.
+
+5420
+
+IEEE TRANSACTIONS ON NEURAL NETWORKS AND LEARNING SYSTEMS, VOL. 35, NO. 4, APRIL 2024
+
+[28] J. Fridrich and J. Kodovský, “Rich models for steganalysis of digital
+images,” IEEE Trans. Inf. Forensics Security, vol. 7, no. 3, pp. 868–882,
+Jun. 2012.
+[29] G. Retsinas, G. Louloudis, N. Stamataopulos, G. Sfikas, and B. Gatos,
+“An alternative deep feature approach to line level keyword spotting,”
+in Proc. CVPR, Jun. 2019, pp. 12650–12658.
+[30] N. Majid and E. H. B. Smith, “Segmentation-free Bangla offline handwriting recognition using sequential detection of characters and diacritics
+with a faster R-CNN,” in Proc. Int. Conf. Document Anal. Recognit.
+(ICDAR), Sep. 2019, pp. 228–233.
+[31] C. Neche, A. Belaid, and A. K. Echi, “Arabic handwritten documents
+segmentation into text-lines and words using deep learning,” in Proc.
+ICDAR, 2019, pp. 19–24.
+[32] M. Tan and Q. V. Le, “EfficientNet: Rethinking model scaling for
+convolutional neural networks,” 2019, arXiv:1905.11946.
+[33] L. N. Trefethen, “Approximation theory and approximation practice,” in
+Extended Edition. Philadelphia, PA, USA: SIAM, 2019.
+[34] I. Goodfellow, Y. Bengio, and A. Courville, “Softmax units for multinoulli output distributions,” in Deep Learning. Cambridge, MA, USA:
+MIT Press, 2016, pp. 180–184, ch. 6.2.2.3.
+[35] P. D. Kingma and J. L. Bai, “Adam: A method for stochastic optimization,” in Proc. ICLR, 2015, pp. 1–15.
+[36] K. Janocha and W. Czarnecki, “On loss functions for deep neural
+networks in classification,” Schedae Informaticae, vol. 25, pp. 49–59,
+2017.
+[37] L. N. Smith, “Cyclical learning rates for training neural networks,”
+in Proc. IEEE Winter Conf. Appl. Comput. Vis. (WACV), Mar. 2017,
+pp. 464–472.
+
+[38] T. Kanungo, R. M. Haralick, and H. S. Baird, “Document degradations
+models: Parameter estimation and model validation,” in Proc. IAPR
+Workshop Mach. Vis. Appl., 1994, pp. 552–557.
+[39] G. D. Vo and C. Park, “Robust regression for image binarization under
+heavy noise and nonuniform background,” Pattern Recognit., vol. 81,
+pp. 224–239, Sep. 2018.
+[40] S. Bhowmik, R. Sarkar, B. Das, and D. Doermann, “GiB: A
+game theory inspired binarization technique for degraded document
+images,” IEEE Trans. Image Process., vol. 28, no. 3, pp. 1443–1455,
+Mar. 2019.
+[41] F. Kleber, S. Fiel, M. Diem, and R. Sablatnig, “CVL-DataBase: An
+off-line database for writer retrieval, writer identification and word
+spotting,” in Proc. 12th Int. Conf. Document Anal. Recognit., Aug. 2013,
+pp. 560–564.
+[42] C. Artaud, N. Sidere, A. Doucet, J.-M. Ogier, and V. P. D. Yooz, “Find it!
+Fraud detection contest report,” in Proc. 24th Int. Conf. Pattern Recognit.
+(ICPR), Aug. 2018, pp. 13–18.
+[43] P. N. Chowdhury, P. Shivakumara, R. Ramachandra, U. Pal, T. Lu,
+and M. Blumenstein, “A new U-Net based license plate enhancement model in night and day images,” in Proc. ACPR, 2019,
+pp. 749–763.
+[44] A. Mittal, R. Soundararajan, and A. C. Bovik, “Making a ‘completely
+blind’ image quality analyzer,” IEEE Signal Process. Lett., vol. 22, no. 3,
+pp. 209–212, Mar. 2013.
+[45] N. Venkatanath, D. Praneeth, M. Chandrasekhar, S. S. Channappayya,
+and S. S. Medasani, “Blind image quality evaluation using perception
+based features,” in Proc. 21st Nat. Conf. Commun. (NCC), Feb. 2015,
+pp. 1–6.
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:01:27 UTC from IEEE Xplore. Restrictions apply.
+
+

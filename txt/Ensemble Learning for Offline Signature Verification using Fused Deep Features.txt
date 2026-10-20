@@ -1,0 +1,999 @@
+2024 5th International Conference on Advancements in Computational Sciences (ICACS) | 979-8-3503-9478-8/24/$31.00 ©2024 IEEE | DOI: 10.1109/ICACS60934.2024.10473290
+
+Ensemble Learning for Offline Signature
+Verification using Fused Deep Features
+Sara Tehsin1,2
+
+Ali Hassan1
+
+Farhan Riaz1
+
+1Department of Computer and Software
+
+1Department of Computer and Software
+
+1Department of Computer and Software
+
+Engineering, NUST,
+Islamabad, Pakistan
+2Deparment of Computer Engineering,
+HITEC university, Taxila
+sara.tehsin@ceme.nust.edu.pk
+
+Engineering, NUST,
+Islamabad, Pakistan
+alihassan@ceme.nust.edu.pk
+
+Engineering, NUST,
+Islamabad, Pakistan
+farhan.riaz@ceme.nust.edu.pk
+
+Abstract— Signature verification plays an important role in
+document authentication. The efficient and robust system is
+required for forgery detection in documents in the presence of
+distortion such as rotation, scaling and noise. This paper
+proposes a writer-dependent signature verification method,
+where hand-crafted features are fused with one-dimensional
+convolutional neural network features to cater different
+variance in the whole verification process. Proposed feature
+extraction methodology is validated by bagged ensemble
+learning technique in which machine learning classifier’s
+decision is finalized based on majority voting. The effectiveness
+of the proposed signature verification approach has been
+evaluated across three distinct publicly accessible datasets. The
+outcomes highlight the versatility of this method. Moreover, the
+proposed system surpasses the performance of other preexisting systems documented in the literature.
+Keywords — signature verification, 1-d deep features, handcrafted features, bagged ensemble learning, machine learning
+
+I. INTRODUCTION
+Biometrics is employed in many different security
+applications, and nowadays has gained more research interest
+among researchers across the globe. Biometrics can be
+categorized as physiological or behavioural properties.
+Physiological applications can be the face, iris, palm,
+fingerprint, and behavioral applications, such as handwriting,
+gait, voice, and signatures. A signature is a handwritten
+sample of a person’s handwriting style that specifies their
+name, nickname, last name, or a mixture of the words used for
+identification, and authenticating these signatures is called
+signature verification. Signature verification is a crucial task
+in various domains, ranging from financial institutions to legal
+documentation and beyond. Traditionally, human experts
+have been responsible for determining the authenticity of
+signatures, a process that is time-consuming, subjective, and
+susceptible to errors. Signature verification processes are
+primarily of two types: offline and online [1].
+Input images to verify offline signatures are often captured
+using a mobile or scanned one. To verify the online signature,
+a person usually uses a stylus to input their signature, which is
+recorded with a timestamp and signature position. In contrast
+to this, offline process can be catagorized either writerindependent or writer-dependent. Every time a new user's
+signature is added to the system, the system must be updated
+and retrained in a writer-dependent scenario. This makes the
+procedure burdensome and impractical. In an authorindependent scenario, however, a generalized system that can
+distinguish between authentic and forged signatures without
+repetitive retraining must be developed. However, the
+introduction of machine learning techniques has brought
+
+about a substantial transformation in the field of signature
+verification, offering a more efficient, accurate, and
+automated approach.
+Deep learning, a subset of machine learning, has proven to
+be highly effective in automatically learning and representing
+intricate patterns within data. When applied to signature
+verification, deep learning models can extract discriminative
+features that capture the unique characteristics of each
+individual's signature. This technology holds the promise of
+streamlining processes, reducing the risk of fraud, and
+increasing the overall efficiency of document authentication.
+In this paper, we are presenting the fusion of hand-crafted
+features with the 1-d deep features with ensemble learning.
+Ensemble learning implies the combination of multiple
+individual models to design an accurate, predictive, and
+stronger prototype. When applied to signature verification
+using 1-d deep learning and hand-crafted features, ensemble
+technique significantly enhances the robustness and reliability
+of the authentication process. This approach leverages the
+diversity of multiple models to improve generalization,
+mitigate overfitting, and ultimately increase the overall
+accuracy of signature authentication.
+The contributions of this article are:
+•
+
+Hand-crafted features are fused with the 1-D
+Convolution Neural Network (CNN) features
+outperform in authenticating the signatures.
+
+•
+
+Evaluation of the proposed methodology on
+publicly available diverse datasets to prove the
+validity of the proposed model.
+
+This article is organized in a what that Literature review
+of handwritten signature verification is given in section II.
+Section III presents the proposed model, whereas the
+verification results are illustrated in section IV. The
+conclusion and future work are stated in section V.
+II. LITERATURE REVIEW
+Numerous strategies have been suggested and
+effectively executed to discern the authenticity of a signature
+image from whether it's been forged or not. However, an
+approach called dynamic time warping, which evaluates the
+alignment between two evolving structures, has been
+employed to differentiate between authentic and forged
+samples [3]. Furthermore, a feature extractor based on the
+local random transform has emerged [4]. Additionally, novel
+methods for verifying individual signatures have been
+
+979-8-3503-9478-8/24/$31.00 ©2024 IEEE
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:01:27 UTC from IEEE Xplore. Restrictions apply.
+
+introduced. These include the pixel matching technique [5],
+structural features derived from the signature's shape using
+altered direction or its refined version [6], and hybrid
+characteristics [7, 8], which combine local and global
+attributes into a visual codebook accompanied by linked
+attributes [9]. An eigenvalue approach on the lower and upper
+envelopes of signatures has also been proposed for
+verification [10].
+Despite these techniques, most of the contemporary
+learning relies on feature learning representations using deep
+neural networks (DNNs) to authenticate signatures. In
+contrast to employing manually crafted features, Dey et al.
+introduced the SigNet network model for independent offline
+signature validation, utilizing a Siamese network based on
+CNN. Their approach involves assessing the similarities
+between pairs of observations, decreasing the Euclidean
+distance for similar pairs, and increasing the distance for
+dissimilar pairs [11]. Another group designed a CNN
+architecture with 18 layers, consisting of convolutional,
+pooling, rectified linear unit (ReLU), normalization, and fully
+connected layers. The output of one layer serves as input for
+the next, creating high-dimensional features and enhancing
+accuracy [12]. DNNs have been favored for offline signature
+verification due to their ability to self-learn for handwritten
+signature authentication.
+Hafemann et al. suggested employing a deep CNN to
+extract features solely from input images, and this model was
+trained using a distinct image group [13, 14]. A Siamese
+network based on CNN was proposed for offline signature
+verification [15]. Similarly, another CNN-based solution for
+both writer-dependent and writer-independent signature
+verification was introduced the same year [16]. Transfer
+learning (TL) models based on GoogleNet inception V1 and
+V3 were also utilized on the Grupo de Procesado Digital de
+Seales (GPDS) dataset in the same year [17]. In 2020,
+Siamese networks were applied to three distinct datasets GPDS, MCYT 75, and BHsig260 - alongside statistical
+measures to enhance model performance [18]. However,
+CNNs require minimal preprocessing and are a variant of the
+multilayer perceptron. In modern machine learning tasks,
+these computational models based on biological neurons
+surpass earlier forms of artificial intelligence (AI). LargeScale Visual Recognition Challenge (LSVRC) exemplifies a
+large-scale task, with DL CNN methods exhibiting the
+highest accuracy in the ImageNet challenge [19]. Recent
+research on the ImageNet dataset has showcased state-of-theart accuracy results [20].
+III. PROPOSED METHOLODOLOGY
+In our paper, the fusion of hand-crafted and 1-D CNN
+features is presented. The proposed methodology is given in
+Fig. 1. Initially, the signature dataset has been divided into
+two parts i.e., training and testing data. The split we consider
+for the training and testing is 70:30 ratio. The fundamental
+pre-processing such as identifying the signatures on the
+document and image resizing has been done on the
+experimental dataset. After extracting the features from deep
+models which includes VGG16, DenseNet, MobileNet as
+well as hand-crafted features with 1-D CNN, it is passed to
+the machine learning classifier and the bagged ensemble
+learning technique is applied.
+
+Fig.1 Proposed Methodology
+A. Hand-Crafted Features
+For signature authentication in digital documents, the issue
+of affine transformations such as rotation and scale variance
+are very important. The hand-crafted features are there to
+cater for the issues of rotation and scale invariance. These
+hand-crafted features are classified into structural-based,
+statistical-based, and model-based approaches. We are using
+widely used rotation invariant Local Binary Pattern (LBP),
+Gabor, and gray-level co-occurrence features from document
+textures which helps in distinguishing the different
+signatures. These features are concatenated for each signature
+sample and then forwarded to 1-D CNN architecture. Ojala et
+al. [21] demonstrated Local Binary Pattern (LBP) features
+which aim to compare neighboring grayscale image pixels.
+LBP has high discriminative power and gives better results in
+less computational time. Due to its simple implementation, it
+can be used for signature discrimination conveniently. Its
+equation is given as
+1 𝑥≤0
+𝑝
+𝐿𝐵𝑃𝑃,𝑅 = ∑𝑃−1
+(1)
+𝑝=0 𝑠(𝑔𝑝 − 𝑔𝑐 )2 , 𝑠(𝑥) = {
+0 𝑥>0
+where 𝑔𝑐 is the given gray score of continuous central
+pixels, P represents the location of 𝑔𝑐 , 𝑔𝑝 is a gray value of a
+certain LBP on a spherical neighborhood of p, for all 𝑝 ∈
+[0, 𝑝 − 1] and R is a rotating cost that represents a
+neighborhood area.
+The Gabor filter is a pattern of linear filters which has
+the competence to amend the variations of image positioning
+and it provides information regarding signature using image
+orientation. It can be computed by following equation
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:01:27 UTC from IEEE Xplore. Restrictions apply.
+
+𝑔′ (𝑥, 𝑦) = 𝑠 ′ (𝑥, 𝑦)𝑤 ′ (𝑥, 𝑦)
+(2)
+where 𝑠 ′ (𝑥, 𝑦) is the complex sinusoidal signal carrier
+and
+𝑤 ′ (𝑥, 𝑦) is the 2-D gaussian shaped function.
+𝑠 ′ (𝑥, 𝑦) = exp (j(2π(u0 𝑥 − 𝑣0 𝑦) + 𝑃′
+(3)
+Where 𝑢0 , 𝑣0 𝑎𝑛𝑑 𝑃′ defines spatial occurrence and
+segment of sinusoidal wave respectively.
+𝑤 ′ (𝑥, 𝑦) = 𝑘 exp (−𝜋𝑓)
+(4)
+Where f is the highest value of the function and 𝑎, 𝑏 are
+the scaling parameter of gaussian function.
+The main advantage of this feature is that it is scale and
+rotation invariant. A matrix which is containing the
+distribution of the co-occurrence values at a given offset over
+the gray level image is named as Gray- Level Co-occurrence
+Matrix (GLCM). Co-occurring pair of pixels in GLCM can
+be spatially related concerning distance and angular spatial
+relationships which is the advantage of statistical descriptors.
+The textural descriptors related to GLCM are estimated for
+four paths including 0º, 45º, 90º, 135º degrees. During this
+process, only 7 Haralick texture features are obtained from
+each co-occurrence array [22]. For experimentation, we have
+extracted Angular Second Moment (ASM), contrast,
+homogeneity, dissimilarity, entropy and correlation texture
+descriptors from the grayscale image.
+B. 1-D Convolutional Neural Network
+After extracting the hand-crafted features of signatures,
+it will pass on the one-dimensional deep learning model. The
+reason of using 1-D CNN model is to capture local patterns
+and features within sequences. Convolutional layers slide a
+kernel over the input data, identifying relevant patterns in
+small segments. This enables the model to recognize
+distinctive features such as low-level and high-level features
+regardless of their position in the sequence. Similarly, by
+combining multiple convolutional layers, 1D CNNs can
+capture compositional features that arise from the
+combination of simpler patterns. 1D CNNs inherently
+possess a scale of translation variety, allowing them to
+identify samples regardless of their precise location in the
+input sequence. This property is particularly valuable in the
+signature where the position of feature can vary.
+The detail of the layers of 1-D CNN model is given in Fig.
+2. The proposed CNN model is less complex and less
+computationally intense. The proposed model only has six
+layers including a flatten, ReLU, batch normalization, dropout
+and dense, and one convolutional layer.
+
+Fig. 2. One-Dimensional CNN model
+
+C. VGG16
+VGG16, a CNN architecture designed by the Visual
+Geometry Group (VGG), was declared winner of 2014
+ILSVRC object identification algorithm [23]. Main impact of
+VGG model was to confirm that the expansion of network
+depth can boost the performance of model. VGG-16 develops
+on the guidelines of AlexNet by utilizing several convolution
+
+cores, which widen the intensity of the architecture and
+reduced total parameters [24].
+D. MobileNet
+MobileNet [25] is distinguished from other extant
+models by the reduced number of parameters compared to
+others. It is composed of depthwise discrete convolutions,
+which were devised to shrink the computing attempts in the
+first few levels. Its two layers are depthwise and pointwise
+convolutions. depthwise convolution refers to the process of
+filtering the input without adding new features. As an
+outcome, the technique that produces novel descriptors,
+pointwise convolution, was incorporated. Consequently, the
+term depthwise discrete convolution was introduced to
+characterize the combination of two consecutive layers. It
+allocates a exclusive filter to every input using convolutions
+and then constructs a dual allocation of output using 1 × 1
+conv (pointwise). After each convolution, Batch
+Normalization (BN) and Rectified Linear Unit (ReLU) are
+applied. We extracted the features from fully-connected
+layer.
+E. Dense Net
+Huang et al. introduced the Dense Convolution Neural
+Network DenseNet. [26] Each layer in DenseNet induces all
+layers in a feed forward approach. Five ranks comprise a
+DenseNet unit. The initial 4 layers are dense, followed by a
+transition layer. Each stratum of this dense unit has a growing
+rate of (k). In the transition layer, 2 × 2 average pooling
+layer with a 1 × 1 convolution and a 2 stride is attached to
+increase the growth rate to 4. In the dense stratum, there are
+1 × 1 and 3 × 3 convolutions having a stride of 1.
+DenseNet169 is utilized in our investigation. We extracted
+the features from fully connected layer.
+F. Bagged Ensamble learning
+Ensemble learning describes a broad, effective method to
+Machine Learning, that shoots to improve analytical
+capacities by merging the forecasts from numerous
+simulations. While there are several ensembles to verify
+signatures, boosting, stacking, and bagging are the three
+approaches that direct the ensemble learning approach. In this
+paper, we are using bagging technique. Bagging leads to
+averaging the verification of signatures from several models
+that have corresponded to different models of the original
+datasets.
+The signature verification through the ensemble
+members is merged by majority polling. Three classifiers
+have been used in our experimentation which includes
+Support Vector Machine (SVM), Multi-Layer Perceptron
+(MLP) and Extreme Gradient Bossing (XGB). The entire
+process varies depending on how all dataset models are made
+to train ensemble members. The dataset is split up into
+distinct sections for each member. These members are chosen
+at random.
+The operative theory of SVM is to discover a
+hyperplane (linear or non-linear) that maximizes the margin.
+Maximizing the margin is equivalent to:
+1
+𝑚𝑖𝑛𝑖𝑚𝑖𝑧𝑒 𝑤 𝑡 𝑤 + 𝐶(∑𝑁
+(5)
+𝑖=1 𝜉𝑖 )
+2
+𝑇
+𝑠𝑢𝑏𝑗𝑒𝑐𝑡 𝑡𝑜 𝑦𝑖 (𝑤 𝑥𝑖 − 𝑏) + 𝜉𝑖 − 1 ≥ 0, 1 ≤ 𝑖
+𝜉𝑖 ≥ 0
+1≤𝑖
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:01:27 UTC from IEEE Xplore. Restrictions apply.
+
+IV. EXPERIMENTS
+Three human signature databases, i.e., BHSig260, CEDAR
+[27] and SigComp2011[28], were used to test the
+performance of the proposed signature verification model.
+The BHSig260 dataset has 6,240 real signatures and 7,800 ski
+fake signatures. These signatures were collected from 260
+people. The CEDAR dataset [27] comprises of 55 person’s
+signatures. Each person has presented 24 legitimate signature
+sample and 24 forged samples. The dataset contains 1,320 (55
+× 24) real signatures and 1,320 forged signatures.
+SigComp2011 was published at the ICDAR 2011 conference
+for the International Signature Verification Competition
+(SVC). [28] The dataset contains of both Chinese and Dutch
+authors. The performance measures to validate the proposed
+model are Accuracy (ACC), False Acceptance Rate (FAR),
+and False Rejection Rate (FRR) [29]. These experiments are
+done using affine transformations. In the testing scenarios,
+the images are rotated to 90 angle and 10% scaled, as shown
+in Fig. 3.
+
+Accuracy (%)
+
+(6)
+
+𝑂(𝜃) = 𝐿(𝜃) + 𝜔(𝜃)
+where, L denotes the loss function.
+
+BHsig260
+70
+65
+60
+55
+50
+45
+40
+
+MLP
+XGB
+SVM
+
+(b)
+
+SigComp2011
+
+Accuracy (%)
+
+XGB is a supervised ML method that expands
+performance and speed by employing decision trees. It is
+quicker to previous performances of gradient boosting. Its
+objective function is:
+
+80
+70
+60
+50
+40
+
+MLP
+XGB
+SVM
+
+(c)
+
+Original
+
+Rotated
+
+Scaled
+
+Scaled &
+rotated
+
+Fig. 4 Non-Bagged Ensembled Learning results (a) CEDAR (b)
+BHsig260 (c) SigComp2011
+
+Fig. 4 demonstrates the non-ensemble learning technique
+model results using three publicly available datasets. In
+testing procedure, affine transformations are included. The
+proposed methodology gave approximately 70%, 68% and
+80% on CEDAR, BHsig260 and SigComp2011 datasets
+respectively. We compared our proposed methodology from
+the other standalone deep models such as MobileNet,
+DenseNet, VGG16 and 1-D CNN model and our proposed
+methodology outperforms among all.
+Table I. Results of Bagged Ensemble Learning
+Dataset
+
+CEDAR
+
+Fig 3. Signature dataset with transformations
+
+BHsig26
+0
+
+Accuracy (%)
+
+CEDAR
+80
+70
+60
+50
+40
+
+SigComp
+2011
+
+Perf.
+Meas
+.
+
+Mobi
+leNet
+
+FRR
+FAR
+ACC
+FRR
+FAR
+ACC
+FRR
+FAR
+ACC
+
+7.8
+6.1
+65
+8.1
+7.1
+70
+5.7
+6.7
+80
+
+Bagged Ensemble Learning
+Dens VGG
+1D
+Prop
+eNet
+16
+CNN
+osed
+Net
+8.8
+5.7
+6.3
+4.5
+7.3
+6.8
+8.2
+3.8
+73
+76
+71
+80
+9.6
+7.9
+8.8
+5.1
+8.1
+6.1
+7.4
+4.7
+72
+63
+60
+79
+6.3
+8.7
+4.9
+4.7
+5.9
+7.4
+4.0
+3.6
+74
+81
+71
+82
+
+MLP
+XGB
+SVM
+
+The results of bagged ensemble learning based on majority
+polling are given in Table I. The results present the efficiency
+of this methodology. The proposed methodology is compared
+with the existing work and its results are given in table II for
+fair comparison.
+
+(a)
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:01:27 UTC from IEEE Xplore. Restrictions apply.
+
+Table II. Comparison of proposed methodology with existing
+literature
+Methods
+Jagtap et al.
+[12]
+Dey et al. [11]
+Hafemann et
+al. [13]
+Proposed
+
+BHsig260
+ACC FAR
+65
+9.1
+
+FRR
+8.8
+
+CEDAR
+ACC FAR
+55
+8.4
+
+FRR
+6.1
+
+70
+62
+
+8.7
+7.5
+
+7.4
+6.7
+
+67
+71
+
+6.1
+5.9
+
+7.4
+5.6
+
+79
+
+4.7
+
+5.1
+
+80
+
+3.8
+
+4.5
+
+The Comparison with the existing techniques is done using
+the transformed datasets. The proposed methodology has
+given the promising results as compared to the previous
+technique.
+The proposed methodology is further tested by changing the
+experimental conditions. The various rotated angles with no
+scaling factor have been tested on all these three datasets and
+the results are presented in table III.
+
+V. CONCLUSION
+This paper presented a feature fusion approach in which
+hand-crafted and deep CNN features have been combined for
+signature verification. The extracted features from VGG16,
+MobileNet, DenseNet and 1-D CNN have been compared
+with the proposed feature fusion technique and from results
+it reveals that it outperforms as compared to the other
+techniques. The proposed model has been tested using three
+popular machine learning classifiers i.e., SVM, MLP and
+XGB. The result of machine learning classifiers has been
+selected from bagged ensemble learning approach in which
+majority voting selected. Image transformations such as
+rotation and scaling have been considered for testing the
+feasibility of proposed methodology. Through different
+experimentation, it has been revealed that the proposed
+methodology outperforms as compared to the existing work
+if signature has various transformations other than original
+sample. This technique can be further tested for on-line
+signatures to analysis the effectiveness of this technique
+
+Table III. Results of rotation transformation
+Dataset
+CEDAR
+
+BHsig260
+
+SigComp2011
+
+Perf.
+Meas.
+
+Proposed Methodology
+30º
+
+60º
+
+90º
+
+180º
+
+270º
+
+FRR
+
+4.5
+
+4.1
+
+4.9
+
+5.1
+
+4.2
+
+FAR
+
+4.2
+
+3.9
+
+5.4
+
+5.6
+
+4.4
+
+ACC
+
+79.0
+
+81.2
+
+77.3
+
+76.8
+
+75.4
+
+FRR
+
+6.5
+
+6.8
+
+7.2
+
+6.3
+
+7.0
+
+FAR
+
+6.7
+
+7.1
+
+6.5
+
+5.9
+
+7.3
+
+ACC
+
+81.1
+
+79.3
+
+77.6
+
+78.4
+
+79.7
+
+FRR
+
+5.9
+
+5.6
+
+5.0
+
+5.7
+
+6.8
+
+FAR
+
+5.3
+
+5.1
+
+4.7
+
+5.9
+
+6.1
+
+ACC
+
+77.9
+
+79.3
+
+81.8
+
+83.2
+
+80.3
+
+By testing the signature samples at various scaling factors,
+the proposed methodology has been given promising results,
+as shown in table IV.
+Table IV. Results of scaling transformation
+Dataset
+CEDAR
+
+BHsig260
+
+SigComp2011
+
+Perf.
+Meas.
+
+Proposed Methodology
+10
+
+20
+
+25
+
+30
+
+35
+
+FRR
+
+4.7
+
+5.4
+
+5.7
+
+5.8
+
+5.2
+
+FAR
+
+4.8
+
+5.0
+
+5.1
+
+5.5
+
+4.9
+
+ACC
+
+78.2
+
+71.8
+
+73.9
+
+74.1
+
+73.4
+
+FRR
+
+6.7
+
+6.1
+
+6.2
+
+5.9
+
+6.9
+
+FAR
+
+6.3
+
+5.9
+
+5.9
+
+5.2
+
+6.6
+
+ACC
+
+80.2
+
+80.0
+
+78.5
+
+77.1
+
+74.3
+
+FRR
+
+5.3
+
+6.1
+
+6.5
+
+6.3
+
+7.1
+
+FAR
+
+5.9
+
+6.3
+
+6.6
+
+5.8
+
+7.3
+
+ACC
+
+82.6
+
+81.8
+
+78.9
+
+75.2
+
+79.9
+
+The advantage of using 1D-CNN and hand-crafted features is
+that the signature's location does not matter as well as the
+affine transformation can be catered efficiently.
+
+REFERENCES
+[1]
+
+S., Neha, S. Gupta, and P. Mehta. "A comprehensive study on offline
+signature verification." In Journal of Physics: Conference Series, vol.
+1969, no. 1, p. 012044. IOP Publishing, 2021.
+[2] K. Bibi, S. Naz, and A. Rehman, “Biometric signature authentication
+using machine learning techniques: current trends, challenges and
+opportunities,” Multimedia Tools Appl. 79(1–2), 289–340 (2020)
+[3] M. Ajij et al., “Off-line signature verification using elementary
+combinations of directional codes from boundary pixels,” Neural
+Comput. Appl. 1–18 (2021)
+[4] M. Sharif et al., “A framework for offline signature verification system:
+best features selection approach,” Pattern Recognit. Lett. 139, pp. 50–
+59, 2020
+[5] A., Ritu, and Om Prakash Verma. "An efficient copy move forgery
+detection using deep learning feature extraction and matching
+algorithm." Multimedia Tools and Applications 79, no. 11-12 (2020):
+7355-7376.
+[6] F. Ding et al., “Perceptual enhancement for autonomous vehicles:
+restoring visually degraded images for context prediction via
+adversarial training,” IEEE Trans. Intell. Transp. Syst., 1–12 (2021).
+[7] A. K. Bhunia, A. Alaei, and P. P. Roy, “Signature verification approach
+using fusion of hybrid texture features,” Neural Comput. Appl. 31(12),
+8737–8748 (2019).
+[8] E. Parcham, M. Ilbeygi, and M. Amini, “Cbcapsnet: A novel writerindependent offline signature verification model using a cnn-based
+architecture and capsule neural networks,” Expert Systems with
+Applications, vol. 185,
+[9] p. 115649, 2021K. Yu et al., “Securing critical infrastructures: deeplearning-based threat detection in IIoT,” IEEE Commun. Mag. 59(10),
+76–82 (2021).
+[10] A. B. Jagtap and R. S. Hegadi, “Offline handwritten signature
+recognition based on upper and lower envelope using Eigen values,” in
+Proc. 2nd World Congr. Comput. Commun. Technol. WCCCT 2019,
+pp. 223–226 (2019).
+[11] S. Dey et al., “SigNet: convolutional Siamese network for writer
+independent offline signature verification,” (1), 1–7 (2017).
+[12] A. B. Jagtap, R. S. Hegadi, and K. C. Santosh, “Feature learning for
+offline handwritten signature verification using convolutional neural
+network,” Int. J. Technol. Hum. Interact. 15(4), 54–62 (2019).
+[13] L. G. Hafemann, R. Sabourin, and L. S. Oliveira, “Learning features
+for offline handwritten signature verification using deep convolutional
+neural networks,” Pattern Recognit. 70, 163–176 (2017).
+[14] D. Banerjee, B. Chatterjee, P. Bhowal, T. Bhattacharyya, S. Malakar,
+and R. Sarkar, “A new wrapper feature selection method for language
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:01:27 UTC from IEEE Xplore. Restrictions apply.
+
+invariant offline signature verification,” Expert Systems with
+Applications, vol. 186, p. 115756, 2021.
+[15] G., Souvik, S. Ghosh, P. Kumar, E. Scheme, and P. Pratim Roy. "A
+novel spatio-temporal Siamese network for 3D signature recognition."
+Pattern Recognition Letters 144 (2021): 13-20.
+[16] R., Victoria, I. Linares, A. Sanchez, and J. F. Velez. "Off-line
+handwritten signature verification using compositional synthetic
+generation of signatures and Siamese Neural Networks."
+Neurocomputing 374 (2020): 30-41.
+[17] S. M. Sam et al., “Offline signature verification using deep learning
+convolutional neural network (CNN) architectures GoogLeNet
+inception-v1 and inception-v3,” Proc. Comput. Sci. 161, 475–483
+(2019).
+[18] A. B. Jagtap et al., “Verification of genuine and forged offline
+signatures using Siamese neural network (SNN),” Multimedia Tools
+Appl. 79, 35109–35123 (2021).
+[19] F. Ding et al., “Anti-forensics for face swapping videos via adversarial
+training,” IEEE Trans. Multimedia, 1 (2021).
+[20] K. Yu et al., “A blockchain-based Shamir’s threshold cryptography
+scheme for data protection in industrial internet of things settings,”
+IEEE Internet Things J, 1 (2021).
+[21] T. Ojala, K. Valkealahti, E. Oja, and M. Pietik¨ainen, “Texture
+discrimination with multidimensional distributions of signed graylevel differences,” Pattern Recognition, vol. 34, no. 3, pp. 727–739,
+2001.
+[22] R. M. Haralick, K. Shanmugam, and I. H. Dinstein, “Textural features
+for image classification,” IEEE Transactions on systems, man, and
+cybernetics, no. 6, pp. 610–621, 1973.
+[23] K. Simonyan, A. Z. Very deep convolutional networks for large-scale
+image recognition. https://arxiv.org/abs/1409.1556. Accessed: 2023-81.
+[24] Y., Haoyan, J. Ni, J. Gao, Z. Han, and T. Luan. "A novel method for
+peanut variety identification and classification by Improved VGG16."
+Scientific Reports 11, no. 1 (2021): 15756.
+[25] H., Andrew G., M. Zhu, B. Chen, D. Kalenichenko, W. Wang, T.
+Weyand, M. Andreetto, and H. Adam. "Mobilenets: Efficient
+convolutional neural networks for mobile vision applications." arXiv
+preprint arXiv:1704.04861 (2017).
+[26] H., Gao, Z. Liu, L. V. D. Maaten, and K. Q. Weinberger. "Densely
+connected convolutional networks." In Proceedings of the IEEE
+conference on computer vision and pattern recognition, pp. 4700-4708.
+2017.
+
+[27] CEDAR (Center of Excellence for Document Analysis and
+Recognition)
+Dataset.
+http://www.cedar.buffalo.edu/NIJ/publications.html. Last accessed:
+2023-06-12
+[28] Liwicki, M., Malik, M. I., Van Den Heuvel, C. E., Chen, X., Berger,
+C., Stoel, R., ... & Found, B. (2011). Signature verification competition
+for online and offline skilled forgeries (sigcomp2011). In 2011
+International conference on document analysis and recognition (pp.
+1480-1484). IEEE.
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:01:27 UTC from IEEE Xplore. Restrictions apply.
+
+

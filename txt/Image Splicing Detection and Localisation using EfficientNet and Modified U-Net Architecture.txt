@@ -1,0 +1,492 @@
+2021 10th International Conference on Internet of Everything, Microwave Engineering, Communication and Networks (IEMECON) | 978-1-6654-2686-2/21/$31.00 ©2021 IEEE | DOI: 10.1109/IEMECON53809.2021.9689172
+
+Image Splicing Detection and Localisation using EfficientNet and
+Modified U-Net Architecture
+Md Shamim Ahmed
+Department of Information Technology
+Indian Institute of Engineering Science and Technology
+Shibpur, INDIA - 711103
+shamim.pg2019@it.iiests.ac.in
+
+Abstract—The process of preserving, identifying, extracting,
+and documenting computer evidence that can be utilized in a
+court of law is known as digital forensics. It is the science of
+finding evidence from digital media like a computer, mobile
+phone, server, or network. It equips the forensic team with
+the most up-to-date techniques and tools for resolving complex
+digital cases.. Among many of them, the major problem which
+is addressed in this project is Image Forgery Detection. More
+precisely we deal here with the “splicing attack detection and
+localization”. Even though there are numerous techniques to
+conquer the problem, still there are loopholes in them like the
+accuracy of the forged region localization. As a part of this
+project, we propose a Convolutional Neural Network (CNN)
+based Deep Learning architecture, which is capable of detecting
+this forgery with state-of-the-art performance. We propose a
+transfer learning (EfficientNet) based image classification algorithm for the classification of forged Images and EfficientNet
+based U-Net Architecture for localization. In the classification
+part, we extract the image patches from the forged regions
+and non-forged regions in an image and classify them. The
+classification fetched us state of the art result. In the localization
+part, we have built a U-Net architecture by replacing the U-Net
+Encoder part with EfficientNet layers and keeping the decoder
+part as usual. We then pass the forged images through the
+network to train the model. The localization experiment also
+fetched state-of-the-art results.
+Keywords—Digital Forensics; Image Forgery Detection; Splicing Attack; Convolutional Neural Network; Instance Segmentation; U-Net; Transfer Learning;
+
+I. I NTRODUCTION
+Recently, we have witnessed advances in user-friendly image editing software, image editing techniques. So image
+manipulation has become very easy and affordable [1]. Forgers
+may employ forged photos to transmit misleading information,
+spread rumours, or give false testimony, all of which have
+detrimental social consequences. Image forensics, which aims
+to differentiate counterfeit photographs and prevent forgers
+from utilising them for unethical business or political reasons,
+has sparked a lot of interest in the scientific and industrial
+areas. To find the altered regions, various clues are analysed
+like the splicing, copy-move, and removal, etc. The image
+splicing basically copies regions from an authentic image
+and pastes them to other images, copy-move forgery copies
+and pastes regions within the same image. It’s really hard to
+identify the tampered regions even after careful inspection.
+Examples of these manipulations are shown in Fig. 1.
+
+Dr. Ruchira Naskar
+Department of Information Technology
+Indian Institute of Engineering Science and Technology
+Shibpur, INDIA - 711103
+ruchira@it.iiests.ac.in
+
+Fig. 1. Examples of tampered images which are result of different tampering
+techniques. These are the examples of Splicing and Copy-Move forgery
+attacks.
+
+The traditional feature extraction-based methods can be
+categorised into four types: detection methods based on the
+essence attribute [2] [3] [4], detection methods based on the
+imaging device attribute [5] [6] [7] [8], detection methods
+based on the image compression attribute [9] [10] [11], and
+detection methods based on the hash techniques [12] [13] [14].
+However, the traditional features extraction techniques persist
+with lots of drawbacks. i) Firstly image essence techniques
+fail if some hidden processes are performed after the process
+of splicing forgery. ii) In case the device noise intensity of an
+image is weak, the detection methods based on the imaging
+device fails. iii) The detection based on the image compression
+attribute only detects the images saved by JPEG format. iv)
+The hash techniques rely on the hash of the original untampered image. So we cannot rely on one single forgery
+detection method.
+Convolutional neural networks (CNN) have achieved great
+success in the research area of computer vision. CNN has been
+used by researchers to accomplish splicing forgery detection.
+CNN is originally used to judge whether the image has been
+forged in [15], but it couldn’t locate the tampered regions. In
+[15] the authors tried to locate the tampered regions by CNNs,
+but the detected regions showed inaccurate rough areas that are
+made up of some square white blocks. To improve researchers
+tried to improve the detected tampered regions, the methods
+[16] [17] use the non-overlapping image patch as the input of
+CNNs. However, when an image patch totally comes from the
+
+978-1-6654-2686-2/21/$31.00 ©2021 IEEE
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:59:52 UTC from IEEE Xplore. Restrictions apply.
+
+tampered regions, this image patch will be judged un-tampered
+label. In [18], the authors use a larger picture patch to disclose
+the image properties of the tampered portions; nevertheless, if
+the forgery image is small, the detection method may fail. For
+the existing CNN-based detection methods, since they use the
+image patch as the input of the network, the contextual spatial
+information is lost, which easily causes incorrect prediction.
+Furthermore, when the network architecture becomes more
+complex, the gradient degradation problem emerges, and feature discrimination weakens, making splicing forgery detection
+increasingly difficult, if not impossible.
+Recent work on image forensics witnessed good advances.
+In [19] authors identified tampering of the images using local
+descriptors based on variations in visual elements like texture,
+illumination, or color in images. However, it’s not guaranteed
+to detect forged regions using visual elements, the model
+didn’t promise a good performance. In [20] the authors used
+two networks, one (C-CNN) to detect forged regions and
+the other (R-CNN) to filter the inaccurately detected forged
+regions. Both are traditional methods to extract the image
+features. The models couldn’t achieve appreciable results.
+II. P ROPOSED M ETHODS
+A. Proposed Splicing Detection Model
+To improve the classification accuracy and optimum localization of the forged regions, we propose two novel Image
+classification and localization networks. In the classification
+part, we transformed the images in such a way so that our
+algorithm could learn the features more precisely and fetch us
+optimum results. For the initial part, we took the idea from this
+[15] paper. Every fictitious image has a mask that corresponds
+to it. We utilize that mask to sample the forged image along the
+spliced region’s boundary in such a way that both the forged
+and unforged parts of the image contribute at least 25% of
+the total. These samples will have distinct boundaries that are
+only present in bogus photographs. The CNN we develop will
+have to learn these boundaries. Similarly, we extract a similar
+number of patches from the authentic images. We then classify
+them using our CNN model. We used transfer learning,
+EfficientNet [21] for the classification purpose. EfficientNet is
+the recent state-of-the-art ImageNet competition classification
+model. We achieved state-of-the-art results after performing
+the experiment.
+Image classification of this experiment is about classification between forged and authentic images. We have chosen
+the CASIA 1 dataset for this experiment. The dataset consists
+of authentic images, spliced images, and masks related to the
+forged images. Splicing attack forgery detection takes place
+when we paste a portion of an image on top of another image.
+As we have discussed above, we try to extract image patches
+of the boundaries from the forged image which consists of
+pixels from the forged portion as well as pixels from an
+authentic portion of an image. We identify the boundaries
+using the mask of each image. The mask contains a white
+portion (255) which is the forged and a black portion (0) which
+is authentic. Programmatically we extract boundary image
+
+Fig. 2. Flow diagram of classification of forged and authentic images.
+
+patches that contain both these types of pixels. Similarly, we
+extract a similar number of patches from authentic images.
+These boundaries are to be learned by the CNN architecture
+that we design.
+To make boundaries even more distinct, the gray-scale
+images were converted to binary Otsu’s thresholding (implemented in Open CV) after de-noising using the Gaussian filter.
+After this operation, sampling was merely a matter of moving
+64*64 windows (with a stride of 8) through the fake image
+and counting 0 valued(black) pixels in the corresponding mask
+and sampling in case the value lies in a certain interval.
+B. Proposed Splicing Localisation Model
+In the case of the localization part, we use transfer learningenabled U-Net architecture [22]. The U-Net architecture consists of encoding and decoding layers. In the encoding part,
+we used layers of EfficientNet and for decoding, we used
+the default layers of U-Net. This experiment also fetched us
+state-of-the-art results. The inference part of the forged images
+was very impressive performing above all the existing forgery
+localization algorithms.
+We know that Image classification using transfer learning
+architectures consists of multiple layers of neural networks.
+There is a strong chance of overfitting in such cases. To
+avoid the same, there is a requirement for a large dataset.
+The CASIA1 dataset contains 462 spliced images which are
+solely not sufficient to train the best model. Therefore we have
+combined both CASIA1 and CASIA2 datasets containing 462
+and 1765 images respectively. Now 2226 spliced and authentic
+images individually are good numbers to train our model.
+III. E XPERIMENTAL R ESULTS
+A. Dataset
+In order to extract the image patches for classification of
+the forged images, we have considered CASIA [23] dataset.
+It contains 1,275 sets of images (1,275 forged images and
+1,275 original images along with their corresponding masks)
+in JPG and PNG formats. Most of them have a pixel resolution
+of approximately 384 * 256. In the case of the second
+experiment, we did use deep neural networks like RESNET
+and EffcientNet. Due to this reason, we required an abundance
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:59:52 UTC from IEEE Xplore. Restrictions apply.
+
+of images to get the best possible model for the segmentation
+task. We combined both the CASIA 1 and CASIA 2 datasets.
+Both the datasets combined 2226 images of nearly the same
+configurations as CASIA 1 dataset.
+B. Evaluation Metrics
+The number of correctly detected tampered pixels (TP), the
+number of wrongly detected tampered pixels (FP), and the
+number of incorrectly detected un-tampered pixels (FN) are
+important evaluation metrics for detecting an image splicing
+forgery. The Precision, Recall, and F-measure are utilised to
+evaluate the performance of the suggested splicing forgery
+detection algorithms in the following tests.
+Here, Precision is defined in Eq.(1), Precision is the probability that the detected regions in the ground-truth image
+are truly tampered regions, Recall is the probability that the
+tampered regions in the ground-truth image will be detected
+as defined in Eq.(2), and the F1 measure synthesises Precision
+and Recall into a single measurement to synthetically evaluate
+detection performance., as defined in Eq.(3).
+TP
+TP + FP
+
+(1)
+
+TP
+TP + FN
+
+(2)
+
+P recision =
+
+Recall =
+
+F − measure =
+
+2 × P recision × Recall
+P recision + Recall
+
+(3)
+
+C. Deep Learning Model using Transfer Learning for classification
+We leveraged transfer learning using the pre-trained models
+on the ImageNet dataset for classification purposes. Initially,
+we used the ResNet50 model with ’binary cross-entropy loss
+and Adam optimizer having a learning rate of 1e-6. We have
+run the model for 15 epochs. It fetched a test accuracy of
+94.15% with a loss of 0.31.
+To improve further we leveraged the latest state-of-the-art
+ImageNet model, EfficientNet. AutoML MNAS created the
+EfficientNet-B0 baseline network, and Efficient-B1 to B7 are
+acquired by scaling up the baseline network. The architecture
+uses the mobile inverted bottleneck convolution (MBConv).
+The researchers then scaled up this baseline network to create
+the EfficientNets family of deep learning models. Firstly, we
+used the EfficientNetB0 as the base architecture with Adam
+optimizer (learning rate of 1e-3). It fetched an accuracy of
+97.12% with a 0.11 loss. The steps are depicted in Fig. 2.
+To further increase the accuracy we leveraged the EfficientNetB2 with Adam optimizer (learning rate of 1e-3). It achieved
+an accuracy of 98.26% with a loss of 0.054. The result was
+very close to state-of-the-art accuracy. To further improve the
+accuracy we leveraged the EfficientNetB3. We use the Adam
+optimizer (learning rate 1e-4). Finally, we achieved the state
+of the art accuracy of 99.02% with a loss of 0.046.
+
+Fig. 3. The proposed U-Net Architecture with Efficient-Net Encoding.
+
+D. U-Net Architecture using Transfer Learning for Localisation
+As discussed above we have used U-Net Architecture
+for the localization of the spliced regions. U-Net is a
+state-of-the-art Image segmentation algorithm. We have
+incorporated some major changes in the architecture to fetch
+out optimum accuracy. The U-Net architecture consists of
+two parts encoding and decoding. Since the layers of the
+architecture can be easily modified or replaced as per our
+requirement, we have leveraged transfer learning layers in the
+encoding part. The EfficientNet architecture is the modern
+state-of-the-art Image classification architecture that fetched
+optimum complexity with minimum use of deep networks. We
+have changed the encoding part with the EfficientNet layers
+with a similar number of neurons in each layer. The decoding
+part of the U-Net is left as it is. Apart from the Precision,
+recall, and f1-score. We would be using dice-coefficient
+here, which is essentially used for semantic segmentation
+performance analysis.
+We have firstly incorporated the EfficientNetB0 as the
+encoding layer of our network. Similarly, we have extracted
+few skip connection layers and concatenated them with the
+encoder output to perform the upsampling operation. We have
+used relu activation function and batch normalization at each
+subsequent layer. The architecture is a semantic segmentation
+technique that essentially links pixels to the class label. The
+class label here is forged and un-forged regions. The regions
+and their corresponding pixels are identified by the model
+using the ground truth of each spliced image. We can think
+of semantic segmentation as image classification at a pixel
+level. The performance of the EfficientNetB0 wasn’t up to the
+mark. We repeated the same procedure with other EfficientNet Architectures as well. Subsequently, we incorporated the
+EfficientNetB7 as our encoding layer and that fetched us the
+state-of-the-art result. The model secured a dice coefficient of
+0.78, precision of 0.86, recall of 0.74, F1-score of 0.8, and
+AUC of 0.87.
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:59:52 UTC from IEEE Xplore. Restrictions apply.
+
+Fig. 4. Steps for the localisation.
+
+E. Inferences
+Above are the inferences of our results. We got nearly
+accurate output of the bounding/forged regions. It’s evident
+from our performances of the resulting output. Here the first
+column corresponds to the spliced images, middle corresponds
+to the mask/ground-truth of the forged regions and the third
+column represents the resulting output.
+The following are the comparisons of our experimental
+results with various other techniques which are been incorporated before using CASIA dataset. Few of the spaces are kept
+blank because the papers didn’t use that concerned metric and
+hence we couldn’t get the data. So ‘-’ denotes that the result
+is not available in the literature.
+TABLE I
+C LASSIFICATION PERFORMANCE ANALYSIS OF RECENT MODELS
+Illumination-Reflectance [24]
+Low-dim DCT and DWT [25]
+Wavelet transform [26]
+Optimal threshold [27]
+Local descriptor [19]
+CFA Artifacts [28]
+Our Model
+
+Precision
+97
+98
+99
+99
+
+Recall
+99
+97.08
+99
+99
+
+F1-Score
+98
+97.53
+99
+99
+
+Acc.
+94.5
+96
+95.45
+98.25
+96.97
+98.15
+99.02
+
+TABLE II
+L OCALISATION PERFORMANCE ANALYSIS OF RECENT MODELS
+Error Level Analysis [29]
+Noise Inconsistency [30]
+Coarse to Refined CNN [17]
+Local Descriptor [19]
+Rich Features[31]
+Our Model
+
+Precision
+0.581
+0.866
+
+Recall
+0.214
+0.263
+0.808
+0.7471
+
+F1-Score
+0.613
+0.612
+0.6758
+0.58
+0.408
+0.805
+
+AUC
+0.795
+0.8790
+
+IV. C ONCLUSION
+In this work, Image Splicing Detection and Localisation
+using EfficientNet and Modified U-Net Architecture is proposed for splicing attack forgery detection and localisation.
+In classification part we have extracted the image patches
+from the forged and authentic regions to distinguish the border
+parts better and classify using transfer learning technique
+between the forged image and the authentic image. In case
+of localisation we have used a modified U-Net architecture
+embedding the EfficientNet architecture in the encoder part
+and conjunction the same with the decoding part. Both the
+classification and the localisation part fetched us state of the art
+
+results. The work is capable for usage in practical applications.
+However there is still scope of improvement in the image
+localisation part.
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:59:52 UTC from IEEE Xplore. Restrictions apply.
+
+R EFERENCES
+[1] Y. Wu, W. Abd-Almageed, and P. Natarajan, “Busternet: Detecting copymove image forgery with source/target localization,” in Proceedings of
+the European Conference on Computer Vision (ECCV), September 2018.
+[2] W. Chen, Y. Q. Shi, and W. Su, “Image splicing detection using 2D
+phase congruency and statistical moments of characteristic function,” in
+Security, Steganography, and Watermarking of Multimedia Contents IX,
+E. J. D. III and P. W. Wong, Eds., vol. 6505, International Society for
+Optics and Photonics. SPIE, 2007, pp. 281 – 288. [Online]. Available:
+https://doi.org/10.1117/12.704321
+[3] Wei Wang, J. Dong, and T. Tan, “Effective image splicing detection
+based on image chroma,” in 2009 16th IEEE International Conference
+on Image Processing (ICIP), Nov 2009, pp. 1257–1260.
+[4] X. Zhao, J. Li, S. Li, and S. Wang, “Detecting digital image splicing
+in chroma spaces,” in Digital Watermarking, H.-J. Kim, Y. Q. Shi, and
+M. Barni, Eds. Berlin, Heidelberg: Springer Berlin Heidelberg, 2011,
+pp. 12–22.
+[5] H. Gou, A. Swaminathan, and M. Wu, “Noise features for image tampering detection and steganalysis,” in 2007 IEEE International Conference
+on Image Processing, vol. 6, 2007, pp. VI – 97–VI – 100.
+[6] Y. Hsu and S. Chang, “Detecting image splicing using geometry invariants and camera characteristics consistency,” in 2006 IEEE International
+Conference on Multimedia and Expo, July 2006, pp. 549–552.
+[7] M. K. Johnson and H. Farid, “Exposing digital forgeries through specular
+highlights on the eye,” in Information Hiding, T. Furon, F. Cayre,
+G. Doërr, and P. Bas, Eds.
+Berlin, Heidelberg: Springer Berlin
+Heidelberg, 2007, pp. 311–325.
+[8] B. Mahdian and S. Saic, “Detection of resampling supplemented with
+noise inconsistencies analysis for image forensics,” in 2008 International
+Conference on Computational Sciences and Its Applications, June 2008,
+pp. 546–556.
+[9] M. K. Johnson and H. Farid, “Exposing digital forgeries in complex
+lighting environments,” IEEE Transactions on Information Forensics and
+Security, vol. 2, no. 3, pp. 450–461, Sep. 2007.
+[10] Z. Lin, J. He, X. Tang, and C.-K. Tang, “Fast, automatic and fine-grained
+tampered jpeg image detection via dct coefficient analysis,” Pattern
+Recognition, vol. 42, no. 11, pp. 2492 – 2501, 2009. [Online]. Available:
+http://www.sciencedirect.com/science/article/pii/S0031320309001198
+[11] S. Ye, Q. Sun, and E. Chang, “Detecting digital image forgeries by measuring inconsistencies of blocking artifact,” in 2007 IEEE International
+Conference on Multimedia and Expo, July 2007, pp. 12–15.
+[12] Z. Tang, X. Zhang, X. Li, and S. Zhang, “Robust image hashing with
+ring partition and invariant vector distance,” IEEE Transactions on
+Information Forensics and Security, vol. 11, no. 1, pp. 200–214, Jan
+2016.
+[13] X. Wang, K. Pang, X. Zhou, Y. Zhou, L. Li, and J. Xue, “A visual
+model-based perceptual image hash for content authentication,” IEEE
+Transactions on Information Forensics and Security, vol. 10, no. 7, pp.
+1336–1349, July 2015.
+[14] C. Yan, C. Pun, and X. Yuan, “Quaternion-based image hashing for
+adaptive tampering localization,” IEEE Transactions on Information
+Forensics and Security, vol. 11, no. 12, pp. 2664–2677, Dec 2016.
+[15] Y. Rao and J. Ni, “A deep learning approach to detection of splicing and
+copy-move forgeries in images,” in 2016 IEEE International Workshop
+on Information Forensics and Security (WIFS), Dec 2016, pp. 1–6.
+[16] J. H. Bappy, A. K. Roy-Chowdhury, J. Bunk, L. Nataraj, and B. S.
+Manjunath, “Exploiting spatial structure for localizing manipulated
+image regions,” in Proceedings of the IEEE International Conference
+on Computer Vision (ICCV), Oct 2017.
+[17] Y. Wei, X. Bi, and B. Xiao, “C2r net: The coarse to refined network for
+image forgery detection,” in 2018 17th IEEE International Conference
+On Trust, Security And Privacy In Computing And Communications/
+12th IEEE International Conference On Big Data Science And Engineering (TrustCom/BigDataSE), Aug 2018, pp. 1656–1659.
+[18] B. Liu and C.-M. Pun, “Deep fusion network for splicing forgery
+localization,” in Proceedings of the European Conference on Computer
+Vision (ECCV) Workshops, September 2018.
+[19] Y. Rao, J. Ni, and H. Zhao, “Deep learning local descriptor for image
+splicing detection and localization,” IEEE Access, vol. 8, pp. 25 611–
+25 625, 2020.
+[20] B. Xiao, Y. Wei, X. Bi, W. Li, and J. Ma, “Image splicing
+forgery detection combining coarse to refined convolutional
+neural network and adaptive clustering,” Information Sciences,
+
+vol. 511, pp. 172 – 191, 2020. [Online]. Available:
+http://www.sciencedirect.com/science/article/pii/S0020025519308977
+[21] M. Tan and Q. V. Le, “Efficientnet: Rethinking model scaling for
+convolutional neural networks,” 2020.
+[22] O. Ronneberger, P. Fischer, and T. Brox, “U-net: Convolutional networks
+for biomedical image segmentation,” 2015.
+[23] “Casia. v2.0. http://forensics.idealtest.org/casiav2/. 2009.”
+[24] N. Patrick and B. Chakravarthy, “Image splicing detection technique
+based on illumination-reflectance model and lbp,” 2020.
+[25] D. M. B. P. C. S. M. V. H. R. K. L. Jaiprakash, Sahani Pooja, “Low
+dimensional dct and dwt feature based model for detection of image
+splicing and copy-move forgery,” 2020.
+[26] Z. H. H. Abd El-Latif Eman I, Taha Ahmed, “A passive approach for
+detecting image splicing based on deep learning and wavelet transform,”
+2020.
+[27] K. L. B. J. S. Kanwal Navdeep, Girdhar Akshay, “Digital image splicing
+detection technique using optimal threshold based local ternary pattern,”
+2020.
+[28] N. Y. e. a. Hussien, “Deep learning on digital image splicing detection
+using cfa artifacts.” 2021.
+[29] N. Krawetz, “A picture’s worth... hacker factor solutions.” 2007.
+[30] B. Mahdian and S. Saic., “Using noise inconsistencies for blind image
+forensics. image and vision computing,” 2009.
+[31] P. Zhou, X. Han, V. I. Morariu, and L. S. Davis, “Learning rich
+features for image manipulation detection,” in Proceedings of the IEEE
+Conference on Computer Vision and Pattern Recognition (CVPR), June
+2018.
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:59:52 UTC from IEEE Xplore. Restrictions apply.
+
+

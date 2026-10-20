@@ -1,0 +1,696 @@
+2023 International Conference on Artificial Intelligence in Information and Communication (ICAIIC) | 978-1-6654-5645-6/23/$31.00 ©2023 IEEE | DOI: 10.1109/ICAIIC57133.2023.10067120
+
+The Use of Background Features, Template
+Synthesis and Deep Neural Networks in Document
+Forgery Detection
+Mahmoud Hamido
+
+Abdallah Mohialdin
+
+Ayman Atia
+
+Faculty of Computer Science
+October University for
+Modern Sciences and Arts (MSA)
+Giza, Egypt
+mahmoud.mohamed87@msa.edu.eg
+
+Faculty of Computer Science
+October University for
+Modern Sciences and Arts (MSA)
+Giza, Egypt
+abdallah.mohamed22@msa.edu.eg
+
+HCI-LAB, Faculty of Computers
+and Artificial Intelligence
+Helwan University.
+Faculty of Computer Science
+October University for
+Modern Sciences and Arts (MSA)
+Giza, Egypt
+aezzat@msa.edu.eg
+
+Abstract—Document manipulation is a recently arising problem, especially with the rapid spread of fabrication technology.
+The tools to alter documents are now publicly available and can
+result in high quality forgeries, indistinguishable from genuine
+ones. Forged documents may wreak havoc on many processes
+dependent on the validity of the document, leading to lasting
+consequences such as financial loss. Therefore, the process of
+identifying a document that has been altered is essential. A
+system that is capable of scrutinizing documents as either forged
+or genuine through discriminative features (such as distortions
+or character misalignment) can assist industries with heavily
+reliance on documents for processes such as identity verification.
+Most of the documents involved in such processes have sufficiently
+complex backgrounds. We present a computer-vision-based system that detects changes in the background of the aforementioned
+documents as a result of manipulations made to its contents
+through the use of image subtraction. The system takes an image
+as input and then classifies the document as genuine or forged.
+Our proposed system produces an accuracy of 95% using CNN
+on unaligned images as well as 100% for aligned images.
+Index Terms—Document, forgery, detection, genuine, CNN,
+background, subtraction, forged, splicing, copy-move
+
+I. I NTRODUCTION
+Forgery is the process in which an item in the form
+of a document is altered or created to resemble a genuine
+counterpart in an attempt to deceive others. Forgeries manifest
+from modifications made to existing documents. Determining
+whether a document is forged or genuine (see Fig. 1) is crucial
+for most verification procedures [1], [2], which is used in most
+business aspects and can cause potential data breaches if a
+forged document was used as a genuine document. The issue
+regarding digital documents unlike the physical documents that
+can be inspected closely is that they can be easily modified
+with publicly available tooling such as photo editors as well
+as scanners and printers [3].
+For such types of documents, the text, including the surrounding areas can be valuable indicators of potential forgery.
+Specifically, these forms of text-based forgery are detectable
+
+(a) Genuine passport document from the MIDV-2020 dataset.
+
+(b) Forgery afflicted with Pixel manipulation and copy-move.
+
+Fig. 1: Genuine and forged documents
+
+by analyzing variations in the rotation and the alignment of
+characters [4].
+Various methods of textual forgeries exist but are often
+classified into the following types: Pixel Manipulation involves
+altering pixels on the document to modify characters existing
+on the document. Splicing is the process in which a group of
+pixels taken, often from another document. This is intended
+to cascade a character by laying another over it. Splicing
+produces forgeries that may be easily spotted due to the
+inconsistency of its photo-characteristic properties (such as
+color, noise, and font size) with its surroundings. Nonetheless,
+
+Authorized licensed use©2023
+limited to:
+REVA UNIVERSITY. Downloaded on
+October 09,2026 at 06:57:49 UTC from IEEE Xplore. Restrictions apply. ICAIIC 2023
+978-1-6654-5645-6/23/$31.00
+IEEE
+365
+
+Copy-Move forgeries, which are a form of splicing in which
+the source of the spliced pixels is taken from the same image;
+providing relatively more consistent properties [5]. Fig. 2.
+depicts the previously mentioned methods.
+
+Fig. 2: Methods of Textual forgery
+The techniques used to detect forged documents has been
+often partitioned into 2 classes. Active Forgery Detection is the
+technique of instilling authenticatable information within an
+image or document [6]. This information manifests in the form
+of serial numbers, embedded holograms, watermarks, or other
+indicators. These forms of authentication are easily verifiable
+by the issuing body or creator, but are uncommon and often
+reserved for specific forms of documents. An independent
+body or party may struggle with verifying these details, as they
+are still prone to modification and often require specialized
+equipment to be verified.
+In contrast, passive forgery detection is the process of
+detecting the authenticity of the source image without relying
+on embedded data.
+Forged images may exhibit evidence of modification despite
+resembling its genuine counterpart (For an example, see Fig.
+1a and Fig. 1b). Sharma et. al [6] gives the example of
+distortion, artifacts and loss of information as symptoms or
+clues to a possibly forged document. As depicted in Fig. 1b.
+, it can be observed that in most documents with sufficiently
+detailed backgrounds, the background of the copied content
+does not match the patterns of the surrounding background
+in the event of forgery (see Fig. 3). Sharma et. al [6] further
+categorizes passive forgery detection of images into multiple
+classes.
+
+for use in image recognition tasks and classification due to
+proficiency in detecting spatial correlations or features.
+The main contribution of this paper is to investigate the
+use of the aforementioned technique (as shown in Fig. 4.),
+and evaluate its efficacy using classical machine learning
+models as well as a convolutional model in the context of
+the detection of forged documents, measuring the accuracy of
+the system using the MIDV-2020 [8] extended with manually
+created forged images. The proposed system is a form of
+pixel based forgery detection, as the change in intensity of
+background pixels upon manipulation is indicative of a forgery,
+as is therefore detected in that manner. However, this form
+of document manipulation detection has multiple challenges.
+Namely, the ability to retrieve the backdrop of an image of a
+blank document without foreground details (such as personal
+information) in order to exclusively detect manipulation in the
+background of the document. Furthermore, the classification of
+unaligned images is challenging as it affects intricate features
+of the background, therefore a genuine document may be
+misclassified due to artifacts left during registration and vice
+versa.
+
+Fig. 4: System overview
+Fig. 3: Examples of background disturbance in forged documents.
+As described by Amidi et al. [7], The success of deeplearning based models is attributed to the massive amount
+of data available for training purposes, however, many deeplearning models can be properly trained with sufficient sizes of
+data sets through the use of data augmentation, in which the
+input image is rotated, flipped, recolored, etc. In particular,
+Convolutional Neural Networks (CNN) are a subclass of
+neural networks that have shown to be particularly successful
+
+II. R ELATED W ORK
+Research involved in such fields investigate common forgery
+types that can cause the most danger. Several existing approaches were used to detect such forgeries through the use
+of techniques such as optical character recognition (OCR),
+statistical models and deep learning models.
+A. Classical Approaches
+James et al. [4] implemented a random forest based classifier utilizing OCR (using Tesseract [9]) graph features of
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on
+October 09,2026 at 06:57:49 UTC from IEEE Xplore. Restrictions apply.
+366
+
+each character in a document such as width, height, and
+vertical displacement relative to its neighbouring characters
+on the same line. The proposed system targeted plain digital
+documents which lack colors or complex backgrounds. Imperfections in the previously mentioned features indicate areas of
+manipulation. The classifier was capable of reaching 98.57%.
+Moreover, The authors proposed using pixel-based features
+from images along with the OCR graph features in order to
+further enhance performance. Osorio et al. [5] proposed an
+algorithm that could identify the type of forgery afflicted on the
+image using a hybrid model consisting of SIFT and Markov
+processing. The algorithm achieved an accuracy of 91%. Ryu
+et al. [3] proposed a Support Vector Machine (SVM) based
+technique which achieved an overall classification accuracy of
+80%. The system aimed to detect printed forged documents
+through the inspection of image qualities, along with the
+identification of the printer (laser, ink-jet, etc) that was used
+to produce a forged document.
+B. Deep Learning Based Approaches
+Marra et al. [10] proposed a conceptual framework for
+the detection of forged images, with special emphasis on
+modifications which are not visually obvious. The proposed
+system consisted of a CNN which automatically extracts
+defining features from an entire image without resorting to
+resizing, which is often the cause of loss in detail. The
+system was evaluated on a data-set representative of real
+forgeries. Additionally, Fahmi & Sari [11] investigated the use
+of CNNs of similar architectures for detection of tampered
+images. Specifically, the models investigated the effect of an
+additional convolutional layer on the pre-existing two layers
+on accuracy of the model. The models were evaluated against
+various data-sets consisting of images afflicted with copymove or splicing. The most effective model, equipped with an
+additional convolutional layer, perform with 83% accuracy on
+average. However, the model proposed was suspected to have
+overfit. The authors suggested that it could be remedied with
+a larger data set with a diverse set of forgeries. Zhao et al. [2]
+developed a neural network capable of editing documents with
+textual information surrounded by complex backgrounds. The
+system is capable of disguising the artifacts produced by the
+modification such as mismatching colors or distortion. Tarek
+et al. [1] performed a comparative analysis on the accuracy of
+detecting forged signatures across multiple CNN models (such
+as ResNet50, VGG-16, etc). The results showed that ResNet50 was the highest performing model, producing an accuracy
+of 82.3%. Bunk et al. [12] proposed a system using Patch
+Classification and LSTM to classify and localize regions in
+images that have been tampered. The system has achieved an
+accuracy of 94.86%.
+III. M ETHODOLOGY
+A. Data Collection
+1) Genuine Documents: Due to the scarcity of publicly
+available documents, we make use of synthetic documents
+accurately resembling their real counterparts. Notably, we
+
+TABLE I: Gap analysis of related work.
+Classification
+Model
+OCR
+Random Forest
+SVM
+SIFT
+Markov Processing
+
+Ref
+
+Input Type
+
+Author
+
+[4]
+
+Documents
+
+James et. al.
+
+[3]
+
+Documents
+
+Ryu et al.
+
+[5]
+
+Images
+
+Osorio et al.
+
+[10]
+
+Images
+
+Marra et al.
+
+CNN
+
+Images
+
+Fahmi & Sari
+
+CNN
+
+Document
+
+Proposed System
+
+CNN
+
+[11]
+
+Dataset
+
+Accuracy
+
+Proprietary
+
+98.57%
+
+Proprietary
+Columbia
+LAB, CASIA V1
+Modified FAU, DSO-1,
+Korus, NC and MFC.
+Proprietary, CASIA ITDE
+and FAU Image
+Manipulation
+Modified MIDV-2020
+
+80%
+91%
+82.4%
+83%
+95%
+
+make use of the MIDV-2020 [8] data set. the MIDV-2020 is
+an extension of the MIDV-500 [13] document data-set and
+consists of 10 document types, each containing 100 genuine
+documents (See Fig. 1a). The difference being the increase in
+diversity of the input fields, faces, and signatures. In addition
+to another 100 genuine documents for each document type
+provided with the data-set that were unaligned under the name
+”scan rotated” (See Fig. 5a). Additionally, a photograph, video
+clip and scanned version of each document was also provided,
+depicting realistic scenarios where the input is provided from
+an unaligned image or video frame, this is further discussed
+in the pre-processing section.
+2) Forged Documents: The MIDV-2020 data-set does not
+include forged documents. Therefore, forged documents were
+created manually with approximately 14 documents per type
+(See Fig. 1b), forming 132 forged documents in total for
+experiment 1. 105 unaligned forged documents were also
+manually created and registered (as shown in Fig. 4) to conduct
+experiment 2. Forming up to 237 manually created forged
+documents to conduct both experiment 1 and 2.
+
+(a) Sample of experiment 2 documents before registration
+
+(b) Sample of experiment 2 documents after registration
+
+Fig. 5: Sample of experiment 2 documents before and after
+registration.
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on
+October 09,2026 at 06:57:49 UTC from IEEE Xplore. Restrictions apply.
+367
+
+B. Deep-Learning Model
+The Convolutional Neural Network (CNN) was developed
+using the Keras API for TensorFlow [14] and consists of several layers, which are specified in Fig. 6. A data augmentation
+layer was used to make random horizontal flips and random
+rotations to decrease the rate of over-fitting. Second, a rescaling layer which re-scales the images to the fraction of
+1/255 of their size.
+The images are then passed into multiple convolutional
+layers each followed by a normalization layer. We applied
+hyperparameter tuning in order to determine the best dropout
+value for the model to minimize over-fitting while maintaining
+adequate results. Hyperparameter tuning is the process in
+which a search space consisting of all possible values constructed for the set of hyperparameters (such as dropout rate,
+kernel size, etc.). The search space is then examined through
+random selection or through a bracket style of elimination
+to obtain values for each hyperparameter in the model. The
+Tuner [15] is responsible for assessing the quality of the model
+during the search for more optimal parameter, after a specified
+number of epochs, the best model is selected and its values
+for hyperparameters are retained. The model was re-trained
+after finding optimal hyperparameters on a machine equipped
+with 16 GB of RAM, a NVIDIA RTX 3070 TI, and an Intel
+Core i9 10900F. The set of forged documents were manually
+created with varying levels of detail and quality. A set of
+genuine photos were moved into the forged data set before
+being manually altered. Each forged document contains one
+or more occurrences of pixel manipulation, copy-move and
+splicing. Similar to the genuine counterparts, each image was
+subtracted from a generated template to expose background
+details.
+
+L1, L2, Hamming, and other forms available in OpenCV’s
+implementation of ORB [16], feature matching algorithm
+which relies on descriptive key points common to both the
+source and companion image to compute a transformation
+capable of producing a candidate for the aligned image
+from the unaligned source image. The most suitable aligned
+image is measured through the absolute difference between
+each aligned candidate and the pre-aligned template for each
+document type. The candidate with the minimum distance to
+the template is then selected. Although the absolute difference
+seems to be a simple heuristic, it has proven to be effective,
+requiring little manual selection or discarding of unreasonably
+aligned documents. As previously stated, the manipulated
+areas of a forged document cause subtle changes to the
+surrounding background. To further reveal the difference, the
+input image is subtracted from an empty document (As shown
+in Fig. 4), containing the genuine background to reveal the
+difference. This accentuates the area that has been tampered
+with (See Fig. 7b.) whereas a genuine document would produce one as seen in Fig. 7a. In the event that a template for
+the background is unavailable, a sufficiently large amount of
+sample documents could be used to synthesize an approximate
+template. Assuming that the document consists of dark test
+with a lighter background, pixels representing the background
+can be extracted by taking the brightest pixel from the samples,
+forming an image such as the one shown in Fig. 8. Although
+the generated template contains artifacts (e.g the photograph,
+or common text), it is sufficient for its purpose.
+
+(a) Fig. 1a after subtraction from the template.
+
+Fig. 6: Architecture of the Convolutional Neural Network
+C. Preprocessing
+The images were converted to bitmap images to avoid nondeterministic behavior produced by compression or specifics
+concerning a particular file format, and resized to dimensions
+of 671x471 as well as converted to RGB from other color
+formats (such as CMYK) for consistency.
+The images are aligned via Image Registration. (See Fig.
+4.) Each image was aligned using normalization types such as
+
+(b) Fig. 1b after subtraction from the template
+
+Fig. 7: The result of the subtraction of a genuine and forged
+from the template.
+Once a template has been generated, the data-set is generated by subtracting each image by it’s template using saturating arithmetic, meaning that resulting values are clamped to
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on
+October 09,2026 at 06:57:49 UTC from IEEE Xplore. Restrictions apply.
+368
+
+the range 0 to 255 rather than wrapping semantics produced
+by underflow or overflow (See Eq. 1. for a formal definition).
+This cascades artifacts arising from direct subtraction of pixel
+values.
+h(x, y) = max{0, min{255, f (x, y) − g(x, y)}}
+
+(1)
+
+and used in Experiment 1. A subset of the aligned documents
+produced in the previous step was used to generate the
+template, the remainder was then subtracted from the template
+(as shown in Fig. 4.) and used to train the models as the
+training and validation set.
+
+IV. E XPERIMENTS AND RESULT DISCUSSION
+Both experiments follow similar setups. First, a template
+was generated for a sample of (aligned) genuine documents,
+the sample size used for both experiments was 100 images.
+After preprocessing the images according to the requirements
+of the experiment (see Fig. 4.), the images are assigned to a
+training and test set for each type of document after subtraction
+from the template, which produces the input to the models.
+Each model was evaluated on each type of document model
+and their respective accuracy is measured.
+
+Fig. 8: Template document of srb passport from MIDV-2020
+
+A. Experiment 1
+The first experiment aims to assess the accuracy of a
+selection of models on the post-subtracted images produced
+from perfectly aligned images of different types of documents.
+1) Setup: The first experiment uses aligned images to test
+the aforementioned technique, which was tested on 8 different
+types of documents, each containing 132 forged documents
+and 162 genuine documents. All models were trained on the
+same data set. The models consist of the proposed convolutional neural network (see Fig. 6, and 7 statistical models
+listed in Table III. The aforementioned models were selected
+to resemble the current state of the art models for binary
+classifications as well as selected from the related work.
+2) Results: Table II shows the results produced by each
+model in each type of document present. Due to the stark
+contrast between the noise levels of a genuine and postsubtraction forged image, approaches such as the CNN are
+highly effective where as classical algorithms such as SVM
+and Naive Bayes perform adequately. Other classical models
+have varying performance, which is justified in the remainder
+of the section. Regardless of any potential correlations amidst
+the features, the Naive Bayes classifier considers each of these
+features to contribute independently to the confidence. The
+single Decision Tree classifier outperforms a Random Forest
+model in terms of average accuracy. This is likely due to
+the environment of the experiment, as well as the variance
+produced by the differing noise patterns in the forged images,
+causing it to underfit. The voting classifier consists of an ensemble of the classical models, wherein the final classification
+result is produced from the majority vote of the sub-classifiers.
+However the decision is unweighted, therefore many incorrect
+classification results produced by sub-classifiers will dominate
+the outcome over less votes for the correct result produced for
+a particular class.
+
+2) Results: As shown in Table III, overall accuracy produced from experiment 2 has regressed as expected, due
+to the noise generated by the alignment errors produced
+during registration. Notably, the results demonstrate the weak
+generalizability of the Decision Tree. The Random Forest
+demonstrated higher accuracy, likely due to the increase in
+variation in the data-set overall. This variation has caused the
+Naive Bayes to be biased towards producing a classification
+result of forged, even for genuine documents due to the alignment noise. Although CNN demonstrated a lower accuracy
+than SVM in the second experiment, CNN is likely more
+desirable than SVM for this particular use case as it produces
+significantly lower false positives (forged documents classified
+as genuine) than SVM as shown in the confusion matrices
+(generated using [17]) for both classifiers (see Fig. 9.)
+
+B. Experiment 2
+1) Setup: Unaligned scanned copies of documents (obtained from MIDV-2020 [8]) were then first aligned, followed
+by template generation using the same procedure described
+
+Fig. 9: Confusion Matrix evaluated on unaligned documents
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on
+October 09,2026 at 06:57:49 UTC from IEEE Xplore. Restrictions apply.
+369
+
+TABLE II: Accuracy of each document class from Experiment 1 comparing selected classical machine learning algorithms
+with the CNN model.
+alb id
+aze passport
+est id
+fin id
+grc passport
+lva passport
+rus internalpassport
+svk id
+Average accuracy
+
+CNN
+100.00%
+100.00%
+100.00%
+100.00%
+100.00%
+100.00%
+100.00%
+100.00%
+100.00%
+
+SVM
+100.00%
+100.00%
+100.00%
+96.97%
+100.00%
+100.00%
+100.00%
+100.00%
+99.62%
+
+Naive Bayes
+100.00%
+100.00%
+94.12%
+96.97%
+100.00%
+100.00%
+100.00%
+92.86%
+97.99%
+
+Decision Tree
+90.91%
+57.58%
+55.88%
+93.94%
+100.00%
+54.55%
+56.25%
+75.00%
+73.01%
+
+Voting Classifier
+93.94%
+75.76%
+52.94%
+63.64%
+54.55%
+100.00%
+56.25%
+75.00%
+71.51%
+
+AdaBoost
+90.91%
+57.58%
+52.94%
+78.79%
+100.00%
+57.58%
+56.25%
+71.43%
+70.69%
+
+Random Forest
+87.88%
+54.55%
+52.94%
+54.55%
+54.55%
+100.00%
+56.25%
+67.86%
+66.07%
+
+TABLE III: Accuracy of Experiment 2 comparing selected classical machine learning algorithms with the CNN model
+Classifier
+Accuracy
+
+CNN
+95.00%
+
+SVM
+97.78%
+
+Naive Bayes
+75.00%
+
+Decision Tree
+55.56%
+
+V. C ONCLUSION AND F UTURE W ORK
+In conclusion, computer vision has the potential to revolutionize the field of document forgery detection by providing
+a reasonably reliable and automated way to analyze and
+verify the authenticity of a document. Using machine learning,
+models can take advantage of various background features
+of a document and compare them to known patterns and
+characteristics of genuine documents. Two experiments were
+conducted; the first experiment processed aligned documents
+taken from an artificially sterile environment where no lighting conditions or environmental noise were introduced and
+taken into account. The second experiment was conducted
+on unaligned documents to measure the efficiency of the
+proposed system in real environments where alignment and
+environment noise exist. The MIDV-2020 data set was used
+for both experiments; forged documents manually created by
+mimicking various types of forgeries. Using a set of genuine
+documents for each type of document, a generic template
+was generated, and then images were subtracted from the
+template to construct the genuine and forged data set. The
+post-subtraction images were then fed to one CNN model and
+six classical machine learning models. The most optimal and
+consistent models in both experiments were CNN and SVM,
+scoring 100.00% and 96.62%, respectively, in experiment 1
+and 95.00% and 97.78% in experiment 2. Despite the fact
+that SVM had higher results than CNN, CNN is more reliable
+in this particular use case as it produces significantly lower
+false positives than SVM which is very sensitive in such field.
+Future work includes extending the forged document data set
+with more diverse types of forgeries with more environment
+noise such as different lighting conditions or the documents
+being contorted. The proposed system can be combined with
+an OCR-based approach to further improve accuracy.
+R EFERENCES
+
+Voting Classifier
+76.11%
+
+AdaBoost
+57.78%
+
+Random Forest
+71.11%
+
+[2] L. Zhao, C. Chen, and J. Huang, “Deep learning-based forgery attack
+on document images,” IEEE Transactions on Image Processing, vol. 30,
+pp. 7964–7979, 2021.
+[3] S.-J. Ryu, H.-Y. Lee, I.-W. Cho, and H.-K. Lee, “Document forgery
+detection with svm classifier and image quality measures,” in Advances
+in Multimedia Information Processing - PCM 2008 (Y.-M. R. Huang,
+C. Xu, K.-S. Cheng, J.-F. K. Yang, M. N. S. Swamy, S. Li, and
+J.-W. Ding, eds.), (Berlin, Heidelberg), pp. 486–495, Springer Berlin
+Heidelberg, 2008.
+[4] H. James, O. Gupta, and D. Raviv, “Ocr graph features for manipulation
+detection in documents,” 2020.
+[5] J. a. Cortés Osorio, J. A. Chaves Osorio, and C. D. López Robayo,
+“Hybrid algorithm for the detection of pixel-based digital image forgery
+using markov and sift descriptors,” Revista Facultad de Ingenierı́a
+Universidad de Antioquia, p. 111–121, Nov. 2021.
+[6] P. Sharma, M. Kumar, and H. Sharma, “Comprehensive analyses of
+image forgery detection methods from traditional to deep learning
+approaches: an evaluation,” Multimedia Tools and Applications, pp. 1
+– 34, 2022.
+[7] A. Amidi and S. Amidi, “Cs 230 - deep learning,” Jan 2019.
+[8] K. Bulatov, E. Emelianova, D. Tropin, N. Skoryukina, Y. Chernyshova,
+A. Sheshkus, S. Usilin, Z. Ming, J.-C. Burie, M. Luqman, and V. Arlazarov, “MIDV-2020: a comprehensive benchmark dataset for identity
+document analysis,” Computer Optics, vol. 46, pp. 252–270, apr 2022.
+[9] A. Kay, “Tesseract: An open-source optical character recognition engine,” Linux J., vol. 2007, p. 2, jul 2007.
+[10] F. Marra, D. Gragnaniello, L. Verdoliva, and G. Poggi, “A full-image
+full-resolution end-to-end-trainable cnn framework for image forgery
+detection,” IEEE Access, vol. 8, pp. 133488–133502, 2020.
+[11] H. Fahmi and W. Sari, “Effectiveness of deep learning architecture for
+pixel-based image forgery detection,” 01 2021.
+[12] J. Bunk, J. H. Bappy, T. M. Mohammed, L. Nataraj, A. Flenner, B. S.
+Manjunath, S. Chandrasekaran, A. K. Roy-Chowdhury, and L. Peterson,
+“Detection and localization of image forgeries using resampling features
+and deep learning,” 2017.
+[13] V. V. Arlazarov, K. B. Bulatov, and T. S. Chernov, “MIDV-500: A dataset
+for identity documents analysis and recognition on mobile devices in
+video stream,” CoRR, vol. abs/1807.05786, 2018.
+[14] F. Chollet et al., “Keras.” https://keras.io, 2015.
+[15] T. O’Malley, E. Bursztein, J. Long, F. Chollet, H. Jin, L. Invernizzi,
+et al., “Kerastuner.” https://github.com/keras-team/keras-tuner, 2019.
+[16] E. Rublee, V. Rabaud, K. Konolige, and G. Bradski, “Orb: An efficient
+alternative to sift or surf,” in 2011 International Conference on Computer
+Vision, pp. 2564–2571, 2011.
+[17] J. D. Hunter, “Matplotlib: A 2d graphics environment,” Computing in
+Science & Engineering, vol. 9, no. 3, pp. 90–95, 2007.
+
+[1] O. Tarek and A. Atia, “Forensic handwritten signature identification
+using deep learning,” in 2022 IEEE 9th International Conference on
+Sciences of Electronics, Technologies of Information and Telecommunications (SETIT), pp. 185–190, 2022.
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on
+October 09,2026 at 06:57:49 UTC from IEEE Xplore. Restrictions apply.
+370
+
+

@@ -1,0 +1,624 @@
+2025 3rd International Conference on Business Analytics for Technology and Security (ICBATS) | 979-8-3315-3827-9/25/$31.00 ©2025 IEEE | DOI: 10.1109/ICBATS66542.2025.11258335
+
+AI-Driven Signature Forgery Detection: A Novel
+Deep Learning-Based Approach with CALSigNet
+1st Ritu Chauhan
+Artificial Intelligence and IoT Lab, Center for
+Computational Biology and Bioinformatics
+Amity University
+UP, India
+rituchauha@gmail.com
+
+2nd Aarushi Mishra
+Artificial Intelligence and IoT Lab, Center for
+Computational Biology and Bioinformatics
+Amity University
+UP, India
+aarushi.mishra@s.amity.edu
+
+Abstract—The increased usage of forged signatures is posing
+a major threat to the legitimacy of legal and financial documents,
+which requires effective automated detection systems. This
+paper introduces CALSigNet, a deep learning model using CNN,
+Attention, and LSTM to improve signature forgery detection
+accuracy. The model employs CNN for spatial feature extraction,
+Attention to analyse important signature areas, and LSTM to
+identify sequential patterns, overcoming the limitations of
+conventional approaches that tend to neglect both spatial and
+temporal dynamics. With a large dataset of signature images, the
+proposed model was tested through intensive training, 5-fold
+cross-validation, and comparison with baseline CNN models.
+CALSigNet attained a high-test accuracy of 99.60%, which
+surpassed that of a Basic CNN (97.60%) and a ResNet-like CNN
+(98.40%), with a cross-validation mean accuracy of 95.44%
+(±0.0086). The results highlighted CALSigNet's potential as a
+scalable, accurate tool for signature verification in forensic
+science, improving the reliability of legal and financial document
+authentication.
+
+Keywords—AI, Deep Learning, Signature Detection, Image
+Classification, CALSigNet, CNN, Attention, LSTM, Forged
+Signature, Prediction.
+
+I.
+
+INTRODUCTION
+
+Today, in the technological domain, Artificial Intelligence
+(AI) has evolved as a milestone. It has profoundly shaped the
+future across different domains to unprecedented levels of
+automation, accuracy, and efficiency. AI has revolutionized
+industries by processing Big Data, making smart decisions, and
+detecting patterns. It can also be an innovation tool in forensic
+science [1], [2]. AI has found its way in the domain of forensic
+science to provide new solutions for crime scene analysis,
+document verification, and facial recognition [3]. Investigators
+now have the ability of rapid analysis, with accuracy, so that
+the evidence proves better in court sessions. AI has brought an
+advancement to forensic science, and it has lifted human
+capability to new heights. It is countering the rising difficulty
+of modern-day crimes, which can no longer be overcome by
+traditional methods [4], [5] .
+The detection of forged signatures presents one such core
+challenge for forensic science since it is such a common
+challenge with profound impacts on legal and financial
+frameworks. Forgery of signatures threatens the credibility of
+contracts, wills, and financial transactions, resulting in frauds,
+
+disputes, and large economic loss [6]. According to the
+Association of Certified Fraud Examiners (ACFE), in 2022 [7],
+billions of dollars of loss is caused by document fraud, such as
+forged signatures, globally every year. It is important to detect
+forged signatures because methods used for detection manually
+by experts can be time-consuming, subjective, and prone to
+human error, especially in detecting high-quality forgeries [8].
+Therefore, it is necessary to develop automated detection
+systems capable of providing reliability, scalability and
+objectivity especially in legal and financial applications of
+critical importance as decision of document authenticity can
+also end disputes.
+Deep learning, a sub field of Artificial Intelligence, is an
+effective solution for addressing the stated problem of forged
+signatures [9]. AI models can use neural networks to learn
+complex patterns in signature images and distinguish subtle
+differences between a genuine and forged sample with high
+accuracy. Convolutional Neural Networks (CNNs) are superior
+at extracting spatial features from images, whereas
+sophisticated methods such as attention mechanisms and Long
+Short-Term Memory (LSTM) units extend the model's capacity
+to pay attention to important areas and absorb sequential
+dependencies, respectively [10]. These capabilities position AI
+as the most suited for signature verification to produce
+trustworthy systems that can manage large datasets, generalize
+across diverse styles of signatures, and provide objective
+decisions in real time [11].
+To solve the forged signature problem, we propose a novel
+deep learning model CALSigNet (CNN-Attention-LSTM
+Signature Network). CALSigNet is a combination of a CNN
+backbone with an attention mechanism and an LSTM unit that
+accurately distinguishes between forged and genuine signatures
+[12]. The research shows the model’s superior performance
+with rigorous testing by kfold cross-validation, baseline CNN
+model comparison, and the model’s real-world applicability in
+forensic science. This is achieved by leveraging the power of
+AI with the personalized approach of CALSigNet to enhance
+the ability to validate documents in legal and financial settings,
+thereby promoting the use of AI in forensic sciences [13].
+II.
+
+RELATED WORKS
+
+Artificial intelligence has emerged as a key factor of
+forensic sciences, helping to overcome the difficulties in
+
+979-8-3315-3827-9/25/$31.00 ©2025 IEEE
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:57:49 UTC from IEEE Xplore. Restrictions apply.
+
+processing intricate and massive data in criminal
+investigations. Studies identify AI potential in the progression
+of forensic methods in areas of blood pattern identification
+[14], crime scene reconstruction, digital forensics, and image
+analysis, while stressing the need for transparent and ethical AI
+mechanisms to minimize wrongful convictions caused by
+flawed scientific research or organizational negligence [15].
+Also, research investigates AI applications in forensic image
+and audio examination, for example, the identification of crime
+tools and establishing causes of death, highlighting the need for
+high-quality information and model interpretability for
+consistent results [16]. In computer cybersecurity forensics, a
+Hybrid Intrusion Detection System (HIDS) integrates
+signature-based detection and AI-based anomaly detection
+utilizing Gradient Boosting and K-Nearest Neighbors (KNN)
+algorithms to reach 90.37% accuracy in detecting cyber threats
+while suppressing false positives [17].
+Signature verification, an important forensic process,
+has relied on human methods in the past, that are subject to
+errors, initiating the use of AI for automation. One proposed
+banking application uses AI to scan signatures into images,
+draw out features, and utilize a neural network to identify them
+as genuine or counterfeit, enhancing dependability over human
+examination [18]. Another framework solves for misplaced
+signatures on student admission cards through AI-based
+identification of photographs and signatures in uploaded
+documents, proper placement, and avoidance of administrative
+mistakes [19]. Also, a signature recognition system utilizes
+Support Vector Machine (SVM) and Histogram of Oriented
+Gradients (HOG) using OpenCV and Qt for the GUI, where
+HOG extracts the feature vectors by reducing images, and
+SVM classifies them into different classes with user-specified
+precision [20].
+Regardless of these developments, most current methods
+focus on static image analysis and ignore temporal dynamics
+that can be used to improve detection accuracy. Most methods
+do not capture spatial and sequential features of signatures
+thoroughly, restricting their use in detecting complex forgeries
+[21]. This gap prompts the current study, proposing
+CALSigNet, a new model that encompasses CNN, Attention,
+and LSTM to address such limitations by bringing together
+spatial feature extraction, region-based attention, and
+sequential pattern detection for better signature forgery
+identification [22].
+Verification of signatures by AI systems in critical legal
+and financial settings creates ethical issues because incorrect
+classifications could cause severe problems including unfair
+court decisions and financial scams. The use of biased training
+data leads to misidentification of signatures particularly from
+specific demographic groups like elderly people with handwriting trepidation thereby raising fairness problems that
+interfere with legitimate claims and business deals. Banking
+systems must exercise caution when storing signature data
+without consent because GDPR violations are likely to occur
+while processing sensitive personal client information. Legal
+proceedings and judicial acceptance become jeopardized by
+unexplained AI decision-making because transparency remains
+a barrier in this process. The deployment of these systems
+becomes more complex due to ethical problems that necessitate
+
+strong protective measures to create fair and secure and
+transparent verification processes.
+III.
+
+METHODOLOGY
+
+A. Dataset Collection and Preparation
+We sourced our data from an open-source repository. The
+dataset contains 2152 signature image files that are divided
+between training and test sets [23]. We have 762 forged and
+887 real signatures in the training set (a total of 1649 samples),
+and in the test set, we have 248 forged and 252 real signatures
+(a total of 500 samples) as depicted in Figure 1 and Figure 2.
+To train our models, we ran a preprocessing pipeline in Python
+that employed TensorFlow and Keras. Loaded images were
+transformed into grayscale, resized to the size of 128x128
+pixels, and normalized to range [0, 1] by dividing pixel values
+by 255 [24], [25]. Preprocessing was carried out on files
+ending with .png, .jpg, or .jpeg in a case-insensitive fashion,
+handled errors, and generated training (X_train, y_train) and
+test (X_test, y_test) datasets of shapes (1649, 128, 128, 1) and
+(500, 128, 128, 1), respectively. For forged, labels were
+designated as 0 and genuine signatures as 1, with training data
+shuffled to avoid order bias [26].
+
+Fig. 1. Forged Signature image in the dataset
+
+Fig. 2. Genuine Signature image in the dataset
+
+B. CALSigNet Proposed Architecture
+We developed a hybrid deep learning model, called
+CALSigNet to detect real and fake signatures, implemented via
+Keras in TensorFlow. The architecture starts with an input
+layer which can accept grayscale images of size (128, 128, 1),
+followed by a CNN backbone consisting of three convolution
+layers (32, 64, and 128 filters, 3x3 kernels, ReLU activation,
+same padding) and MaxPooling2D layers (2x2 pool size),
+downsampling the outputs to (16, 16, 128) [27]. Then, a
+MultiHeadAttention layer (4 heads, key dimension 128)
+concentrates on key signature attributes, for example, stroke
+patterns, whose output is flattened to a 128-size vector through
+GlobalAveragePooling2D [28].
+The attention output is then reshaped to (1, 128) and input
+into an LSTM layer with 64 units, which strengthens feature
+aggregation with the ability to catch possible sequential
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:57:49 UTC from IEEE Xplore. Restrictions apply.
+
+dependencies despite the fixed image context [29]. The model
+finishes with a Dense output layer with sigmoid activation,
+producing a probability score (≥ 0.5 for real, < 0.5 for fake).
+Compiled with the Adam optimizer, binary cross-entropy loss,
+and accuracy as the metric, this architecture integrates CNN's
+spatial feature extraction, Attention's region-specific attention,
+and LSTM's sequence modelling to enhance forgery detection
+performance [30], [31].
+C. Model Training and Validation
+CALSigNet was trained on preprocessed training set
+(X_train, y_train) for 20 epochs with batch size 32 with
+validation on test set (X_test, y_test) to monitor generalization.
+Performance was measured using the evaluate method with test
+accuracy and loss, while Matplotlib plotted training and
+validation accuracy/loss curves to test convergence and
+overfitting [32]. To further analyse robustness, 5-fold crossvalidation was applied to the combined dataset (X_full, y_full,
+2149 samples) employing scikit-learn's KFold (n_splits=5,
+shuffle=True, random_state=42) [33]. For each fold, the split
+dataset contained roughly 1719 training and 430 validation
+samples; a new model instance that was trained for 10 epochs
+(batch size 32) on the training subset, and validation accuracy
+were monitored. Average accuracy and standard deviation
+across folds provided a reasonable performance estimate,
+demonstrating consistency under data variations [34].
+D. Comparison with Baseline CNN Models and Signature
+Prediction
+To measure the effectiveness of the new model, we
+benchmarked it against two baseline CNNs with the same
+training (X_train, y_train) and test (X_test, y_test) datasets
+[35]. The Basic CNN had two convolutional layers (32 and 64
+filters, 3x3 kernels, ReLU) with 2x2 max-pooling, followed by
+a Flatten layer, a 128-unit Dense layer with ReLU, and a
+sigmoid output, representing a straightforward classification
+strategy. The ResNet-like CNN comprised a starting 32-filter
+convolutional layer, a residual block (two 32-filter layers and a
+skip connection) [36], max-pooling, a 64-unit Dense layer, and
+a sigmoid output, using residual learning for better gradient
+flow. Both were trained over 10 epochs (batch size 32), and
+their test accuracies were compared against the new model's,
+highlighting the superiority of its Attention and LSTM units in
+signature verification [37].
+For actual application, we have built a function to
+preprocess a signature image (grayscale, 128x128, normalized)
+from a file path, resizes it to (1, 128, 128, 1), and passes it to
+the loaded CALSigNet model. It returns a probability score,
+labelling the signature as "Genuine" (≥ 0.5) or "Forged" (< 0.5)
+with confidence levels, plotted together with the image using
+Matplotlib.
+IV.
+
+RESULTS
+
+A. Data Preparation and Model Overview
+The dataset was preprocessed into train (1649 samples: 762
+forged, 887 genuine) and test (500 samples: 248 fake, 252 real)
+sets, with dimensions of (1649, 128, 128, 1) and (500, 128,
+128, 1) after grayscaling, resizing to 128x128, and
+normalization. These dimensions facilitate compatibility with
+
+deep learning models. CALSigNet model consisted of an input
+layer, three convolutional layers, a multi-head attention
+mechanism, an LSTM layer, and a dense output layer, with
+405,953 trainable parameters [38]. This lean architecture, with
+most parameters in the convolutional and attention layers, is
+appropriate for signature verification, striking a balance
+between complexity and efficiency.
+B. Model Training and Evaluation
+The CALSigNet model was trained over 20 epochs (batch
+size of 32) using 1649 training samples validated on 500 test
+samples with clear improvements in performance. Accuracy to
+training improved from 53.45% (Epoch 1) to 95.82% (Epoch
+20) with loss diminishing from 0.6911 to 0.1027, while
+increasing validation accuracy went from 50.40% to 99.60%
+by Epoch 19 (reaching loss at 0.0291) [39], slightly declining
+further to 0.0328 by Epoch 20. In Figure 3, accuracy was
+increased quickly, converging at Epoch 5 (training: 92.69%,
+validation: 97.80%) where curves plateau, with validation
+exceeding and flatlining above 98% post-Epoch 9; loss curves
+exhibited parallel training improvement but small validation
+fluctuation, with overfitting at Epoch 12 (validation accuracy
+falls to 94.00%, loss peaks to 0.2540) before reaching stability
+below 0.05. Test accuracy reached 99.60%, outperforming
+signature classification.[40].
+
+Fig. 3. Training and Validation Performance of CALSigNet Over 20 Epochs
+
+Robustness was also confirmed using 5-fold crossvalidation on the complete 2149-sample set (shape: 2149, 128,
+128, 1). Output yielded a mean accuracy of 95.44% with
+standard deviation 0.0086 and fold accuracies of between
+94.42% (Fold 2) and 96.74% (Fold 4), as summarized in Table
+1. Such stability across splits is a guarantee of the stability and
+generalizability of the model to signature verification.
+TABLE I. 5-FOLD CROSS-VALIDATION RESULTS FOR CALSIGNET MODEL.
+Fold
+1
+2
+3
+4
+5
+
+Accuracy
+0.9535
+0.9442
+0.9465
+0.9674
+0.9604
+
+C. Data Preparation and Model Overview
+The CALSigNet model was contrasted with two baseline
+CNNs—Basic CNN and ResNet-like CNN—on the test set,
+and results are presented in Table 2. The novel model
+performed a test accuracy of 99.60%, outperforming the Basic
+CNN (97.60%) and ResNet-like CNN (98.40%). This
+advantage comes from its attention mechanism, which focuses
+more intensely on important signature characteristics, and
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:57:49 UTC from IEEE Xplore. Restrictions apply.
+
+LSTM units, which learn sequential patterns, beating the less
+complex Basic CNN and the residual-improved ResNet-like
+CNN [41].
+Model
+Basic CNN
+ResNet-like CNN
+CALSigNet
+
+Test Accuracy
+0.9760
+0.9840
+0.9960
+
+TABLE II. MODEL COMPARISON ON TEST SET.
+
+In real-world testing, the trained model identified
+individual signatures to simulate forensic application.
+Signature 1 was labelled Forged with a confidence of 0.5398—
+the low score suggesting feature ambiguity—while Signature 2
+was confidently labelled Genuine at 0.9962, demonstrating
+high reliability as shown in Figure 4. These results validate the
+model's forensic utility, performing well in straightforward
+cases and reasonably well in more challenging ones.
+
+by building trust and complying with forensic requirements in
+web-based applications.
+VI. CONCLUSION
+This study proposed CALSigNet, a novel deep learning
+network incorporating CNNs, an Attention unit, and an LSTM
+cell with an outstanding 99.60% test accuracy for detecting
+forged signatures, superior to a Basic CNN (97.60%) and a
+ResNet-inspired CNN (98.40%) and having a solid 95.44%
+(±0.0086) mean accuracy under five-fold cross-validation.
+Signature predictions emphasized its forensic potential with
+confidences up to 0.9962, but lesser ones such as 0.5398 in
+some scenarios show room for improvement. Leverage of
+CNNs for spatial information, Attention for region-based
+attention, and LSTM for sequential patterns, CALSigNet's
+lightweight 1.55 MB architecture offers a scalable, robust
+solution for authenticating legal and financial documents, antifraud, and trust building. Future improvements may include
+data augmentation, ensemble methods, bigger datasets,
+temporal stroke data, or real-time systems, in addition to
+testing against proficient, random, and simulated forgery
+methods, testing performance on larger datasets over various
+real-world use cases for scalability, and integrating
+interpretability methods such as SHAP and LIME to increase
+model transparency and user confidence, further solidifying it
+in AI-based forensic document authentication.
+REFERENCES
+[1]
+
+Fig. 4. Signature prediction results for sample images using CALSigNet
+
+V.
+
+DISCUSSION
+
+The high accuracy of CALSigNet (99.60%) implies its use
+as a forensic tool, but compatibility with current signature
+verification systems used in legal and financial institutions can
+increase its impact in real-world applications. An API
+integration of CALSigNet system into DocuSign platforms and
+financial institution workflows would enhance forgery
+detection alongside human review mechanisms. To fulfill
+industry requirements the system requires both compatibility
+tests along with confidence level refinement at 0.5398 levels or
+higher for increased market acceptance.
+The feasibility of deploying CALSigNet must be evaluated
+through a complexity computational analysis. The 1.55 MB file
+size combined with training duration between 30 to 34 seconds
+per epoch shows efficient operation yet evaluation of standard
+hardware memory usage and inference time (between 0.431 to
+0.991 seconds) will clarify system scalability. To make the
+Attention mechanism practical for forensic applications
+forensic operators must optimize its resource usage.
+Web-based deployment of CALSigNet requires essential
+cybersecurity evaluations to prevent vulnerabilities which
+protect the system from threats. Security testing of data
+encryption together with access control systems and adversarial
+attack defenses would protect sensitive signature information
+
+R. Chauhan and D. Singh, “Maximizing Accuracy in AI-Driven
+Pattern Detection in Cardiac Care,” 2024, pp. 176–187. doi:
+10.1007/978-3-031-53827-8_17.
+[2] R. Chauhan, D. Gogna, and S. Avasthi, “Deep learning approach for
+the prediction of skin diseases,” in Machine Learning Models and
+Architectures for Biomedical Signal Processing, Elsevier, 2025, pp.
+301–318. doi: 10.1016/B978-0-443-22158-3.00012-0.
+[3] N. Galante, R. Cotroneo, D. Furci, G. Lodetti, and M. B. Casali,
+“Applications of artificial intelligence in forensic sciences: Current
+potential benefits, limitations and perspectives,” Int J Legal Med, vol.
+137, no. 2, pp. 445–458, Mar. 2023, doi: 10.1007/s00414-022-029285.
+[4] T. M. Ghazal et al., “E-Supply Chain Issues in Internet of Medical
+Things,” in 14th International Conference on Mathematics, Actuarial
+Science, Computer Science and Statistics, MACS 2022, 2022. doi:
+10.1109/MACS56771.2022.10023325.
+[5] M. M. Abualhaj et al., “A fine-tuning of decision tree classifier for
+ransomware detection based on memory data,” International Journal
+of Data and Network Science, vol. 8, no. 2, pp. 733–742, 2024, doi:
+10.5267/j.ijdns.2024.1.005.
+[6] “Forged Signatures: Detection, Legal Risks & Prevention.” Accessed:
+Mar. 12, 2025. [Online]. Available:
+https://www.certinal.com/blog/forged-signatures
+[7] “2022 ACFE Report on Occupational Fraud: 4 Key Takeaways.”
+Accessed: Mar. 12, 2025. [Online]. Available:
+https://www.lextegrity.com/resources/2022-acfe-report-takeaways
+[8] M. M. Abualhaj, M. O. Hiari, A. Alsaaidah, M. Al-Zyoud, and S. AlKhatib, “Spam Feature Selection Using Firefly Metaheuristic
+Algorithm,” Journal of Applied Data Sciences, vol. 5, no. 4, pp. 1692–
+1700, 2024, doi: 10.47738/jads.v5i4.336.
+[9] S. Nam, H. Park, C. Seo, and D. Choi, “Forged Signature Distinction
+Using Convolutional Neural Network for Feature Extraction,” Applied
+Sciences, vol. 8, no. 2, p. 153, Jan. 2018, doi: 10.3390/app8020153.
+[10] C. Dhasaratha et al., “Data privacy model using blockchain
+reinforcement federated learning approach for scalable internet of
+medical things,” CAAI Trans Intell Technol, 2024, doi:
+10.1049/cit2.12287.
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:57:49 UTC from IEEE Xplore. Restrictions apply.
+
+[11] M. M. Abualhaj, M. O. Hiari, A. Alsaaidah, and M. M. Al-Zyoud,
+“Comparative analysis of whale and Harris Hawks optimization for
+feature selection in intrusion detection,” Indonesian Journal of
+Electrical Engineering and Computer Science, vol. 37, no. 1, pp. 179–
+185, 2025, doi: 10.11591/ijeecs.v37.i1.pp179-185.
+[12] L. Abualigah et al., “Arithmetic optimization algorithm: a review and
+analysis,” in Metaheuristic Optimization Algorithms: Optimizers,
+Analysis, and Applications, 2024, pp. 73–87. doi: 10.1016/B978-0443-13925-3.00012-1.
+[13] A. Al Sharah, H. A. H. A. Owida, F. Alnaimat, and S. Abuowaida,
+“Application of machine learning in chemical engineering: outlook
+and perspectives,” IAES International Journal of Artificial
+Intelligence, vol. 13, no. 1, pp. 619–630, 2024, doi:
+10.11591/ijai.v13.i1.pp619-630.
+[14] L. Abualigah et al., “Crow search algorithm: a survey of novel
+optimizer and its recent applications,” in Metaheuristic Optimization
+Algorithms: Optimizers, Analysis, and Applications, 2024, pp. 167–
+176. doi: 10.1016/B978-0-443-13925-3.00004-2.
+[15] R. Chauhan, H. Kaur, and B. Alankar, “Air Quality Forecast using
+Convolutional Neural Network for Sustainable Development in Urban
+Environments,” Sustain Cities Soc, vol. 75, p. 103239, Dec. 2021, doi:
+10.1016/j.scs.2021.103239.
+[16] P. Renukadevi, S. John, and N. Shivani, “Forensic Science: AIPowered Image and Audio Analysis,” in 2024 5th International
+Conference on Smart Electronics and Communication (ICOSEC),
+IEEE, Sep. 2024, pp. 1519–1525. doi:
+10.1109/ICOSEC61587.2024.10722068.
+[17] F. Rehman, F. Mushtaq, and H. Zaman, “A Host-based Intrusion
+Detection: Using Signature-based and AI-driven Anomaly Detection
+for Enhanced Cybersecurity*,” in 2024 4th International Conference
+on Digital Futures and Transformative Technologies (ICoDT2), IEEE,
+Oct. 2024, pp. 1–7. doi: 10.1109/ICoDT262145.2024.10740248.
+[18] Viswanatha Reddy Allugunti, Chetankumar Mathuradas Sedani, and
+Santosh D. Parakh, “Signature Verification and Alert using AI,”
+NeuroQuantology, vol. 20, no. 16, pp. 2254–2261, Dec. 2022.
+[19] N. A. Al-Dmour, S. Kousar, A. Khan, A. Ihsan, T. Abbas, and A. Q.
+Saeed, “Enhancing Email Spam Detection Using Advanced AI
+Techniques,” 2024 International Conference on Decision Aid Sciences
+and Applications (DASA), pp. 1–6, Dec. 2024, doi:
+10.1109/DASA63652.2024.10836525.
+[20] A. Shukla, R. Tiwari, S. Raghuvanshi, S. Sharma, and S. Avinash,
+“Artificial Intelligence Approach for Signature Detection,” in
+Convergence of Cloud with AI for Big Data Analytics, Wiley, 2023,
+pp. 387–400. doi: 10.1002/9781119905233.ch16.
+[21] L. Abualigah et al., “Social spider optimization algorithm: survey and
+new applications,” in Metaheuristic Optimization Algorithms:
+Optimizers, Analysis, and Applications, 2024, pp. 15–31. doi:
+10.1016/B978-0-443-13925-3.00011-X.
+[22] M. A. Alhija, O. Al-Baik, A. Hussein, and H. Abdeljaber,
+“Optimizing blockchain for healthcare IoT: a practical guide to
+navigating scalability, privacy, and efficiency trade-offs,” Indonesian
+Journal of Electrical Engineering and Computer Science, vol. 35, no.
+3, pp. 1773–1785, 2024, doi: 10.11591/ijeecs.v35.i3.pp1773-1785.
+[23] “SigComp (Signature Verification).” Accessed: Mar. 12, 2025.
+[Online]. Available:
+https://www.kaggle.com/datasets/sinjinir1999/sigcomp-signatureverification
+[24] A. K. Budati, S. Islam, M. K. Hasan, N. Safie, N. Bahar, and T. M.
+Ghazal, “Optimized Visual Internet of Things for Video Streaming
+Enhancement in 5G Sensor Network Devices,” Sensors, vol. 23, no.
+11, 2023, doi: 10.3390/s23115072.
+[25] M. A. Aljubouri and M. Z. Iskandarani, “Comparative analysis of
+coding schemes for effective wireless communication,” Indonesian
+Journal of Electrical Engineering and Computer Science, vol. 34, no.
+2, pp. 926–940, 2024, doi: 10.11591/IJEECS.V34.I2.PP936-950.
+[26] E. Alkasasbeh, A. Alqadi, L. M. L. M. Alkilani, and A. M. A. A. M.
+A. Al-Tarawneh, “Analyzing the Psychological, Social and Cognitive
+Impact of Digital Learning in Different Educational Environments,”
+
+[27]
+
+[28]
+
+[29]
+
+[30]
+
+[31]
+
+[32]
+
+[33]
+
+[34]
+
+[35]
+
+[36]
+
+[37]
+
+[38]
+
+[39]
+
+[40]
+
+[41]
+
+2nd International Conference on Cyber Resilience, ICCR 2024, 2024,
+doi: 10.1109/ICCR61006.2024.10532967.
+M. Arshad, M. N. Brohi, T. R. Soomro, T. M. Ghazal, H. M. Alzoubi,
+and M. Alshurideh, NoSQL: Future of BigData Analytics
+Characteristics and Comparison with RDBMS, vol. 1056. 2023. doi:
+10.1007/978-3-031-12382-5_106.
+L. Almahadeen et al., “Enhancing Threat Detection in Financial Cyber
+Security Through Auto Encoder-MLP Hybrid Models,” International
+Journal of Advanced Computer Science and Applications, vol. 15, no.
+4, pp. 924–933, 2024, doi: 10.14569/IJACSA.2024.0150495.
+W. J. AlKasasbeh and A. T. Amawi, “Elevating Physical Education
+Teacher Through Technology Integration,” International Journal of
+Interactive Mobile Technologies, vol. 18, no. 2, pp. 16–26, 2024, doi:
+10.3991/ijim.v18i02.43669.
+O. Almomani, A. Alsaaidah, A. A. A. Shareha, A. Alzaqebah, and M.
+Almomani, “Performance Evaluation of Machine Learning Classifiers
+for Predicting Denial-of-Service Attack in Internet of Things,”
+International Journal of Advanced Computer Science and
+Applications, vol. 15, no. 1, pp. 263–271, 2024, doi:
+10.14569/IJACSA.2024.0150125.
+A. S. Albahri et al., “Prioritizing complex health levels beyond autism
+triage using fuzzy multi-criteria decision-making,” Complex and
+Intelligent Systems, vol. 10, no. 5, pp. 6159–6188, 2024, doi:
+10.1007/s40747-024-01432-0.
+M. A. Almaiah, L. M. Saqr, L. A. Al-Rawwash, L. A. Altellawi, R.
+Al-Ali, and O. Almomani, “Classification of Cybersecurity Threats,
+Vulnerabilities and Countermeasures in Database Systems,”
+Computers, Materials and Continua, vol. 81, no. 2, pp. 3189–3220,
+2024, doi: 10.32604/cmc.2024.057673.
+T. M. Ghazal, S. Munir, S. Abbas, A. Athar, H. Alrababah, and M. A.
+Khan, “Early Detection of Autism in Children Using Transfer
+Learning,” Intelligent Automation and Soft Computing, vol. 36, no. 1,
+pp. 11–22, 2023, doi: 10.32604/iasc.2023.030125.
+A. Arabiat and M. Altayeb, “Enhancing internet of things security:
+evaluating machine learning classifiers for attack prediction,”
+International Journal of Electrical and Computer Engineering, vol.
+14, no. 5, pp. 6036–6046, 2024, doi: 10.11591/ijece.v14i5.pp60366046.
+L. H. L. H. Baniata, S. Kang, M. A. M. A. Alsharaiah, and M. H.
+Baniata, “Advanced Deep Learning Model for Predicting the
+Academic Performances of Students in Educational Institutions,”
+Applied Sciences (Switzerland), vol. 14, no. 5, 2024, doi:
+10.3390/app14051963.
+A. Y. Areiqat, Navigating the Future: Innovative Approaches in
+Business, Technology, and Education, vol. 550. 2024. doi:
+10.1007/978-3-031-66218-8_6.
+J. I. Janjua, S. Kousar, A. Khan, A. Ihsan, T. Abbas, and A. Q. Saeed,
+“Enhancing Scalability in Reinforcement Learning for Open Spaces,”
+2024 International Conference on Decision Aid Sciences and
+Applications (DASA), pp. 1–8, Dec. 2024, doi:
+10.1109/DASA63652.2024.10836237.
+M. U. Nasir et al., “Kidney Cancer Prediction Empowered with
+Blockchain Security Using Transfer Learning,” Sensors, vol. 22, no.
+19, p. 7483, 2022, doi: 10.3390/s22197483.
+Y. Cheng et al., “Vehicular Fog Resource Allocation Approach for
+VANETs Based on Deep Adaptive Reinforcement Learning
+Combined with Heuristic Information,” IEEE Access, vol. 12, pp.
+139056–139075, 2024, doi: 10.1109/ACCESS.2024.3455168.
+A. H. H. Alamoodi et al., “Selection of electric bus models using 2tuple linguistic T-spherical fuzzy-based decision-making model,”
+Expert Syst Appl, vol. 249, 2024, doi: 10.1016/j.eswa.2024.123498.
+R. Alazaidah, H. A. H. A. Owida, N. Alshdaifat, A. Issa, S.
+Abuowaida, and N. Yousef, “A comprehensive analysis of eye
+diseases and medical data classification,” Telkomnika
+(Telecommunication Computing Electronics and Control), vol. 22, no.
+6, pp. 1422–1430, 2024, doi: 10.12928/TELKOMNIKA.v22i6.26058.
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:57:49 UTC from IEEE Xplore. Restrictions apply.
+
+

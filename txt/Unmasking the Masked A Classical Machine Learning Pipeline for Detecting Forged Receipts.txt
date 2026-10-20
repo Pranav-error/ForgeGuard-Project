@@ -1,0 +1,790 @@
+Proceedings of 2025 International Conference on NexGen Networks and Cybernetics (IC2NC)
+IEEE Xplore Part Number: CFP250AS-ART; ISBN: 979-8-3315-9484-8
+
+2025 International Conference on NexGen Networks and Cybernetics (IC2NC) | 979-8-3315-9484-8/25/$31.00 ©2025 IEEE | DOI: 10.1109/IC2NC67409.2025.11376086
+
+Unmasking the Masked: A Classical Machine
+Learning Pipeline for Detecting Forged Receipts
+Marita J Neerakan
+PG Scholar, Dept. Computer Science
+Christ University
+Bengaluru, Karnataka
+marita@mca.christuniversity.in
+
+Sudhakar T
+Assoc. Prof., Dept. Computer Science
+Christ University
+Bengaluru, Karnataka
+sudhakar.t@christuniversity.in
+
+Logeshwaran J
+Assoc. Prof., Dept. Computer Science
+Christ University
+Bengaluru, Karnataka
+logeshwaran.j@christuniversity.in
+
+Abstract—The abundance of digital and paper document
+forgery requires strong automated detection tools against
+financial fraud. This research provides a classical machine
+learning method for forged receipt detection using multimodal
+features from image and text modalities. The approach entailed
+designing a feature set to obtain textural and statistical
+attributes from receipt images via Local Binary Patterns (LBP)
+and Canny edge detection, along with structural features
+obtained from the associated text files. Another demanding issue
+in this area is the excessive class imbalance between genuine and
+forged documents. To overcome this issue, Synthetic Minority
+Over-sampling Technique (SMOTE) is used to create a
+balanced training dataset. The models are assessed using the
+macro F1-score, precision, recall, PR AUC and ROC AUC to
+address class imbalance. The enhanced detection of the minority
+class is achieved using SMOTE, while hyperparameter tuning
+leads to the improvements in performance. The final Tuned
+Support Vector Machine model achieves a macro F1-score of
+0.5429, and it has the highest recall on forged receipts,
+demonstrating that it detects more histories of tampered
+documents effectively. This research sets a good baseline for
+receipt forgery detection and emphasizes that class imbalance
+solving is a key towards creating a working system.
+
+the vast majority of the data and away from the limited number
+of rare instances they are meant to detect.
+
+Keywords—Document Forgery Detection, Local Binary
+Patterns, Machine Learning, Support Vector Machine (SVM)
+
+II. LITERATURE REVIEW
+
+I. INTRODUCTION
+The prevalence of digital imaging and advanced editing
+software has caused a tremendous boom in document
+falsification, which poses a very serious threat to companies
+and financial institutions. The most falsified documents by far
+are receipts, which are altered for expense report fraud,
+inflation of insurance claims, and tax fraud. The manual
+checking of such documents is time-consuming, costly, and
+prone to errors. This requires the creation of systems that can
+reliably and effectively discriminate between genuine and
+counterfeit receipts.
+Creating such a system, though, is fraught with several
+difficulties. Forgeries are sometimes subtle and multifaceted
+and may range from straightforward text manipulations to
+sophisticated ``Frankenstein'' documents produced by
+combining pieces from various sources. In addition, one of the
+main challenges in this space is the natural class imbalance
+of real-world data: forged documents simply do not exist
+nearly as often as legitimate ones. This data bias can severely
+skew machine learning algorithms toward patterns based on
+
+This work presents and assesses a traditional machine
+learning workflow for detecting receipt forgery, addressing
+these challenges directly. The solution is multimodal,
+designing a collection of discriminative features from both
+visual properties of the receipt image and structural properties
+of the textual content of the receipt. To mitigate the issue of
+class imbalance, the Synthetic Minority Over-sampling
+Technique (SMOTE) is used to generate a balanced training
+set. A number of machine learning classifiers have been
+compared to show that this hybrid approach provides a strong
+baseline for the task of forgery detection.
+The work is organized as follows: the Methodology
+section describes the steps of data preprocessing, feature
+engineering, and model training procedures. The Results
+section reports the performance of the models. The Discussion
+section explains the outcomes and limitations observed in the
+research. Finally, the Conclusion section summarizes the
+study and outlines how the limitations can be addressed in
+future work.
+
+Many researchers have tackled the issue of forgery
+detection in various ways, including through pattern-based
+analysis, deep learning and the classification of document
+features.
+Ahsan et al. recognized a major barrier to effective use of
+digital forgery detection systems as laboratory-to-practice
+differences based on differences in document formats and
+image quality [1]. Similarly, Roja et al. described the basic
+elements of digital image processing systems and
+demonstrates how pattern recognition drives technologies
+such as OCR and fingerprint identification—abilities fully
+transferable to scanned document forgery detection[2].
+Prachi et al. discussed the application of deep learning
+approaches, particularly convolutional autoencoders (CAE)
+and convolutional neural networks (CNN), to identify
+watermark patterns and other repeating structures [3]. The
+results demonstrate that deep models are precise but sensitive
+to input quality. Mohammed et al. also addressed this issue
+by highlighting the limitations of traditional image-based
+methods and spectroscopic methods for addressing forgery
+[4]. The authors proposed the use of Laser-Induced
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:59:52 UTC from IEEE Xplore. Restrictions apply.
+
+979-8-3315-9484-8/25/$31.00 ©2025 IEEE
+
+989
+
+Proceedings of 2025 International Conference on NexGen Networks and Cybernetics (IC2NC)
+IEEE Xplore Part Number: CFP250AS-ART; ISBN: 979-8-3315-9484-8
+
+Breakdown Spectroscopy (LIBS) for non-destructive
+verification, and emphasizes the use of physical documents
+long term for critical events.
+Pulkit et al. offered a systematic feature categorization of
+document security features—by type, inspection level, and
+security level—and examines the implementation in Indian
+identity documents [5]. The research emphasizes the
+significance of feature-based categorization in the fight
+against document fraud, which can inform pattern-based
+detection approaches.
+Chenfan et al. reviewed current approaches to natural
+image tampering and generalizes them to the document field,
+proposing the Document Tampering Detector (DTD), a tool
+that combines spatial pattern analysis for more sensitive
+detection of faint irregularities [6]. Although effective, the
+critique points to a lack of solidity in previous methods when
+applied across diverse document types.
+Jhankar et al. proposed a multi-modal system that
+combines visuals, text, and metadata of documents to
+improve the accuracy of forgery detection [7]. It notes that
+the one-feature systems are more prone to malicious attacks
+and format problems and suggests that deep architectures
+(such as ResNet-50) are better in complex modern types of
+documents.
+Joel et al. added seminal contributions to pattern
+recognition and deep learning [8]. Joel classifies the learning
+approaches—supervised, unsupervised, semi-supervised, and
+reinforcement learning—and discusses the nature and
+applications of different architectures of deep neural
+networks. These concepts are indispensable for
+comprehending how deep learning models can be utilized
+successfully in scanned document analysis and forgery
+detection.
+Pushpalata et al. and Xin et al. (2023) also added to this
+literature by concentrating on domain-specific datasets and
+enhancing training resilience, though those results are not
+investigated here in detail [9][10].
+Kilari et al. used CNN in the research to detect copy-move
+forgery in digitally modified identity documents[11]. By
+applying the CNN on the MICC-F2000 datasets, training
+accuracy of 98.33%, 100% precision, and an F-score of 98%
+was obtained. When applied to a self-created dataset,
+IDCCMFD-1000, the CNN reported a training accuracy of
+92% and a testing accuracy of 93.02%. These results
+demonstrate that the CNN model was easily transferable
+across different datasets.
+In another study, Aboudramane et al. presented Docpatch, an unsupervised method to detect forgeries in
+documents without the use of labeled training or testing data
+[12]. Doc-patch uses FAISS K-Nearest Neighbors (KNN) to
+compare embeddings to a memory bank of verified authentic
+documents, and documents are identified as forged if the
+anomaly scores exceed a defined threshold. Doc-patch
+outperforms GANomaly, a popular unsupervised baseline, by
+a significant margin.
+
+Naglaa et al. presented the model IMD-CNN, using
+unique spectral signatures of the inks to facilitate
+identification and detection of document forgeries [13]. This
+approach not only detects forged documents, but also
+determines the number of inks within the document, and
+detects forgeries by locating the regions that have been
+manipulated within a document. The results show that the
+model correctly identified forgeries with 99.91% accuracy
+for blue ink and 97.51% accuracy for black ink, surpassing
+previous work by 0.18% (blue ink) and 0.36% (black ink).
+Teerath et al. implemented another approach to overcome
+issues with the limited number of datasets available to
+researchers and the problems associated with annotation by
+developing a four-step algorithm for creating synthetic forged
+documents[14]. The authors employed a fill-in-the-blank
+approach, where data is filled into documents with various
+characteristics, characters are randomly altered on different
+occasions by misalignment of the document or the addition
+of background noise, augmentation was applied to augment
+the collection of the synthetic forged document, and the
+authors would retain the bounding box information for the
+annotations into a JSON file.
+A dataset was created by Beatriz et al. the same one
+utilized in this study, by conducting workshops where 19
+compatriots of varying ability in editing created and
+annotated forgeries, and experimentation of the dataset
+reported that traditional methods such as Bag-of-Words with
+Logistic Regression (F1: 17.78%) and SVM on raw pixels
+(F1: 13.33%) performed poorly [15]. In comparison,
+ChatGPT in a zero-shot condition was able to achieve greater
+recall but very low precision (F1: 28.39%). The best
+performance came from a CNN that was trained to detect
+JPEG compression artifacts, which attained around 78-79%
+precision.
+III. METHODOLOGY
+With the purpose of developing a strong classification
+model to differentiate forged receipts from authentic ones,
+traditional machine learning techniques were employed, with
+feature engineering from both image and text sources. The
+main steps consist of data preprocessing, multimodal feature
+extraction, handling major class imbalance, model training,
+and thorough evaluation of the models.
+A. Dataset Structure
+The dataset used in this study is the Find it again! dataset,
+obtained from Kaggle[16].
+The dataset contains receipt images in .png format and
+corresponding extracted text in .txt format, obtained using
+Optical Character Recognition (OCR). In addition, the
+dataset was divided into training, validation, and test sets,
+which are specified in the files train.txt, val.txt, and test.txt,
+respectively. This division ensures that the models do not
+carry forward any bias from the training data.
+B. Feature Engineering
+For the feature set, both visual and structural properties of
+the receipts were considered and extracted.
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:59:52 UTC from IEEE Xplore. Restrictions apply.
+
+979-8-3315-9484-8/25/$31.00 ©2025 IEEE
+
+990
+
+Proceedings of 2025 International Conference on NexGen Networks and Cybernetics (IC2NC)
+IEEE Xplore Part Number: CFP250AS-ART; ISBN: 979-8-3315-9484-8
+
+1) Image Feature Extraction:
+Visual evidence often serves as a primary forgery
+indicator. To extract such information, features were
+computed from the grayscale version of each receipt image
+resized to a standard 256 × 256 pixel size.
+•
+
+Texture Analysis: Local Binary Patterns (LBP) was
+used to examine the textural characteristics of the
+receipts. LBP defines image pixels by thresholding
+neighboring pixels and encoding results as binary
+values. A 10-bin histogram of the LBP result was
+calculated to produce a compact texture feature
+vector.
+
+•
+
+Statistical Features: Basic image statistics,
+including the mean and standard deviation of pixel
+intensities, were calculated to capture information
+about contrast and brightness.
+
+•
+
+Edge Density: The Canny edge detector was
+applied to each image to identify edges. Edge
+density, defined as the number of edge pixels
+divided by the total number of pixels, was used as a
+feature to detect irregular patterns or artificial lines
+introduced through tampering.
+
+2) Text Feature Extraction
+The layout and wording of the text on a receipt may also
+provide clues of tampering. The following text-based features
+were extracted:
+• Token Count: Total number of words.
+• Digit Count: Total number of numeric digits.
+• Average Token Length: Mean length of tokens.
+• Keyword Presence: Binary indicators of whether
+essential keywords such as “total” and “date” are
+present, which are fundamental to a valid receipt.
+These image and text features were concatenated to form
+a single feature vector per sample.
+C. Managing Class Imbalance via SMOTE
+Initial exploration revealed a significant class imbalance
+between genuine and forged receipts, with the authentic class
+dominating. Training directly on such imbalanced data risks
+producing models biased toward the majority class. To
+address this, the Synthetic Minority Over-sampling
+Technique (SMOTE) was applied.
+SMOTE creates synthetic samples of the minority class
+by randomly selecting an instance, finding k nearest
+neighbors, and generating a synthetic sample along the line
+segment joining the instance and one neighbor. This
+augmentation was applied only to the training set, ensuring
+no information leakage into validation or test sets.
+D. Training Models and Tuning Hyperparameters
+Two approaches were taken for training:
+1. Training on original data with class weight
+adjustments.
+2. Training on the SMOTE-balanced dataset.
+
+The four algorithms evaluated were: Logistic Regression
+(a basic linear classifier), Random Forest (an ensemble of
+decision trees), Support Vector Machine (SVM), which finds
+a separating hyperplane, and XGBoost, a gradient-boosting
+framework.
+For raw-data models, class weighting parameters such as
+class_weight='balanced' (Logistic Regression, Random
+Forest, SVM) and scale_pos_weight (XGBoost) were used to
+mitigate class imbalance. For SMOTE-balanced models, a
+StandardScaler was applied to normalize training data, which
+was later used to transform validation and test sets.
+After preliminary evaluation, the models showing the best
+performance (Random Forest, XGBoost, and SVM) from the
+SMOTE pipeline were re-evaluated for hyperparameter
+optimization. Randomized Search Cross-Validation
+(RandomizedSearchCV) was employed, optimizing for the
+macro F1-score to achieve balanced performance across both
+classes.
+E. Evaluation Metrics
+Model performance was assessed using a comprehensive
+set of metrics suitable for imbalanced classification:
+•
+
+Accuracy:
+Accuracy =
+
+𝑇𝑃 + 𝑇𝑁
+𝑇𝑃 + 𝑇𝑁 + 𝐹𝑃 + 𝐹𝑁
+
+where
+TP- True Positive
+TN- True Negative
+FP- False Positive
+FN- False Negative
+•
+•
+•
+
+Precision (Positive Predictive Value):
+𝑇𝑃
+Precision =
+𝑇𝑃 + 𝐹𝑃
+Recall (Sensitivity):
+𝑇𝑃
+Recall =
+𝑇𝑃 + 𝐹𝑁
+F1-Score: Harmonic mean of Precision and
+Recall.
+Precision ⋅ Recall
+𝐹1 = 2 ⋅
+Precision + Recall
+The macro F1-score is the unweighted mean of
+F1-scores across classes:
+𝐶
+
+1
+𝐹1𝑚𝑎𝑐𝑟𝑜 = ∑ 𝐹1𝑖
+𝐶
+𝑖=1
+
+•
+
+where C- Number of classes.
+ROC AUC: Area under Receiver Operating
+Characteristic curve, where ROC plots True
+Positive Rate (TPR) vs. False Positive Rate
+(FPR)
+𝑇𝑃
+TPR =
+𝑇𝑃 + 𝐹𝑁
+FPR =
+
+𝐹𝑃
+𝐹𝑃 + 𝑇𝑁
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:59:52 UTC from IEEE Xplore. Restrictions apply.
+
+979-8-3315-9484-8/25/$31.00 ©2025 IEEE
+
+991
+
+Proceedings of 2025 International Conference on NexGen Networks and Cybernetics (IC2NC)
+IEEE Xplore Part Number: CFP250AS-ART; ISBN: 979-8-3315-9484-8
+
+•
+
+•
+
+PR AUC: Area under the Precision–Recall
+curve, which plots Precision vs. Recall and is
+particularly informative for imbalanced datasets
+as it emphasizes performance on the minority
+(forged) class.
+Precision, Recall, and F1-Score: Computed for
+both ``Authentic'' and ``Forged'' classes. The
+macro F1-score was chosen as the primary
+comparison metric, as it balances precision and
+recall while mitigating the effect of imbalance.
+
+Finally, models were compared in a consolidated table,
+and the highest-performing model was selected based on the
+macro F1-score on the held-out test set.
+The overall pipeline of the proposed methodology is
+illustrated in Fig 1.
+
+IV. RESULTS
+In this section, the empirical results of the experiments are
+presented. The performance of four machine learning models
+under three different conditions have been compared: (1)
+training on original imbalanced data, (2) training on SMOTEbalanced data, and (3) training the best-performing models on
+SMOTE-balanced data with hyperparameter optimization.
+The macro F1-score is used as the main metric for model
+comparison, as the dataset is highly imbalanced.
+The first evaluation considered the performance of models
+trained on the original imbalanced dataset. Class weighting
+techniques were employed to handle the imbalance.
+The results in Table 1 show that despite relatively high
+accuracy, the models were unable to detect the minority class
+(``Forged''). For example, the Random Forest model achieved
+an accuracy of 83.49% but completely failed to identify forged
+receipts (recall = 0.00). Logistic Regression and XGBoost also
+performed poorly in terms of recall and F1-score for the
+forged class, highlighting the limitations of class weighting
+alone.
+To improve detection of the minority class, models were
+retrained on data balanced using SMOTE.
+As shown in Table 1, nearly all models trained with
+SMOTE exhibited improved recall and F1-scores for the
+forged class compared to those trained without SMOTE. For
+example, the Random Forest model's F1-score improved from
+0.4550 to 0.5111, and it was able to correctly classify some
+forged documents (recall = 0.1429). Similarly, the SVM
+model improved from an F1-score of 0.4003 to 0.5035. These
+results demonstrate the effectiveness of SMOTE in enhancing
+classifier balance.
+The three best-performing models from the SMOTE
+experiments—Random Forest, XGBoost, and SVM—were
+further tuned using Randomized Search Cross-Validation.
+Among these, the tuned SVM showed the most notable
+improvements, with its F1-score increasing from 0.5035 to
+0.5429 and PR AUC rising from 0.1835 to 0.2464. Based on
+these results, the tuned SVM trained on SMOTE-balanced
+data was selected as the best-performing model. It achieved
+the highest macro F1-score (0.5429), the highest PR AUC
+(0.2464), and the highest recall for the “Forged'” class
+(0.3143), indicating the most balanced and effective
+performance across all models.
+The quantitative results are further supported by the
+Precision-Recall (PR) curves in Figure 2. Models trained with
+SMOTE (right plot) show superior curves compared to those
+trained without SMOTE (left plot). The curve for the tuned
+SVM (green line, AUC = 0.2464) is the most prominent,
+visually confirming its superiority for this classification task.
+
+V. DISCUSSION
+
+Figure 1. Proposed methodology workflow
+
+A. Summary of Key Findings
+The findings suggest that a classical machine learning
+framework, enhanced by multimodal feature engineering and
+effective class balancing techniques, can be useful for receipt
+forgery detection. This section interprets the key findings,
+highlights limitations, and proposes directions for future
+work.
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:59:52 UTC from IEEE Xplore. Restrictions apply.
+
+979-8-3315-9484-8/25/$31.00 ©2025 IEEE
+
+992
+
+Proceedings of 2025 International Conference on NexGen Networks and Cybernetics (IC2NC)
+IEEE Xplore Part Number: CFP250AS-ART; ISBN: 979-8-3315-9484-8
+
+Table 1. Comprehensive Model Comparison on the Test Set
+Model
+
+SMOTE
+
+Accuracy
+
+F1-Score
+
+PR AUC
+
+ROC AUC
+0.4842
+
+Precision
+(Forged)
+0.1333
+
+Recall
+(Forged)
+0.4000
+
+Logistic
+Regression
+Random Forest
+SVM
+XGBoost
+Logistic
+Regression
+Random Forest
+SVM
+XGBoost
+Random Forest
+(Tuned)
+XGBoost
+(Tuned)
+SVM (Tuned)
+
+Without
+
+0.4862
+
+0.4108
+
+0.1436
+
+Without
+Without
+Without
+With
+
+0.8349
+0.4358
+0.7936
+0.4817
+
+0.4550
+0.4003
+0.5319
+0.4201
+
+0.1663
+0.1393
+0.1635
+0.1401
+
+0.5006
+0.4554
+0.4507
+0.4681
+
+0.0000
+0.1615
+0.2500
+0.1518
+
+0.0000
+0.6000
+0.1429
+0.4857
+
+With
+With
+With
+With
+
+0.7615
+0.6101
+0.7431
+0.7661
+
+0.5111
+0.5035
+0.5121
+0.5269
+
+0.1845
+0.1835
+0.1884
+0.1820
+
+0.5727
+0.5909
+0.5803
+0.5702
+
+0.1852
+0.1951
+0.1818
+0.2143
+
+0.1429
+0.4571
+0.1714
+0.1714
+
+With
+
+0.7339
+
+0.5176
+
+0.1995
+
+0.6023
+
+0.1892
+
+0.2000
+
+With
+
+0.7156
+
+0.5429
+
+0.2464
+
+0.6061
+
+0.2245
+
+0.3143
+
+Figure 2(a,b). Precision-Recall curves comparing models trained without SMOTE (left) and with SMOTE (right)
+
+The experiments yielded several important insights,
+particularly regarding the necessity of addressing class
+imbalance.
+The baseline models performed poorly despite the use of
+class weighting. For instance, the Random Forest classifier
+achieved an overall accuracy of 83.49%, but its recall for the
+“Forged” class was zero. Thus, it provided no value for the
+primary task of detecting forgeries. This result exemplifies
+one of the pitfalls of classification on imbalanced datasets:
+accuracy can be misleading when one class dominates the
+distribution.
+On the positive side, applying SMOTE improved the
+performance of all models, particularly in terms of F1-score
+
+and PR AUC, which are more appropriate measures for
+imbalanced problems. By generating synthetic minority
+samples, SMOTE enabled the models to better capture the
+distinctive characteristics of forged receipts instead of
+defaulting to the ``Authentic'' class. This demonstrates that
+balanced training data is essential for forgery detection, and
+that class weighting alone is insufficient.
+The multimodal feature set proved effective, highlighting
+the value of incorporating both visual and textual features.
+Visual features such as LBP and edge density capture
+artifacts of tampering and irregular textures, while textual
+features such as token counts and keyword presence reveal
+logical inconsistencies introduced during electronic edits.
+The combination of these features created a richer
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:59:52 UTC from IEEE Xplore. Restrictions apply.
+
+979-8-3315-9484-8/25/$31.00 ©2025 IEEE
+
+993
+
+Proceedings of 2025 International Conference on NexGen Networks and Cybernetics (IC2NC)
+IEEE Xplore Part Number: CFP250AS-ART; ISBN: 979-8-3315-9484-8
+
+representation of receipts, making forgery detection more
+robust.
+Finally, the tuned SVM emerged as the best-performing
+model. This suggests that SVMs are particularly well-suited
+for this task due to their ability to find optimal non-linear
+decision boundaries in the engineered feature space.
+Although ensemble models like Random Forest and
+XGBoost are powerful, they did not capture the subtle
+differences between genuine and forged receipts as
+effectively as the tuned SVM.
+B. Limitations of the Study
+While the approach was successful, several limitations
+remain. The methodology depends on manually engineered
+features. This approach may be less powerful than end-to-end
+deep learning models (e.g., CNNs), which can learn complex
+representations directly from raw data.
+The accuracy of text-based features depends on the
+quality of the OCR process. Errors or noise in OCR output
+can significantly reduce detection performance in real-world
+settings.
+The feature set, while effective, remains relatively simple.
+Advanced techniques such as semantic NLP analysis, EXIF
+metadata inspection, or Error Level Analysis (ELA) were not
+explored.
+The model was trained and tested on a single dataset. Its
+performance may not generalize to receipts from other
+domains, languages, currencies, or forgery techniques. Realworld forgeries may differ significantly from those in the
+dataset.
+VI. CONCLUSION AND FUTURE WORK
+This study highlights the possibility of using a standard
+machine learning pipeline for detecting forged receipts using
+multimodal features from both the images and text. An
+important finding was that addressing class imbalance is
+crucial, where class weighting was used. On the other hand,
+using SMOTE helped improve minority class representation.
+The Support Vector Machine trained with hyperparameters
+achieved the best performance of all models with a macro F1score of 0.5429, which is an informative benchmark for
+future work.
+For future work, there are several directions to further
+expand this line of work: build end-to-end deep learning
+architectures that integrate convolutional neural networks
+(CNNs) for extracting features from images along with
+transformer-based models for text, use OCR integrated with
+forgery detection to allow for noise present at the character
+level, develop a dataset composed of various formats and
+types of forgery, and study forensic features like Error Level
+Analysis and font consistency. These avenues could generate
+higher quality representations and more robust generalizable
+models for detection of document forgery.
+
+REFERENCES
+[1]
+
+A. Waqar, N. Bheel, and B. A. Tayeh, “Modeling the effect of implementation of artificial intelligence powered image analysis and pattern
+recognition algorithms in concrete industry,” Developments in the Built
+Environment, vol. 17, p. 100349, 2024.
+[2] L. Dalavai, S. Javvadi, K. B. Sk, S. S. Vellela, N. Vullam et al., “Computerised image processing and pattern recognition by using machine
+algorithms,” 2023.
+[3] P. Tyagi, K. Agarwal, G. Jaiswal, A. Sharma, and R. Rani, “Forged
+document detection and writer identification through unsupervised
+deep learning approach,” Multimedia Tools and Applications, vol. 83,
+no. 6, pp. 18 459–18 478, 2024.
+[4] M. A. A. Al-Ameri, B. Ciylan, and B. Mahmood, “Spectral data
+analysis for forgery detection in official documents: A network-based
+approach,” Electronics, vol. 11, no. 23, p. 4036, 2022.
+[5] P. Garg, S. Chhabra, G. Gupta, V. Srivastava, and G. Gupta, “Analysis
+of document security features,” in IFIP International Conference on
+Digital Forensics. Springer, 2023, pp. 143–159.
+[6] C. Qu, C. Liu, Y. Liu, X. Chen, D. Peng, F. Guo, and L. Jin, “Towards
+robust tampered text detection in document image: New dataset and
+new solution,” in Proceedings of the IEEE/CVF Conference on
+Computer Vision and Pattern Recognition, 2023, pp. 5937–5946.
+[7] J. Moolchandani, R. Pakshwa, and K. Singh, “Machine learning for
+iden- tifying and validating document authenticity,” in 2024 15th
+International Conference on Computing Communication and
+Networking Technologies (ICCCNT). IEEE, 2024, pp. 1–9.
+[8] J. Serey, M. Alfaro, G. Fuertes, M. Vargas, C. Duran, R. Ternero,
+R. Rivera, and J. Sabattin, “Pattern recognition and deep learning
+technologies, enablers of industry 4.0, and their role in engineering
+research,” Symmetry, vol. 15, no. 2, p. 535, 2023.
+[9] P. Gonasagi, S. S. Rumma, and M. Hangarge, “Text-independent
+source identification of printed documents using texture features and
+cnn model,” in First International Conference on Advances in
+Computer Vision and Artificial Intelligence Technologies (ACVAIT
+2022). Atlantis Press, 2023, pp. 250–261.
+[10] X. Liao, S. Chen, J. Chen, T. Wang, and X. Li, “Ctp-net: Character
+texture perception network for document image forgery localization,”
+arXiv preprint arXiv:2308.02158, 2023.
+[11] K. J. Devi, J. Dinesh, K. L. Neha, K. V. R. Teja, M. Jayashree, and J.
+R. Devi, “A novel approach to enhancing identity document
+authentication with copy-move forgery detection using cnn,” in 2024
+4th Interdisciplinary Conference on Electrics and Computer
+(INTCEC). IEEE, 2024.
+[12] A. Diarra, T. F. Bissyande, and P. Poda, “Doc-patch: An unsupervised
+approach for documents forgery detection,” in 2024 7th International
+Conference on Algorithms, Computing and Artificial Intelligence
+(ACAI). IEEE, 2024.
+[13] N. F. EL Abady, H. H. Zayed, and M. Taha, “An efficient technique
+for detecting document forgery in hyperspectral document images,”
+Alexandria Engineering Journal, vol. 85, pp. 207–217, 2023.
+[14] T. Kumar, M. Turab, S. Talpur, R. Brennan, and M. Bendechache,
+“Forged character detection datasets: Passports, driving licences and
+visa stickers,” International Journal of Artificial Intelligence and
+Applications (IJAIA), vol. 13, no. 2, March 2022.
+[15] B. Mart´ınez Torn´es, T. Taburet, E. Boros, K. Rouis, A. Doucet, P.
+Gomez-Kr¨amer, N. Sidere, and V. Poulain d’Andecy, “Receipt dataset
+for document forgery detection,” in Document Analysis and
+Recognition– ICDAR 2023, ser. Lecture Notes in Computer Science,
+vol. 14189. Springer Nature Switzerland, 2023, pp. 454–469.
+[16] B. M. Torn´es, T. Taburet, E. Boros, K. Rouis, P. Gomez-Kr¨amer, N.
+Sidere, A. Doucet, and V. P. d’Andecy, “Find it again! dataset,” 2025.
+[Online]. Available: https://www.kaggle.com/dsv/11192869
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:59:52 UTC from IEEE Xplore. Restrictions apply.
+
+979-8-3315-9484-8/25/$31.00 ©2025 IEEE
+
+994
+
+

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>System Design Document</title>
+<link href="https://fonts.googleapis.com/css2?family=Carlito:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  @page { size: letter; margin: 1in 1in 1in 1in; }
+  body { font-family: 'Carlito', 'Calibri', Arial, sans-serif; font-size: 11pt; line-height: 1.38; color: #000; background: #fff; margin: 0; }
+  h1 { font-size: 15pt; font-weight: 700; margin: 0 0 8pt; }
+  h2 { font-size: 13pt; font-weight: 700; margin: 16pt 0 6pt; page-break-after: avoid; }
+  h3 { font-size: 11.5pt; font-weight: 700; margin: 12pt 0 4pt; page-break-after: avoid; }
+  p { margin: 0 0 8pt; text-align: left; }
+  .sub { margin-bottom: 10pt; }
+  table { border-collapse: collapse; width: 100%; margin: 4pt 0 14pt; }
+  td { border: 0.75pt solid #000; padding: 3pt 5pt; vertical-align: top; width: 50%; }
+  ul { margin: 0 0 8pt; padding-left: 28pt; }
+  li { margin-bottom: 3pt; }
+  pre.diagram { border: 0.75pt solid #000; padding: 8pt 10pt; font-family: 'Courier New', monospace; font-size: 9pt; line-height: 1.25; white-space: pre; overflow-x: auto; margin: 6pt 0 14pt; page-break-inside: avoid; }
+  table.schema td { width: auto; font-size: 10pt; }
+  table.schema td:first-child { font-weight: 700; width: 18%; }
+  table.map td { width: auto; }
+  code { font-family: 'Courier New', monospace; font-size: 10pt; }
+</style>
+</head>
+<body>
+
+<h1>SYSTEM DESIGN DOCUMENT</h1>
+<p class="sub"><b>REVA Internship Opportunities (RIO)</b> | School of Computer Science and Engineering, REVA University, Bengaluru</p>
+
+<table>
+<tr><td>Particulars</td><td>Details</td></tr>
+<tr><td>Task</td><td>Task 3 (SL 3), Project Track: System Design of the Module</td></tr>
+<tr><td>Name of Student</td><td>{{NAME}}</td></tr>
+<tr><td>University Seat Number (USN)</td><td>{{USN}}</td></tr>
+<tr><td>Project Title</td><td>{{TITLE}}</td></tr>
+<tr><td>Track</td><td>{{TRACK}}</td></tr>
+<tr><td>Centre</td><td>{{CENTRE}}</td></tr>
+<tr><td>Faculty Guide</td><td>{{GUIDE}}</td></tr>
+<tr><td>Date of Submission</td><td>{{DATE}}</td></tr>
+</table>
+
+<h2>1. Introduction</h2>
+<p><b>1.1 Purpose.</b> This document designs {{SHORT}} from the requirements fixed in the Literature Survey and Requirement Analysis Report. Every component below exists to satisfy one or more functional requirements (FR-U, FR-S, FR-D, FR-A, FR-P) or non-functional requirements (NFR-1 to NFR-10) from that report, and the identifiers are carried over unchanged so the two documents trace against each other.</p>
+<p><b>1.2 Design goals.</b> Three decisions shape the whole design, each a direct response to a literature gap: (a) no single end-to-end classifier &mdash; signature, tamper and OCR evidence are produced by independent services and combined only at a fusion stage (Gap 5, FR-D5); (b) every detector sits behind one fixed interface (image/crop in, score and evidence out) so a model can be swapped without touching the orchestrator or the other detectors (Gap 8, NFR-7); (c) every stored verification is explainable and auditable, not just a label (Gap 6 and Gap 9, FR-D6, FR-A3, NFR-8).</p>
+
+<h2>2. Architecture Overview</h2>
+<p>{{SHORT}} is a single backend service exposed through one REST API (FR-P1), fronted by a web client, with four detector workers and a fusion stage orchestrated per request. The assigned module, Document Tamper Detection and Localisation, is one of the four workers.</p>
+
+<pre class="diagram">
+                              +-------------------+
+                              |     Web Client     |  (FR-U1..U4)
+                              +---------+---------+
+                                        | HTTPS (JSON + file upload)
+                                        v
+                              +-------------------+
+                              |     API Gateway    |  auth, rate limit, RBAC (NFR-9)
+                              +---------+---------+
+                                        v
+                              +-------------------+
+                              |   Verification      |  FR-P1 - single entry point
+                              |   Orchestrator      |  for every client
+                              +--+------+------+---+
+                                 |      |      |
+             +-------------------+   +--+--+   +-------------------+
+             v                       v     v                       v
+   +-------------------+   +----------------+   +-------------------+   +-------------------+
+   |  Signature Verif.  |   |  Tamper        |   |  OCR / Field      |   |  Fusion & Scoring  |
+   |  Service           |   |  Localisation   |-->|  Validation       |-->|  Service            |
+   |  (FR-S1..S3)       |-->|  (FR-D1,D2)     |   |  (FR-D3,D4)       |   |  (FR-D5,D6)         |
+   +--------+-----------+   +---+--------+----+   +---------+---------+   +----------+----------+
+            |                   |        |                  |                        |
+            | crop + ref        | SRM/ELA| heatmap          | fields/arith           | score, label,
+            | compare            | maps   | + tamper sub-   | sub-score              | heatmap, reasons
+            v                   v        v score            v                        v
+   +---------------------------------------------------------------------------------------------+
+   |                              Shared Storage                                                   |
+   |  Object store: uploaded docs, crops, heatmaps (encrypted, NFR-3)                               |
+   |  Postgres: users, signatures, documents, verifications, audit_log (NFR-8), feedback (FR-A2)    |
+   +---------------------------------------------------------------------------------------------+
+                                        ^
+                                        |
+                              +-------------------+
+                              |   Admin Console    |  FR-A1..A3
+                              +-------------------+
+</pre>
+
+<p><b>2.1 Why this shape.</b> The orchestrator calls the four workers in the fixed order shown (signature and tamper run independently, OCR can run in parallel with either, fusion runs last), because FR-D5 requires all three evidence streams before a score is produced. Each worker is a separate process behind the same request/response contract, so NFR-7 is met by construction: replacing the tamper localiser with a newer model only changes that one box.</p>
+
+<h2>3. Module Design</h2>
+
+<h3>3.1 Signature Verification Service (FR-S1, FR-S2, FR-S3, NFR-6)</h3>
+<p>Input: the full page image and the claimed signer's ID. Steps: (1) detect the signature region (object detector, following paper [13]); (2) clean the crop &mdash; remove ruled lines, stamps and background (FR-S2); (3) embed the crop and the signer's one-to-five stored references with a writer-independent Siamese/metric-learning encoder (papers [3], [6], [12]) and threshold the distance. Output: a similarity score in [0, 1], a genuine/forged decision, and the cropped region's coordinates. No retraining is needed to add a new signer (NFR-6) &mdash; only new reference embeddings are stored.</p>
+
+<h3>3.2 Document Tamper Detection and Localisation (assigned module &mdash; FR-D1, FR-D2, FR-D6, NFR-2, NFR-10)</h3>
+<p>Input: the deskewed, resized, normalised page (FR-D1). Two streams run in parallel and are fused in an encoder-decoder, following SRM-Net (paper [49]): a fixed Spatial Rich Model (SRM) stream that captures noise-residual artefacts invisible to the eye, and a semantic RGB stream (ResNet/U-Net style) that reads layout and content. ELA is computed as one supporting channel only, not the sole signal (Gap 4). Output: a pixel-level tamper mask and heatmap, the largest suspicious regions with coordinates (FR-D6), and a 0&ndash;100 tamper sub-score passed to fusion. Trained with augmentation for rotation, scaling, noise, blur, recompression and print-scan (NFR-10); sized to run on one consumer GPU or CPU within the per-page time budget (NFR-2).</p>
+
+<h3>3.3 OCR / Field Validation Service (FR-D3, FR-D4)</h3>
+<p>Input: the page image and the declared document type. Steps: (1) OCR extraction (consensus across engines for financial documents, following FORENSIQ, paper [39]); (2) regex/format checks on names, dates and ID numbers (FR-D3); (3) for financial documents, an arithmetic gate checking total = net + tax (FR-D4, paper [39]). Output: per-field pass/fail flags and an OCR sub-score.</p>
+
+<h3>3.4 Fusion &amp; Scoring Service (FR-D5, FR-D6)</h3>
+<p>Input: the three sub-scores (signature similarity, tamper score, OCR/field score) and their supporting evidence. A weighted rule (not a black-box classifier, Gap 5) combines them into one authenticity score 0&ndash;100 and a label: Genuine (&ge; 80), Suspicious (40&ndash;79) or Forged (&lt; 40) &mdash; thresholds configurable without a redeploy. Output: the final score, label, the tamper heatmap, per-check sub-scores and a templated plain-language reason (FR-D6, NFR-4), e.g. "Flagged Suspicious: signature similarity 0.41 (below 0.6 threshold); tamper region detected near the date field."</p>
+
+<h3>3.5 Admin &amp; Audit (FR-A1, FR-A2, FR-A3, NFR-8, NFR-9)</h3>
+<p>Separate role (NFR-9) that can review documents labelled Suspicious, record a final human decision (stored as labelled feedback for retraining, FR-A2), and view analytics over the append-only audit log (FR-A3). Every verification request and every admin decision is written once to <code>audit_log</code> and never updated in place (NFR-8).</p>
+
+<h2>4. Data Design</h2>
+<p>Relational store (Postgres) for structured records; object storage for files, referenced by key. Simplified schema:</p>
+
+<table class="schema">
+<tr><td>users</td><td>id, email, password_hash, role (verifier | admin), created_at</td></tr>
+<tr><td>signatures</td><td>id, user_id (signer), image_key, embedding, created_at &mdash; 1 to 5 rows per signer (FR-U4)</td></tr>
+<tr><td>documents</td><td>id, uploaded_by, doc_type, file_key, sha256_hash (FR-P2), uploaded_at</td></tr>
+<tr><td>verifications</td><td>id, document_id, signature_sub_score, tamper_sub_score, ocr_sub_score, final_score, label, heatmap_key, reason_text, created_at</td></tr>
+<tr><td>audit_log</td><td>id, actor_id, action, verification_id, detail_json, created_at &mdash; append-only (NFR-8)</td></tr>
+<tr><td>feedback</td><td>id, verification_id, admin_id, final_decision, created_at &mdash; used for retraining (FR-A2)</td></tr>
+</table>
+
+<h2>5. API Design (FR-P1)</h2>
+<p>One REST API serves the web client today and any future client tomorrow:</p>
+<ul>
+<li><code>POST /auth/register</code>, <code>POST /auth/login</code> &mdash; FR-U1</li>
+<li><code>POST /signatures</code> (signer_id, image) &mdash; register a reference signature, FR-U4</li>
+<li><code>POST /documents</code> (file, doc_type) &rarr; <code>202 {document_id}</code> &mdash; upload, FR-U2</li>
+<li><code>GET /documents/{id}/verification</code> &rarr; score, label, heatmap URL, sub-scores, reason &mdash; FR-U3, FR-D5, FR-D6</li>
+<li><code>GET /documents/{id}/report.pdf</code> &mdash; downloadable report, FR-U3</li>
+<li><code>GET /verifications?user_id=</code> &mdash; history, FR-U3</li>
+<li><code>POST /admin/verifications/{id}/decision</code> &mdash; FR-A2 (admin role only, NFR-9)</li>
+<li><code>GET /admin/audit-log</code>, <code>GET /admin/analytics</code> &mdash; FR-A3</li>
+</ul>
+<p>Upload returns immediately with a document ID (FR-D1&ndash;D5 run asynchronously within the NFR-1 budget); the client polls or receives a webhook/SSE push when the verification completes.</p>
+
+<h2>6. Verification Sequence (per upload)</h2>
+<ol>
+<li>Client calls <code>POST /documents</code>; gateway checks auth/role and forwards to the orchestrator.</li>
+<li>Orchestrator stores the file, computes its SHA-256 (FR-P2), and pre-processes it: deskew, resize, normalise, SRM + ELA maps (FR-D1).</li>
+<li>Signature service and tamper localiser run (in parallel, since neither depends on the other); OCR/field service runs concurrently with both.</li>
+<li>Each service returns its sub-score and evidence to the orchestrator.</li>
+<li>Fusion service combines the three sub-scores into the final score, label and reason (FR-D5, FR-D6).</li>
+<li>Orchestrator writes the <code>verifications</code> row and an <code>audit_log</code> entry (NFR-8), then notifies the client.</li>
+<li>If the label is Suspicious, the document additionally appears in the admin review queue (FR-A2).</li>
+</ol>
+
+<h2>7. Non-Functional Design Decisions</h2>
+<table class="map">
+<tr><td><b>NFR</b></td><td><b>Design decision</b></td></tr>
+<tr><td>NFR-1 (&lt;10 s/page)</td><td>Signature, tamper and OCR run concurrently, not in sequence; each model is sized to finish its share of the budget.</td></tr>
+<tr><td>NFR-2 (consumer GPU/CPU)</td><td>Tamper localiser uses ResNet-18-scale backbones, not large transformers; quantised inference path for CPU-only deployment.</td></tr>
+<tr><td>NFR-3 (encryption, retention)</td><td>Object store server-side encryption; TLS in transit; scheduled job purges files past the configured retention window, keeping only hashes and scores.</td></tr>
+<tr><td>NFR-4 (explainable)</td><td>Fusion output always includes the heatmap, the three sub-scores and a templated reason string &mdash; never a bare label.</td></tr>
+<tr><td>NFR-5 (proper evaluation)</td><td>Each service reports precision/recall/F1/AUC on held-out splits in its own eval harness; class weighting applied where training data is imbalanced.</td></tr>
+<tr><td>NFR-6 (few-shot signer)</td><td>Metric-learning embedding model is frozen at inference; adding a signer is an insert into <code>signatures</code>, not a training job.</td></tr>
+<tr><td>NFR-7 (replaceable detectors)</td><td>Every worker implements the same contract: image/crop in, {sub_score, evidence} out, over an internal queue/HTTP call &mdash; swappable independently.</td></tr>
+<tr><td>NFR-8 (audit log)</td><td><code>audit_log</code> is insert-only at the DB level (no UPDATE/DELETE grants on that table for the application role).</td></tr>
+<tr><td>NFR-9 (RBAC)</td><td>Gateway checks <code>role</code> claim on every request; admin-only routes return 403 for the verifier role.</td></tr>
+<tr><td>NFR-10 (robust capture)</td><td>Training-time augmentation (rotation, scale, noise, blur, recompression, print-scan) across all three detector models.</td></tr>
+</table>
+
+<h2>8. Technology Stack</h2>
+<ul>
+<li>API &amp; orchestrator: Python (FastAPI) &mdash; async I/O suits the fan-out/fan-in call pattern in Section 6.</li>
+<li>Detector services: PyTorch (signature embedding model, SRM/RGB dual-stream localiser); Tesseract/PaddleOCR for text extraction.</li>
+<li>Storage: PostgreSQL for structured data; S3-compatible object storage for images/heatmaps.</li>
+<li>Web client: React, calling only the REST API in Section 5 (FR-P1), so a mobile client can reuse it unchanged.</li>
+</ul>
+
+<h2>9. Phase 2 (Out of Scope Here)</h2>
+<p>Consistent with the survey's scope notes (Section 4.4 of the Literature Survey Report): blockchain anchoring of the document hash already stored under FR-P2, and an anomaly-detection worker for forgery types outside the training distribution (Gap 8), can be added behind the same replaceable-detector interface (NFR-7) without changing the orchestrator, fusion logic or API.</p>
+
+</body>
+</html>

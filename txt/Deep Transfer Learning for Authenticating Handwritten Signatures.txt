@@ -1,0 +1,547 @@
+Deep Transfer Learning for Authenticating
+Handwritten Signatures
+2025 International Conference on Electronics, AI and Computing (EAIC) | 979-8-3315-5358-6/25/$31.00 ©2025 IEEE | DOI: 10.1109/EAIC66483.2025.11101688
+
+Srushti Bhirud
+
+Samiksha Bijwe
+
+Tanmay Chavan
+
+Department of Computer Engineering
+Department of Computer Engineering
+Department of Computer Engineering
+Fr. C. Rodrigues Institute of Technology Fr. C. Rodrigues Institute of Technology Fr. C. Rodrigues Institute of Technology
+Vashi, India
+Vashi, India
+Vashi, India
+tanmaychavan2214@gmail.com
+bijwesamiksha@gmail.com
+srushti.bhirud@gmail.com
+
+Ashutosh Bhonsle
+
+Smita Rukhande
+
+Dakshayani G.
+
+Department of Computer Engineering
+Department of Computer Engineering
+Department of Computer Engineering
+Fr. C. Rodrigues Institute of Technology Fr. C. Rodrigues Institute of Technology Fr. C. Rodrigues Institute of Technology
+Vashi, India
+Vashi, India
+Vashi, India
+dakshayani@fcrit.ac.in
+smita.rukhande@fcrit.ac.in
+bhonsle.ashutosh@gmail.com
+
+Abstract—Handwritten signature authentication is crucial in
+sectors like banking, security, and education, where identity
+verification plays a significant role. Signatures are a unique
+proof of authorization, making their verification essential to
+prevent forgery and fraud. This study presents a deep learning
+based approach for handwritten signature verification using
+transfer learning with the VGG16 model. The model extracts
+key distinguishing features from hand written signatures and
+applies a classification method that compares new signatures
+against stored references using specific threshold values. A wellcurated data set undergoes pre-processing to enhance feature
+extraction before being utilized for training and evaluation.
+To improve accuracy and robustness, the model incorporates
+data augmentation techniques that help mitigate variations in
+handwriting styles and distortions. Adaptive thresholding ensures
+flexibility in signature matching, reducing false rejections and
+improving overall reliability. The experimental results highlight
+the effectiveness of the proposed model, demonstrating a high
+level of reliability and precision in distinguishing between genuine
+and forged signatures. This approach provides a robust solution
+for safe and accurate signature verification in real-world applications, offering significant improvements over traditional manual
+verification methods.
+Index Terms—Transfer Learning, VGG16, Deep Learning,
+Signature Authentication, Forgery Detection, Feature Extraction,
+Convolutional Neural Network (CNN), Document Security, Identity Verification.
+
+I. I NTRODUCTION
+Handwritten signatures have long been recognized as a fundamental means of authentication in various domains, including banking, legal documentation, and educational institutions
+[1]. They serve as a unique representation of an individual’s
+identity and authorization. However, with the advancement of
+forgery techniques, traditional signature verification methods
+relying on manual inspection and expert judgment have proven
+to be subjective, time-consuming, and prone to inaccuracies
+[2]. The need for an automated, efficient, and reliable verification system has therefore become crucial.
+
+Signature authentication is broadly categorized into two
+types: static (offline) and dynamic (online) verification [3].
+Offline authentication, which is the focus of this study, involves verifying a signature after it has been completed by
+comparing it against previously stored reference signatures.
+Despite various algorithms being developed for signature verification, many existing approaches have struggled to achieve
+reliable performance, often yielding results below the 80%
+mark [4]. This challenge arises due to the complexities of
+handwritten signatures, variations in individual writing styles,
+and the limitations of traditional classification techniques [5].
+By allowing models to recognize intricate patterns and
+distinguish features from signature images, the development
+of artificial intelligence and deep learning has completely
+changed the process of verifying signatures [6]. Convolutional
+Neural Networks (CNNs) are ideally suited for examining the
+complex features of signatures because of their impressive
+performance in computer vision tasks [7]. Specifically, transfer learning has become popular since it makes it possible
+to optimize pre-trained deep learning models for signature
+verification without the need for large datasets [8].
+This system uses the VGG16 model, a popular pre-trained
+CNN architecture, to propose a deep learning-based method
+for handwritten signature verification. The model successfully
+distinguishes between authentic and fake signatures by utilizing VGG16’s deep feature extraction capabilities [9]. Adaptive
+thresholding techniques are used to compare new signatures
+with reference samples for authentication, and signature images are pre-processed to improve feature extraction [10]. The
+effectiveness of the suggested method is assessed through
+thorough testing, which shows that it is highly reliable and
+accurate in differentiating genuine signatures from fakes [11].
+The findings demonstrate how deep learning can improve
+security and effectiveness in signature-based authentication
+systems [12].
+The rest of the article is arranged as follows: Section
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:59:09 UTC from IEEE Xplore. Restrictions apply.
+
+II presents a detailed review of related work in the field
+of handwritten signature verification, highlighting recent approaches, findings, and existing research gaps [13]. Section III
+outlines the methodology adopted in this study, describing the
+architecture, pre-processing techniques, and implementation
+details of the proposed VGG16-based model [14]. Section IV
+discusses the experimental results and provides an in-depth
+analysis of the model’s performance in distinguishing genuine
+signatures from forgeries [15]. Finally, Section V concludes
+the study and suggests potential directions for future research
+to further enhance the accuracy and robustness of signature
+verification systems [16].
+II. R ELATED W ORK
+The field of signature verification has a rich and evolving
+history, transitioning from traditional manual inspection methods to highly advanced automated techniques. In the early
+stages, signature verification relied on visual and statistical
+analysis performed by experts who examined specific features
+such as stroke direction, pen pressure, and the time taken to
+complete the signature. While effective to some extent, these
+manual methods were inherently subjective, time-consuming,
+and prone to errors, particularly when dealing with skilled
+forgeries or variations in an individual’s signing style. Furthermore, manual verification required extensive expertise, making
+it unsuitable for large-scale authentication tasks in domains
+such as banking, legal documentation, and education [1] [2].
+To address the limitations of manual verification, early
+automated techniques were introduced, relying on statistical
+and rule-based approaches to analyze signature features. These
+methods extracted key attributes such as stroke curvature,
+pen pressure distribution, and geometric characteristics of the
+signature. However, such techniques faced challenges due
+to the natural variability of handwritten signatures, as even
+genuine signatures from the same individual could exhibit
+differences based on factors like writing speed and pen grip
+[3] [4]. Additionally, many statistical methods required specialized hardware for data acquisition, particularly in dynamic
+signature verification, where real-time pressure and motion
+data were needed [5].
+As computational power increased, machine learning techniques became widely adopted for signature verification. Algorithms such as Support Vector Machines (SVMs), Hidden
+Markov Models (HMMs), and Dynamic Time Warping (DTW)
+improved verification accuracy compared to traditional statistical techniques. However, they relied heavily on feature
+engineering, where domain experts manually selected and
+extracted relevant features from signature images [6]. The
+performance of these models depended on the quality of
+extracted features, making them less adaptable to variations
+in signature styles. Moreover, these machine learning models
+often required large labeled datasets for training, making them
+resource-intensive [7].
+With the emergence of deep learning, signature verification has undergone a significant transformation. Convolutional
+
+Neural Networks (CNNs) have demonstrated remarkable success in recognizing complex visual patterns, making them
+highly effective for analyzing handwritten signatures. Unlike traditional machine learning approaches that depend on
+handcrafted features, CNNs automatically learn hierarchical
+representations from raw signature images. Several studies
+have explored different CNN architectures, including Siamese
+networks and triplet loss-based learning, to develop more robust verification systems [8]. Siamese networks, for example,
+have been widely used to learn similarity metrics between
+signature pairs, allowing the model to compare signatures
+directly rather than classifying them into predefined categories
+[9].
+One of the most impactful advancements in deep learning
+for signature verification is the adoption of transfer learning.
+Transfer learning enables models pre-trained on large-scale
+datasets, such as ImageNet, to be fine-tuned for signature
+verification with relatively smaller datasets, reducing the need
+for extensive labeled data while improving model performance
+[10]. Among various deep CNN architectures, VGG16 has
+emerged as a strong candidate for feature extraction due to its
+deep hierarchical layers that capture fine-grained visual patterns. Originally designed for large-scale image classification,
+VGG16 has been successfully repurposed for various computer
+vision applications, including handwritten signature analysis
+[11].
+Building upon these advancements, our work explores the
+use of VGG16 for feature extraction in combination with
+an adaptive thresholding classification method. By leveraging VGG16’s deep feature extraction capabilities, the model
+efficiently differentiates between genuine and forged signatures without requiring extensive manual feature engineering
+[12]. The extracted features are further processed through an
+adaptive thresholding technique, which dynamically adjusts
+the decision boundary based on signature similarity, ensuring
+robust and reliable verification [13]. This approach enhances
+accuracy and improves the model’s ability to generalize across
+different handwriting styles, making it a viable solution for
+real-world applications in banking, education, and security
+domains [14]. Through rigorous experimentation and evaluation, we aim to demonstrate the effectiveness of this deep
+learning-based signature verification system, highlighting its
+potential to enhance security and efficiency in signature-based
+authentication processes [15] [16].
+III. M ETHODOLOGY
+The methodology for handwritten signature verification
+follows a structured approach to ensure accurate and reliable authentication. It begins with dataset preparation, where
+genuine and forged signatures are collected, preprocessed,
+and augmented to enhance model training. Next, feature
+extraction is performed using the VGG16 model, leveraging
+transfer learning to obtain high-level signature representations.
+These features are then compared using similarity metrics,
+with adaptive thresholding improving classification accuracy.
+Finally, the model is trained using a classifier, optimized
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:59:09 UTC from IEEE Xplore. Restrictions apply.
+
+with techniques like Adam optimizer, and evaluated using
+metrics such as accuracy, False Acceptance Rate (FAR), False
+Rejection Rate (FRR), and Equal Error Rate (EER) to ensure
+robust verification.
+The step by step working of the system is as follows:
+A. Dataset Preparation
+Data Collection: A carefully curated dataset is crucial for
+training and evaluating the model. This dataset should
+contain a sufficient number of genuine signatures from
+each individual, along with a representative set of forgeries. The forgeries should encompass both skilled and
+random forgeries to challenge the model’s ability to
+discriminate between genuine and fraudulent signatures.
+For this project, we have used a dataset obtained from
+Kaggle, which provides a diverse collection of handwritten signatures. This dataset serves as the primary
+source for training and testing the model, ensuring a
+comprehensive evaluation of its performance.
+• Data Pre-processing: The signature images undergo several pre-processing steps to enhance feature extraction
+and improve the model’s performance:
+Grayscale Conversion: Converting the images to
+grayscale reduces the dimensionality of the input data
+and simplifies the analysis. Image Resizing: Resizing
+the images to a consistent size ensures that the model
+receives inputs of the same dimensions. A size of
+224x224 pixels is typically used for compatibility with
+VGG16. Image Normalization: Normalizing the pixel
+values to a specific range (e.g., [0, 1]) helps to improve
+the model’s training stability and convergence. Data
+Augmentation: Techniques like rotation, scaling, and
+translation can be employed to artificially increase
+the size and diversity of the training data, reducing
+overfitting and improving generalization.
+
+•
+
+transfer learning model, specifically VGG16, which is pretrained on the ImageNet dataset. This model extracts features
+from the signatures and undergoes estimation to evaluate
+performance metrics, such as accuracy. Once the optimal
+model is obtained, it is used for signature identification. The
+system classifies signatures into two categories: genuine or
+forged, based on the learned patterns. This approach enhances
+the accuracy and reliability of signature verification through
+deep learning techniques.
+B. Feature Extraction with VGG16
+Transfer Learning: We utilize the VGG16 model, pretrained on the ImageNet dataset, as a feature extractor.
+The convolutional layers of VGG16 are frozen to preserve
+the learned weights and features from the ImageNet
+dataset.
+• Feature Extraction Layer: The output of a specific layer
+in the VGG16 model (e.g., the last convolutional layer
+or a fully connected layer) is used as the feature vector
+for each signature image. This feature vector represents a
+high-level representation of the signature’s characteristics.
+•
+
+C. Classification and Verification
+Similarity Metric: A similarity metric, such as cosine
+similarity, Euclidean distance, or other suitable measure,
+is used to compare the feature vector of a test signature
+with the feature vectors of the stored reference signatures
+for the claimed identity.
+• Thresholding: A threshold value is defined to determine
+whether the test signature is considered genuine or a
+forgery. If the similarity score between the test signature
+and the reference signatures exceeds the threshold, the
+signature is classified as genuine; otherwise, it is classified as a forgery.
+• Adaptive Thresholding: Instead of using a fixed threshold,
+an adaptive threshold is calculated for each individual
+based on the distribution of similarity scores between
+their genuine signatures. This allows the system to account for individual variations in signature style and
+improve accuracy. One approach is to calculate the mean
+and standard deviation of the similarity scores for genuine
+signatures of each individual and use a threshold based
+on these statistics.
+•
+
+D. Model Training and Evaluation
+Training: The feature extraction layer is connected to a
+fully connected classifier followed by a sigmoid activation function. The training process fine-tunes the weights
+in the classifier while keeping the VGG16 weights frozen.
+• Parameter Optimization: The classifier is trained with the
+preprocessed dataset and the Adam optimizer is used to
+minimize the binary cross-entropy loss.
+• Evaluation Metrics: The performance of our model is
+evaluated using several metrics:
+Accuracy: The percentage of correctly classified signatures (both genuine and forged).
+•
+
+Fig. 1. Working of the System
+
+The fig 1. illustrates a signature verification system utilizing
+deep transfer learning. The process begins with data gathering,
+where signature samples are collected and then prepared into
+training and testing sets. The training set is fed into a deep
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:59:09 UTC from IEEE Xplore. Restrictions apply.
+
+False Acceptance Rate (FAR): The percentage of forged
+signatures that are incorrectly classified as genuine.
+False Rejection Rate (FRR): The percentage of genuine
+signatures that are incorrectly classified as forgeries.
+Equal Error Rate (EER): The point where FAR and FRR
+are equal. A lower EER indicates better performance.
+IV. R ESULTS
+The implementation of the handwritten signature verification system was carried out in two phases: one using
+only a Convolutional Neural Network (CNN) and the other
+incorporating a pre-trained VGG16 model combined with
+a CNN. The results from both approaches were evaluated
+based on accuracy, reliability, and efficiency in distinguishing
+genuine and forged signatures. The CNN-only model achieved
+moderate accuracy, ranging between 75-78%, but struggled
+with complex variations in signature styles, requiring extensive
+labeled data for effective learning. In contrast, the pre-trained
+VGG16 model significantly improved feature extraction, leading to superior classification accuracy. The dataset was divided
+into 80% training and 20% testing using the train test split
+method, and the VGG16-based model achieved an impressive
+98.6% accuracy, demonstrating high reliability in detecting
+forged signatures.
+
+includes a processed signature image and a confidence score,
+which quantifies the likelihood of the signature being genuine.
+The confidence scores, displayed in red and green, indicate
+varying degrees of authenticity, with higher values suggesting a stronger match. The presence of red scores signifies
+lower confidence in authenticity, whereas green scores indicate
+higher confidence. This visualization demonstrates the effectiveness of the model in distinguishing between genuine and
+potentially forged signatures, leveraging feature extraction and
+similarity measurement techniques for verification.
+A. Evaluation Metrics
+In deep learning, evaluation metrics are essential for assessing how well a model performs on a given task. They help determine the model’s ability to generalize effectively to unseen
+data. This study considers the evaluation metrics Accuracy,
+False Acceptance Rate (FAR), False Rejection Rate (FRR),
+and Equal Error Rate (EER) to measure the performance of
+the signature verification model.
+According to Equation (1), Accuracy is the proportion of
+correctly classified signatures (both genuine and forged) to
+the total number of signatures. Equation (2) defines False
+Acceptance Rate (FAR) as the percentage of forged signatures
+that are incorrectly classified as genuine. As demonstrated
+in Equation (3), False Rejection Rate (FRR) quantifies the
+proportion of genuine signatures that are wrongly classified as
+forgeries. Equation (4) illustrates the Equal Error Rate (EER),
+which represents the point where FAR and FRR are equal,
+serving as an important indicator of system performance.
+Accuracy =
+
+Fig. 2. Signature Verification Results
+
+The effectiveness of data preprocessing techniques such as
+grayscale conversion, image resizing, and normalization contributed to enhanced feature extraction and training stability.
+Data augmentation methods, including rotation, scaling, and
+translation, further improved model generalization and reduced
+overfitting. Additionally, adaptive thresholding played a crucial
+role in refining the decision-making process, enhancing precision and recall. The model was validated using an independent
+test set to ensure consistent performance on unseen data.
+The VGG16-based model exhibited high precision and recall,
+effectively minimizing false positives (genuine signatures misclassified as forgeries) and false negatives (forged signatures
+misclassified as genuine). Moreover, the approach proved to
+be computationally efficient while maintaining high accuracy,
+making it suitable for real-world applications.
+The fig. 2. represents the results of a signature verification system, where each signature is evaluated based on
+its similarity to a reference signature using a deep learning
+or machine learning-based model. Each verification output
+
+TP + TN
+× 100
+TP + TN + FP + FN
+
+(1)
+
+FAR =
+
+FP
+× 100
+FP + TN
+
+(2)
+
+FRR =
+
+FN
+× 100
+FN + TP
+
+(3)
+
+EER = Threshold where F AR = F RR
+
+(4)
+
+B. Evaluation Results
+The effectiveness of using transfer learning with the VGG16
+model for handwritten signature verification demonstrates high
+performance. The model achieves an accuracy of 98.6% on the
+test dataset comprising 500 signature images. The comparative
+analysis of training and testing accuracy, loss, and other key
+parameters is summarized in Table I.
+These results highlight that the VGG16 model, when finetuned for feature extraction, effectively distinguishes between
+genuine and forged signatures. The model maintains a low
+error rate while ensuring robust generalization across unseen
+signature samples. This confirms its potential for deployment in real-world authentication systems, such as banking and document verification. Further improvements can
+be achieved through advanced optimization techniques and
+additional dataset augmentation.
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:59:09 UTC from IEEE Xplore. Restrictions apply.
+
+TABLE I
+P ERFORMANCE C OMPARISON FOR S IGNATURE V ERIFICATION U SING
+VGG16
+Criteria
+
+VGG16 (Train)
+
+VGG16 (Test)
+
+Accuracy
+
+96-99%
+
+98.6%
+
+Loss
+
+0.15
+
+0.35
+
+No. of Epochs
+
+300
+
+300
+
+The fig. 4. illustrating the loss values over 40 epochs for
+different training phases of a deep learning model. The xaxis represents the number of epochs, while the y-axis shows
+the loss values. The blue line indicates the training loss for
+Phase 1, which drops sharply and stabilizes at a low value.
+The orange line represents the validation loss for Phase 1,
+showing a gradual decline. In Phase 2, the red line represents
+the training loss, which starts higher but decreases steadily,
+while the green line represents the validation loss, which
+remains consistently low. This graph highlights the model’s
+improvement in minimizing loss over time, indicating effective
+learning.
+V. C ONCLUSION
+
+Fig. 3. Model Accuracy
+
+The fig. 3. depicting the accuracy trends over 40 epochs
+for different training phases of a deep learning model. The
+x-axis indicates the number of epochs, while the y-axis
+represents accuracy. The graph includes four lines: the blue
+line represents the training accuracy for Phase 1, showing a
+steep rise before stabilizing; the orange line represents the
+validation accuracy for Phase 1, which increases gradually. In
+Phase 2, the red line depicts the training accuracy, starting
+lower but improving rapidly, while the green line represents
+the validation accuracy, achieving near-perfect performance.
+This visualization highlights the model’s learning progress and
+improved accuracy across different training phases.
+
+This study presents a deep learning-based approach for
+handwritten signature verification using transfer learning with
+the VGG16 model. Signature authentication is essential in
+security-sensitive areas such as banking and legal documentation, where preventing forgery is crucial. Traditional methods often struggle with variations in signatures and skilled
+forgeries, making deep learning a viable solution. The proposed model leverages the VGG16 architecture to extract key
+distinguishing features from handwritten signatures. A wellbalanced dataset of genuine and forged signatures is used for
+training, with pre-processing techniques like grayscale conversion, image resizing, and normalization applied to enhance
+feature extraction. Data augmentation methods such as rotation
+and scaling further improve generalization. The verification
+process involves comparing a new signature against stored references using similarity measures and threshold-based classification. Experimental results show that the model achieves high
+accuracy in distinguishing genuine signatures from forgeries.
+Two experiments were conducted: one using a CNN alone and
+another integrating a pre-trained VGG16 model. The latter
+outperformed the former, confirming the benefits of transfer
+learning. The findings highlight the model’s reliability and
+efficiency, making it suitable for real-world applications like
+financial transactions and identity verification. This approach
+strengthens security by reducing fraud risks. Future work could
+explore additional deep learning models and larger datasets to
+enhance accuracy and robustness further.
+R EFERENCES
+
+Fig. 4. Model Loss
+
+[1] O. D. Akinrolabu, O. O. Ajayi, A. E. Ebitigha, A. A. Adegbite, J.
+R. Obafemi and J. K. Ogunleye, ”Handwritten Signature Verification
+Model Using Transfer Deep Learning Technique,” 2024 International
+Conference on Science, Engineering and Business for Driving Sustainable Development Goals (SEB4SDG), Omu-Aran, Nigeria, 2024, pp.
+1-6, doi: 10.1109/SEB4SDG60871.2024.10629731.
+[2] P. Blessy, K. Kathiresan and N. Yuvaraj, ”Deep Learning Approach to Offline Signature Forgery Prevention,” 2023 9th International Conference on Advanced Computing and Communication
+Systems (ICACCS), Coimbatore, India, 2023, pp. 1570-1575, doi:
+10.1109/ICACCS57279.2023.10112906.
+[3] B. Mustafa, R. Taha, O. M. Fahmy and S. M. Afifi, ”Handwritten Signature Recognition using Deep Learning,” 2023 International Conference
+on Microelectronics (ICM), Abu Dhabi, United Arab Emirates, 2023,
+pp. 1-6, doi: 10.1109/ICM60448.2023.10378888.
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:59:09 UTC from IEEE Xplore. Restrictions apply.
+
+[4] P. William, G. R. Lanke, S. Pundir, I. Kumar, M. Gupta and S. Shaw,
+”Implementation of Hand Written based Signature Verification Technology using Deep Learning Approach,” 2023 4th International Conference
+on Intelligent Engineering and Management (ICIEM), London, United
+Kingdom, 2023, pp. 1-6, doi: 10.1109/ICIEM59379.2023.10167195.
+[5] K. Harika, P. Dhanalakshmi, S. S. K. Reddy, S. Shakeer, M. V.
+S. Thanmayi and V. Haripriya, ”Handwritten Signature Recognition
+using MobileCNN,” 2024 International Conference on Intelligent Systems for Cybersecurity (ISCS), Gurugram, India, 2024, pp. 1-7, doi:
+10.1109/ISCS61804.2024.10581340.
+[6] S. C. Nossam, R. A. Katakam, G. Pulastya and S. Jayan, ”Signature
+Forgery Detection and Verification using Deep Learning Techniques,”
+2024 15th International Conference on Computing Communication and
+Networking Technologies (ICCCNT), Kamand, India, 2024, pp. 1-6, doi:
+10.1109/ICCCNT61001.2024.10726260.
+[7] A. Kazi, V. Bharadi and K. Prasad, ”Deep Learning Based Dynamic
+Signature Analysis for Multiclass Classification,” 2023 6th International
+Conference on Advances in Science and Technology (ICAST), Mumbai,
+India, 2023, pp. 256-261, doi: 10.1109/ICAST59062.2023.10454978.
+[8] Eman Alajrami, Belal A. M. Ashqar, Bassem S. Abu-Nasser, Ahmed
+J. Khalil, Musleh M. Musleh, Alaa M. Barhoom, Samy S. AbuNaser,“Handwritten Signature Verification using Deep Learning“, International Journal of Academic Multidisciplinary Research (IJAMR),
+ISSN: 2643-9670 Vol. 3 Issue 12, December – 2019.
+[9] O. AbuAlghanam, L. Albdour, and A. Omar, ”Multimodal biometric
+fusion online handwritten signature verification using neural network and
+support vector machine,” International Journal of Innovative Computing,
+Information, and Control (ICIC International), vol. 17, no. 5, pp. 1691
+1703, 2021.
+[10] Djeziri , Salah Guessoum, Ahmed Oussedik, Seifedine. (2013). Off-Line
+Signature Verification Based on Graph Matching. 978-3-642-41651-6.
+10.1007/978-3-642-41652-39.
+[11] Malik, A. S., Khokhar, R. H. (2017). Online signature verification using
+dynamic time warping and neural networks. International Journal of
+Biometrics, 9(1), 47-63.
+[12] Yousefi, S., Iranmehr, A., Nasiri, A. (2013). Off-line signature verification based on HOG features and SVM classifier. Expert Systems with
+Applications, 40(3), 909-915.
+[13] Hafemann, D. R., Oliveira, L. S., Sabourin, R. (2017). Offline signature
+verification using deep convolutional neural networks. International Joint
+Conference on Neural Networks (IJCNN), 3279-3286.
+[14] Balogun, A. O., Adebayo, O. S., Ojo, J. A. (2021). Handwritten
+signature verification using transfer learning with deep convolutional
+neural networks. IEEE Access, 9, 89894-89904.
+[15] Chollet, F. (2005). Siamese neural networks for one-shot image recognition. NIPS Workshop on Deep Learning, 1-9.
+[16] C. Sharma, ”Transfer learning and its application in computer vision:
+A review,” in Conference Paper*, Electrical and Computer Engineering,
+University of Waterloo, 2022.
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:59:09 UTC from IEEE Xplore. Restrictions apply.
+
+

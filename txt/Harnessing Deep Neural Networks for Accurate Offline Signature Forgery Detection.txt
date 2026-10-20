@@ -1,0 +1,664 @@
+2023 7th International Conference on Intelligent Computing and Control Systems (ICICCS) | 979-8-3503-9725-3/23/$31.00 ©2023 IEEE | DOI: 10.1109/ICICCS56967.2023.10142593
+
+Proceedings of the 7th International Conference on Intelligent Computing and Control Systems (ICICCS-2023)
+IEEE Xplore Part Number: CFP23K74-ART; ISBN: 979-8-3503-9725-3
+
+Harnessing Deep Neural Networks for Accurate
+Offline Signature Forgery Detection
+Nikita Bhrugumaharshi Emberi
+Department of Information Technology
+Vidyalankar Institute of Technology
+Mumbai, India
+nikita.emberi@gmail.com
+
+Akshaya Mohan
+Department of Information Technology
+Vidyalankar Institute of Technology
+Mumbai, India
+akshayamohan.2401@gmail.com
+
+Chinmay Anant Naphade
+Department of Information Technology
+Vidyalankar Institute of Technology
+Mumbai, India
+chinmaynaphade29@gmail.com
+
+Rasika Ransing
+Department of Information Technology
+Vidyalankar Institute of Technology
+Mumbai, India
+rasikaransing275@gmail.com
+
+Abstract—S ignature is considered to be one of the broadly
+practiced and important biometric features for the verification
+of an individual. It is used in various documents like pan card,
+passport, bank cheques, etc which can lead to numerous frauds
+like identity theft, money laundering and so on. To help solve
+or reduce this issue, an attempt is being made to develop an
+offline signature forgery detection system using an artificial
+neural architecture known as the Siamese neural network which
+consists of two identical Convolutional Neural Network (CNN)
+which are trained to learn feature representations of genuine
+and forged signatures. The two individual Siamese Models
+implemented in our project provide an accuracy of 98.27%
+and 98.35% respectively. Additionally, on occasions one of the
+models performs better while the other gets confused. To get
+optimum results from the former, a logical system was developed
+for handling the corner cases which resulted in an accuracy of
+99.75%
+Index Terms—Artificial Intelligence, Machine Learning, Deep
+Learning, Optuna, S iamese Network, Convolutional Neural Network, S ignature Forgery.
+
+use of static features i.e scanned images of the signatures.
+Forgery detection using handwritten signatures is difficult
+as a forger can deliberately imitate a person’s signature and
+hamper the authenticity of processes. Currently there is a
+person whose job is to match the signatures manually, this
+can cause two problems: the man in charge can be corrupt or
+the two signatures can look identical to a naked eye.
+
+I. INT RODUCT ION
+There are numerous biometric systems like facial
+recognition, fingerprint recognition and so on. A mong
+these offline signatures are the most widely used feature in
+biometric systems [1] [2]. A signature is a distinctive way
+of writing one’s in itials or name to p rovide authorizat ion
+in cheques, debit cards, property papers and so on. Forgery
+detection is the process of authenticating if a given signature
+matches with a person’s original sign. In other words,
+signature verification is performed to avoid forgery while
+cashing cheques, transferring property or simply accepting
+couriers.
+There are two types of signature verification systems:
+Online and Offline verification. Online verification makes
+use of features such as velocity, acceleration, movement of
+the pen, its pressure, and other dynamic features using a
+dynamic tablet. Offline verification on the other hand makes
+
+It is difficult fo r an individual to provide the exact same
+signature over mult iple attempts and this discrepancy can be
+taken advantage of by a skilled forger [3]. The problem to be
+tackled here is to take into consideration the subtle changes in
+an individual’s signature over mu ltiple attempts and the fake
+signature a forger makes and finally to train a model wh ich
+knows the difference between a genuine and a fake signature.
+To avoid this kind of forgery, a Siamese neural network [4]
+was constructed which consists of two identical convolutional
+neural networks (CNN) [5] [6] which are trained with the
+same weights to identify if a signature is real or fake. The
+dataset in use consists of mu ltip le attempts made by a single
+person and also a bunch of forged signatures of the same
+person.
+II. LITERATURE SURVEY
+Poddar J,Parikh V, Bhart i SK [7] p roposed a technique for
+signature recognition using Convolutional Neural Networks
+(CNN) and Crest-Trough Method and signature forgery
+detection using SURF algorith m and Harris Corner Detection
+algorith m. They plan to increase the resultant system accuracy
+by trying new and better parameter coefficients that increase
+the deviation between real and forged signatures in the future.
+H.-H.Kao and C.-Y.Wen [8] developed an offline signature
+verification system with an accuracy of 94.37% and 99.96%
+using Deep Convolutional Neural Netwo rks (DCNN).
+However in order to optimize the system performance and
+
+979-8-3503-9725-3/23/$31.00 ©2023 IEEE
+
+619
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:59:52 UTC from IEEE Xplore. Restrictions apply.
+
+Proceedings of the 7th International Conference on Intelligent Computing and Control Systems (ICICCS-2023)
+IEEE Xplore Part Number: CFP23K74-ART; ISBN: 979-8-3503-9725-3
+
+provide a mo re convincing verificat ion result they plan to
+collect more data and perform follow-up studies on them..
+
+III. PROPOSED SYSTEM
+A. Dataset Description
+
+Navid S M A, Priya S H, Khandakar NH, Haque AB,
+Ferdous Z [9] constructed a model called VGG-19 which is
+constructed on pre-trained CNN. They made use of ICDAR
+as their dataset which yielded an accuracy of 100%, when
+CEDAR was used accuracy resulted to 88%, and 94.44%
+for Kaggle based dataset, to verify if a g iven signature is
+genuine or not. They faced co mputing resource limitat ions
+and were unable to work with larger datasets which they plan
+to overcome in the near future.
+
+The ”Signature Verification Dataset” [14] which contains
+the signatures of Dutch Users for checking forgery is used
+to train the model was sourced from Kaggle [15], a popular
+data science community that provides a wide range of
+tools and resources for data analysis and machine learning.
+This dataset consists of signatures of Dutch users that were
+collected specifically for the purpose of detecting forgery. The
+signatures were obtained fro m the ICDA R 2011 Signature
+Dataset [16].
+
+Hafemann L G, Sabourin R, Oliveira L S [10] approached the
+problem using feature learning perspective. Their hypothesis
+included learning features fro m the data instead of hand
+crafted ones which have no resemblance to the signature
+generation process. They intend to exp lore the importance of
+a good method for defining user-specific thresholds as their
+methods achieved low Equal Error rates. Also the actual False
+Rejection and False Acceptance rates are very imbalanced,
+and not stable across multiple users and datasets.
+
+The offline dataset comprises PNG images that were scanned
+at 400 dpi and in RGB color, and was orig inally used in a
+signature verification competit ion organized by the German
+Research Center for Art ificial Intelligence in collaboration
+with M Liwicki in 2011. The dataset is organized into two
+main directories: Train and Test. Each directory includes two
+subdirectories for each user, namely ”Genuine” (with the user
+number) and ”Forgery” (with the user nu mber + ” forg”).
+There are a total of 128 subdirectories (64 subdirectories
+containing genuine signature samples and 64 subdirectories
+containing forged signature samp les of 64 users) and 42
+subdirectories(21 subdirectories containing genuine signature
+samples and 21 subdirectories containing forged signature
+samples of 21 users) present in the Train and Test directories,
+respectively. Please note that each subdirectory may contain a
+variable nu mber of signature samples. Additionally, the Train
+and Test directories do not overlap in terms of users, meaning
+that the users in the Train directory are distinct fro m those
+in the Test directory. No additional preprocessing or cleaning
+steps were performed on the dataset.
+
+Xiao W, Ding Y [3] p roposed a method using twostage Siamese neural network model for accurate offline
+handwritten signature verificat ion which adopts a two -stage
+Siamese neural network to verify original and enhanced
+handwritten signatures simultaneously, and also utilizes the
+Focal Loss to deal with the extreme imbalance between
+positive and negative offline signatures.
+R. K. Bharathi B. H. Shekar [11] p roposed a model
+which uses eigen-signature construction They have worked
+on converting scanned signature images to a shape form and
+eigen-signature construction is proposed for extracting the
+feature vector fro m a shape formed signature. The proposed
+system is conducted on a newly created Kannada offline
+signature database.
+Boubacar Diallo, Thierry Urruty, Pascal Bourdon, Christine
+Fernandez-Malo igne [12] identified the problem of images
+present on online sharing platforms which have high
+probabilit ies of undergoing transformation like resizing,
+filtering which may impose many constraints on forgery
+detection algorithms. They proposed a camera identification
+model based on CNN.
+Ane Bro mley, Isabelle Guyon, Yann LeCun, Eduard Sickinger
+and Roopak Shah [13] proposed an algorithm for verify ing
+signatures based on a Siamese neural network which consists
+of identical sub-networks joined at their outputs. They hope
+to have a field trial in the future wh ich can be run in order
+to test this technology in the real world.
+
+Additionally, the dataset includes two separate CSV
+files for the training and testing data, containing 23,205 and
+5,747 rows respectively. These CSV files were developed
+by randomly selecting a combination of two images fro m
+either the genuine or forgery directories, belonging to either
+the same or d ifferent user. The CSV files are arranged
+systematically and consist of three fields: the path to the
+two images, and a label indicating whether the images are
+classified as genuine or forged.
+B. Pre-Processing
+In order to prepare input images for signature forgery
+detection using the Siamese network, it is necessary to
+perform pre -processing steps. These steps typically involve
+resizing, grayscaling, and binarization of the scanned images
+of signatures. The purpose of this pre-processing is to
+reduce the complexity of the input images and imp rove the
+computational efficiency of the Siamese network.
+Image Resizing: To ensure consistency and imp rove the
+performance of the Siamese network, wh ich includes a CNN,
+all input images are resized to a standard resolution of 128
+
+979-8-3503-9725-3/23/$31.00 ©2023 IEEE
+
+620
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:59:52 UTC from IEEE Xplore. Restrictions apply.
+
+Proceedings of the 7th International Conference on Intelligent Computing and Control Systems (ICICCS-2023)
+IEEE Xplore Part Number: CFP23K74-ART; ISBN: 979-8-3503-9725-3
+
+Fig. 2. Pre-processing workflow
+
+Fig. 1. Overview of Dataset Organization
+
+x 128 before being passed through the network. Resizing
+the images improves computational efficiency, reduces noise,
+and prevents overfitting, while also making the model less
+sensitive to variations in the size and slant of the signature.
+This allows the model to more accurately detect forgeries.
+Image GrayScaling: Image grayscaling is the process of
+converting a color image into a grayscale image, where each
+pixel in the grayscale image represents the luminance or
+brightness of the corresponding pixel in the o rig inal color
+image. Th is is achieved by taking the weighted average of
+the red, green, and blue color channels of an RGB image.
+Grayscaling is performed to simplify the image representation
+and reduce the computational cost required for processing.
+Additionally, it also contributes towards enhancing certain
+features of an image, such as edges and textures, making
+them easier to detect.
+Image Binarization: Image b inarizat ion is a process that
+involves converting a grayscale or color image into a binary
+image by apply ing a threshold value. Pixels with values
+below the threshold are set to 0, while p ixels with values
+above the threshold are set to 1. Although there are several
+methods to determine the appropriate threshold value for
+different applications, the OTSU thresholding method [17] is
+often used to determine it automatically. Th is pre-processing
+step is performed to standardize the pixel values, which can
+improve the performance of CNN models.
+
+The Siamese network consists of two identical convolutional
+neural networks (CNNs) that share the same weights and
+are trained to learn feature representations of genuine and
+forged signatures. The selection of a CNN-based approach
+for signature forgery detection is justified by its ability to
+learn discriminative features fro m the raw image data, and
+its proven success in a wide range of image recognition tasks.
+The output of the two CNNs (the pecuilar number of neurons
+present in each CNN layer is shown in Fig. 5 and Fig. 6
+and the reason behind the selection of neurons is described
+latter part of this section) is then concatenated and passed
+through two dense layers that contain 64 neurons and 1 neuron
+respectively. These dense layers serve the purpose of introducing non-linearity to the feature representation learned by the
+CNNs. The first dense layer contains 64 neurons and uses the
+Rectified Linear Unit (ReLU) activation function. ReLU is a
+commonly used activation function in neural networks because
+it is co mputationally efficient and allows the model to learn
+complex non-linear relationships between features. The second
+dense layer contains a single neuron and uses the sigmoid
+activation function. This layer is responsible for co mputing
+the dissimilarity score between the two signature images. If
+the dissimilarity score is below a predefined threshold, the
+signature is classified as genuine, otherwise, it is classified as
+forged. A threshold value of 0.5 is chosen because it represents
+a natural decision boundary between the two classes. When the
+output of the Siamese network is greater than or equal to 0.5,
+it means that the dissimilarity between the two signatures is
+high, and the network classifies that the signature was forged.
+Fig. 3. illustrates the overall working of the Siamese network.
+
+The train and test CSV files have been modified to
+replace the file path with the Nu mPy representation of the preprocessed images. Performing these steps has reduced the
+computational resources required to work with raw images
+and has also sped up the training and testing processes.
+C. Model Implementation and Training
+For the modeling aspect of this study, Keras (Version 2.6.0)
+[18] was utilized in conjunction with Tensorflo w (Version
+2.6.4) [19] as the backend. The neural network utilized for detecting forged signatures is constructed using a novel art ificial
+neural architecture called the ”Siamese” neural network [13].
+
+Fig. 3. Implementation of Siamese Network
+
+Following our experimentation with various Convolutional
+Neural Netwo rks, two architectures were identified that performed equally well on our validation data. As a result, two
+separate Siamese Network models were implemented. Both
+
+979-8-3503-9725-3/23/$31.00 ©2023 IEEE
+
+621
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:59:52 UTC from IEEE Xplore. Restrictions apply.
+
+Proceedings of the 7th International Conference on Intelligent Computing and Control Systems (ICICCS-2023)
+IEEE Xplore Part Number: CFP23K74-ART; ISBN: 979-8-3503-9725-3
+
+the architectures were taken into consideration because the
+predictions made by both Convolutional Neural Networks
+used in the two sub-networks of each Siamese model were
+dependent on the relative positions of the two images in certain
+input pairs, potentially affect ing the accuracy of our model.
+Specifically, if the two images were presented in reverse order,
+the model might produce different outputs than when the
+images were presented in their o rig inal order. To ensure that
+our final model produced accurate results regardless of the
+input image positions, both the architectures were utilized and
+their outputs was combined using a custom function designed
+to yield the final pred iction out of the four predictions obtained
+for each input pair. Further analysis of this custom function
+is discussed in the results section. The proposed system is
+demonstrated in Fig. 4., with the CNN architectures of the
+two distinct Siamese models shown in Fig. 5. and Fig. 6.,
+respectively.
+
+Fig. 6. CNN Architecture for Siamese Model 2
+
+The number of neurons in each convolutional layer depicted
+in Fig. 5. and Fig. 6. was determined through hyperparameter
+tuning, which was accomp lished with Optuna, a hyperparameter optimization framework [20]. In the pursuit of maximizing
+validation accuracy, 20 trials for the hyperparameter search
+process were carried out. The study included the following
+parameters to obtain their optimal values:
+num layers: An integer value between 1 and 3 indicating
+the number of layers in the model.
+• num units: A list of integer values between 64 and 256
+indicating the number of units in each layer.
+• num epochs: An integer value between 1 and 15 indicating the number of epochs to train the model.
+• dropout rate: A float value between 0 and 1 indicating
+the dropout rate to be used in the layers.
+•
+
+Fig. 4. Proposed System Architecture
+
+Fig. 5. CNN Architecture for Siamese Model 1
+
+In order to min imize the binary cross -entropy loss between
+predicted and target outputs, the model was fitted on the
+training dataset with a validation split of 0.2. The values
+of the parameters obtained fro m each of the 20 trials were
+then trained using the RMSprop optimizer (RM SProp is an
+unpublished adaptive learning rate optimizer proposed by
+Geoff Hinton.) [21] to maximize validation accuracy, with
+weights initialized and trained accordingly. The trained models
+were subsequently tested on the test data, and found that
+two convolutional layer architectures performed exceptionally
+well, not only on test data, but also on a few signature samples
+collected fro m study participants. As a result, two distinct
+Siamese models were imp lemented, each of which was trained
+for 5 epochs with a batch size of 128.
+To make a p rediction for a new input pair of signature
+images, first the images were preprocessed as described above
+and then pass them through both Siamese models. Each
+Siamese model produces two dissimilarity scores correspond ing to the two possible input pair configurations. The four
+dissimilarity scores are then combined using a custom function
+(detailed description is present in ”Results and Analysis”
+Section) that takes into account the relative positions of the
+
+979-8-3503-9725-3/23/$31.00 ©2023 IEEE
+
+622
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:59:52 UTC from IEEE Xplore. Restrictions apply.
+
+Proceedings of the 7th International Conference on Intelligent Computing and Control Systems (ICICCS-2023)
+IEEE Xplore Part Number: CFP23K74-ART; ISBN: 979-8-3503-9725-3
+
+two images in the input pair. The output of the custom function
+represents the final binary classification prediction.
+I V. RESULTS AND ANALYSIS
+
+Fig. 9. Summary of Classification Report for the Proposed System
+
+Fig. 7. Siamese Model 1 and Siamese Model 2 Loss
+
+Fig. 10. Demonstration of the working of the model for Forged Signature
+Pair
+
+Fig. 11. Demonstration of the working of the model for Genuine Signature
+Pair
+Fig. 8. Siamese Model 1 and Siamese Model 2 Accuracy
+
+To assess the models’ performance during training, the
+training and validation losses as well as the training and
+validation accuracies were tracked fo r each epoch. The Fig.
+7 and Fig. 8 were generated and updated dynamically during
+
+the model train ing by specifying the callback parameter while
+fitting the model. Tensorboard offers an interactive and userfriendly interface for monitoring and analyzing the model’s
+performance, allowing for the visual representation of metrics
+like training and validation accuracy. By using Tensorboard’s
+callback parameter, it was possible to generate these figures
+in real-time, to monitor the model’s performance and adjust
+
+979-8-3503-9725-3/23/$31.00 ©2023 IEEE
+
+623
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:59:52 UTC from IEEE Xplore. Restrictions apply.
+
+Proceedings of the 7th International Conference on Intelligent Computing and Control Systems (ICICCS-2023)
+IEEE Xplore Part Number: CFP23K74-ART; ISBN: 979-8-3503-9725-3
+
+the hyperparameters as needed to achieve the best possible
+accuracy. Once each Siamese Model was trained independently, the resulting accuracy on the test files was 98.27% for
+Siamese Model 1 and 98.35% for Siamese Model 2. Based
+on the infrastructure described in Fig. 4. , when co mbin ing
+the predictions fro m two Siamese Models resulted in four
+predictions which gave rise to follo wing cases which are
+handled by custom function to give the corresponding results
+in a following way:
+Case 1:
+When three out of four dissimilarity scores predicted are
+greater than 0.5, the final result is deemed as “forged.
+Case 2:
+When three out of four d issimilarity scores predicted are
+less than 0.5: The final result is deemed as “genuine”
+Fig. 12. Confusion Matrix Results for the Proposed System
+
+Case 3:
+If both the d issimilarity scores
+predicted
+by
+Siamese Model 1 are below 0.5 and both the dissimilarity
+scores predicted by Siamese Model 2 are above 0.5 or vice
+versa:
+Example 1: If the predicted scores are [0.02, 0.48, 0.97,
+0.98], where Siamese Model 1 predicts 0.02 and 0.48, and
+Siamese Model 2 predicts 0.97 and 0.98. To determine the
+final output, we need to consider the scores predicted by both
+models. The following steps were performed:
+•
+
+•
+
+The values below 0.5 are subtracted by 0 and the values
+above 0.5 are subtracted from 1.0. Th is ensures that all
+scores are within the expected range of 0.0 to 1.0. In the
+example considered, the modified scores become [0.02,
+0.48, 0.03, 0.02].
+Next, we identify outliers that may indicate one model
+is more reliable than the other. In the modified scores
+calculated,it indicates that 0.48 is an outlier. Th is is
+because it aligns more with the predict ions predicted by
+Siamese Model 2 rather than Siamese Model 1 itself,
+which shows that Siamese Model 1 got confused. Since
+Siamese Model 2 is reliable in this case and the majority
+of votes are for distance being greater, the result predicted
+by Siamese Model 2, i.e., the output being ”Forged,” is
+returned.
+
+Example 2: If the four pred icted scores are like [0.39, 0.39,
+0.61, 0.61] where 0.39 is predicted by Siamese model 1 and
+0.61 is predicted by Siamese Model 2. In such a case, where
+both the predictions made by a particular model are the same
+and applying the steps specified in Examp le 1 fails. Therefore,
+more signature samples were requested. Such a case did not
+appear in test data so calculating accuracy did not have any
+problem. This case arised when testing with the signature
+samples provided by study participants.
+
+Case 4:
+If the four pred icted scores are like [0.01, 0.97, 0.04, 0.98]
+where 0.01 and 0.97 are predicted by Siamese model 1 and
+0.04 and 0.98 are predicted by Siamese Model 2: In such
+a scenario, It is possible that a Siamese model may have
+difficulty detecting forged signatures when both signatures
+provided are too similar. Th is is because the model relies on
+differences between the signatures to make its prediction, and
+when the signatures are too similar, those differences may be
+too subtle for the model to detect. In such cases, the model
+may struggle to accurately classify the input images and may
+make errors. However, if both Siamese models are predict ing
+forgery for a certain relative position of input images, it is
+possible that the images are indeed forged. This is because
+each Siamese model has been trained to detect differences
+between signatures, and if both models are independently detecting the same differences and predicting forgery, it provides
+strong evidence that the signatures are not genuine.
+After considering the final prediction using the custom function described above, the proposed system achieved an overall
+accuracy of 99.756%. The confusion matrix and classification
+report summary are presented in Fig. 9. and Fig. 10. fo r further
+details, respectively.
+V . CONCLUSION AND FUTURE SCOPE
+Our experimental results demonstrate that our Siamese
+network-based signature forgery detection system described
+in this study achieves a high level of accuracy (99.75%), indicating the effect iveness of our proposed approach in detecting
+signature forgeries. The novelty of our proposed model lies in
+the use of a Siamese network with two separate sub-networks.
+
+979-8-3503-9725-3/23/$31.00 ©2023 IEEE
+
+624
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:59:52 UTC from IEEE Xplore. Restrictions apply.
+
+Proceedings of the 7th International Conference on Intelligent Computing and Control Systems (ICICCS-2023)
+IEEE Xplore Part Number: CFP23K74-ART; ISBN: 979-8-3503-9725-3
+
+We utilized two distinct convolutional layer architectures for
+each sub-network to handle the issue of the relative positions
+of the two images in input pairs, which can affect the accuracy
+of the model. The final predict ion is obtained by combining
+the outputs of the two sub-networks using a custom function
+that takes into account the relative positions of the two
+images. The neural network approach to automated signature
+forgery detection is a significant advantage, as it eliminates
+the need for manual inspection by experts, which can be timeconsuming and costly. However, a d isadvantage of this model
+is that the features it uses to produce the expected output
+are not known. Nevertheless, the model provides objective
+and consistent evaluation, unlike human experts who may
+be influenced by biases and contextual factors. Additionally,
+signature forgery detection models are useful for quickly and
+accurately verifying a large number o f signatures, making
+them ideal fo r high-volu me processing in banks, financial
+institutions, or legal proceedings.
+The proposed system can be used to provide API services
+for signature authentication and verificat ion. To authenticate
+a signature using an API, the user would need to provide
+two signature images intended for verificat ion, along with any
+relevant in formation, such as the name of the signer or the
+date it was signed, and the API would then process the image
+and indicate whether the signature is genuine or forged.
+To further enhance the reliab ility of the model, a hard ware
+setup such as a tablet could be utilized to detect and verify
+signatures based on factors like pressure points and writ ing
+style. When a person signs their name on a tablet, the device
+captures various parameters like signature shape, movement,
+pressure points, speed, and acceleration of the stylus [22]. By
+incorporating these parameters and training the model with
+signature images, the credibility of the model’s predict ions
+can be significantly improved.
+Our current signature classification model is designed to
+determine the authenticity of Dutch signatures and has b een
+found to work well with English signatures as well, given the
+similarity between Dutch and English writing styles. However,
+for languages written fro m right to left, such as Arabic and
+Hebrew, the direction of strokes could be a crucial factor in
+determining the authenticity of the signature. Conversely, for
+languages like Chinese, Japanese, and Korean, the structure
+of characters and strokes could be more relevant in detecting
+forgery. To analyze these differences accurately, more data
+would be required, and the model could be further developed
+to cater to various languages.
+V I. ACKNOWLEDGEM ENTS
+We would like to express our gratitude to Prof. Rasika
+Ransing, Assistant Professor, Vidyalankar Institute of Tech nology, Mumbai, for guiding us throughout this project. We
+are also deeply grateful to the Kaggle p latform fo r provid ing
+the necessary resources, including 12 GB RAM, 30 hours
+per week of GPU access, and 20 hours per week of TPU
+access, which were instrumental in enabling us to conduct our
+research study efficiently and effectively. We would like to
+
+extend our heartfelt thanks to the participants who provided
+extra signature samples to test the reliability of our model.
+Additionally, we would like to acknowledge all those who
+provided valuable in formation in their respective fields, wh ich
+was crucial for the success of our project.
+REFERENCES
+[1] Kiran Bibi, Saeeda Naz, and Arshia Rehman. Biometric signature
+authentication using machine learning techniques: Current trends, challenges and opportunities. Multimedia Tools and Applications, 79(12):289–340, 2020.
+[2] Anil K Jain, Salil Prabhakar, and Sharath Pankanti. On the similarity
+of identical twin fingerprint s. Pattern Recognition, 35(11):2653–2663,
+2002.
+[3] Wanghui Xiao and Yuting Ding. A two-stage siamese network model for
+offline handwritten signature verification. Symmetry, 14(6):1216, 2022.
+[4] Soumya Jain, Meha Khanna, and Ankita Singh. Comparison among
+different cnn architectures for signature forgery detection using siamese
+neural network. In 2021 International Conference on Computing,
+Communication, and Intelligent Systems (ICCCIS), pages 481–486.
+IEEE, 2021.
+[5] S Jerome Gideon, Anurag Kandulna, Aron Abhishek Kujur, A Diana,
+and Kumudha Raimond. Handwritten signature forgery detection using
+convolutional neural networks. Procedia computer science, 143:978–
+987, 2018.
+[6] Shahab T ayeb, Matin Pirouz, Brittany Cozzens, Richard Huang,
+Maxwell Jay, Kyle Khembunjong, Sahan Paliskara, Felix Zhan, Mark
+Zhang, Justin Zhan, et al. Toward data quality analytics in signature
+verification using a convolutional neural network. In 2017 IEEE
+international conference on big data (Big Data), pages 2644–2651.
+IEEE, 2017.
+[7] Jivesh Poddar, Vinanti Parikh, and Santosh Kumar Bharti. Offline signature recognition and forgery detection using deep learning. Procedia
+Computer Science, 170:610–617, 2020.
+[8] Hsin-Hsiung Kao and Che-Yen Wen. An offline signature verification
+and forgery detection method based on a single known sample and
+an explainable deep learning approach. Applied Sciences, 10(11):3716,
+2020.
+[9] Shayekh Mohiuddin Ahmed Navid, Shamima Haque Priya,
+Nabiul Hoque Khandakar, Zannatul Ferdous, and Akm Bahalul
+Haque. Signature verification using convolutional neural network.
+In 2019 IEEE International Conference on Robotics, Automation,
+Artificial-intelligence and Internet-of-Things (RAAICON), pages 35–39.
+IEEE, 2019.
+[10 ] Luiz G Hafemann, Robert Sabourin, and Luiz S Oliveira. Writerindependent feature learning for offline signature verification using deep
+convolutional neural networks. In 2016 international joint conference
+on neural networks (IJCNN), pages 2576–2583. IEEE, 2016.
+[11 ] BH Shekar and RK Bharathi. Eigen-signature: A robust and an efficient
+offline signature verification algorithm. In 2011 international conference
+on recent trends in information technology (ICRTIT), pages 134–138.
+IEEE, 2011.
+[12 ] Boubacar Diallo, Thierry Urruty, Pascal Bourdon, and Christine
+Fernandez-Maloigne. Robust forgery detection for compressed images using cnn supervision. Forensic Science International: Reports,
+2:100112, 2020.
+[13 ] Jan e Bro ml e y, Isab ell e Gu yon, Yann Le C un, Edu ar d Sä cking er, and
+Roopak Shah. Signature verification using a” siamese” time delay neural
+network. Advances in neural information processing systems, 6, 1993.
+[14 ] Robin
+Reni.
+Signature
+verification
+dataset.
+https://www.kaggle.com/datasets/robinreni/signature-verificationdataset, 2021. Accessed on September 21, 2021.
+[15 ] Kaggle. https://www.kaggle.com/, 2021. Accessed on September 21,
+2021.
+[16 ] IAPR T C11.
+Icdar 2011 signature verification competition(sigcomp2011), 2011.
+[17 ] Nobuyuki Otsu. A threshold selection method from gray-level histograms. IEEE transactions on systems, man, and cybernetics, 9(1):62–
+66, 1979.
+[18 ] Franç ois Cholle t. Kera s. https://ke ra s.io /, 2015.
+
+979-8-3503-9725-3/23/$31.00 ©2023 IEEE
+
+625
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:59:52 UTC from IEEE Xplore. Restrictions apply.
+
+Proceedings of the 7th International Conference on Intelligent Computing and Control Systems (ICICCS-2023)
+IEEE Xplore Part Number: CFP23K74-ART; ISBN: 979-8-3503-9725-3
+
+[19 ] Mart´ın Abadi, Ashish Agarwal, Paul Barham, Eugene Brevdo, Zhifeng
+Chen, Craig Citro, Greg S Corrado, Andy Davis, Jeffrey Dean, Matthieu
+Devin, et al. Tensorflow: Large-scale machine learning on heterogeneous
+distributed systems. arXiv preprint arXiv:1603.04467, 2016.
+[20 ] Takuya Akiba, Shotaro Sano, Toshihiko Yanase, Takeru Ohta, and
+Masanori Koyama. Optuna: A next-generation hyperparameter optimization framework. In Proceedings of the 25th ACM SIGKDD international
+conference on knowledge discovery & data mining, pages 2623–2631,
+2019.
+[21 ] Sebastian Ruder. An overview of gradient descent optimization algorithms. arXiv preprint arXiv:1609.04747, 2016.
+[22 ] Sudeep T anwar, Mohammad S Obaidat, Sudhanshu Tyagi, and Neeraj
+Kumar. Online signature-based biometric recognition. Biometric-based
+physical and cybersecurity systems, pages 255–285, 2019.
+
+979-8-3503-9725-3/23/$31.00 ©2023 IEEE
+
+626
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:59:52 UTC from IEEE Xplore. Restrictions apply.
+
+

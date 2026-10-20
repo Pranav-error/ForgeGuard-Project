@@ -1,0 +1,932 @@
+Reinforcing Digital Banking Onboarding with
+
+2026 IEEE 16th Annual Computing and Communication Workshop and Conference (CCWC) | 979-8-3315-9397-1/26/$31.00 ©2026 IEEE | DOI: 10.1109/CCWC67433.2026.11393774
+
+Generative AI Fraud Detection
+Veeramani Sampathkumar
+Software Engineering Advisory
+Fiserv
+Frisco, Texas, USA
+ORCID 0009-0007-9996-7025
+
+Rajesh Kotha
+Software Engineering Advisor
+Fiserv
+Alpharetta, GA, USA
+ORCID 0009-0004-3594-2206
+
+Abstract: The following paper contains a deep
+learning-based solution that was implemented in Python
+and aims to identify document forgery when undergoing
+digital onboarding. To grant wide applicability to the
+study, three different datasets are used including
+passport images, drivers license images, and bank
+statement images as a part of the overarching
+applicability to common identity and financial
+documents utilized in e-KYC processes. Extensive
+preprocessing,
+transformation
+methods
+and
+visualisations were used to facilitate sound training and
+explainability. The findings indicate high levels of
+convergence and learning in all the datasets used which
+validates the reliability of the model in detecting forgery
+of multi-document. On the whole, it is demonstrated in
+the paper that Generative AI applied to computer vision
+can significantly boost e-KYC-related systems through
+the elimination of fraud and enhancement of digital
+identity verification in the financial sector and the
+management of other services.
+Keywords: Document Forgery Detection, Generative
+Artificial Intelligence, Deep Learning, Digital Identity
+Verification, ResNet18, e-KYC Automation, Computer
+Vision, Fraud Prevention, Financial Technology
+
+I. INTRODUCTION
+The swift digitalization of financial solutions has
+revolutionized the customer onboarding process to
+allow the user to provide identity documents fully
+online. Although this change enhances convenience
+and speed of operation, it also demands new security
+threats. The forgeries of documents based on AI are
+becoming more and more authentic, and traditional
+OCR systems, as well as the simplified CNN-based
+models, are less useful to detect the manipulation.
+This increases the risks of identity theft, fraudulent
+account creation and non-compliance with the
+regulations by the financial institutions. Such
+difficulties underscore the necessity of more
+sophisticated AI-based verification methods that can
+be used to identify subtle pixel, texture, and
+structural anomalies that can be used to tell the
+authenticity of documents and their fake
+counterparts. The given study is the answer to these
+issues as it will present a Python-based document
+forgery detection system that will combine both
+discriminative and generative deep learning
+methods. The system compares the effectiveness of
+
+Dinesh Kumar Ramaraj
+Cloud Architect
+Ericsson
+Pflugerville, Texas, USA
+ORCID 0009-0006-4059-4650
+
+AI models to detect forged documents of various
+types using datasets of passports, driver licenses, and
+bank statements.
+II. LITERATURE REVIEW
+Digital Identity Verification Systems Timeline
+The developmental history of digital identity
+verification systems has been developed by the high
+rate of online financial services and the need to
+onboard processes without facing issues of insecurity
+and inconvenience. At first, it was verified by manual
+methods of the review mechanism, during which
+users submitted identification documents and
+checked them by human operators. Though this
+method was accurate to some degree, it was not
+scalable and had a high susceptibility to the human
+factor, delays, and inefficiency in operations. Despite
+the growth of digital banking, fintech platforms, and
+the necessity to ensure the reliability and automation
+of verification emerged, and this resulted in the usage
+of Optical Character Recognition (OCR) and simple
+image processing tools [2]. The methods retrieved
+the textual data and matched it to databases which
+became the first step to automation in verifying
+identities. Nonetheless, document manipulations or
+high-quality forgeries would remain unnoticed by
+OCR-based systems and thus they would not be
+effective in curbing sophisticated fraud methods.
+The second wave of development was the
+incorporation of the Artificial Intelligence (AI) and
+Machine Learning (ML), which allowed systems to
+examine patterns, textures, and anomalies within the
+digital documents more efficiently. By detecting the
+visual inconsistencies that the traditional algorithms
+were not able to identify, CNNs revolutionized the
+process of document verification. Artificial
+intelligence systems also increased their verification
+speed and flexibility and minimized manual
+interference [1]. Regardless of these developments, it
+was still weak in addressing adversarial attacks and
+forgeries that are of deepfakes nature and replicates
+the authentic features with high accuracy. The latest
+and radical change in digital identity verification is
+the transition to Generative AI (GenAI). The GenAIbased systems achieve semantics understanding at
+the complexity of visuals and pixel-level detection of
+synthetics or manipulated material by utilizing the
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:01:27 UTC from IEEE Xplore. Restrictions apply.
+
+0133
+
+transformer and diffusion models. In contrast to the
+conventional AI models, they cannot only identify
+forgers but also acquire generative patterns, enabling
+them to predict and neutralize developing fraud
+methods.
+
+they study. In turn, the classical CNN and OCRrelated algorithms are able to resolve apparent
+inconsistencies but fail to do so in the case of
+synthetically generated counterfeits which mimic the
+characteristic elements of authentic documents.
+
+The innovations have facilitated real-time identity
+validations and increased resistance to fraud
+particularly in the process of opening online accounts
+and e-KYC. The development between hand
+verification and GenAI-based systems is a symptom
+of a larger change of intelligent adaptable and safe
+digital ecosystems. This development will help
+insure that the identity verification follows the trend
+of the technological advancement and the growth of
+the fraud in the virtual financial space.
+
+These constraints make it clear that an improved,
+generative strategy to document authentication is
+needed; one that does not merely categorize, but also
+acquires the abstract patterns of genuineness and
+falsification. Generative AI is the direct answer to
+these limitations as it proposes models that perform
+both discriminative and generative analysis, being
+more accurate and resilient to the detection of
+contemporary fraud in digital documents.
+
+Data Mining weaknesses on CNN and OCR
+Methods
+Convolutional Neural Networks (CNNs) and Optical
+Character Recognition (OCR) systems yield
+important results when it comes to authentication of
+documents; however, they have exactly outlined
+weaknesses as far as complex and developing
+document forgeries are concerned. Text extraction is
+the primary objective of OCR systems, and they are
+mostly based on the recognition of characters instead
+of their authenticity. They may effectively scan and
+computerize data that can be found on identity
+documents, but cannot detect more covert visual and
+visual manipulation, including forged seals, font
+modifications, or holograms. Consequently, the
+verification of documents using OCR usually
+accommodates counterfeit document which looks
+real especially when complex image editing software
+are applied so as to maintain structural consistency
+[7]. Furthermore, accuracy in OCR reduces with
+poor scan quality, blurred pictures or with
+multilingual texts, which is frequent in international
+digital onboarding practices. The worst improvement
+came with CNN-based methods which analyzed both
+the pixel and feature level thus allowing automated
+pattern and irregularity recognition.
+
+Forgery Detection Generative AI
+Generative Artificial Intelligence (GenAI) is now a
+new change maker in the subject of document
+forgery detection, overcoming the drawback of
+traditional OCR and CNN-based systems. In contrast
+to conventional models, which utilise features
+extraction and classifications only model, GenAI
+applies advanced models, including diffusion
+models, Generative Adversarial Networks (GANs),
+and transformers, to learn, generate, and analyze
+document structures on a pixel basis [5]. This
+generation power enables the system to model the
+realistic and advanced distribution of documents and
+it is very successful in detecting the tiny changes on
+the textures, the background, and the security
+patterns. Teaching GenAI to understand how the
+appearance of genuine documents ought to look like
+helps identify even the smallest defects that may be
+overlooked by the human eye of regular algorithms.
+Practically, GenAI models are trained on identity
+document data on a large scale i.e., passports,
+licenses, financial statements etc., which is how they
+learn high-dimensional visual representations. After
+training, such models have the potential of recreating
+or forecasting the anticipated image outlines of
+authentic papers and contrasting the documented
+outputs with them.
+
+Nevertheless, CNNs have some fundamental
+weaknesses in their reliance on large, heavily
+labelled datasets and inability to effectively
+generalize to unseen forms of forgery. They tend to
+ignore contextual relations or semantic discrepancies
+between document modules because they pay
+attention to spatial hierarchy. Moreover, CNNs are
+susceptible to adversarial examples, i.e., malicious,
+imperceptible manipulations of images to find them
+offensive to models and interpret them in the wrong
+category. Such a weakness follows a decrease in their
+strength in the face of actual forgery attempts where
+the fraudsters deliberately structure the deceptive
+inputs to avoid detection mechanisms. The other
+issue is the impossibility of CNNs and OCRs to
+adhere to generative forgeries made with the help of
+the latest AI tools [4]. Manipulations of the
+documents of the Deepfake type and manipulations
+of the textures are not always evident, because these
+models do not generate the knowledge of the data
+
+Any difference between the created and observed
+representations indicates an indication of forgery.
+The process of detecting adversarial attacks that are
+intended to exploit static recognition systems, this
+predictive reconstruction approach results in an
+increased detection accuracy, fewer false approvals,
+and increased resilience. Moreover, the generative
+architecture based on transformers enables the
+forgery detection to generalize the capability of the
+spatial pattern analysis with that of contextual
+reasoning. These types of models can concurrently
+assess the matching of textual information, image
+areas and document arrangement and enable them to
+employ a more comprehensive check policy. With
+financial and e-KYC systems, a GenAI can be
+integrated to detect frauds in real-time by analyzing
+documents uploaded, which is dramatically better
+than onboarding process speed and reliability when
+using solely digital data [6]. GenAI is capable of
+detecting visible falsifications as well as synthetic
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:01:27 UTC from IEEE Xplore. Restrictions apply.
+
+0134
+
+ones that have been created using AI-generated
+tampering methods. The dynamic nature of these
+models to learn and adjust to new types of forgery
+also makes GenAI a pillar technology in the
+management of secure digital identities. Therefore, it
+provides a scalable, intelligent, and future-ready tool
+of preventing document-based fraud in current
+financial ecosystems.
+Blockchain Authentication of Documents
+Document verification aided by blockchain
+technology enables a decentralized and non-erasable
+method of document verification that introduces a
+new trust and transparency to the system of digital
+identification and verification to lessen the risk of
+identity theft. Unlike centralized databases that are
+prone to unauthorized access and manipulations,
+blockchain can archive verification records in an
+unchangeable record in a distributed ledger that
+spans across various nodes. Every transaction which
+is a verification or creation of a document is signed
+cryptographically and time-stamped and a change is
+noticed instantaneously. This contributes to the
+efficiency of blockchain specifically in ensuring the
+provenance of documents, avoiding duplication, and
+authenticity validation in real-time digital settings. In
+conjunction with the AI-based forgery detection
+systems, blockchain will increase the overall stability
+of the verification pipeline [10]. Generation AI
+models have the ability to scan document
+characteristics and identify possible forgery and
+afterwards it is written on an encrypted cryptographic
+registry network that could be used in future. The
+integration will create a continuous auditable audit
+trail, which will offer a higher level of regulatory
+compliance, especially where Know Your Customer
+(KYC) functionality and anti-money laundering
+(AML) measures are available.
+A document is validated and the hash of its own or a
+digital fingerprint is stored on blockchain thereby,
+with the aid of such authentication, the institutions
+will be able to verify whether a document is authentic
+in real-time without the necessity to access an
+original file. Also, it becomes possible to automated
+verification working flows with the help of the smart
+contract functionality of blockchain. These contracts
+may be coded to execute particular actions i.e.
+document approval or rejection upon satisfaction of
+some preexisting authenticity conditions. This saves
+time that would be spent on doing things manually,
+it saves time spent in processing and one can do away
+with human error. Financially, blockchain-based
+authentication enables the customers to have more
+control of their data since they can give or take access
+to authenticated credentials safely [9]. The
+combination of the blockchain and Generative AI
+forms a powerful hybrid carcass of document
+authentication schemes. As GenAI provides a
+verification of the accuracy of detection of forgeries
+at both visual and contextual scale, blockchain
+provides integrity and traceability at the level of the
+system as a whole. The combination of both creates
+an overall defence system that does not only deter
+
+document manipulation, but also creates a longerterm confidence in online financial systems.
+III. METHODOLOGY
+Overview
+The methodology is to create a smart system that can
+identify forgery in the documents, in the process of
+online onboarding, through the use of Generative
+Artificial Intelligence (GenAI), computer vision, and
+digital forensics. This paper is concerned with
+building an effective Python-based model, which
+simulates the behaviour of a GenAI-driven model of
+forgery detection. It involves the data preprocessing,
+deep learning model training and visualisation to
+detect pixel-level and structural anomalies between
+authentic documents and forged ones. The data is
+composed of three major document types (bank
+statements, passports, and driver licenses) put in
+labelled folders to recreate the conditions of actual eKYC. The individual data sets are transformed and
+augmented to have a stable learning process and to
+improve the generalisation of the model under
+different document types.
+Every image is preprocessed, with transformations
+to input data including resizing and converting
+tensors standardising input data to be used in
+training. This guarantees that the deep learning
+model gets normalised and uniform images that are
+utilized in accurate feature extraction. In order to
+build the learning base, the approach uses a
+convolutional neural network, namely ResNet18 that
+was selected due to the combination of simplicity and
+efficiency in its performance [25]. The model will be
+set to run offline eliminating reliance on cloud based
+APIs and be trained with an established number of
+epochs to guarantee optimal convergence [12].
+Evaluation mechanisms, optimiser, and loss method
+in the methodology are the key elements. The
+classification accuracy is calculated using the crossentropy loss, and the Adams optimiser is used to
+optimise the network to ensure a quick convergence.
+The model is trained to reduce the loss progressively
+by comparing the predicted results to actual
+document labels during the training stage, and
+progressively enhance its sensitivity to detect a minor
+inconsistency.
+The model is stored to be used later, and the
+parameters are learned so that they can be used to
+process new data without re-training. The methods of
+visualisation are used to show both the performance
+in learning and sample predictions. Training loss
+curve gives graphical analysis of optimisation of
+model in each epoch, and random dataset represents
+data diversity and integrity of preprocessing [11]. All
+in all, the presented methodology presents a
+replicable framework along with a structure that
+proves how GenAI-inspired models can be applied to
+document forgery detection to establish a basis of
+future
+application
+with
+blockchain-based
+authentication frameworks.
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:01:27 UTC from IEEE Xplore. Restrictions apply.
+
+0135
+
+Technical Implementation based on Python
+The technical implementation is based on Python and
+it is the center of the research since it is the translation
+of the conceptual objectives into the achievable or
+executable model of document forgery detection.
+Python was selected because it has a large machine
+learning ecosystem and libraries, including PyTorch,
+torchvision, scikit-learn, and matplotlib, are designed
+to cover the entire workflow, including data
+processing and visualisation. It is implemented in a
+modular way thereby providing clarity, efficiency
+and reproducibility. It starts with the importation of
+the necessary libraries and the system configurations
+[16]. PyTorch is the main deep learning platform,
+which offers the flexibility of the model design and
+the accelerated computation on the GPU. All
+essential parameters like dataset folder, batch size,
+learning rate, and number of epochs, and the
+computational device (CPU or GPU) are set to
+regulate the training conditions and facilitate the
+consistency of the experimentation. The torchvision
+is used to perform data preprocessing. Transform
+module.
+All the images are downsampled to 224x 224 and
+transformed into a normalised tensor. This
+transformation guarantees hominity in the input size,
+and thus the neural network can be trained to learn
+efficiently
+the
+features
+of
+documents.
+SimpleDocumentDataset A custom dataset class,
+SimpleDocumentDataset, is created which can
+automatically load and label images in nested
+directories. The labels are produced depending on the
+names of files or folders that contain words such as
+forg or fake and they receive a label of the category
+of forgery, the rest are labeled as genuine. This is an
+automation that helps in simplifying the dataset
+preparation process and minimizes manual labelling
+errors [14]. The architecture of the model is
+ResNet18 a residual neural network which has been
+referenced to be very effective in feature extraction
+with the aid of skip connections. The last fully
+connected network layer is adjusted to produce two
+classes, which are forged and genuine [24]. This is a
+lightweight architecture that can be trained
+effectively and competitively in image classification
+tasks.
+The loss metric applied is the cross-entropy loss,
+which is appropriate to binary classification and the
+Adam optimiser with a learning rate of 0.0001 is used
+to balance the convergence speed and stability. The
+model repeatedly runs through several epochs, image
+batches, making predictions, and weight updates to
+minimise loss, which happens during training. The
+progress of training is continuously monitored, and
+every epoch has the value of the average loss that
+shows the improvement of the model [15]. Upon
+training completion, the model is stored as
+simpleforgerydetector.pth.pth which stores learned
+parameters to be used in future inference. Lastly,
+visualisation is applied in order to render
+interpretability. Training loss curve depicts
+performance versus epochs and a grid of randomly
+
+sampled documents depicts document diversity and
+model input integrity. Combined with the rest of
+these Python-based operations, these form a fully
+functional, interpretable, and efficient document
+forgery detection system, which fits the objective of
+the research to optimize digital identity verification
+with AI automation.
+Generative Model Implementation
+Besides the ResNet18 classifier, a generative model
+was also applied to increase the detection of formerly
+unknown forgeries. Convolutional autoencoder was
+chosen because it is stable, has a lightweight
+structure and is applicable in reconstruction-based
+anomaly detection. Only real documents of passport,
+driver license, and bank statement datasets were used
+to train the autoencoder that was able to extract the
+underlying visual format, texture, and structural
+layout of authentic samples. The decoder is used to
+reconstruct each image input in the inference phase
+and a reconstruction error score is computed using
+pixel-wise mean squared error. Veritable documents
+give low values to the error, whereas forged
+documents give considerably larger values to the
+reconstruction errors because of the inconsistencies
+that cannot be reproduced by the model. This
+generative process is used in addition to the classifier
+to detect less evident manipulations that have never
+been detected before.
+
+Figure 1: Generative Model Implementation
+(Source: Acquired from Jupyter Notebook)
+
+PyTorch was used to develop a convolutional
+autoencoder that would aid in the detection of fragile
+and hitherto unknown document forgeries. It is a
+model that includes an encoder, which reduces the
+size of input images into a small latent representation
+and a decoder, which re-generates the original image
+using this latent representation. The autoencoder was
+only trained on real samples of passports, driver
+licenses, and bank statements and it utilized the
+similar structural and textual patterns in the real
+sample, making it learn only. In the process of
+inference, every input image is given to the
+autoencoder and a reconstruction error score is
+obtained by the comparison between the output and
+the input. Authentic images create low errors and
+fake documents create higher errors because of
+incongruency that model is incapable of creating.
+This form of generation approach supplements the
+classifier as it allows the detection of anomalies.
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:01:27 UTC from IEEE Xplore. Restrictions apply.
+
+0136
+
+Training and Visualization Process Model
+The reliability and interpretability of forgery
+detection system is ensured by taking a systematic
+approach to model training and visualisation. The
+model is trained to learn ways of distinguishing
+between authentic and counterfeit documents,
+through the recognition of minute pixels-level
+anomalies. The training pipeline created in Python
+with the help of PyTorch fits the purpose of
+improving the methods of digital identity verification
+based on Generative AI-assisted deep learning. The
+algorithm starts with loading the processed images of
+the three datasets, which include the passports,
+drivers license, and bank statements, into a
+DataLoader, and it will arrange the images into
+batches to ensure that it is efficient in the usage of
+computation time. The batches go through a tailored
+ResNet18 model that is programmed to do binary
+classification. In every forward pass, the model
+makes predictions on whether an image of a
+document is authentic or not.
+Adam, the optimiser, then gradually updates the
+network weights to minimise this loss and thus
+achieve more accurate models with each successive
+epoch. This is repeated by a set number of epochs
+until the model has learned the characteristics of
+documents including edges, textures and printed
+patterns. The loss per epoch is summed up and saved
+to be visualised during training. Observation of the
+loss assists in assessing convergence behaviour as
+well as avoiding problems such as overfitting and
+underfitting. As highlighted in the paper, model
+performance involves visual representation which is
+a key factor in the understanding of the performance
+of models. Matplotlib is then used to create a loss
+curve illustrating the reduction in the error rate of the
+model as the number of epoch runs increases, after
+training [17]. This curve graphically illustrates the
+process of learning and assists in proving that the
+model is developing consistently. The paper contains
+visualisation of random samples of the documents to
+further justify the database and preprocessing steps.
+Such images are depicted in a grid manner with
+authentic and counterfeit images with the labels of
+each. This kind of visualisation will provide the data
+diversity guaranteeing that the transformations
+(resizing and normalisation) have been implemented
+correctly. The optimised model is stored to be
+deployed and tested in the future [18]. Using
+quantitative measurements alongside visual analysis
+the paper makes sure that not only a model training
+process leads to accuracy, but also transparency of
+the visualisation process. This extra-layered method
+makes the system more trustworthy to the real-world
+application of digital onboarding and KYC
+verification.
+
+IV. RESULTS
+
+Figure 2: Importing libraries
+Figure 2: Importing Libraries
+(Source: Acquired from Jupyter Notebook)
+
+The outcome is computed on a Python
+implementation with the use of PyTorch and other
+required libraries, including torchvision, PIL, and
+scikit-learn. The model was able to differentiate
+authentic samples and falsified samples of
+documents with high accuracy. A confusion matrix
+and classification report were utilised to develop an
+understanding of the performance evaluation in
+terms of accuracy, recall, and F1-score [21].
+ResNet18 was used to improve the features and thus
+strong detection of forgery patterns. In general, the
+findings proved the effectiveness and reliability of
+the model in the authentication of digital documents.
+
+Figure 3: Transformation
+Figure 3: Transformation (Source: Acquired from Jupyter
+Notebook)
+
+The stage of transformation normalises input images
+and then it feeds the model. All of the pictures were
+downsampled to 224x224 to ensure uniformity
+throughout the data set. This pre-processing was used
+to stabilise the scaling and normalisation of data. On
+balance, these changes enhanced the stability and
+efficiency of model training in that they created clean
+and structured visual inputs to forgery detection
+ready to be processed.
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:01:27 UTC from IEEE Xplore. Restrictions apply.
+
+0137
+
+Figure 4: Custom dataset (Source: Acquired from Jupyter
+Notebook)
+
+Custom dataset class was useful in structuring and
+labeling the data of images to train the models. It
+scanned the dataset folder automatically to identify
+image files whose extensions included JPG, JPEG
+and PNG. The images were opened and converted to
+RGB format with each image being labeled (either
+forged or genuine). Inclusion of transformations
+helped to have uniform preprocessing of all the
+samples. This data processing tool enhanced model
+precision and removed the possibility of manual
+effort in labeling and sorting of images in detecting
+forgeries.
+
+documents. The model was implemented either on
+the GPU or CPU based on the availability to optimize
+the computational performance. The objective
+function was the cross-entropy loss which was used
+to measure the classification accuracy.
+
+Figure 7: Training the dataset
+
+Figure 7: Training Dataset (Source: Acquired from Jupyter
+Notebook)
+
+Figure 5: Loading Data (Source: Acquired from Jupyter
+Notebook)
+
+The custom dataset class which incorporates the
+DataLoader function of PyTorch was used to load the
+dataset successfully. All images of the documents
+were trained (426 images of documents in total): a
+moderate proportion of the natural and faked samples
+was provided. The DataLoader was fast at batching
+the data; it had an option of shuffling and it enhanced
+generalisation in the learning process [20].
+
+The three datasets, i.e. bank statements, driver's
+licenses, and passports were trained individually
+with a five-epoch training loop and the Adam
+optimiser. Backpropagation was used to calculate the
+model parameters and measure the loss values and
+predictions made during training. Some of the
+corrupted images were automatically omitted in
+Dataset 1 to ensure continuous training. The training
+loss showed high convergence rates in all the cases:
+Dataset 1 went down to about 0.0981 to 0.0008,
+Dataset 2 went down to about 0.5855 to 0.0782, and
+Dataset 3 went down to 0.9234 to 0.0359 throughout
+five epochs. These findings support effective
+learning and stabilised optimisation, which means
+that the model was able to capture discriminative
+features to detect document forgery.
+
+Figure 8: Saving model
+Figure8: Saving model (Source: Acquired from Jupyter
+Notebook) (Source: Acquired from Jupyter Notebook)
+
+Figure 6: Model (ResNet18 & offline) (Source: Acquired
+from Jupyter Notebook)
+
+The architecture in this research is ResNet18, a deep
+convolutional neural network, residual learning,
+which makes it easy to train and has a better gradient
+flow. The last fully connected layer was changed to
+give two classes, which are, genuine and forged
+
+The model was trained and the torch.save () was used
+to save the trained model with the name
+simpleforgerydetector.pth.
+The
+confirmation
+message was a confirmation that the model file was
+created successfully. This is what ensures that the
+training phase is complete thus maintaining the
+capacity of the model to distinguish the forged and
+legitimate documents in subsequent applications.
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:01:27 UTC from IEEE Xplore. Restrictions apply.
+
+0138
+
+Figure 10: Visualisation for dataset images
+
+Figure 10: Visualisation for dataset images (Source:
+Acquired from Jupyter Notebook)
+
+Random samples of the passport, driver license, and
+bank statement datasets were presented in the form
+of dataset visualisation with genuine and forged
+samples being randomly selected. Images were
+superimposed on a grid in Matplotlib with evident
+classes so that the diversity in datasets and the
+balance of classes could be checked quickly. This
+visual test gave a qualitative determination of
+preprocessing and labelling accuracy. The
+visualisation, in general, enhanced the knowledge
+about the structure of the datasets and facilitated the
+validity of the task of forgery detection.
+Figure 9: Visualisation for loss curve (Source: Acquired
+from Jupyter Notebook)
+
+The Loss curve visualisation with Matplotlib has
+provided an effective display of the model and its
+quick learning and convergence. A steep decrease in
+loss during epoch 1 and a stabilisation towards zero
+is an indicator of effective optimisation and a
+minimum amount of overfitting. This stable
+decreasing trend is a sign of the good learning
+stability and consistency of the model and its
+efficient performance [22].
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:01:27 UTC from IEEE Xplore. Restrictions apply.
+
+0139
+
+Figure 11: Model Comparison (Source: Acquired from
+
+scalable platform towards improving the security of
+documents in diverse identity and monetary
+authentication settings.
+
+Jupyter Notebook)
+
+The comparison chart shows that the proposed
+methodology enhances training efficiency in all the
+three datasets.
+
+TABLE 1 PERFORMANCE COMPARISON OF RESNET18
+CLASSIFIER AND AUTOENCODER FOR IMAGE FORGERY
+DETECTION
+Model
+
+ResNet18 Classifier
+
+Autoencoder
+(Generative Model)
+
+Type
+
+Discriminative
+
+Generative
+
+Purpose
+
+Classifies images as
+Genuine / Forged
+
+Detects anomalies
+using reconstruction
+error
+
+Accuracy
+
+94.80%
+
+— (unsupervised)
+
+Precision
+
+95.20%
+
+88.70%
+
+Recall
+
+94.10%
+
+91.50%
+
+F1-Score
+
+94.60%
+
+90.10%
+
+AUC
+
+0.97
+
+0.92
+
+Strengths
+
+Strong supervised
+performance, learns
+complex patterns
+
+Detects unseen
+forgeries, robust to
+subtle anomalies
+
+The least time to converge was the bank statements
+where losses were nearly zero after the second epoch,
+which suggests that visual patterns are highly
+learnable. Passport photos also exhibited a high
+convergence, peaking down after the initial epoch
+and coming to rest at extremely low loss. There was
+slower convergence of driving licenses, but still, the
+improvement was relevant in all the epochs.
+V. CONCLUSION
+This project has been able to come up with a hybrid
+document-forgery detector based on a ResNet18based classifier and a convolutional autoencoder.
+The classifier performed well under supervised
+classification on well-known forgery patterns, with
+an extra balance of protection supplied by the
+generative model to identify subtle and never seen
+abnormalities by reconstruction error. These models
+enhanced the stability and dependability of the
+overall framework of detection. The findings reveal
+the importance of using both discriminative and
+generative methods, especially in the real world
+where new methods of manipulation keep being
+invented. This hybrid approach provides a viable and
+
+VI. REFERENCE LIST
+[1] Fugkeaw, S., 2022. Enabling trust and privacy-preserving eKYC systems using blockchain. IEEE Access, 10,
+pp.49028-49039.
+[2] Fugkeaw, S., Sungchai, S., Nakprame, S. and Sreekongpan,
+P., 2025. Enabling Secure and Scalable GDPR-Compliant
+Blockchain-based e-KYC with Efficient Redaction. IEEE
+Access.
+[3] Mansoor, N., Antora, K.F., Deb, P., Arman, T.A., Manaf,
+A.A. and Zareei, M., 2023. A review of blockchain
+approaches for KYC. IEEE Access, 11, pp.121013-121042.
+[4] Kumar, C.V., Selvaprabhu, P., Baska, N., Menon, U.V.,
+Kumaravelu, V.B., Chinnadurai, S. and Ali, F., 2024.
+Ethereum blockchain framework enabling banks to know
+their customers. IEEE Access, 12, pp.101356-101365.
+[5] Nithya, A., Muthukumaran, D., Varadarajan, M.N.,
+Sangeethalakshmi, K., Mahalakshmi, R. and Srinivasan, C.,
+2024, August. Banking Security and Customer Experience:
+Cloud Computing-Enabled KYC in the Digital Era using
+ANN Model. In 2024 International Conference on Electrical
+Electronics and Computing Technologies (ICEECT) (Vol.
+1, pp. 1-6). IEEE.
+[6] Pandey, G.K. and Srivastava, S., 2023, April. ResNet-18
+comparative analysis of various activation functions for
+image classification. In 2023 International Conference on
+Inventive Computation Technologies (ICICT) (pp. 595601). IEEE.
+[7] Chen, Z., Wang, H., Yeh, C.H. and Liu, X., 2022, October.
+Classify respiratory abnormality in lung sounds using STFT
+and a fine-tuned ResNet18 network. In 2022 IEEE
+Biomedical Circuits and Systems Conference (BioCAS)
+(pp. 233-237). IEEE.
+[8] Mazzocca, C., Acar, A., Uluagac, S., Montanari, R.,
+Bellavista, P. and Conti, M., 2025. A survey on
+decentralised identifiers and verifiable credentials. IEEE
+Communications Surveys & Tutorials.
+[9] Podgorelec, B., Alber, L. and Zefferer, T., 2022, June. What
+is a (digital) identity wallet? A systematic literature review.
+In 2022, IEEE 46th Annual Computers, Software, and
+Applications Conference (COMPSAC) (pp. 809-818).
+IEEE.
+[10] Corbara, S. and Moreo, A., 2024. Forging the Forger: An
+Attempt to Improve Authorship Verification via Data
+Augmentation. IEEE Access.
+[11] Yin, J., Xiao, Y., Pei, Q., Ju, Y., Liu, L., Xiao, M. and Wu,
+C., 2022. SmartDID: A novel privacy-preserving identity
+based on blockchain for IoT. IEEE Internet of Things
+Journal, 10(8), pp.6718-6732.
+[12] Xu, M., Ren, X., Niyato, D., Kang, J., Qiu, C., Xiong, Z.,
+Wang, X. and Leung, V.C., 2023. When quantum
+information technologies meet blockchain in Web 3.0. IEEE
+Network, 38(2), pp.255-263.
+[13] Zhao, L., Chen, C. and Huang, J., 2021. Deep learning-based
+forgery attack on document images. IEEE Transactions on
+Image Processing, 30, pp.7964-7979.
+[14] Yang, W., Lu, Y., Yeom, S. and Herbert, D., 2025. Adapting
+GenAI Strategies: Understanding Models, Aims, and
+Challenges in Different Targeted Data and Domains. IEEE
+Access.
+[15] Saifaldawla, A., Ortiz, F., Lagunas, E., Adam, A.B. and
+Chatzinotas, S., 2024. GenAI-based models for NGSO
+satellites interference detection. IEEE Transactions on
+Machine Learning in Communications and Networking, 2,
+pp.904-924.
+[16] Wang, Z., Byrnes, O., Wang, H., Sun, R., Ma, C., Chen, H.,
+Wu, Q. and Xue, M., 2023. Data hiding with deep learning:
+A survey unifying digital watermarking and steganography.
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:01:27 UTC from IEEE Xplore. Restrictions apply.
+
+0140
+
+IEEE Transactions on Computational Social Systems,
+10(6), pp.2985-2999.
+[17] Shailendra, S., Kadel, R. and Sharma, A., 2024. Framework
+for adoption of generative artificial intelligence (GenAI) in
+education. IEEE Transactions on Education.
+[18] Celik, A. and Eltawil, A.M., 2024. At the Dawn of
+Generative AI. IEEE Open Journal of the Communications
+Society.
+[19] Zhu, G., Ding, Y. and Zhao, L., 2022. A document image
+generation scheme based on face swapping and distortion
+generation. IEEE Access, 10, pp.78827-78837.
+[20] Zhang, H., Niyato, D., Zhang, W., Zhao, C., Du, H.,
+Jamalipour, A., Sun, S. and Pei, Y., 2024. The role of
+generative artificial intelligence in the internet of electric
+vehicles. IEEE Internet of Things Journal.
+[21] Hao, Y. and Zheng, Z., 2025. Research on Detecting AIGenerated Forged Handwritten Signatures via DataEfficient Image Transformers. IEEE Access.
+
+[22] Wen, J., Kang, J., Niyato, D., Zhang, Y., Wang, J., Sikdar,
+B. and Zhang, P., 2025. Generative AI for data
+augmentation in wireless networks: Analysis, applications,
+and case study. IEEE Wireless Communications.
+[23] Sun, G., Qi, J., Zhang, C., Liu, X., Wang, J., Niyato, D., Liu,
+Y. and Kim, D.I., 2025. Generative Artificial Intelligence
+for Beamforming in Low-Altitude Economy. arXiv preprint
+arXiv:2504.15079.
+[24] Zhao, L., Chen, C. and Huang, J., 2021. Deep learning-based
+forgery attack on document images. IEEE Transactions on
+Image Processing, 30, pp.7964-7979.
+[25] Wong, K., Zhou, J., Wu, H., Si, Y.W. and Zhou, J., 2025.
+ADCD-Net: Robust Document Image Forgery Localisation
+via Adaptive DCT Feature and Hierarchical Content
+Disentanglement. In Proceedings of the IEEE/CVF
+International Conference on Computer Vision (pp. 1928019289).
+
+1.
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:01:27 UTC from IEEE Xplore. Restrictions apply.
+
+0141
+
+

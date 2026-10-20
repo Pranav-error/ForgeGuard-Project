@@ -1,0 +1,687 @@
+2026 IEEE International Conference for Convergence in Computing Technology (I3CTCON) | 979-8-3315-7656-1/26/$31.00 ©2026 IEEE | DOI: 10.1109/I3CTCON68242.2026.11507251
+
+2026 IEEE International Conference for Convergence in Computing Technology (I3CTCON)
+Lonavala, India. Mar 14 - 15, 2026
+
+A Multi-Modal Architecture for Document Forgery
+Detection
+Amrit Koul*
+Department of Artiﬁcial Intelligence and Data Science
+SVKM’s Dwarkadas J. Sanghvi College of Engineering
+Mumbai, India
+amritkoul19@gmail.com
+
+Henny Prajapati*
+Department of Artiﬁcial Intelligence and Data Science
+SVKM’s Dwarkadas J. Sanghvi College of Engineering
+Mumbai, India
+hennyprajapati613@gmail.com
+
+Heer Shah
+Department of Artiﬁcial Intelligence and Data Science
+SVKM’s Dwarkadas J. Sanghvi College of Engineering
+Mumbai, India
+heershah2909@gmail.com
+
+Harshita Swali
+Department of Artiﬁcial Intelligence and Data Science
+SVKM’s Dwarkadas J. Sanghvi College of Engineering
+Mumbai, India
+swaliharshita@gmail.com
+
+Prof. Sudhir Dehkane
+Department of Artiﬁcial Intelligence and Data Science
+SVKM’s Dwarkadas J. Sanghvi College of Engineering
+Mumbai, India
+sudhir.dehkane@djsce.ac.in
+[9] . Recent studies have underscored the limitations of unimodal systems that focus solely on pixel-level or OCR-based
+analysis[1]. Image-only detectors struggle with high-quality
+print–scan re-encodings and local inpainting attacks [8], while
+text-only models fail to capture texture or edge inconsistencies
+introduced during forgery [4].
+In this work, we propose a multimodal deep architecture that uniﬁes three orthogonal evidence streams—visual
+texture, structural edge features, and OCR-based semantic embeddings—into a cohesive representation for robust
+document forgery detection. The visual backbone employs
+MobileNet enhanced with a Convolutional Block Attention
+Module (CBAM) and a lightweight Atrous Spatial Pyramid
+Pooling (ASPP) module to capture ﬁne-grained manipulation
+artifacts across scales. In parallel, a dedicated edge pathway
+models geometric inconsistencies indicative of copy–move or
+morphing operations [6], while an OCR embedding stream
+encodes linguistic anomalies and font inconsistencies[7] .Our
+contributions are threefold:
+We introduce a uniﬁed multimodal deep architecture integrating visual, structural, and textual modalities for comprehensive document forgery detection.
+We design a normalized feature fusion framework that effectively balances multi-source embeddings without introducing
+modality bias.
+We perform extensive benchmark evaluations and ablation
+studies demonstrating superior robustness and interpretability
+through attention visualizations and confusion analyses.
+
+Abstract—Document fraud has evolved into a technically
+sophisticated threat, involving high-resolution print–scan recapture, selective region manipulation, and adversarial rewriting.
+This work presents a multimodal deep architecture for robust
+forgery detection that integrates visual texture cues, structural
+edge patterns, and textual semantics. The system employs an
+MobileNet-based visual backbone augmented with CBAM and a
+lightweight ASPP module to capture ﬁne-grained manipulation
+artifacts. Parallel pathways model structural inconsistencies via
+edge analysis and linguistic deviations through OCR embeddings,
+targeting splicing and font substitution attacks respectively. The
+three modalities are fused through a normalized integration block
+and classiﬁed using an MLP head. Experiments conducted on a
+10k-image IDNet-Estonia-derived corpus demonstrate an accuracy of 97.8 and an AUC of 0.9992 across seven fraud categories.
+Qualitative visualizations further conﬁrm the model’s ability
+to localize manipulation artifacts, signiﬁcantly outperforming
+unimodal baselines in complex attack scenarios.
+Index Terms—Document Forgery Detection, Multimodal Deep
+Learning, MobileNetV2, Optical Character Recognition (OCR),
+Edge Detection, CBAM Attention Module, Atrous Spatial Pyramid Pooling (ASPP), Image Tampering Detection.
+
+I. I NTRODUCTION
+Document forgery represents an escalating cybersecurity
+and forensic challenge as digital and physical authentication systems increasingly converge. Traditional countermeasures—such as watermarking, optical security features, and
+template matching—have become insufﬁcient against sophisticated forgeries that exploit high-resolution print–scan recaptures, selective manipulations, and semantic text alterations
+* These authors made equal contributions.
+
+979-8-3315-7656-1/26/$31.00 ©2026 IEEE
+
+1
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:59:52 UTC from IEEE Xplore. Restrictions apply.
+
+Fig. 1: Face Morphing Example
+
+Fig. 2: Genuine Document
+
+II. L ITERATURE S URVEY
+
+70% for training,
+15% for validation,
+• 15% for testing.
+Stratiﬁed sampling is implemented using the scikit-learn library to ensure balanced representation of all forgery categories across each subset.
+•
+•
+
+Recent research in document forgery detection (2022–2025)
+shows a strong shift toward CNN-based hybrid models, often
+combined with OCR, SIFT, LBP, GANs, and transformer
+architectures. Many works focus on region-based veriﬁcation,
+signature forgery, passport/ID tampering, and low-quality image enhancement are common targets in recent work. Techniques such as multi-task CNN–RNN pipelines and OCRguided veriﬁcation consistently achieve high accuracy (92–
+98%).
+
+IV. M ETHODOLOGY
+A. System Overview
+The proposed forgery detection framework integrates
+three complementary information streams—visual appearance,
+structural boundaries, and textual semantics—to capture a
+wide spectrum of manipulation cues commonly found in
+identity documents. Each modality is processed by an independent branch designed to extract features relevant to its
+domain. The resulting embeddings are fused into a uniﬁed
+representation and classiﬁed using a multilayer perceptron.
+This design enables the model to jointly reason about pixellevel noise patterns, geometric inconsistencies, and OCR-level
+content deviations.
+
+III. DATASET
+A. Dataset Origin
+The dataset used in this study is derived from the Estonia subset of the IDNet benchmark dataset (IDNet–EST),
+a publicly available corpus designed for document forgery
+detection and identity manipulation researches [15]. Each
+document instance in IDNet comprises one genuine sample
+and six systematically generated forged variants, corresponding to distinct fraud categories: copy-and-move, inpaint-andrewrite, face morphing, portrait substitution, direct text-ﬁeld
+replacement, and combined forgery patterns.
+Each document instance is organized into separate directories, where each folder represents a speciﬁc forgery category.
+This structured organization enables precise segmentation of
+forgery types and facilitates controlled experimental evaluation
+for both classiﬁcation and veriﬁcation tasks. Notably, both the
+facial images and textual ﬁelds within the ID cards are entirely
+synthetically generated, ensuring data privacy and controlled
+forgery simulation [15].
+
+B. Preprocessing
+All images are resized to 256 × 256 and normalized using
+ImageNet statistics. During training, random ﬂips, small-angle
+rotations, and color jitter are applied to simulate distortions
+introduced by various acquisition devices.
+Let I ∈ R256×256×3 denote the normalized image. A Canny
+detector extracts the structural boundary map
+E = Canny(I),
+
+B. Class Deﬁnitions
+
+which highlights edges susceptible to geometric inconsistencies caused by splicing or copy–move operations.
+OCR text is extracted from the image and converted into a
+sequence of ﬁxed length 64:
+
+The dataset comprises seven mutually exclusive classes:
+• positive
+• fraud1 copy move
+• fraud2 face morph
+• fraud3 face replace
+• fraud4 combined
+• fraud5 inpaint rewrite
+• fraud6 crop replace
+
+T = [t1 , t2 , . . . , t64 ],
+ensuring uniformity for downstream text processing.
+C. Visual Branch
+The visual branch is tasked with identifying pixel-level
+irregularities such as abnormal textures, blending artifacts,
+or color inconsistencies. MobileNet V2 is used as the core
+feature extractor due to its strong performance across image
+classiﬁcation tasks.
+
+C. Data Splitting Strategy
+The dataset is partitioned into training, validation, and
+testing subsets using stratiﬁed sampling to preserve class
+distribution consistency. The split ratio is deﬁned as follows:
+
+2
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:59:52 UTC from IEEE Xplore. Restrictions apply.
+
+TABLE I: Comparative summary of recent document forgery detection literature (2023–2025).
+Author(s)
+
+Focus
+
+Key Points
+
+S. Lacca et al. (2025)
+
+Techniques
+
+Hybrid multi-task CNN CNN-based multi-task learning integrating
+text and texture; 96.8% accuracy.
+M. Kurvey et al. (2024) Veripass passport de- CNN+SIFT+OCR based veriﬁcation achievtection
+ing 95.2%.
+R. Sukhija et al. (2025)
+Forgery survey
+Analysis of LBP, attention mechanisms, and
+hybrid models.
+Y.Y. Bae et al. (2025)
+Edge-focused DL
+Edge-enhanced CNN and adaptive OCR;
+97.3%.
+S. Parveen et al. (2024)
+Passport security
+Faster R-CNN + OCR pipeline for airsecurity; 98.1%.
+P. Tyagi et al. (2024)
+Writer identiﬁcation
+Unsupervised CNN + OCR for handwriting
+forgery; 94.5%.
+R. Murugan et al. (2025) OCR for degraded docs CNN–RNN–Transformer hybrid; 93.9%.
+B.M. Tornés et al. (2023)
+M.S. Arul et al. (2025)
+V.J.L.P. Devi et al. (2025)
+R. Bhardwaj et al. (2024)
+C.K. Sonkar et al. (2025)
+V. Sharma et al. (2025)
+D.M. Nogueira et al.
+(2025)
+
+CNN, OCR, Expert Labels
+CNN, OCR, SIFT
+CNN, LBP, OCR
+Edge CNN, OCR
+Faster
+R-CNN,
+YOLOv5, OCR
+CNN, OCR, Clustering
+
+CNN,
+RNN,
+Transformer, OCR
+Receipt forgery dataset CNN on Find-It-Again dataset; 92.4%.
+CNN, OCR Dataset
+Fake ID detection
+CNN + OCR microtext consistency; 95.5%. CNN, OCR
+PAN forgery detection CNN ensemble + OCR consistency; 94.2%. CNN Ensemble, OCR
+Historical OCR
+CNN + generative preprocessing; 91.8%.
+CNN, OCR, GenAI
+Handwriting survey
+CNN-RNN hybrid writer veriﬁcation.
+CNN, RNN, OCR
+Handwriting review
+CRNN + OCR pipeline.
+CNN, CRNN, OCR
+Forgery overview
+CNN, GAN, OCR hybrid analysis.
+CNN, GAN, OCR
+
+By operating solely on shape and boundary information, this
+branch captures geometric inconsistencies that are typically
+invisible to RGB-only feature extraction, making it particularly
+effective for low-quality scanned documents.
+
+A Convolutional Block Attention Module (CBAM) is integrated to strengthen the network’s ability to focus on visually
+relevant regions. CBAM reﬁnes the intermediate representation by applying channel and spatial attention successively,
+enhancing sensitivity to subtle manipulation traces. As each
+channel of a feature map is considered as a feature detector,
+channel attention focuses on ‘what’ is meaningful given an
+input image [13].
+To capture multi-scale artifacts—often present at both
+ﬁne (digit-level) and coarse (full-region) granularities—an
+Atrous Spatial Pyramid Pooling (ASPP) module is employed. ASPP aggregates information across multiple receptive
+ﬁelds, enabling the network to detect both local and global
+inconsistencies[27].
+A global average pooling layer compresses the ﬁnal tensor
+into a 1280-dimensional visual embedding:
+
+E. OCR Branch
+Textual manipulation is a prevalent form of document
+tampering, commonly involving character rewriting, font substitution, spacing irregularities, and number replacement. To
+capture such cues, an OCR-based branch processes characterlevel textual information extracted from document images.
+OCR output is converted into a ﬁxed-length character
+sequence, which is embedded into a 64-dimensional vector
+space. An attention-based aggregation mechanism is then
+employed to adaptively weight salient character representations. Speciﬁcally, a learnable query vector attends over the
+embedded sequence using a scaled dot-product formulation,
+producing a weighted summary representation. The aggregated vector is subsequently projected into a compact 32dimensional embedding:
+
+vimg ∈ R1280 .
+D. Edge Branch
+Structural deformation is a common outcome of tampering
+processes such as region replacement, boundary erasing, and
+text overwriting. The edge branch focuses on these geometric
+cues using the edge map E.
+A lightweight convolutional network processes E through
+a 7 × 7 convolution with stride 2 to capture coarse structural
+patterns, followed by batch normalization, ReLU activation,
+and spatial dropout for regularization. Global average pooling
+is then applied, and the output is projected into a compact
+32-dimensional embedding:
+
+vtext ∈ R32 .
+This attention-driven formulation enables the model to emphasize informative character patterns and typographic irregularities while suppressing noisy OCR artifacts, thereby improving robustness under real-world document degradations.
+F. Attention-Based Fusion Module
+Let vimg , vedge , and vtext denote the embeddings extracted
+from the visual, edge, and OCR branches, respectively. These
+
+vedge ∈ R32 .
+
+3
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:59:52 UTC from IEEE Xplore. Restrictions apply.
+
+when validation performance stagnates, thereby improving
+convergence stability. Training is conducted for 25 epochs
+on a dataset of approximately 10,000 images, with bestmodel checkpointing based on validation performance to mitigate overﬁtting. Data augmentation and dropout regularization
+within the classiﬁer further enhance generalization.
+
+embeddings are concatenated to form an intermediate multimodal feature vector:
+vcat = [vimg  vedge  vtext ].
+To enable adaptive modality weighting, an attention-based
+fusion mechanism is introduced. A lightweight gating network
+predicts modality importance scores, which are normalized
+using a softmax function to obtain attention weights. Each
+modality embedding is then reweighted according to its
+learned contribution, yielding:
+
+V. R ESULTS AND D ISCUSSION
+A. Classiﬁcation Metrics
+Table II presents the detailed classiﬁcation performance
+of the proposed system across all forgery categories. The
+results demonstrate consistently high predictive accuracy, with
+precision, recall, and F1-scores exceeding 0.90 for most
+classes, indicating strong discriminative capability. Notably,
+the face_replace and copy_move categories achieve
+near-perfect precision and recall, reﬂecting the model’s robustness in identifying visually subtle manipulations. The overall
+accuracy of 97.8% over more than 10,000 test samples further
+conﬁrms the reliability and generalization strength of the
+proposed framework.
+
+vfusion = [αimg vimg  αedge vedge  αtext vtext ],
+where αi denotes the learned attention weight for modality i.
+This attention-guided fusion strategy allows the network to
+dynamically emphasize the most informative cues depending
+on the forgery type, leading to improved generalization and
+robustness across diverse manipulation scenarios.
+G. Classiﬁcation Head
+The fused embedding vfusion is fed into a three-layer multilayer perceptron (MLP) with batch normalization, ReLU
+activations, and dropout regularization. The ﬁnal output is a
+seven-dimensional logit vector:
+
+TABLE II: Classiﬁcation Report
+Class
+
+z = MLP(vfusion ),
+corresponding to the seven classes in the IDNet-EST dataset.
+A softmax layer converts logits into class probabilities during
+training.
+
+Precision
+
+Recall
+
+F1
+
+Support
+
+Positive
+Fraud1 Copy Move
+Fraud2 Face Morph
+Fraud3 Face Replace
+Fraud4 Combined
+Fraud5 Inpaint Rewrite
+Fraud6 Crop Replace
+
+0.98
+1.00
+0.92
+1.00
+1.00
+0.91
+0.98
+
+0.91
+1.00
+0.99
+1.00
+1.00
+0.99
+0.90
+
+0.94
+1.00
+0.95
+1.00
+1.00
+0.95
+0.94
+
+214
+213
+217
+206
+211
+215
+214
+
+Overall Accuracy
+Macro Average
+Weighted Average
+
+0.97
+0.97
+
+0.97
+0.97
+
+0.97
+0.97
+0.97
+
+1490
+1490
+1490
+
+B. Confusion Matrix
+The raw confusion matrix shows that the majority of predictions are concentrated along the main diagonal, indicating
+a high number of correct classiﬁcations across all forgery
+categories. Classes such as positive, copy–move, face morph,
+face replace, combined, inpaint, and crop–replace exhibit
+strong diagonal dominance, reﬂecting robust true-positive performance. Limited misclassiﬁcations are observed primarily
+between visually similar categories, most notably from positive
+to combined and from combined to copy–move, suggesting
+ambiguity arising from overlapping manipulation artifacts.
+C. ROC and PR Curves
+
+Fig. 3: System Architecture
+
+The ROC curves for all classes exhibit steep rises toward
+the upper-left region, yielding AUC values close to 1.0, which
+indicates excellent separability between authentic and forged
+samples. Likewise, the Precision–Recall (PR) curves remain
+consistently high across recall levels, demonstrating that the
+model maintains strong precision even under varying decision
+thresholds.
+
+H. Training Strategy
+The entire network is trained end-to-end using the AdamW
+optimizer with a learning rate of 1 × 10−4 . Cross-entropy
+loss is minimized to update model parameters. A ReduceLROnPlateau scheduler adaptively decreases the learning rate
+
+4
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:59:52 UTC from IEEE Xplore. Restrictions apply.
+
+D. Qualitative Analysis
+Grad-CAM visualizations clearly highlight the manipulated
+regions within the identity document, including altered facial
+structures, tampered photo boundaries, and overwritten textual
+areas. The resulting heatmaps consistently concentrate on
+synthetic seams and forged patches, indicating that the model
+effectively attends to semantically meaningful forgery artifacts
+rather than irrelevant background content.
+
+Fig. 4: Confusion Matrix
+Fig. 7: Grad-CAM Analysis
+VI. A BLATION S TUDIES
+To analyze the contribution of individual architectural components and input modalities, we conduct a detailed ablation
+study evaluating backbone selection, attention mechanisms,
+multi-scale feature extraction, and multi-branch fusion strategies.
+TABLE III: Backbone Ablation Study
+Backbone
+
+Val Acc (%)
+
+Test Acc (%)
+
+F1
+
+96.83
+94.13
+95.98
+
+97.05
+93.36
+95.10
+
+0.970
+0.933
+0.951
+
+MobileNetV2
+EfﬁcientNet-B3
+ResNet50
+
+Fig. 5: ROC Curves
+
+TABLE IV: Component-wise Ablation Study
+Model Variant
+MobileNetV2 CNN
+MobileNetV2 + ASPP
+MobileNetV2 + CBAM
+Proposed (CBAM + ASPP)
+
+Val Acc (%)
+
+Test Acc (%)
+
+F1
+
+97.82
+97.30
+97.69
+97.85
+
+97.72
+97.58
+98.26
+97.85
+
+0.9773
+0.9768
+0.9827
+0.9787
+
+TABLE V: Effect of Multi-Branch Feature Fusion
+Input Conﬁguration
+Image Only
+Image + OCR
+Image + Edge
+Full Multi-Branch (Proposed)
+
+Val Acc (%)
+
+Test Acc (%)
+
+F1
+
+97.43
+96.70
+97.36
+97.82
+
+96.71
+97.38
+96.98
+97.85
+
+0.9671
+0.9739
+0.9699
+0.9787
+
+Fig. 6: Precision–Recall Curves
+
+5
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:59:52 UTC from IEEE Xplore. Restrictions apply.
+
+TABLE VI: Final Performance of the Proposed Method
+Metric
+
+Value
+
+Validation Accuracy (%)
+Test Accuracy (%)
+Precision (Macro)
+Recall (Macro)
+F1-score (Macro)
+ROC-AUC (Macro)
+Matthews Corr. Coef.
+Cohen’s Kappa
+
+97.82
+97.85
+0.9697
+0.9680
+0.9787
+0.9992
+0.9627
+0.9624
+
+mobile devices, kiosks, and edge systems requiring realtime document veriﬁcation.
+• Integration With Veriﬁcation Pipelines: Future iterations may integrate digital-signature veriﬁcation, metadata consistency checks, or blockchain-based audit
+trails to form a more complete and secure documentveriﬁcation ecosystem.
+R EFERENCES
+[1] Bipasha, S. (2025). Literature Survey of Image Forgery Detection Using
+Machine Learning. Theseus.ﬁ.
+[2] Tornés, B. L. M. (2024). Document Forgery Detection in Receipts:
+Towards Generalizable Textual Approaches for Authenticity Veriﬁcation.
+HAL Theses, France.
+[3] Zhang, M., Ding, Q., & Yan, X. (2025). Research on multimodal
+image tampering detection and counterfeit image recognition. Applied
+Mathematics & Nonlinear Sciences, 10(2).
+[4] Hsu, C. C., Lee, C. M., Sun, C. H., & Wu, K. M. (2024). OCR is All
+You Need. arXiv preprint arXiv:2403.11536.
+[5] Ravi Prasad, M., & Thillaiarasu, N. (2024). Multichannel EfﬁcientNet
+B7 with Attention Mechanism. Multiagent and Grid Systems, 20(1).
+doi:10.3233/MGS-230118.
+[6] Zhou, X., & Chen, Q. (2021). Dual-Stream CNNs for Printed
+Document Forgery Detection. Neurocomputing, 453, 84–97.
+doi:10.1016/j.neucom.2021.04.052.
+[7] Zhou, Y., & Sharma, A. (2020). Font-level Anomaly Detection Using
+Deep OCR Embeddings. Pattern Recognition Letters, 138, 350–358.
+[8] Liu, Y., Zhao, H., & Zhang, P. (2022). Image Splicing Detection via
+Edge-aware Attention and Frequency Domain Learning. IEEE TIFS, 15,
+2790–2803.
+[9] Hernandez-Ortega, J., Fierrez, J., & Ortega-Garcia, J. (2020). Face and
+Document Forgery Detection. IEEE Access, 8, 19955–19968.
+[10] Yarlagadda, S., Natarajan, S., & Venkat, R. (2022). Deep Learning-Based
+Document Fraud Detection. Computers & Security, 118, 102749.
+[11] Zampoglou, M., Papadopoulou, O., & Kompatsiaris, I. (2018). Detecting
+Document and Image Forgeries in the Wild. Information Processing &
+Management, 54(3), 434–448.
+[12] Islam, M. T., & Rahman, M. S. (2023). Multi-modal Document Integrity
+Veriﬁcation. ESWA, 222, 119858.
+[13] Woo, S., Park, J., Lee, J.-Y., & Kweon, I.-S. (2018). CBAM: Convolutional Block Attention Module. In Proceedings of the European Conference on Computer Vision (ECCV 2018), Lecture Notes in Computer
+Science, vol. 11211. Springer, Cham. https://doi.org/10.1007/978-3-03001234-2 1
+[14] Priyanka, J., Sundaresan, A. A., & Kalabarige, L. R. (2025). Advancements in image forgery detection through deep learning methods. AIP
+Conference Proceedings, 3291(1), 030030. doi:10.1063/5.0211873.
+[15] Xie, L., et al. (2024). IDNet: A Novel Identity Document Dataset via
+Few-Shot and Quality-Driven Synthetic Data Generation. In Proceedings
+of the IEEE International Conference on Big Data (BigData), pp. 2244–
+2253.
+[16] Dong, L., Liang, W., & Wang, R. (2024). Robust text image tampering
+localization via forgery trace enhancement and multiscale attention.
+IEEE Transactions on Consumer Electronics, 70(3), 20323–20339.
+doi:10.1109/TCE.2024.20323.
+[17] Cui, S., Nguyen, H. H., Le, T. N., Lu, C. S., & Echizen, I. (2025).
+LookupForensics: A large-scale multi-task dataset for multi-phase
+image-based fact veriﬁcation. IEEE Access, 13, 8841–8856.
+[18] Joren, H., Gupta, O., & Raviv, D. (2022). Learning document graphs
+with attention for image manipulation detection. In International Conference on Pattern Recognition and Artiﬁcial Intelligence (pp. 321–334).
+[19] Li, Y., Zhang, Y. M., Yin, F., & Huang, L. L. (2024). Unsupervised document image tampering localization via anomaly detection. In ICONIP
+2024. doi:10.1007/978-981-96-6606-5 7.
+[20] Luo, D., Zhou, Y., Yang, R., Liu, Y., & Zeng, J. (2023). ICDAR 2023
+competition on detecting tampered text in images. In ICDAR 2023.
+doi:10.1007/978-3-031-41679-8 36.
+[21] Y. Tsyrulnev, “Cybersecurity of intellectual information aggregation processes into digital archives,” Theoretical and Applied Cybersecurity, Kyiv Polytechnic Institute, 2025. [Online]. Available:
+tacs.ipt.kpi.ua/article/view/343769
+
+VII. C ONCLUSION
+This work presents a multimodal deep-learning framework
+for reliable document forgery detection by integrating visual
+texture cues, structural edge patterns, and semantic inconsistencies extracted through OCR. The proposed architecture
+combines a MobileNet-based feature encoder with a dedicated
+edge-enhancement branch and a text-semantic veriﬁcation
+module, enabling robust detection of print–scan recapture,
+region-level manipulation, font tampering, and textual rewriting.
+Experimental results demonstrate that fusing low-level manipulation artifacts with high-level semantic context significantly improves generalization, particularly on challenging
+real-world forgeries. Overall, the proposed system offers a
+practical and scalable solution suitable for educational institutions, veriﬁcation agencies, and government workﬂows
+requiring automated document integrity veriﬁcation.
+VIII. FUTURE SCOPE
+Although the proposed model demonstrates strong performance, several avenues remain for further enhancement:
+• Real-World Dataset Expansion: Increasing the dataset
+size with diverse, high-resolution government and institutional document categories would improve robustness
+under varied printing, scanning, compression, and lighting conditions.
+• Transformer-Based Multi-Modal Fusion: Future extensions may incorporate Vision Transformers (ViT), Document Transformers, or multimodal fusion architectures
+such as LayoutLMv3 or Donut to achieve more expressive
+cross-modal reasoning.
+• Fine-Grained Localization of Forged Regions: Enhancing the model with pixel-level manipulation detection—via Grad-CAM++, SAM, or integrating a U-Net
+segmentation head—would enable explicit localization of
+forged or tampered areas.
+• Adversarial Robustness and Anti-Spooﬁng: Incorporating adversarial training, noise-tolerant layers, or
+recapture-spoof detectors could strengthen the system
+against highly sophisticated AI-generated or GAN-based
+forgeries.
+• On-Device and Real-Time Deployment: Optimization
+through model quantization, pruning, TensorRT acceleration, or ONNX export may support deployment on
+
+6
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:59:52 UTC from IEEE Xplore. Restrictions apply.
+
+[22] A. O. Mulani, V. V. Godase, and S. R. Takale, “Image authentication
+using cryptography and watermarking,” Journal of Image Security and
+Applications, 2025. [Online]. Available: ResearchGate.
+[23] X. Situ, T. Liu, H. Yao, and C. Qin, “Document-image perceptual
+hashing for content authentication,” IEEE Transactions on Big Data,
+2025. [Online]. Available: IEEE Xplore.
+[24] N. Zhu, K. Wang, and X. Zhang, “Document image tampering detection and localization based on dual-path network with progressive supervision,” in Proc. SPIE Digital Image Forensics, 2025. doi:
+10.1117/12.3073213.
+[25] M. Rani and E. R. Sharma, “A comprehensive review of techniques
+for image forgery detection and localization,” in ICT for Sustainable
+Development. Springer, 2025. doi: 10.1007/978-3-032-06671-8 13.
+[26] M. Vasudevan, C. Sireesha, and N. Sumiya, “CNN-based error level
+analysis (ELA) with scores to detect digital image manipulation,” in
+IEEE Conference on Self-Adaptive Systems, 2025. [Online]. Available:
+IEEE Xplore.
+[27] L.-C. Chen, G. Papandreou, I. Kokkinos, K. Murphy, and A. L. Yuille,
+“DeepLab: Semantic Image Segmentation with Deep Convolutional
+Nets, Atrous Convolution, and Fully Connected CRFs,” IEEE Transactions on Pattern Analysis and Machine Intelligence, vol. 40, no. 4,
+pp. 834–848, Apr. 2018, doi: 10.1109/TPAMI.2017.2699184.
+
+7
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:59:52 UTC from IEEE Xplore. Restrictions apply.
+
+

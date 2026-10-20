@@ -1,0 +1,926 @@
+2026 International Conference on Electronics and Renewable Systems (ICEARS) | 979-8-3315-4881-0/26/$31.00 ©2026 IEEE | DOI: 10.1109/ICEARS67481.2026.11416587
+
+Proceedings of the International Conference on Electronics and Renewable Systems (ICEARS-2026)
+IEEE Xplore Part Number: CFP26AV8-ART; ISBN: 979-8-3315-4881-0
+
+SafeSign: A Multi-Level Forgery and Deepfake
+Detection System for Images, Videos, and
+Handwritten Signatures
+Dr. G. Naga Rama Devi,
+Professor, Project Guide,
+Department of CSE(DS),
+Sreyas Institute of Engineering
+and Technology,
+Telangana, India
+dr.g.nagaramadevi@sreyas.ac.in
+
+Veeramally Sanjana,
+UG Student,
+Department of CSE(DS),
+Sreyas Institute of Engineering
+and Technology,
+Telangana, India
+sanjanaveeramally@gmail.com
+
+Vamsi Kamtam,
+UG Student,
+Department of CSE(DS),
+Sreyas Institute of Engineering
+and Technology,
+Telangana, India
+vamsinani390@gmail.com
+
+Chandippa Tejaswi,
+UG Student,
+Department of CSE(DS),
+Sreyas Institute of Engineering
+and Technology,
+Telangana, India
+chandippatejaswi@gmail.com
+
+Abstract- The fast development of artificial intelligence and
+other digital media editing tools leading falsified images,
+deepfakes, and falsified handwritten signatures have become
+serious challenges and very difficult to handle in the field of
+cybersecurity,
+digital
+forensics,
+and
+document
+verification/authentication.
+Manual
+and
+rule-based
+verification methods are not always capable of identifying
+this type of sophisticated forgery, especially those that are
+produced using deep learning models. In this paper presents
+SafeSign:AI-based multi-level forgery detection system that is
+used to analyze and verify the authenticity of the images,
+videos, and handwritten signatures in the single system. The
+process of image tampering detection is done through
+EfficientNet convolutional neural networks (CNN) that are
+trained to detect inconsistencies that are added during
+manipulation. The video deepfake detection technique is
+obtained by frame-based analysis of the deep learning models
+that identify visual artifacts in facial areas but with
+computational efficiency. The verification of handwritten
+signatures is done with the help of a Siamese CNN which is
+trained to learn the similarity measure between authentic and
+fake signatures. The suggested system is implemented as an
+online application that enables its users to upload media files
+
+Sandra Rahul,
+UG Student,
+Department of CSE(DS),
+Sreyas Institute of Engineering
+and Technology,
+Telangana, India
+sandrarahulchinnu@gmail.com
+
+and receive automated predictions of authenticity and
+confidence scores and forensic reports. The experimental
+analysis of publicly available datasets indicates that SafeSign
+offers reliable and efficient multimodal forgery detection,
+hence, it can be used in practice in digital forensics and to
+ensure cybersecurity.
+
+Keywords: Artificial Intelligence, Digital Media, Deepfakes,
+cybersecurity, digital forensics, EfficientNet CNN, Siamese
+CNN, multimodal forgery, authentic.
+I.
+
+INTRODUCTION
+
+The authenticity of digital media has become a critical issue
+due to the intensive use of images, videos, and scanned
+documents in social media, money transactions, court cases,
+and online communication. Simultaneously, the fast
+development of artificial intelligence and processing images
+have simplified the manipulation of the digital content in the
+most realistic forms. Phishing, fake video clips, and faked
+signatures of a handwritten signature are becoming a
+widespread method of fraud, misinformation, and identity
+
+979-8-3315-4881-0/26/$31.00 ©2026 IEEE
+
+1504
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:00:41 UTC from IEEE Xplore. Restrictions apply.
+
+Proceedings of the International Conference on Electronics and Renewable Systems (ICEARS-2026)
+IEEE Xplore Part Number: CFP26AV8-ART; ISBN: 979-8-3315-4881-0
+
+theft, and ensuring their authenticity is a significant
+challenge.
+Visual contents can be changed using image tampering
+methods, including copymove, splicing, and retouch methods
+which do not create clear evidence, and with deepfake
+technologies it is possible to create believable facial
+manipulations in videos. Signatures that are written down,
+still commonly used as a means of identity checking in banks
+and legal documents, are also vulnerable to skilled forgery.
+As a result, manual checking and rules-based verification
+methods are not adequate anymore to uncover such complex
+forgeries.
+In order to overcome these limitations, there has been an
+interest in automated forgery detection with machine learning
+and deep learning. Convolutional Neural Networks (CNNs)
+have demonstrated overall high performance in identifying
+manipulated images and videos through the training of
+discriminative features of visual characteristics that are
+directly learnt via data [2], [3]. Equally, frame-based and
+spatio-temporal deep learning architectures have been
+suggested to deepfake detection [4], and architectures based
+on Siamese networks have been effectively used to identify
+handwritten signatures [5],[6].
+Although profound progress was made in the field of deep
+learning-based forgery detection, the majority of the current
+practices concentrate on one modality, i.e., image tampering,
+video deepfakes, or handwritten signature verification alone.
+Such single-mod focus restricts their usage in practice in
+forensic and cybersecurity cases, where varying types of
+digital evidence have to be considered jointly very often.
+Moreover, very accurate models can be very expensive to
+compute, which makes them less viable to use in real-time.
+Therefore, an effective, scalable, and unified system that
+would identify several types of forgery in digital formats is
+required. This paper fills this gap by introducing the
+SafeSign, a multi-level forgery and deepfake detection
+system that incorporates image and video as well as
+handwritten signature checks in the single deployable
+platform.
+II.
+
+LITERATURE SERVEY
+
+The phenomenon of digital forgery has been actively studied
+because pf the rapid growth of artificial intelligence-based
+content generation. Existing research mainly focuses on
+individual forgery modalities such as image tampering, facial
+deepfake detection, and handwritten signature verification.
+
+Wang et al. [1] gave an extensive survey of passive image
+tampering detection methods, classifying them into pixellevel, format-based, camera-based, and semantic-level
+methods. Their paper pointed out that conventional
+handcrafted forensic tools are powerful in identifying copy–
+move and splicing attacks but are very delicate to postprocessing activities like compression and resizing, so they
+are not robust in real world setting.
+A large-scale benchmark of facial manipulation detection
+with different levels of compression was introduced in
+FaceForensics++ dataset by Rössler et al. [2]. Their
+experiments showed that CNN-based models are much better
+at detecting manipulated faces images as compared to human
+observers. Nevertheless, the work is confined to the field of
+facial forgery and other types of digital forgery are not
+discussed.
+D. Afchar et al. suggested MesoNet [3], a small CNN
+structure that is trained on mesoscopic facial video forgery
+detection. The model was both competitive and had low
+computational complexity to ensure that it was applicable in
+near real-time. However, its performance was demonstrated
+to decline on unseen datasets, which means poor
+generalization.
+O.de Lima et al. [4] investigated deepfake detection using
+spatiotemporal convolutional networks through adding the
+temporal data across video frames. Their findings showed
+better results than frame-based methodology, but the
+implementation of 3D CNNs is much higher, which is
+inconvenient in lightweight systems.
+Siamese network-based methods have been highly embraced
+in the field of handwritten signature verification. H.
+Hafemann et al. [5] evidence that similarity measures can be
+successfully trained in Siamese CNNs between real and
+forged signatures, whereas M. Soleimani et al. [6] indicated
+that deep feature learning can be more successful than
+handcrafted features in signature verification on the offline
+setting. These are however limited to signature analysis and
+not combined with other mechanisms of forgery detection.
+The latest CNN-based image tampering detection tools [7]
+have demonstrated higher robustness than traditional forensic
+tools when they are trained on learning spatial anomalies. In
+spite of their efficacy, such methods are usually image-level,
+and are not extrapolatable to video and document forgery
+detection.
+
+979-8-3315-4881-0/26/$31.00 ©2026 IEEE
+
+1505
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:00:41 UTC from IEEE Xplore. Restrictions apply.
+
+Proceedings of the International Conference on Electronics and Renewable Systems (ICEARS-2026)
+IEEE Xplore Part Number: CFP26AV8-ART; ISBN: 979-8-3315-4881-0
+
+TABLE I. COMPARATIVE ANALYSIS OF EXISTING FORGERY
+DETECTION APPROACHES
+
+splicing, as well as post-processing like compression, and
+resizing. The diversity of the CASIA have been employed
+extensively in image forensics studies because CNN-based
+systems are capable of learning spatial inconsistencies that
+are induced in image manipulation [1], [7].
+
+Accuracy
+(%)
+
+Key
+Limitatio
+n
+
+Image
+
+Handcrafted +
+ML
+
+85-90
+
+Sensitive
+to
+compressi
+on
+
+TABLE II. SAMPLES OF THE CASIA DATASET FOR IMAGE
+TAMPERING DETECTION MODULE
+
+Rossler et al.
+[2]
+
+Video
+
+CNN
+
+90+
+
+Limited to
+facial
+forgery
+
+Original Images in the
+Dataset
+
+Afchar et al.
+[3]
+
+Video
+
+Frame-Based
+CNN
+
+91
+
+Poor
+generalizat
+ion
+
+De Lima et al.
+[4]
+
+Video
+
+Spatiotempora
+l
+
+93-94
+
+High
+Computati
+onal cost
+
+Hafemann et
+al. [5]
+
+Signature
+
+Siamese CNN
+
+93
+
+Single
+modality
+
+Proposed
+SafeSign
+
+Multimod
+al
+
+CNN +
+Siamese CNN
+
+92.9
+
+Lightweig
+ht tradeoffs
+
+Reference
+
+Modality
+
+Model Type
+
+Wang et al.
+[1]
+
+Tampered Images in the
+Dataset
+
+As Table I summarizes, the currently known methods of
+detecting forgery do so in a unimodal fashion, that is, by
+detecting a single type of digital forgery. Although the
+spatiotemporal models are accurate in detection, they are
+computationally expensive, and they cannot be deployed in a
+lightweight manner. The restrictions are the driving force
+behind having a comprehensive and efficient multi-level
+system like SafeSign.
+Research Gap: Based on the literature reviewed, it can be seen
+that the vast majority of the available solutions target
+unimodal forgery detection and do not integrate images,
+videos, and handwritten forms. Furthermore, the deep
+learning models with high accuracy tend to be
+computationally complex and can hardly be implemented in
+practice. It is this that drives the creation of an efficient,
+multi-level forgery detection system that is unified, such as
+the one presented in the SafeSign framework.
+III.
+
+ABOUT DATASET
+
+The SafeSign system is trained and tested on publicly
+available datasets that are chosen such that they represent
+realistic forgery situations on images, video, and handwritten
+signature.
+
+In the case of video deepfake detection, DeepFake Detection
+Challenge (DFDC) is used. DFDC data can be described as a
+large-scale dataset of real and manipulated videos of different
+levels of compression, noise, and lighting conditions, which
+is close to the social media content of the real world. It is
+diverse enough to be applicable to testing the sound deepfake
+detection models in the real-life deployment scenario [8]. The
+Table III shows the DFDC original and tampered video
+frames from the dataset.
+
+In tampering of images, the CASIA Tampered Image
+Dataset is utilized. The images available in this dataset
+consist of both genuine and artificial images as shown in
+Table II created by ordinary tampering like copy-move, and
+
+979-8-3315-4881-0/26/$31.00 ©2026 IEEE
+
+1506
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:00:41 UTC from IEEE Xplore. Restrictions apply.
+
+Proceedings of the International Conference on Electronics and Renewable Systems (ICEARS-2026)
+IEEE Xplore Part Number: CFP26AV8-ART; ISBN: 979-8-3315-4881-0
+
+TABLE III. SAMPLES OF THE DFDC DATASET FOR VIDEO
+DEEPFAKE DETECTION MODULE
+
+Original Video Frames
+
+Tampered Video Frames
+
+In the case of handwritten signature verification, offline
+signature datasets are publicly available and are composed of
+genuine and forged signature samples as shown in Table IV
+which are gathered by several individuals. These datasets
+enable the model to train on writer-independent similarity
+measures and they have extensively been applied in Siamese
+network-based signature verification research [5], [6].
+TABLE IV. SAMPLES OF THE CEDAR DATASET FOR
+HANDWRITTEN SIGNATURE VERIFICATION MODULE
+Original Signatures
+
+IV.
+
+Forgery Signatures
+
+METHODOLOGY
+
+SafeSign is a system that uses a modular and systematic
+approach to identifying various types of online forgery, such
+as image manipulation, video deepfakes, forged handwritten
+signatures, and so on. The processing of each type of media
+is carried out with the help of a specific deep learning model,
+and all the modules are combined into a single framework.
+A. DATA PREPROCESSING
+The input media files are never left untouched in their original
+form as they are subjected to preprocessing to enhance
+consistency and better model results. Frames of images and
+video are rescaled and standardized to the input demands of
+the corresponding convolutional neural networks. Video files
+are run through to remove representative frames at predefined
+intervals to trade-off between accuracy of detection and
+computation. Images of handwritten signature are converted
+to grayscale, scaled, and normalized to make strokes more
+
+979-8-3315-4881-0/26/$31.00 ©2026 IEEE
+
+1507
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:00:41 UTC from IEEE Xplore. Restrictions apply.
+
+Proceedings of the International Conference on Electronics and Renewable Systems (ICEARS-2026)
+IEEE Xplore Part Number: CFP26AV8-ART; ISBN: 979-8-3315-4881-0
+
+visible and minimise the amount of background noise as
+widely used in offline signature verification research [5], [6].
+B. IMAGE TAMPERING DETECTION
+Image tampering detection is done by means of a CNN-based
+classification system with EfficientNet as the underlying
+architecture. The model is trained to recognise genuine
+pictures and manipulated ones by learning spatial
+inconsistency which is introduced during manipulation.
+Image forensic methods that have been developed by deep
+learning have shown high robustness over traditional handcrafted feature-based methods, especially when subjected to
+compression and noise [7].
+
+CNN+LSTM
+
+Partial
+
+93.0
+
+Medium
+
+Moderate
+
+3D CNN
+
+Yes
+
+94.0
+
+High
+
+Low
+
+Proposed
+Method
+
+Aggregated
+Frames
+
+91.5
+
+Low
+
+High
+
+C. VIDEO DEEPFAKE DETECTION
+The video deepfake detector module uses a frame-based
+method of deep learning to make sure it is computationally
+efficient. A CNN is trained to detect visual artifacts added
+during the generation of deepfakes through the extraction of
+facial regions of sampled video frames followed by their
+analysis. The spatiotemporal models do not have this
+drawback since they are more effective in capturing the
+temporal inconsistencies at a high cost of computation [4].
+Previous research has demonstrated that the frame-based
+CNN models can perform competitively when the predictions
+are made using the multiple frames [3], [9]. In line with this,
+SafeSign combines frame-level predictions to generate an
+effective video-level authenticity score.
+The spatiotemporal deep learning architectures, which
+include the 3D CNNs and CNN-LSTM, can capture the
+temporal discrepancies between adjacent video frames, but at
+a much higher cost in terms of their computational cost and
+inference latency. By contrast, the suggested frame-based
+CNN model processes representative frames at a set time
+resolution and frames together with frame-level predictions
+to generate a video level authenticity score. This design
+provides a balanced trade-off between detection performance
+and computational efficiency and hence, it can be deployed
+in real-life forensic applications with fair level of real-time
+performance shown in table.V.
+TABLE V. COMPARISON BETWEEN FRAME-BASED AND
+SPATIOTEMPORAL DEEPFAKE DETECTION MODULES
+Approach
+
+Temporal
+Modelling
+
+Accuracy
+(%)
+
+Computational
+Cost
+
+Deployment
+Suitability
+
+Frame-Based
+CNN
+
+No
+
+91.5
+
+Low
+
+High
+
+Fig 1. IMPACT OF VIDEO FRAME SAMPLING RATE ON DEEPFAKE
+DETECTION ACCURACY
+
+The results in Fig. 1 indicate that detection accuracy improves
+with increased frame sampling; however, accuracy gains
+beyond 12 frames are marginal while computational cost
+increases significantly.
+
+D. SIGNATURE VERIFICATION
+Verification of handwritten signatures is done with the help
+of a Siamese Convolutional Neural Network which is
+composed of two identical CNN branches that share weights.
+Every branch derives feature embeddings of a true and a
+suspected image signature. The distance between the two
+embeddings is computed and the decision of authenticity is
+ultimately made according to a predetermined parameter.
+Siamese network-based methods have been extensively
+verified to do offline signature verification because they are
+capable of learning writer-independent similarity metrics [5],
+[6].
+E. DECISION AND REPORTING
+In the case of each analyzed media file, the module provides
+the prediction of authenticity and the score of confidence.
+These findings are put together in the system to produce
+computerized forensic reports. Receiver Operating
+Characteristic (ROC) analysis during the process of threshold
+calibration is used during the validation in order to establish
+dependable decision limits, which is commonplace in
+biometric and forensic verification systems [10].
+The selection of decision thresholds used in authenticity
+classification was done through the analysis of the Receiver
+
+979-8-3315-4881-0/26/$31.00 ©2026 IEEE
+
+1508
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:00:41 UTC from IEEE Xplore. Restrictions apply.
+
+Proceedings of the International Conference on Electronics and Renewable Systems (ICEARS-2026)
+IEEE Xplore Part Number: CFP26AV8-ART; ISBN: 979-8-3315-4881-0
+
+Operating Characteristic (ROC) curve on the validation
+process. The false positive rate was reduced to the maximum
+possible limit with the thresholds selected to achieve a
+maximum true positive rate, in accordance with standard
+practice in biometric and forensic verifications systems.
+Sensitivity analysis indicated that the overall system
+performance was not significantly influenced by any slight
+variations in the values of the threshold, and this is how
+robust the decision mechanism has been proved to be.
+The configuration and training parameters used for each
+detection module are summarized in Table VI.
+TABLE VI. MODEL CONFIGURATION AND TRAINING
+PARAMETERS
+
+Parameter
+Input Size
+Architecture
+Frames
+Sampled
+Optimizer
+
+Image
+Model
+224 x 224
+EfficientNet
+CNN
+
+Video
+Model
+224 x 224
+FrameBased CNN
+
+Signature
+Model
+150 x 150
+Siamese
+CNN
+
+Fig. 2. SYSTEM ARCHITECTURE OF PROPOSED SYSTEM
+
+-
+
+8-12
+
+-
+
+The Layers of the System Architecture as shown in Fig. 2 are:
+Client Layer: Client Layer is the user interface that the users
+interface the system. It is reached through the regular webbased browser through which one can post images, videos, or
+signature files to be examined. The layer just interacts with
+the user and does not do any processing or inference that is
+why it is simple and secure.
+
+Adam
+
+Adam
+
+Adam
+
+Loss
+Function
+
+Binary
+CrossEntropy
+
+Binary
+CrossEntropy
+
+Contrastive
+Loss
+
+Evaluation
+Metric
+
+Accuracy
+
+Accuracy
+
+Accuracy
+
+V.
+
+SYSTEM ARCHITECTURE
+
+SafeSign system has a multi-layered and modular design which
+is meant to offer the concept of multi-level forgery detection of
+images, videos and handwritten signature on images in the same
+platform. The architecture also reduces the difficulty of scaling,
+maintaining, and processing the information because
+application logic, model inference, user interaction and data
+storage are divided into different layers such as Fig 2.
+
+Application Layer: Application Layer is the heart of the
+orchestration component of the system and implemented with
+a Streamlit web application. It accepts the uploaded files by
+the client layer in form of the HTTP request and manages the
+general workflow. Depending on the form of input media, the
+application layer forwards the data to the corresponding
+detection module. It also handles the preprocessing, makes
+calls to the trained models to do inference, aggregates results
+and organizes report generation and logging.
+Model Layer: The Model Layer is made up of the three
+individual deep learning models that are specialized in
+detecting a particular forgery task:
+Signature Model: This is a Siamese Convolutional Neural
+Network, which compares actual signature images and
+suspected signature images and calculates a similarity score
+to verify authenticity.
+Image Model: The model is an EfficientNet-based
+Convolutional neural network that is trained to detect
+authentic or tampered images based on the learning of spatial
+discrepancies.
+
+979-8-3315-4881-0/26/$31.00 ©2026 IEEE
+
+1509
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:00:41 UTC from IEEE Xplore. Restrictions apply.
+
+Proceedings of the International Conference on Electronics and Renewable Systems (ICEARS-2026)
+IEEE Xplore Part Number: CFP26AV8-ART; ISBN: 979-8-3315-4881-0
+
+Video Model: This is a frame-based CNN, which examines
+sampled video frames to detect deepfake artifacts, and framelevel prediction is combined into a final decision.
+Storage Layer: Storage Layer helps in managing the system
+through persistent data. It saves trained model weights in.h5
+format, prediction logs in CSV files and automatically
+generated PDF reports to assist the user. Such separation
+guarantees that inference operations are independent of data
+storage enhancing system reliability.
+VI.
+
+RESULTS
+
+SafeSign system was tested on three forgery detection tasks
+that included image tampering detection, video deepfake
+detection, and handwritten signature verification.
+Fig. 3 describes the details of the SafeSign Interface including
+the key features present in each forgery detection module.
+
+Fig. 5: SAMPLE RESULTS OF IMAGE TAMPERING DETECTION
+
+B. Video Deepfake Detection Results: Video deepfake
+detection module uses a frame-based CNN that uses
+prediction aggregation on sampled frames. The model was
+successful to detect visual artifacts that were added during the
+manipulation of the faces, such as the irregularity of the
+texture and inconsistency of blending. The acquired findings
+verify that frame aggregation methods can be used in near
+real-time deepfake detection [3], [4].
+Fig. 6 shows the interface of the video deepfake detection
+module where the user and add or upload the original or
+tampered videos to check the authenticity or originality of the
+input given.
+
+Fig. 6: VIDEO DEEPFAKE DETECTION MODULE
+Fig. 3: ABOUT PAGE OF SAFESIGN INTERFACE
+
+A. Image Tampering Detection Results: It has an image
+tampering detection module to detect authentic images and
+tampered images and showed high performance with the use
+of EfficientNet CNN. The obtained accuracy proves the
+efficiency of CNNs that are based on EfficientNet in terms of
+detecting image forgeries, which previous research confirms
+[7].
+
+Fig. 7 shows the result of the Video Deepfake detection
+module by taking sample video as input from the user.
+
+Fig. 4 shows the interface of the Image Tampering Detection
+where the user can upload the original or tampered images to
+check the authenticity or originality of the given input.
+
+Fig. 7: SAMPLE RESULTS OF VIDEO DEEPFAKE DETECTION
+
+Fig. 4: IMAGE TAMPERING DETECTION MODULE
+
+C. Results of Signature Verification: The handwritten
+signature verification module is a Siamese Convolutional
+Neural Network that compares actual and potential
+signatures. The model was able to perform well in its
+verification process as it was able to learn writer-independent
+similarity features [5], [6].
+
+Fig. 5 shows the result of the Image Tampering Detection
+module by taking sample image as input from the user.
+
+Fig. 8 shows the interface of the Signature Verification where
+the user can upload the genuine and forged signatures to
+check the authenticity or originality of the given input.
+
+979-8-3315-4881-0/26/$31.00 ©2026 IEEE
+
+1510
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:00:41 UTC from IEEE Xplore. Restrictions apply.
+
+Proceedings of the International Conference on Electronics and Renewable Systems (ICEARS-2026)
+IEEE Xplore Part Number: CFP26AV8-ART; ISBN: 979-8-3315-4881-0
+
+Proposed multimodal
+SafeSign
+
+Fig. 8: SIGNATURE VERIFICATION MODULE
+
+Fig. 9 shows the result of the Signature Verification module
+by taking signatures as input from the user.
+
+Fig. 9: SAMPLE RESULTS OF SIGNATURE VERIFICATION
+
+D. Accuracy Summary: Table VII shows the accuracy of the
+classification of each detection module within the SafeSign
+system. The CNN based on EfficientNet is the most accurate
+in terms of detecting image tampering. Although the reduced
+accuracy of the frame-based CNN to detect video deepfakes
+can be attributed to the complexity of video data, the Siamese
+CNN is also successful in signature verification.
+TABLE VII. PERFORMANCE SUMMARY OF SAFESIGN DETECTION
+MODULES
+Detection Model
+
+Model Used
+
+Accuracy (%)
+
+Image Tampering
+Detection
+
+EfficientNet-based
+CNN
+
+94.2%
+
+Video Deepfake
+Detection
+
+Frame-Based CNN
+
+91.5%
+
+Handwritten
+Signature Verification
+
+Siamese CNN
+
+93.1%
+
+Overall Accuracy: 92.9%
+
+92.9
+
+Lowest
+
+Table VIII. illustrates despite the excellent performance of
+each of the individual detection modules, the combined
+SafeSign framework is more robust, as it lowers the false
+negative. The system reduces the danger of misclassification
+that can be caused by use of one or more detectors by crossvalidating the evidence in more than one modality.
+Though the models were trained and tested on the benchmark
+data sets like CASIA, DFDC and CEDAR, user uploads in a
+real-world environment may vary in compression, resolution,
+noise, and light conditions. Preprocessing methods like
+normalization and compression simulation were used to curb
+this shift of domain. Moreover, the ROC-based threshold
+calibration facilitates constant threshold behavior to a wide
+variety of real-life inputs.
+VII.
+
+CONCLUSION
+
+This paper showcased the SafeSign, a multi-tiered forgery
+and deepfake detection multi-level neural network trained to
+combat the increased numbers of falsified images, videos,
+and handwritten signatures. The proposed framework
+incorporates EfficientNet-based image tampering detection,
+frame-based video deepfake analysis, and Siamese CNNbased signature verification, which integrates into a coherent
+framework, and the results are a high detection performance
+and computational performance. Explicit testing showed that
+there is good performance regardless of the modality and the
+overall accuracy of 92.9. SafeSign is only lightweight and has
+automated reporting, which is used to make it fit real-world
+digital forensics and cybersecurity-related applications. The
+future work will consider adding more modalities like audio
+deepfake detection, and also deploy the system in edge
+devices to enable low latency forensic analysis.
+REFERENCES
+
+E. Effect of MultiModal Fusion:
+TABLE VIII. PERFORMANCE COMPARISON BETWEEN SINGLEMODULE AND MUTLIMODAL DEPLOYEMNT
+System Configuration
+
+Accuracy (%)
+
+False Negative Rates
+
+Image module only
+
+94.2
+
+Moderate
+
+Video module only
+
+91.5
+
+Moderate
+
+Signature module only
+
+93.1
+
+Low
+
+[1] W. Wang, J. Dong, and T. Tan, “A Survey of Passive Image
+Tampering Detection,” National Laboratory of Pattern Recognition,
+2009.
+[2] A. Rössler, D. Cozzolino, L. Verdoliva, C. Riess, J. Thies, and
+M. Nießner, “FaceForensics++: Learning to Detect Manipulated
+Facial Images,” Proc. IEEE/CVF International Conference on
+Computer Vision (ICCV), 2019.
+[3] D. Afchar, V. Nozick, J. Yamagishi, and I. Echizen, “MesoNet:
+A Compact Facial Video Forgery Detection Network,” arXiv
+preprint arXiv:1809.00888, 2018.
+
+979-8-3315-4881-0/26/$31.00 ©2026 IEEE
+
+1511
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:00:41 UTC from IEEE Xplore. Restrictions apply.
+
+Proceedings of the International Conference on Electronics and Renewable Systems (ICEARS-2026)
+IEEE Xplore Part Number: CFP26AV8-ART; ISBN: 979-8-3315-4881-0
+
+[4] O. de Lima, S. Franklin, S. Basu, S. Karwoski, and R. George,
+“Deepfake Detection Using Spatiotemporal Convolutional
+Networks,” arXiv preprint arXiv:2006.14749, 2020.
+[5] L. G. Hafemann, R. Sabourin, and L. S. Oliveira, “Offline
+Handwritten Signature Verification Using Convolutional Neural
+Networks,” Pattern Recognition, vol. 70, pp. 1–12, 2017.
+[6] M. Soleimani, F. Razzazi, and H. Sameti, “Learning Features for
+Offline Handwritten Signature Verification Using Deep
+Convolutional Neural Networks,” Pattern Recognition, vol. 61, pp.
+26–36, 2017.
+[7] Bipasha, Sirajum. "Literature Survey of Image Forgery
+Detection Using Machine Learning." (2025).
+[8] B. Dolhansky, J. Bitton, B. Pflaum, J. Lu, R. Howes, M. Wang,
+and C. Ferrer, “The DeepFake Detection Challenge Dataset,” arXiv
+preprint arXiv:2006.07397, 2020.
+[9] F. Chollet, “Xception: Deep Learning with Depthwise Separable
+Convolutions,” Proc. IEEE Conference on Computer Vision and
+Pattern Recognition (CVPR), 2017.
+[10] A. K. Jain, A. Ross, and S. Prabhakar, “An Introduction to
+Biometric Recognition,” IEEE Transactions on Circuits and
+Systems for Video Technology, vol. 14, no. 1, pp. 4–20, 2004.
+
+979-8-3315-4881-0/26/$31.00 ©2026 IEEE
+
+1512
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:00:41 UTC from IEEE Xplore. Restrictions apply.
+
+

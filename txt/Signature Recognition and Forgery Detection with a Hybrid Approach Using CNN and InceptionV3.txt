@@ -1,0 +1,546 @@
+2025 International Conference on Information, Implementation, and Innovation in Technology (I2ITCON) | 979-8-3315-3482-0/25/$31.00 ©2025 IEEE | DOI: 10.1109/I2ITCON65200.2025.11210728
+
+2025 International Conference on Information, Implementation, and Innovation in Technology (I2ITCON)
+Pune, India. July 04 - 05, 2025
+
+Signature Recognition and Forgery Detection with a
+Hybrid Approach using CNN and InceptionV3
+Suresh Babu Dasari
+
+Hemanth Suresh Para
+
+Dheeraz Chaduvula
+
+Dept. of CSE
+V R Siddhartha Engineering College
+Vijayawada, Andhra Pradesh, India
+dasarisuresh@vrsiddhartha.ac.in
+
+Dept. of CSE
+V R Siddhartha Engineering College
+Vijayawada, Andhra Pradesh, India
+phemanth1555@gmail.com
+
+Dept. of CSE
+V R Siddhartha Engineering College
+Vijayawada, Andhra Pradesh, India
+dheerazchaduvula23@gmail.com
+
+look real but attributed to the wrong person—a problem as
+important as forgery. Most existing solutions are biased towards forgery detection with the omission of proper attribution
+as a necessary requirement. This incompatibility results in
+incomplete or incorrect systems that limit their performance
+and validity in real-world scenarios where authenticity and
+proper attribution are both issues.
+In order to overcome these constraints, we introduce a
+hybrid deep learning-based model that consolidates both signature recognition and forgery detection within a single efﬁcient
+pipeline. Within our method, we utilize two datasets: the
+publicly available GPDS-100 ofﬂine signature dataset and a
+locally collected dataset with signatures from 19 individuals. Following preprocessing, both datasets are divided into
+training, validation, and testing sets. We train a Convolutional
+Neural Network (CNN) to identify individuals based on the
+unique signature pattern of each individual and concurrently
+use InceptionV3, whose deep and multi-scale feature extraction ability is renowned, to detect forgeries. By combining the
+strengths of the two models and training on variant signature
+data, our system can effectively identify the signer and indicate
+the authenticity of the signature, providing a comprehensive
+and robust solution for real-world signature veriﬁcation.
+
+Abstract—Signatures are vital for identity veriﬁcation in banking, legal agreements, and document authentication, making their
+authenticity crucial due to rising fraud. Traditional methods
+address either signature recognition or forgery detection but
+independently, with no uniﬁed framework. In this work, we
+propose a hybrid model for signature veriﬁcation that uses deep
+learning models, CNN and InceptionV3. We initially collect the
+publicly available GDPS-100 ofﬂine signature dataset CustomCollected Signature Dataset. After preprocessing, the dataset is
+split into training, testing, and validation sets. We train the CNN
+model to identify signatures from the identity of the individual,
+and at the same time we train the InceptionV3 model to identify
+genuine and forged signatures. Person identiﬁcation is done
+using CNN because it has the capability to learn distinctive
+handwriting characteristics, and forgery identiﬁcation is done
+using InceptionV3 because it has the capability to learn features
+at multiple scales and is robust at detecting subtle differences. We
+then merge these two models into a single pipeline, which when
+provided with an input signature image, identiﬁes the person
+and whether the signature is genuine or forged. The experiments
+show that this strategy effectively solves the person identiﬁcation
+and forgery detection tasks, and it provides a uniﬁed and efﬁcient
+solution for real world signature veriﬁcation.
+Index Terms—Convolutional Neural Networks (CNN), Deep
+Learning, Forgery Detection, Hybrid Approach, InceptionV3,
+Signature Recognition, Signature Veriﬁcation
+
+I. I NTRODUCTION
+
+II. L ITERATURE R EVIEW
+
+Signatures have been a safe form of identiﬁcation for
+decades of individuals in various industries, such as banking,
+court forms, and government processes. Their handwritten
+nature gives them a personal touch to veriﬁcation. Yet, as technology advanced, so has the technique of forging signatures,
+rendering manual checks less reliable. There are methods
+such as expert forgeries, where a signature is mimicked after
+rigorous practice, and even AI forgeries that almost appear to
+be real. These limitations introduce the demand for a stronger
+and more automated system of signature veriﬁcation to deter
+identity theft and document forgery.
+Traditional signature veriﬁcation methods are generally biased towards signer identiﬁcation or forgery detection [1], and
+they treat them as separate tasks. Though attempts at both
+are addressed in some works, these are tried with parallel
+models with minimal integration and lack the leverage to gain
+from shared information between the two. The difference is
+not suitable for real-world scenarios where a signature can
+
+979-8-3315-3482-0/25/$31.00 ©2025 IEEE
+
+We brieﬂy discuss here the overview of the methods used
+previously.
+Kiran et al. [2] created an ofﬂine signature veriﬁcation
+system based on image processing and a Back Propagation Neural Network (BPNN). Preprocessing techniques like
+grayscale conversion, thresholding, and Canny edge detection
+were applied to enhance signature readability. The preprocessed images were resized and input to a ﬁxed-architecture
+BPNN for classifying them. Their system achieved a highest
+recognition rate of 93% on the dataset. The system lacked the
+capability to catch forgeries. It was also prone to overﬁtting
+with limited neurons and required manual tuning. These constraints rendered the model less scalable and efﬁcient for use
+in real-world scenarios.
+Poddara et al. [3] utilized CNN for recognition and CrestTrough for detection with 90-94% recognition and 85-89%
+detection rate. Their system was not, however, robust against
+
+1
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:57:49 UTC from IEEE Xplore. Restrictions apply.
+
+DCT 4 and DHT 64 combination. Nevertheless, the system is
+marred with computational complexity, signature variability,
+and the challenge of detecting skilled forgeries, calling for
+more robust and adaptive systems.
+
+variability in signatures and ran the risk of misclassiﬁcations.
+Harris and SURF algorithms, though good, were not effective
+in detecting skilled forgeries. Further, the system’s reliance
+on pre-deﬁned thresholds and features made it less sensitive
+to changes in signature styles or conditions. These limitations
+imply the need for stronger systems with the capacity to handle
+different signature variations and improve forgery detection
+accuracy.
+Anagha et al. [4] proposed an ofﬂine signature forgery
+detection and veriﬁcation system using the combination of
+Support Vector Machine (SVM) and K-Means algorithms that
+reported 95.83% accuracy in forgery detection. The system
+applied preprocessing methods like RGB to grayscale conversion, image binarization, and region of interest (ROI) extraction, and feature extraction techniques like contour detection
+and Scale-Invariant Feature Transform (SIFT). Yet, the use of
+static image data by the system makes it vulnerable to changes
+in signature styles, and the feature extraction techniques might
+lack the ability to handle all the variations in different signatures. The performance can also decrease when it is applied to
+skilled forgeries or changes in writing conditions like mood or
+health, which are not taken into consideration, so more ﬂexible
+systems need to be maintained.
+Hashim et al. [5] performed a comparative analysis of
+machine learning algorithms for handwritten signature veriﬁcation with the models SVM, CNN, K-NN, and DTW.
+They compared over 20 studies in terms of dataset, feature
+extraction, and classiﬁcation methods. Despite tremendous
+advancements, challenges like high intra-class and inter-class
+variability of signatures, lack of adequate genuine signature
+samples for training, and poor detection of skilled forgeries
+were presented, which indicated the necessity for more reliable
+systems capable of accommodating varied signature styles and
+enhanced forgery detection.
+Wang et al. [6] focus on advances in ofﬂine handwritten
+signature recognition, both traditional feature extraction and
+modern deep learning-based methods. They document the
+use of Convolutional Neural Networks (CNNs) to feature
+extraction, which are better compared to traditional methods
+like Histogram of Oriented Gradients (HOG) and Radon
+transform. There are a number of challenges in spite of these
+advances, according to the paper, like variability in signature
+styles and lack of dynamic characteristics in ofﬂine signatures,
+which make them more difﬁcult to verify compared to online
+signatures. Challenges like sparse feature representation in
+ofﬂine signatures, lack of large, diverse training datasets,
+and multilinguality across signature samples are discussed,
+pointing towards the requirement of more robust and wellintegrated systems in real-world applications.
+Chavan et al. [7] suggested an online signature veriﬁcation
+and forgery detection system based on a Hybrid Wavelet
+Transform-2 (HWT-2) and Hidden Markov Model (HMM)
+classiﬁers. They employed HWT-2 for online signature
+feature extraction and experimented with the system using
+the SVC 2004 database, obtaining low False Rejection Rate
+(FRR) and False Acceptance Rate (FAR) values with the best
+
+III. P ROPOSED M ETHODOLOGY
+In the methodology chapter, we will provide a clear
+description of the methods, techniques, and processes
+employed to attain goals.
+IV. M ODEL A RCHITECTURE
+The system proposed integrates signature veriﬁcation and
+forgery detection into a single framework of deep learning. It
+employs the CNN and InceptionV3 models to offer precise,
+dual-output veriﬁcation from signature images.
+
+Fig. 1. Model Architecture
+
+Figure 1 provides the architecture of this Signature Veriﬁcation System, covering the end-to-end process from data
+acquisition to end output. With the integration of the strengths
+of CNN and InceptionV3 models, and training on dual
+datasets, the system is highly accurate and reliable. The
+end output provides both person identiﬁcation and signature
+genuineness, thus forming a complete and scalable solution for
+practical implementation of signature veriﬁcation in real-world
+applications such as banking, legal documents, and identity
+veriﬁcation services.
+The system design is an integrated and modular deep
+learning system for raw signature image processing, extraction
+of meaningful features, and production of correct identity
+veriﬁcation and forgery detection results. Signature data is
+collected from two data sources: the GPDS-100 publically
+available ofﬂine signature dataset and a Custom-Collected
+Signature Dataset of signatures of 19 individuals. Raw image
+data is subjected to a systematic Data Preprocessing process
+
+2
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:57:49 UTC from IEEE Xplore. Restrictions apply.
+
+that includes grayscale conversion, noise reduction through
+application of Gaussian blur, contrast enhancement using
+CLAHE, and adaptive + Otsu’s thresholding for binarization.
+Preprocessed data is resized, centered, normalized, and split
+into training, validation, and testing sets to enable effective
+model development.
+The preprocessed signature images are then passed through
+two simultaneous deep learning models namely, a CNN model
+trained for person identiﬁcation from signatures and an InceptionV3 model trained for competent forgery detection. The
+CNN identiﬁes distinct handwriting features unique to every
+signer, whereas InceptionV3 is able to recognize real and
+forged signatures because it has the capability of multi-scale
+feature extraction. Both the models are utilized in tandem in a
+Hybrid Model (CNNception) pipeline that receives a signature
+image as input and identiﬁes the signer and authenticates it
+simultaneously.
+
+Fig. 2. Sample signature image processed through preprocessing techniques
+
+the subsequent processing steps. CLAHE (Contrast Limited
+Adaptive Histogram Equalization) is then used to improve
+contrast, making features such as strokes and edges more
+visible. The image is binarized using a combination of Otsu’s
+and Adaptive Thresholding, which effectively separates the
+foreground (signature) from the background. Noise removal
+follows, cleaning the image of small unwanted elements, and
+further reﬁnement ensures that the image is clutter-free. The
+image is resized to standard dimensions: 150x150 pixels for
+the Signature Recognition task (CNN) and 299x299 pixels for
+the Forgery Detection task (InceptionV3) to meet the input
+size requirements of the respective models.
+Normalization in the later phases is employed to normalize
+the pixel values to enable faster and more stable machine learning model training. The data is split into training, validation,
+and testing sets at the 80%, 10%, and 10% ratio respectively
+to enable proper evaluation of the models. This sequential
+process ensures that the image data is clean, consistent, and
+ready for high-performance model training.
+
+A. Data Description
+The raw signature images used as the source in this study
+are derived from two diverse datasets, processed individually
+to offer diverse training and testing. The GPDS-100 dataset
+contains 100 individuals with each having 54 signatures (24
+real and 30 forged) with a total of 5,400 images. The CustomCollected dataset contains 19 individuals with each having
+approximately 140 signatures (80 real and 60–80 forged) with
+a total of 3520 images. The datasets are taken individually for
+model training and testing to offer improved generalization
+and accuracy in signature veriﬁcation.
+Datasets
+• GPDS-100 Dataset
+– Number of individuals/persons: 100
+– Number of signatures per person: 54
+– Genuine: 24 , Forged: 30
+– Total images: 54 × 100 = 5400 images
+• Custom-Collected Dataset
+– Number of individuals/persons: 19
+– Number of signatures per person: 140 (approx.)
+– Genuine: 80 , Forged: 60–80
+– Total images: 3520
+These two datasets are used independently in the
+study—each dataset is handled separately for training and
+evaluation, ensuring the models are exposed to distinct sets
+of signature data for enhanced generalization and accuracy.
+
+C. CNN for Signature Recognition
+The CNN architecture is a 14-layered network of convolutional, pooling, ﬂatten, dropout, and dense layers that is
+speciﬁcally designed for grayscale signature recognition with
+an input dimension of 150×150 pixels. Beginning with four
+convolutional blocks with an increasingly greater number of
+ﬁlters (4, 8, 16, 32), the network continues with max-pooling
+layers that reduce spatial dimensions and preserve salient
+features. This structured deep feature extraction pipeline facilitates ﬁne stroke pattern and texture variation extraction crucial
+for signature discrimination.
+As shown in Figure 3, the architecture then transitions into
+a dense structure comprising a ﬂattening layer and three fully
+connected layers with units 256, 128, and 100, respectively. A
+dropout layer is introduced before the ﬁnal classiﬁcation layer
+to minimize overﬁtting and improve generalization across
+unseen data. The ﬁnal dense layer outputs 100 units, each
+corresponding to an identity class. This architecture supports
+both discriminative feature learning and robust classiﬁcation
+performance.
+
+B. Data Preparation
+The preprocessing pipeline, as illustrated in Figure 2, is
+designed to prepare raw signature images for tasks like signature recognition and forgery detection. The process begins
+by loading the input image, followed by converting it into
+grayscale to simplify the image and focus on intensity rather
+than color. This step reduces the complexity of the image,
+making the following processing more efﬁcient.
+After grayscale conversion, a Gaussian blur is applied to
+smooth the image and reduce noise, enhancing the quality of
+
+3
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:57:49 UTC from IEEE Xplore. Restrictions apply.
+
+through low-level features and an InceptionV3 network for
+detecting forgeries using high-level abstractions. Running both
+models in parallel allows for complementary feature extraction, leading to improved performance in signature veriﬁcation.
+
+Fig. 3. 14-Layered CNN Architecture
+
+To optimize the model, Optuna was used as the hyperparameter tuning framework to automatically search for optimal
+values like learning rate, dropout rate, batch size, and layer
+dimensions, signiﬁcantly improving model efﬁciency and accuracy. Two datasets—custom and GPDS—were used entirely
+independently, with standard training cycles of 35 and 100
+epochs, respectively, and further ﬁne-tuned using extended
+training for 200 epochs. The datasets were never combined
+at any stage.
+
+Fig. 5. Multi-Task Parallel Hybrid Architecture Workﬂow
+
+As illustrated in the Figure 5, the architecture begins with
+a single RGB input signature image. This image is passed
+through two preprocessing pipelines—one that converts the
+image to grayscale and resizes it to 150x150 pixels for the
+CNN model, and another that resizes the RGB image to
+299x299 pixels for the InceptionV3 model. These parallel
+branches independently process the input through their respective models to generate feature outputs. The CNN branch
+outputs the predicted person (identity), while the InceptionV3
+branch determines the signature’s authenticity (genuine or
+forged). Both outputs are then fed into a ﬁnal stage where they
+are merged to provide a comprehensive result that includes
+both the person’s identity and the authentication status.
+This hybrid strategy of combining both paths signiﬁcantly
+enhances classiﬁcation efﬁciency and ensures even higher generalizability across diverse handwriting styles and complexities
+of signatures. Low- and high-level feature learning separation
+enables the model to be highly generalizable and attuned to
+ﬁner variation in signature patterns. Additionally, architectural
+modularity enables smooth scalability and optimization, in
+which it is well-positioned to be a versatile tool in realworld signature veriﬁcation systems, where fraud detection
+and identity veriﬁcation are of paramount concern. Blending
+recognition with forgery detection into a single framework, the
+architecture exhibits efﬁciency and wisdom through the use of
+multitask learning.
+
+D. InceptionV3 for Forgery Detection
+The forgery detection model builds on the powerful InceptionV3 architecture, which serves as the core feature extractor.
+It begins with an input layer accepting preprocessed images
+of size 299×299 pixels. These inputs are then passed through
+InceptionV3, a deep convolutional neural network pretrained
+on ImageNet, capable of extracting rich hierarchical features
+from the signature images.
+The output from InceptionV3 is ﬂattened into a onedimensional vector, which enables its use in fully connected
+layers. As illustrated in Figure 5, this representation is processed by a dense layer followed by dropout to prevent
+overﬁtting. Another dense layer further reﬁnes the features,
+again followed by dropout. A ﬁnal dense output layer applies
+a softmax activation function for classiﬁcation, yielding the
+forgery detection result.
+
+Fig. 4. InceptionV3-Based Forgery Detection Architecture
+
+V. R ESULT AND A NALYSIS
+
+This setup balances deep feature extraction with regularization strategies, making it suitable for robust forgery detection.
+
+This section presents results from a hybrid deep learning
+model that integrates CNN and InceptionV3 for signer authentication and forgery identiﬁcation. The outputs were combined
+after training on a labeled dataset to enhance performance. The
+model identiﬁed the signer correctly and marked signatures
+as authentic or forged, and evaluation was done on accuracy,
+precision, and recall. Visual outputs and performance metrics
+validate its efﬁcacy.
+
+E. Multi-Task Parallel Hybrid Architecture
+Signature veriﬁcation is vital in biometric authentication,
+particularly in legal and ﬁnancial sectors. To enhance accuracy
+and robustness, a Multi-Task Parallel Hybrid Architecture was
+developed. It combines a CNN for identifying individuals
+
+4
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:57:49 UTC from IEEE Xplore. Restrictions apply.
+
+0.3432 , indicating strong performance in learning to classify
+signatures effectively.
+
+Fig. 6. Training Metrics for CNN on Custom-Collected Dataset
+
+Fig. 10. Training Metrics for CNN on GDPS-100 Dataset
+
+Fig. 7. Confusion Matrix for CNN on Custom-Collected Dataset
+
+Figure 6 and Figure 7 represents the training metrics
+and confusion matrix for the CNN model trained on the
+Custom-Collected dataset for Signature Recognition. The
+CNN achieved an accuracy of 98% and a ﬁnal loss value of
+0.2442 , indicating strong performance in learning to recognize
+signatures effectively.
+
+Fig. 11. Confusion Matrix for CNN on GDPS-100 Dataset
+
+Figure 10 and 11 represents the training metrics and confusion matrix for the CNN model trained on the GDPS100 dataset for Signature Recognition. The CNN achieved an
+accuracy of 95.3% and a ﬁnal loss value of 0.4623 , indicating strong performance in learning to recognize signatures
+effectively.
+
+Fig. 8. Training Metrics for InceptionV3 on Custom-Collected Dataset
+
+Fig. 12. Training Metrics for InceptionV3 on GDPS-100 Dataset
+
+Fig. 9. Confusion Matrix for InceptionV3 on Custom-Collected Dataset
+
+Figure 8 and Figure 9 represents the training metrics and
+confusion matrix for the InceptionV3 model trained on the
+Custom Collected dataset for Forgery Detection. The InceptionV3 achieved an accuracy of 97% and a ﬁnal loss value of
+
+Fig. 13. Confusion Matrix for InceptionV3 on GDPS-100 Dataset
+
+Figure 12 and Figure 13 represents the training metrics and
+confusion matrix for the InceptionV3 model trained on the
+
+5
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:57:49 UTC from IEEE Xplore. Restrictions apply.
+
+VI. C ONCLUSION A ND F UTURE W ORK
+
+GDPS-100 for Forgery Detection. The InceptionV3 achieved
+an accuracy of 92% and a ﬁnal loss value of 0.2432 ,
+indicating strong performance in learning to classify signatures
+effectively.
+
+The hybrid deep learning model combining CNN and InceptionV3 has demonstrated strong performance in signature
+recognition and forgery detection. Using CNN for signer identiﬁcation and InceptionV3 for forgery detection, the system
+accurately classiﬁes signatures. Results from both the custom
+dataset and GDPS-100 validate the model’s efﬁciency, with
+higher accuracy observed in the custom dataset (140 samples
+per signer), highlighting the importance of a larger sample
+size for improved performance. This indicates that the model
+is better able to capture intra-class variations, which enhances
+its ability to generalize across different signature samples.
+Looking forward, the model can be improved by incorporating a wider variety of signature styles, multiple scripts,
+and languages to boost generalizability. Future advancements
+may include exploring cutting-edge techniques like attention
+mechanisms or transformer-based models. Additionally, deploying the system on web or mobile platforms with secure
+cloud integration could bring practical applications in ﬁelds
+like banking, legal services, and authentication.
+
+TABLE I
+ACCURACY C OMPARISON ON DATASETS
+Model
+CNN
+InceptionV3
+Hybrid
+
+Custom Dataset
+98%
+97%
+95%(0.98*0.97)
+
+GDPS-100
+95.3%
+92%
+88%(0.95*0.92)
+
+Table I presents the accuracy comparison of models on the
+Custom Collected Dataset and GDPS-100. On the Custom
+Collected Dataset, CNN achieved the highest accuracy of 98%,
+followed by InceptionV3 with 97%. These results are notably
+higher than the corresponding accuracies on the GDPS-100
+dataset, where CNN and InceptionV3 obtained 95% and 92%,
+respectively. This improvement can be attributed to the Custom
+Collected Dataset containing more images per signer (approximately 140), enabling the models to better learn individual
+signature patterns. Hence, a larger number of samples per
+signer contributes to improved classiﬁcation and veriﬁcation
+accuracy.
+
+R EFERENCES
+[1] G Manoj Kumar, P Satyanarayana, B Sridhar, K Tejo Rohith,
+GVS Padma Rao, and V Gokula Krishnan. Deep neural networks
+based handwritten signature veriﬁcation using machine learning
+algorithms. In 2024 Asian Conference on Intelligent Technologies
+(ACOIT), pages 1–6. IEEE, 2024.
+[2] P Kiran, BD Parameshachari, J Yashwanth, and KN Bharath.
+Ofﬂine signature recognition using image processing techniques
+and back propagation neuron network system. SN Computer
+Science, 2(3):196, 2021.
+[3] Jivesh Poddar, Vinanti Parikh, and Santosh Kumar Bharti. Ofﬂine
+signature recognition and forgery detection using deep learning.
+Procedia Computer Science, 170:610–617, 2020. The 11th
+International Conference on Ambient Systems, Networks and
+Technologies (ANT) / The 3rd International Conference on
+Emerging Data and Industry 4.0 (EDI40) / Afﬁliated Workshops.
+[4] R Anagha and Chandan Kumar. Signature recognition and
+forgery detection. Authorea Preprints, 2023.
+[5] Zainab Hashim, Hanaa M Ahmed, and Ahmed Hussein
+Alkhayyat. A comparative study among handwritten signature
+veriﬁcation methods using machine learning techniques. Scientiﬁc Programming, 2022(1):8170424, 2022.
+[6] Zhaoya Wang, Mahpirat Muhammat, Nurbiya Yadikar, Alimjan
+Aysa, and Kurban Ubul. Advances in ofﬂine handwritten signature recognition research: A review. IEEE Access, 11:120222–
+120236, 2023.
+[7] Manoj Chavan. Handwritten online signature veriﬁcation and
+forgery detection using hybrid wavelet transform-2 with hmm
+classiﬁer. J. Electr. Syst, 20(4s):2463–2470, 2024.
+
+TABLE II
+C OMPARISON ON S IGNATURE R ECOGNITION M ODELS
+Model
+7-CNN
+SVM
+BPNN
+14-CNN
+
+Accuracy
+94%
+94%
+93%
+98%
+
+Table II showcases the performance of various models on
+signature recognition tasks. Our proposed 14-CNN model
+outperformed all other methods with an accuracy of 98%,
+demonstrating its superior feature extraction capability. Other
+models like 7-CNN, SVM, and BPNN also showed strong
+results but remained slightly lower in accuracy, emphasizing
+the effectiveness of deeper CNN architectures.
+TABLE III
+C OMPARISON ON F ORGERY D ETECTION M ODELS
+Model
+Harris and SIFT Algorithm
+Multi-Layer Perceptron (MLP)
+Random Forest (RF)
+SL
+ResNet-101
+InceptionV3
+
+Accuracy
+89%
+91.48%
+90.73%
+86.53%
+96%
+97%
+
+Table III presents accuracy comparisons among forgery
+detection models. Our InceptionV3 model achieved the highest accuracy of 97%, outperforming traditional methods like
+Harris and SIFT, MLP, Random Forest, ResNet-101 and SL.
+This highlights the superior effectiveness of deep learning,
+particularly InceptionV3, in forgery detection
+
+6
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:57:49 UTC from IEEE Xplore. Restrictions apply.
+
+

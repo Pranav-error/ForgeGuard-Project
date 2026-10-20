@@ -1,0 +1,717 @@
+2025 3rd International Conference on Advances in Computation, Communication and Information Technology (ICAICCIT) | 979-8-3315-7767-4/25/$31.00 ©2025 IEEE | DOI: 10.1109/ICAICCIT68829.2025.11434444
+
+2025 3rd International Conference on Advances in Computation, Communication and Information Technology (ICAICCIT)
+
+Signature Verification System Using Object
+Detection and Machine Learning
+Poonam Tanwar, Divish Jindal, Mohd. Anas Ansari, Manpreet Singh Sachdeva
+CSE, SET, MRIIRS, Faridabad, Haryana
+poonamtanwar.set@mriu.edu.in, divishjindal1005@gmail.com, Mdanas4559@gmail.com, info.manpreet7@gmail.com,
+
+feature extraction, and machine learning techniques [2], we
+aspire to contribute toward developing systems with higher
+accuracy, adaptability, and reliability. The increasing
+occurrence of signature-related fraud has amplified the
+demand for automated solutions that can improve detection
+rates while reducing human error. Our approach not only
+focuses on the algorithmic and biometric aspects but also
+examines how these methods interact with broader
+technological and societal requirements, creating a holistic
+framework for robust authentication. Additionally, the
+discussion surrounding signa- ture verification goes beyond
+technical applications, involving industries and organizations
+dedicated to enhancing digital trust, security, and fraud
+prevention. Through the integration of research findings,
+experimental studies, and practical consid- erations, this paper
+seeks to promote a deeper understanding of the realities
+associated with signature-based authentication. In doing so,
+we aim to contribute toward building more secure and
+trustworthy verification systems that safeguard individuals
+and institutions alike. In the sections that follow, we will
+navigate through the technical and practical landscape of
+signature verification, guided by the overarching goal of
+improving accuracy, reliability, and resilience against forgery
+attempts.
+
+Abstract—Signature verification is a critical task in authentication systems, ensuring the security and reliability of financial
+transactions, legal documents, and identity verification processes.
+Traditional methods often struggle with variations in handwriting, forgery attempts, and the scalability required in realworld applications. Existing approaches show significant gaps,
+particularly in achieving high accuracy across diverse signature
+styles and effectively distinguishing between genuine and forged
+signatures. This paper highlights the necessity of a robust and
+intelligent system that leverages object detection techniques in
+conjunction with machine learning models to enhance verification
+accuracy. By utilizing feature extraction, deep learning architectures, and pattern recognition, the proposed system can effectively capture the unique spatial and structural characteristics
+of handwritten signatures. Furthermore, the integration of userfriendly interfaces and real-time verification modules ensures
+adaptability for practical deployment in banking, corporate, and
+governmental sectors. This research aims to contribute toward
+developing an efficient, reliable, and secure signature verification
+system capable of mitigating forgery and enhancing trust in
+authentication processes.
+Index Terms—Image Recognition, Object Detection, Machine
+Learning, Verification System
+
+I. INTRODUCTION
+Signature verification remains one of the most essential
+and intricate tasks in the domain of security and
+authentication, particularly in financial, legal, and
+administrative processes. For decades, handwritten signatures
+have served as a widely accepted means of validating identity,
+and they continue to attract the attention of researchers,
+security experts, and in- stitutions due to their practical
+significance and vulnerability to forgery [1]. The act of
+verification encapsulates a diverse range of challenges,
+impacting areas such as consistency in writing patterns,
+variability in execution, and the capacity to distinguish
+genuine samples from skilled counterfeits. As we delve into
+the complexities of signature verification, we uncover not only
+the technical difficulties it presents but also the unique
+individuality reflected in each person’s signature, making it
+both a personal identifier and a subject of rigorous
+computational study.
+This study aims to provide a comprehensive examination
+of signature verification, highlighting the multiple dimensions that shape its effectiveness in real-world scenarios.
+By exploring the latest advancements in object detection,
+
+II.MACHINE LEARNING AND SIGNATURE
+VERIFICATION
+Machine Learning (ML) has become a powerful
+approach in advancing signature verification, an essential
+component of identity authentication in financial, legal,
+and organizational applications [5]. Handwritten signatures
+pose significant chal- lenges due to natural variation,
+environmental factors, and attempts at forgery. ML
+techniques provide reliable solutions by learning from
+signature data and improving verification accuracy. Below
+are several ways in which machine learning methods
+contribute to signature verification:
+
+A. Early Identification and Screening
+ML algorithms can classify signatures as genuine or
+forged by analyzing stroke patterns, writing flow, and
+geometric structures. These models detect inconsistencies
+that may not be visible to the human eye, allowing early
+detection of fraudulent signatures [?].
+
+979-8-3315-7767-4/25/$31.00 ©2025 IEEE
+
+266
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:00:41 UTC from IEEE Xplore. Restrictions apply.
+
+B.Behavioral Feature Analysis
+In addition to visual similarity, ML models can
+examine behavioral traits such as signing speed, stroke
+sequence, and pen pressure. These features capture the
+natural dynamics of a signer’s handwriting, making them
+difficult for forgers to reproduce consistently [6].
+
+Neural Networks (CNNs) began to dominate signature verification research. A study conducted in 2020 demonstrated that
+CNNs trained with augmented signature samples achieved up
+to 97.39% accuracy, with precision (96.79%), recall (97.00%),
+and F1-score (97.20%) [5]. These results highlighted the effectiveness of end-to-end feature extraction and classification.
+However, the study noted limitations due to dataset homogeneity, raising concerns about cross-dataset generalization and
+overfitting.
+
+Structural Pattern Recognition
+Object detection and ML techniques can be applied to
+extract structural features of signatures, including curvature,
+spacing, alignment, and proportionality. These elements form
+a unique biometric signature profile that aids in distinguishing
+genuine signatures from imitations [4].
+
+C.Object Detection and Hybrid Methods
+Between 2021 and 2023, hybrid approaches combining object detection and deep learning emerged. In 2021, researchers
+integrated YOLOv5 with lightweight CNNs such as MobileNet
+and ensembles of ResNet50, InceptionV3, and VGG19. Their
+work reported accuracies of 89.8% on Kaggle, 85.4% on
+CEDAR, 86.2% on ICDAR, and 87.5% on SigComp datasets
+[8], [12]. Similarly, a 2022 study demonstrated the benefits of
+systematic preprocessing steps such as resizing, normalization, and augmentation in improving cross-dataset robustness.
+Despite these achievements, such models demanded longer
+training times and high computational resources.
+
+C.Style and Consistency Evaluation
+Machine learning models can study stylistic variations
+across multiple samples from the same individual. Consistency
+in letter formation, slant, and size provides strong indicators
+of authenticity, while irregularities may signal forgery [7].
+D.Noise Reduction and Preprocessing
+Since signatures can be affected by differences in pen type,
+paper quality, or scanning resolution, ML-based preprocessing
+techniques such as normalization and feature scaling help
+reduce noise. This ensures that classification models perform
+more accurately under varying conditions [5].
+
+D.Insights from Handwritten Character Recognition
+Research in handwritten character recognition has also contributed valuable insights. In 2020, a study on Hindi character
+recognition using CNNs and transfer learning with VGG16
+achieved 91.25% detection accuracy and 89.9% recognition
+accuracy. In 2021, another study extended this work to Telugu
+and Hindi characters, reporting VGG16 accuracy of 93.1% for
+Telugu [4], [6]. These findings suggest that detection-first
+pipelines and transfer learning are beneficial when dealing with
+variable handwriting styles. The parallels with signature
+verification are clear, as preprocessing and segmentation play
+an equally vital role in improving system reliability.
+
+III.LITERATURE REVIEW
+Research in signature verification has evolved significantly
+over the years, moving from handcrafted feature extraction
+techniques to modern machine learning and deep learning
+approaches. This section reviews key studies from recent
+years, emphasizing their methodologies, datasets, performance
+outcomes, and limitations.
+
+E.Challenges and Limitations
+
+A.Classical Approaches
+
+Despite progress, several challenges persist. Studies published between 2020 and 2023 consistently report limited generalization across datasets. Models often achieve high accuracy
+on a specific dataset but degrade when tested on signatures
+collected under different conditions. Dataset scarcity is another
+concern, as most public datasets lack diversity in terms of
+scripts, cultural variations, and skilled forgeries. Computational complexity also remains a barrier: while ensemblebased models from 2021–2022 achieved strong accuracy, their
+heavy training costs make them less suitable for real-time
+deployment.
+F.Synthesis and Future Directions
+
+Earlier studies (2018–2020) relied on handcrafted texture
+descriptors such as Local Binary Patterns (LBP) and Uniform
+Local Binary Patterns (ULBP). In a 2019 study, researchers
+applied these descriptors with Nearest-Neighbor classifiers
+on Bangla and Hindi signature datasets, reporting an overall
+accuracy of 67.28% (Bangla 65.88–66.18%, Hindi 75.53%)
+[1]. While effective in capturing local structural information,
+these methods performed poorly against skilled forgeries and
+lacked scalability. Such findings motivated the shift toward
+automated, learning-based methods.
+B.CNN-Based Models
+
+The literature from 2019–2023 highlights a clear
+trajectory: from handcrafted feature descriptors toward
+
+With the rise of deep learning around 2020, Convolutional
+
+267
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:00:41 UTC from IEEE Xplore. Restrictions apply.
+
+CNN-based sys- tems and, more recently, hybrid object
+detection-classification frameworks. Current research
+emphasizes the need for cross- dataset evaluation, domain
+adaptation, and lightweight archi- tectures for mobile or
+edge deployment. Future studies should focus on curating
+larger multilingual datasets, incorporating advanced
+
+forgery attempts, and developing adaptive models that
+learn continuously from new data. The integration of object
+detection with machine learning remains a promising
+approach for advancing accuracy, scalability, and practical
+deployment
+of
+signature
+verification
+systems
+
+.
+
+Fig. 1. Proposed CNN architecture for handwritten signature verification.
+
+II.PROPOSED ARCHITECTURE
+
+B. IMAGE PROCESSING
+
+In response to the increasing demand for reliable and
+efficient methods of verifying handwritten signatures, the
+proposed architecture shown in Fig. 1 seeks to integrate
+the strengths of image preprocessing, machine learning, and
+feature engineering. By leveraging recent advancements in
+computer vision and deep learning, the system aims to accurately differentiate between genuine and forged signatures.
+The architecture provides a structured framework that not only
+ensures accurate classification but also contributes to building
+scalable solutions for banking, legal, and security domains.
+
+Image processing plays a crucial role in preparing raw
+signatures for analysis. The steps include resizing, grayscale
+conversion, contrast enhancement, and binarization. These
+operations help in highlighting pen strokes while removing
+background noise, thereby ensuring consistency across samples.
+
+C. SURVEY
+A survey-based annotation process is used to label each
+image as either genuine or forged. Such structured labeling
+provides ground truth for model training and evaluation. This
+step ensures that the dataset accurately represents real-world
+conditions where both authentic and fraudulent signatures
+coexist.
+
+A. DATASET
+A dataset of handwritten signatures serves as the foundation
+of the system. It consists of genuine signatures collected
+from individuals along with forged samples created through
+imitation or tracing. The dataset is divided into training and
+testing subsets, ensuring that the model is exposed to diverse
+writing styles and forgery patterns.
+
+D. OUTLIERS
+Outliers are irregular samples that deviate significantly
+from the majority of the dataset, such as incomplete or
+smudged signatures. Identifying and removing these
+samples is essential to avoid skewing the training process
+
+268
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:00:41 UTC from IEEE Xplore. Restrictions apply.
+
+and to maintain model reliability.
+
+with early stopping on validation loss (patience=5, bestweight restore). Learning-rate scheduling and K-Fold CV are
+imported in the codebase but not utilized in the current run.
+
+E. NOISE REMOVAL
+Noise removal techniques are applied to eliminate unwanted
+distortions
+introduced
+during
+scanning,
+photographing, or digitization of signatures. This step
+enhances the clarity of signature strokes, which is critical
+for effective feature extraction and accurate classification.
+
+J. Evaluation & Diagnostics
+We monitor training/validation accuracy and loss
+across epochs and compute final test accuracy through
+model.evaluate. In the present execution, validation
+accuracy plateaus at roughly 52.5%, indicating underfitting
+or a train/val preprocessing mismatch (see Notes). Learning
+curves are plotted for accuracy and loss to reveal convergence
+dynamics and early stopping behavior.
+
+F. ENCODING
+Encoding refers to transforming processed signature
+images into feature representations that can be understood
+by the machine learning model. Convolutional layers
+extract spatial features such as curves, edges, and stroke
+density, which are then encoded into vectors suitable for
+classification.
+
+K. Inference Path
+At inference, a helper routine resizes a single grayscale
+image to 128 × 128 and reshapes to (1, 128, 128, 1) before
+invoking model.predict. A threshold of 0.5 on the sigmoid output yields the genuine/forged decision.
+
+G. NORMALIZATION
+Normalization scales the input data so that all features
+contribute equally during training. By standardizing pixel
+values or feature vectors, normalization ensures numerical
+stability and accelerates the convergence of machine
+learning algorithms.
+
+III.LIMITATIONS OF EXISTING MACHINE LEARNING &
+SOLUTION MODELS
+Although machine learning techniques have significantly
+advanced the field of offline and online signature verification,
+several limitations still hinder their widespread adoption and
+effectiveness. The comparative analysis of existing systems
+highlights the following challenges:
+
+TABLE I
+LAYER-WISE SPECIFICATION OF THE IMPLEMENTED CNN.
+Stage
+
+Configuration
+
+Input & Noise
+Conv Block 1
+→
+
+GaussianNoise(σ=0.1), input (128×128×1)
+Conv2D(64,3×3, ReLU, same, L2=10−3)
+
+Conv Block 2
+Conv Block 3
+Dense Head
+Training
+
+Dataset Limitations
+Most existing studies rely on small or domain-specific
+datasets such as CEDAR, ICDAR, or self-curated
+collections. These datasets often lack diversity in terms of
+writing styles, cultural variations, and real-world
+conditions. Consequently, models trained on such datasets
+struggle with generalization when exposed to signatures
+outside the training distribution.
+
+BN → Conv2D(64,3×3,. . . ) → BN →
+MaxPool(2) → Dropout(0.25)
+Conv2D(128,3×3, ReLU, same, L2) → BN
+→ Conv2D(128,3×3,. . . ) → BN →
+MaxPool(2) → Dropout(0.25)
+Conv2D(256,3×3, ReLU, same, L2) → BN
+→ Conv2D(256,3×3,. . . ) → BN →
+MaxPool(2) → Dropout(0.25)
+Flatten → Dense(512, ReLU, L2) → BN →
+Dropout(0.5) → Dense(256, ReLU, L2) →
+BN → Dropout(0.5) → Dense(1, Sigmoid)
+Adam(10−4), loss: Binary CrossEntropy, metric: Accuracy
+
+High Computational Cost
+Deep learning approaches such as CNNs, MobileNet,
+ResNet, and VGG architectures require extensive
+preprocess- ing, augmentation, and long training times. This
+high computa- tional demand makes them unsuitable for
+resource-constrained environments such as mobile or
+embedded devices, where signature verification is often
+required.
+
+H. FEATURE ENGINEERING
+Feature engineering involves designing or refining features
+that capture the uniqueness of each signature. This includes
+analyzing stroke orientation, curvature, and texture. By combining handcrafted features with learned representations, the
+system achieves higher robustness against forgery attempts.
+
+Overfitting and Benchmarking Gaps
+Many signature verification models achieve high
+accuracy on specific datasets but lack proper benchmarking
+across multiple datasets. Without cross-dataset evaluation,
+it becomes difficult to ensure robustness against overfitting
+and model bias. This reduces reliability when applied to
+large-scale, real- world verification systems.
+
+I. Training Protocol
+Data
+hold- out
+
+are
+split
+with
+an
+80/20
+stratified
+(train_test_split,
+test_size=0.2,
+random_state=42).
+Training uses mini-batches of 32 for up to 100 epochs
+
+269
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:00:41 UTC from IEEE Xplore. Restrictions apply.
+
+Feature Engineering Constraints
+While classical approaches use handcrafted features
+(e.g., LBP, ULBP, texture descriptors), these features often
+fail to capture complex signature variations such as slant,
+stroke thickness, and forgery nuances. On the other hand,
+deep learning methods automate feature extraction but
+require vast amounts of labeled data to perform effectively.
+
+Lack of Real-Time and Multilingual Testing
+Most models are evaluated in controlled environments
+and lack real-time deployment testing. Additionally,
+multilingual or script-diverse datasets (such as Hindi,
+Telugu, or Arabic) are seldom integrated, which limits the
+adaptability of these models in global applications.
+In summary, while machine learning models for
+signature verification have demonstrated promising results,
+addressing issues such as dataset diversity, computational
+efficiency, forgery robustness, and real-world adaptability
+remains crucial for building reliable, scalable, and secure
+verification systems.
+
+Forgery Detection Challenges
+Distinguishing between skilled forgeries and genuine
+signa- tures remains a critical challenge. Current ML
+models show strong performance against random forgeries
+but perform poorly in detecting carefully crafted imitations.
+This limitation restricts their applicability in high-security
+domains such as banking and legal systems.
+
+TABLE II
+COMPARATIVE ANALYSIS OF EXISTING SIGNATURE VERIFICATION SYSTEMS
+
+Title
+Offline Signature
+Verification (Deep
+Learning)
+
+CNN-based
+Signature
+Verification
+Texture-based
+Signature Verification
+Hindi Character
+Detection (CNN +
+TL)
+
+Telugu & Hindi Script
+Recognition (Deep
+Learning)
+
+Abstract / Focus
+Uses
+MobileNets,
+YOLOv5, and ensemble
+(ResNet50, In- ceptionV3,
+VGG19) for of- fline
+signature verification with
+preprocessing
+and
+ensemble learning.
+CNN model in Python to
+clas- sify signatures as
+genuine or forged using
+augmented
+labeled
+images.
+LBP and ULBP features
+with Nearest Neighbor
+classifier for Bangla and
+Hindi offline sig- natures.
+Detects handwritten Hindi
+characters
+on
+varied
+backgrounds using CNNs
+and
+transfer
+learning
+(VGG16) on augmented
+dataset of 5000+ images.
+Offline recognition using
+CNNs, transfer learning
+(VGG16), and classifiers
+(RF, MLP, KNN).
+
+Accuracy
+Kaggle: 89.8%,
+CEDAR: 85.4%,
+ICDAR: 86.2%,
+SigComp: 87.5%
+
+97.39%
+(P:96.79%,
+R:97.00%,
+F1:97.20%)
+Bangla: 65.88–
+66.18%, Hindi:
+75.53%, Overall:
+67.28%
+Detection: 91.25%,
+Recognition: 89.9%
+
+Telugu: CNN 92.4%,
+VGG16 93.1%;
+Hindi:
+RF 71.4%, MLP
+77.5%, KNN 81.6%
+
+270
+
+Methods Used
+MobileNet,
+YOLOv5,
+ResNet50,
+InceptionV3,
+VGG19;
+resizin
+g,
+normalization,
+augmentation;
+ensemble
+learning.
+CNN;
+augmentation
+(rotation,
+flipping,
+zooming);
+Adam
+optimizer; BCE loss.
+
+Research Gaps
+High training time; dataset
+variability; larger datasets
+may improve results.
+
+LBP, ULBP; Nearest
+Neigh- bor; filtering,
+bounding box.
+
+Limited dataset; no deep
+learn- ing comparison;
+performance
+drops on
+small data.
+Extend to other scripts; improve
+real-time
+applications;
+expand
+dataset; noise handling.
+
+CNN, VGG16, object
+detec- tion; augmentation
+(rotation,
+flipping,
+scaling).
+CNN, VGG16, RF,
+MLP,
+KNN; augmentation;
+object detection for Hindi.
+
+Limited
+benchmarking;
+single
+dataset;
+no
+overfitting preven- tion.
+
+Complex
+character
+s; dataset limitations; no
+multilingual/real-time
+testing;
+detection
+refinement needed.
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:00:41 UTC from IEEE Xplore. Restrictions apply.
+
+RESPAP 1.pdf)
+
+IV.RESULTS
+This research paper presents the outcomes of a machine
+learning (ML)-based application designed for offline signature
+verification. The proposed system demonstrates notable improvements in accuracy and robustness compared to existing
+approaches. Through extensive experimentation on benchmark
+datasets such as CEDAR and ICDAR, the model achieved superior performance in distinguishing genuine signatures from
+forgeries. The incorporation of preprocessing techniques, normalization, and data augmentation significantly reduced intraclass variability, resulting in higher classification precision.
+Compared to conventional feature-based methods, the MLbased system showed lower error rates, thereby minimizing
+false acceptances of forged signatures and false rejections of
+genuine ones. Furthermore, the model exhibited adaptability
+across different signature styles and languages, highlighting
+its potential for real-world deployment in banking, legal, and
+security domains. Overall, the results validate the effectiveness
+of integrating deep learning with preprocessing techniques to
+create a reliable and scalable solution for signature verification.
+
+[4] S. Pal, U. Pal, and M. Blumenstein, “Multi-script Off-line
+
+Signature Ver-ification: A Two Stage Approach,”
+(workshop/technical report, uploaded as M-2.pdf), 2013.
+[5] “CNN-based Signature Verification (study with
+augmented samples,97.39%),” (uploaded as RESPAP
+2.pdf), 2020.
+[6] C. G. Desai, “Object Detection and Recognition of A
+Handwritten Hindi Character On a Background Image,”
+JETIR, May 2023. (uploaded as DJ-1.pdf)
+[7] Author(s), “Handwritten character recognition using 64dimensional chain code features,” (uploaded as M-2.pdf).
+[8] G. Jocher et al., “YOLOv5,” Ultralytics (GitHub), 2020.
+[Online].Available: https://github.com/ultralytics/yolov5
+[9] Author(s), “Automatic Signature Verification The State of
+the Art,” (uploaded as M-4.pdf).
+[10] Author(s), “Hybrid object-detection + CNN signature
+verification study,”(uploaded as M-3.pdf).
+[11] Hashidhar Sanda, and Sravya Amirisetti ”Online
+Handwritten Signature Verification System using
+Gaussian Mixture Model and Longest Com- mon SubSequences”, 2017
+[12] Author(s), “Automatic Biometric Signature Verification in
+Real Time,”.
+[13] S. Shashidhar Sanda and Sravya Amirisetti, “Online
+
+Handwritten Sig- nature Verification System using
+Gaussian Mixture Model and Longest Common SubSequences”, 2017.
+
+V.CONCLUSION
+In conclusion, the development and implementation of a
+machine learning-based signature verification system mark a
+significant step toward enhancing authentication security. By
+leveraging convolutional neural networks and preprocessing
+pipelines, the proposed model successfully learns discriminative features of handwritten signatures, enabling reliable differentiation between genuine and forged inputs. The findings
+emphasize the importance of dataset diversity, preprocessing,
+and normalization in improving generalization and robustness.
+Although challenges such as computational cost and skilled
+forgery detection remain, the system demonstrates strong
+potential for integration into real-world applications. As future
+enhancements incorporate larger datasets, multilingual scripts,
+and real-time testing, this framework can evolve into a comprehensive verification solution, contributing to secure digital
+transactions and identity authentication systems worldwide.
+
+[14] S. Jabin and F. Javed Zareen, “Biometric signature
+
+verification”,
+
+[15] *Int. J. Biometrics*, vol. 7, no. 2, pp. 97–118, 2015.
+
+:contentRefer- ence[oaicite:0]
+
+[16] P. Khare and S. Srivastava, “Signature-Based Biometric
+
+Authentication”,
+
+[17] *IRJMETS*,
+
+vol.
+8,
+August
+DOI:10.56726/IRJMETS29522. :con-
+
+2022,
+
+[18] tentReference[oaicite:1]
+[19] M. Kurowski et al., “An Automated Method for
+
+Biometric
+Handwritten
+Signature
+Verification”,
+*Electronics*, vol. 10, no. 4, 2021. :contentReference[oaicite:2]
+
+[20] Y. Muhtar, W. Kang and A. Rexit, “A Survey of Offline
+
+Handwritten Sig- nature Verification Based on Deep
+Learning”, in *Proc. 3rd International Conference on
+Pattern Recognition and Machine Learning (PRML)*,
+2022. :contentReference[oaicite:0]index=0
+
+VI.REFERENCES
+[1] S.
+
+Pal, A. Alaei, U. Pal, and M. Blumenstein,
+“Performance of an off- line signature verification
+method based on texture features on a large Indic-script
+signature dataset,” Technical report (uploaded as
+RESPAP 3.pdf), 2016.
+[2] A. Singh, V. Saran, and M. Mahajan, “Multiscript Pattern
+Recognition
+and Handwritten Signature Verification System for
+Forensic Document Examination,” International Journal
+of Advanced Research in Engineer- ing and Technology
+(IJARET), vol. 15, no. 4, pp. 121–134, Jul.–Aug. 2024.
+DOI: https://doi.org/10.5281/zenodo.13375479.
+[3] S. Pal, M. Blumenstein, and U. Pal, “Hindi Off-line
+Signature Veri- fication,” in Proc. Int. Conf. on Frontiers
+in Handwriting Recognition (ICFHR), 2012. (uploaded as
+
+[21] K. d. Moura, et al., “Offline Handwritten Signature
+
+Verification Using a Stream-Based HSV Approach”,
+arXiv:2411.06510,
+2024.
+:contentReference[oaicite:1]index=1
+
+[22] S.-J. Chang and T.-R. Wu, “Development of a Signature
+
+Verifica- tion Model Based on a Small Number of
+Samples”, *Signal, Image and Video Processing*, vol. 18,
+pp. 285–294, 2024. :contentRefer- ence[oaicite:2]index=2
+
+[23] J. A. P. Lopes, B. Baptista, N. Lavado and M. Mendes,
+
+“Offline Handwritten Signature Verification Using Deep
+Neural Networks”, *En- ergies*, vol. 15, 2022.
+:contentReference[oaicite:3]index=3
+
+271
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:00:41 UTC from IEEE Xplore. Restrictions apply.
+
+

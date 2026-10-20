@@ -1,0 +1,832 @@
+2025 IEEE 5th International Conference on ICT in Business Industry & Government (ICTBIG) | 979-8-3315-7981-4/25/$31.00 ©2025 IEEE | DOI: 10.1109/ICTBIG68706.2025.11323606
+
+AI Powered Document Verification - A
+Behavioral and Multi Domain Approach to
+Automated Fraud Detection
+Ashvini Jadhav Assistant Professor
+Dept. Of Information Technology MIT
+Art Design & Technology University.
+School of Computing Pune, India
+ashvinigjadhav@gmail.com
+
+Rohini Bhosale Assistant Professor
+Dept. Of Information Technology
+MIT Art Design & Technology
+University. School of Computing Pune,
+India rohinibhosale1987@gmail.com
+
+Sachin Jagadale Assistant Professor
+Dept. Of Computer Science &
+Engineering MIT Art Design &
+Technology University. School of
+Computing Pune, India
+sachinjagdale.ppr@gmail.com
+
+Deepali Lokare Assistant Professor
+Dept. Of Computer Science &
+Engineering MIT Art Design &
+Technology University. School of
+Computing Pune, India
+
+Abstract— To combat identity fraud and misuse of stolen
+documents To combat identity fraud, phishing, and misuse of
+stolen or forged documents. This paper introduces a unified
+framework for secure and accurate document verification by
+integrating a behavioral authentication layer with an AI-powered
+forgery detection pipeline. The system begins with a Human-AI
+Interfacing Mechanism, the UserKey Protocol, which uses
+contextual questions to ensure only legitimate users initiate the
+verification process. Subsequently, documents are securely
+retrieved via DigiLocker APIs and undergo a rigorous analysis.
+The core of the system is an AI pipeline that preprocesses
+documents, extracts multi-domain features including visual,
+textual, structural, and biometric indicators, and classifies them as
+either authentic or forged. Leveraging a hybrid model powered by
+Convolutional Neural Networks (CNNs), Optical Character
+Recognition (OCR), and advanced preprocessing for primary
+classification and Support Vector Machines (SVMs) and Random
+Forests for specialized feature analysis, the system achieves a high
+classification accuracy of 98%. The system's robustness is
+enhanced through data augmentation and a feedback loop for
+continuous model retraining. This end-to-end solution provides
+real-time, scalable, and automated fraud detection for high-stakes
+applications in government, finance, and other enterprise
+environments. Future work will explore integration with
+blockchain for tamper-proof auditing and enhancement with
+attention-based architectures to improve robustness against subtle
+forgeries aligning with global standards for data security and
+compliance.
+
+Keywords— Document Verification, Deep Learning,
+Fraud Detection, Image Processing, CNN,
+
+I.
+
+Introduction
+
+Fraudsters use various sophisticated methods to
+manipulate documents and bypass verification systems. These
+methods are categorized based on the nature of the deception.
+Completely fake documents are created from scratch, lacking
+the genuine security features of an authentic ID. In contrast,
+false documents are genuine IDs that have been stolen and are
+used by an impersonator. A more prevalent type is a modified
+document, which involves altering an original document. This
+includes a variety of techniques such as Card Edit Checks,
+where textual data like names or dates of birth are changed,
+and Face Morphing and Face Editing, where the ID photo is
+manipulated to resemble the fraudster. Other forms of this
+fraud include Signature Forgery, Document Image Fraud—
+altering scanned documents with software—and Metadata
+
+Bhagyashree Shendkar Assistant
+Professor Dept. Of Computer Science &
+Engineering MIT Art Design &
+Technology University. School of
+Computing Pune, India
+bhagyashree.d.shendkar@gmail.com
+Pankaj Chandre Associate Professor
+Dept. Of Computer Science &
+Engineering MIT Art Design &
+Technology University. School of
+Computing Pune, India
+pankajchandre30@gmail.com
+
+Tampering, which involves changing a file’s digital footprint.
+Additionally, with the advent of generative AI, a new threat
+has emerged: Generated Document Fraud, where AI tools are
+used to create entirely new, convincing but fraudulent
+documents
+TABLE I.
+
+DOCUMENT FRAUD TYPE
+
+Fraud Type
+
+Description
+
+Key Characteristics Detection Method
+
+Lacks
+genuine AI
+analysis
+of
+Documents created
+Completely Fake
+security features document
+format,
+entirely
+from
+(Counterfeit)
+(e.g., QR codes, landmarks,
+and
+scratch.
+holograms).
+security features.
+False (Stolen)
+
+Genuine, authentic Document is real, Facial recognition and
+documents that have but the user is an liveness detection are
+been stolen.
+impersonator.
+required.
+
+AI-powered checks
+Original documents
+Subtle changes to for
+altered
+text,
+Modified
+that
+have
+been
+text, images, or images,
+signatures,
+(Forged/Altered) altered to deceive
+security features.
+and
+document
+verification.
+metadata.
+
+Document verification has traditionally relied on manual
+inspections, which are labor-intensive and error-prone [1],
+[2]. OCR-based methods [3] improved automation but
+struggled with structural forgeries. With the advancement of
+CNN-based deep learning [4], [5], detection accuracy and
+scalability improved significantly. Blockchain integration
+[7], [8], [14] and emerging technologies such as GANs [9],
+[21], IoT [10], and adaptive AI [12] further enhance
+resilience against evolving threats. Current research
+emphasizes hybrid AI-blockchain frameworks and
+explainable AI to balance robustness, security, and
+interpretability. The proposed system integrates behavioral
+authentication, DigiLocker based secure document retrieval,
+and an AI-driven forgery detection pipeline. The workflow
+ensures that only authenticated users can access governmentissued documents, which are then analyzed using advanced
+machine learning and deep learning algorithms to detect
+authenticity or forgery. In the digital era, document fraud has
+become a significant challenge across critical sectors like
+finance, healthcare, and government. The authenticity of
+documents such as passports, identity cards, and academic
+certificates is vital for maintaining trust and security.
+However, with the rise of sophisticated forgery techniques,
+
+979-8-3315-7981-4/25/$31.00 ©2025 IEEE
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:59:52 UTC from IEEE Xplore. Restrictions apply.
+
+traditional manual verification methods are increasingly
+unreliable, time-consuming, and unable to scale for highvolume tasks.Artificial Intelligence (AI), particularly deep
+learning, offers a powerful solution for automating and
+improving document
+verification.
+By leveraging
+Convolutional Neural Networks (CNNs) and advanced image
+processing, AI systems can identify subtle inconsistencies in
+fonts, signatures, watermarks, and security features that are
+often missed during manual inspection. This paper introduces
+a robust, AI-based document verification system designed to
+efficiently and accurately detect forged documents. The
+system combines a behavioral authentication layer with a
+comprehensive document analysis pipeline, delivering realtime verification with high accuracy.
+UserKey is a contextual, dynamic, preference-based
+authentication mechanism that verifies the user based on
+personal behavioral patterns and responses to real-time
+contextual prompts. It acts as a soft biometric signature,
+unique to the user today’s digital era, document fraud has
+emerged as a significant challenge impacting critical sectors
+such as finance, healthcare, and government. The authenticity
+of documents like passports, identity cards, academic
+certificates, and financial statements is vital for maintaining
+trust and security in various processes. However, with the
+advancement of forgery techniques, traditional manual
+verification methods have become increasingly unreliable,
+time-consuming, and unable to scale for high-volume
+verification tasks. Artificial Intelligence (AI), especially deep
+learning, provides promising solutions for automating and
+improving document verification. By utilizing Convolutional
+Neural Networks (CNNs) and advanced image processing
+techniques, AI-powered systems can identify subtle
+inconsistencies in fonts, signatures, watermarks, and
+embedded security features that often go unnoticed during
+manual inspection. This paper introduces a robust AI-based
+document verification system designed to efficiently and
+accurately detect forged documents. The system combines
+preprocessing pipelines, feature extraction, and classification
+models to deliver real-time verification with high accuracy.
+Additionally, future expansions include blockchain
+integration for tamper- proof record-keeping and support for
+mobile platforms to enable widespread accessibility. The
+following sections detail the system architecture,
+methodology, experimental results, and potential avenues for
+future enhancement.
+II.
+
+LITERATURE REVIEW
+
+The detection of document forgery and fraudulent
+verification processes has been widely studied, combining
+image processing, machine learning, deep learning, and
+emerging technologies such as blockchain and IoT.
+Image Processing and Machine Learning Approaches:
+Chawla et al. [1] proposed a hybrid approach integrating
+image processing with machine learning to detect forgery,
+demonstrating that features such as texture and edge
+consistency can improve accuracy when combined with
+classifiers. Similarly, Cekmez et al. [5] developed an AIbased verification framework for secure online transactions.
+Comparative evaluations by Cao et al. [6] and Alzamil [13]
+indicated that traditional classifiers like Random Forests and
+SVMs are effective but lack the robustness of deep learning
+approaches.
+
+Optical Character Recognition (OCR) and Text-Based
+Methods:OCR has been extensively used for textual
+verification in digital documents. Carter [3] and Patel and
+Mehta [19] showed how OCR enables the detection of
+tampering by analyzing font style, alignment, and spacing,
+although its effectiveness decreases in noisy or lowresolution inputs.
+Deep Learning and Convolutional Models :CNN-based
+approaches have transformed forgery detection. Jia and Kong
+[4] pioneered CNN use in intrusion detection, inspiring
+adaptation for document analysis. Khan and Ali [18] applied
+convolutional auto encoders for deep feature extraction,
+while recent CNN frameworks consistently achieve high
+performance in identifying anomalies such as forged
+signatures, stamps, and watermarks.
+Explainable AI (XAI) :Trust and interpretability have
+become crucial in fraud detection. Lewis [2] introduced
+explainable AI into document verification, while Smith and
+Doe [17] and Verma and Singh [20] proposed interpretable
+frameworks that enhance model transparency and end-user
+confidence in decision-making.
+Blockchain-Based
+Verification:Blockchain
+integration
+provides immutable and tamper-proof verification. Patel [7]
+and Zhao [8] demonstrated blockchain’s utility in
+authentication systems. Kumar and Singh [14] advanced
+decentralized verification frameworks, while Ahmed and
+Khan [26] highlighted its synergy with AI in cybersecurity.
+Emerging Technologies: IoT, GANs, and Adaptive AI:
+Recent studies address advanced forgery and phishing
+attacks. Wang [9] and Chen and Wang [21] leveraged GANbased models for detecting deepfake forgeries. Verma [10]
+proposed IoT-enabled AI for distributed fraud detection.
+Zhang [12] introduced adaptive AI models to ensure real-time
+and evolving fraud resistance in verification systems.
+Applications
+and
+Domain-Specific
+Studies:
+AI-powered verification has been applied across multiple
+domains. Sharma and Gupta [16] applied AI for online KYC
+verification. Johnson and Lee [24] proposed self-sovereign
+identity frameworks, aligning with secure e-governance.
+Taylor and Brown [22] emphasized explainable AI for realtime fraud detection, while Singh and Kaur [23]
+demonstrated AI’s role in practical fraud prevention. Garcia
+and Martinez [25] consolidated these trends in a
+comprehensive review.
+I. A SURVEY OF EXISTING PUBLIC IDENTITY DOCUMENT
+DATASETS
+Several publicly available datasets have been introduced for
+tasks such as recognition, classification, and restoration of
+identity documents captured by mobile devices. The
+SmartDoc dataset provides 10 training document samples,
+each recorded as a video clip along with a corresponding
+ground-truth image, and 37 test samples for document
+restoration benchmarking [26]. The LRDE dataset contains
+100 videos of passports and visas under varied conditions and
+using different smartphones [27].
+The MIDV family of datasets has become a standard
+benchmark. MIDV-500 contains 500 video clips across 50
+document types, including ID cards, passports, and driving
+licenses, with five different backgrounds and two mobile
+devices. It supports tasks such as OCR, face detection, and
+document-type classification [28]. MIDV-2019 extended this
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:59:52 UTC from IEEE Xplore. Restrictions apply.
+
+dataset with distorted and low-light captures for each
+document type [29]. MIDV-2020 further expanded the
+benchmark to 1000 unique samples spanning 10 document
+categories, significantly increasing its applicability [30].
+Datasets focusing on fraudulent identity documents are more
+recent. The FMIDV dataset introduced seven forged versions
+for each MIDV-2020 sample using guilloche copy-and-move
+attacks, though it is limited to this single fraud type [31].
+SIDTD extended the scope by generating 1222 forged
+documents using crop-and-move and inpainting techniques,
+thereby modeling additional attack scenarios [32].
+Other regional datasets have also been proposed. For
+instance, the Brazilian Identity Document (BID) dataset
+consists of 28,800 images across eight document types,
+created by altering authentic documents. However, these
+alterations (e.g., blurred portraits) reduce its effectiveness for
+fraud detection involving facial images [33].
+To address scalability and fraud coverage, the IDNet
+benchmark was recently introduced. IDNet is entirely
+synthetic and privacy-preserving, comprising 837,060
+documents across 20 types. Each authentic sample is paired
+with six fraudulent variants, covering face morphing, portrait
+substitution, text alteration, crop-and-move, and inpaintingbased frauds. Metadata is provided in JSON files, describing
+fields such as document identifiers, personal attributes, fraud
+type, and parameters. IDNet represents the largest publicly
+available benchmark for document fraud detection to date
+[34]
+A. Dataset Preparation
+To evaluate the proposed Document Verification System, a
+dataset comprising 1,500 images of official documents was
+assembled. These documents were obtained from publicly
+available sources or synthetically generated to reflect realistic
+forgery scenarios. The dataset includes Aadhaar cards, PAN
+cards, driver’s licenses, and academic certificates, and
+experience certificate bank card.
+Forgery simulations were introduced using tools such as
+Adobe Photoshop and MS Paint. Modifications included text
+manipulation, image substitution, seal/stamp removal, and
+font or alignment inconsistencies. To emulate practical
+conditions, variations in lighting, background, and noise were
+also incorporated.
+The dataset was partitioned into training (70%), validation
+(15%), and testing (15%) subsets:
+Training Set: 1,050 images
+Validation Set: 225 images
+Testing Set: 225 images
+All samples were stored in JPEG/PNG format at 300 DPI
+resolution. Annotations (genuine or forged) were manually
+verified to ensure labeling accuracy.
+B. System Configuration
+Development and evaluation were conducted on a workstation with the following specifications:
+OS: Windows 11 Pro (64-bit)
+CPU: Intel Core i7 (11th Gen) @ 2.80 GHz
+RAM: 16 GB DDR4
+GPU: NVIDIA GeForce GTX 1660Ti (6 GB)
+Tools: Jupyter Notebook, Visual Studio Code
+
+Libraries: Python, OpenCV, TensorFlow, Keras, Tesseract
+OCR, Scikit-learn
+This configuration enabled efficient training and inference
+with GPU acceleration support.
+C. System Architecture
+Figure1. system structured pipeline:
+
+III.
+
+SYSTEM OVERVIEW
+
+A. Behavioral Human–AI Authentication Layer
+The proposed AI-Enhanced Document Verification System is
+designed as a two-layered architecture consisting of the
+Behavioral Human-AI Interface (UserKey Protocol) and the
+AI-powered Document Verification Pipeline. These layers
+collectively ensure that verification is initiated only by
+authenticated users and that documents undergo rigorous
+automated analysis for authenticity.In the behavioral
+authentication stage, the UserKey Protocol validates the
+identity of the user before document analysis begins. This
+mechanism employs dynamically generated contextual
+questions, which are derived from personal preferences, past
+interactions, or real-time contextual factors such as device,
+location, or time of access. Examples include questions like
+“Which of these would you never eat for breakfast?” or
+“What was the color of your last uploaded document?”.
+These prompts may be single-choice or multi-choice, textbased or visual, and are often time-sensitive to identify
+hesitation or automated (bot-like) behavior. Responses are
+matched against the user’s behavioral profile, and failure
+results in immediate termination of the verification process.
+Only authenticated users proceed to the document
+verification pipeline.The first layer ensures that only
+legitimate users initiate the verification process. A UserKey
+Protocol generates contextual questions based on user
+history, environment, and behavioral traits. Responses are
+matched against a stored profile using similarity functions.
+Algorithm: Rule-based + Threshold Matching
+Python Flask/Django (backend authentication)
+SQLite/PostgreSQL (user profile storage)
+Scikit-learn (similarity scoring, cosine similarity for textual
+answers)
+Mathematical Model:
+A(u)={1,0,if f(Q,Ru)≥θ otherwise
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:59:52 UTC from IEEE Xplore. Restrictions apply.
+
+where Q represents contextual questions, Ru the user
+response, and θ the decision threshold.
+B. DigiLocker Integration Layer
+The system integrates with DigiLocker for secure retrieval of
+government-issued documents. Authentication is performed
+via OAuth 2.0, followed by access-token exchange. Verified
+documents are fetched using DigiLocker APIs such as
+GetIssuedFiles or Download.
+Algorithm: OAuth 2.0 Token Exchange + API Request
+Handling
+API/Library:
+DigiLocker Authorized Partner APIs
+requests (Python HTTP client)
+Postman / APISetu SDK for endpoint testing
+JSON/XML parsers for metadata extraction
+Mathematical Abstraction:
+D=APIDL(token)
+where D denotes the retrieved document and APIDL is the
+DigiLocker API service.
+B. Document Preprocessing
+Once the user is authenticated, documents are standardized to
+ensure consistent analysis. Noise removal using Gaussian and
+median filtering eliminates scanning artifacts and
+background interference, thereby improving clarity [3]. Next,
+binarization converts the document into a black-and-white
+format, simplifying edge, font, and shape detection [1]. To
+maintain compatibility with CNN-based models,
+standardization resizes document images to a fixed resolution
+(e.g., 224 × 224 pixels) [2]. Finally, Optical Character
+Recognition (OCR) is applied to extract textual information,
+enabling detailed analysis of font style, alignment, and
+detection of textual tampering [8].
+C. Feature Extraction
+Following preprocessing, the system extracts multi-domain
+features to capture indicators of forgery. Textual features
+include font style, spacing, kerning, and alignment
+irregularities [4]. Visual features, such as signatures, seals,
+stamps, and watermarks, are cross-referenced with authentic
+reference templates to confirm their validity. Additionally,
+structural features capture layout-based attributes, such as
+margins, header/footer alignment, and the placement of logos
+or photographs, which helps identify cloning or tampering.
+The extracted features are concatenated into a unified feature
+set, forming the input to the classification model.
+Following preprocessing, the system extracts multi-domain
+features to capture indicators of forgery.
+Image-Based Features: Canny edge detection, contour
+mapping, and compression artifact detection.
+Text-Based Features: OCR extraction (with Tesseract OCR)
+to analyze font style, alignment, spacing, kerning, and
+metadata irregularities [8].
+Structural Features: Capture layout-based attributes, such as
+margins, block alignment, and header/footer placement [4].
+Biometric Features: Face verification using FaceNet /
+ArcFace embeddings and signature/seal detection using
+SIFT/SURF descriptors.
+D. Model classification
+The classification model is powered by a deep Convolutional
+Neural Network (CNN) trained offline on a labeled dataset
+containing both authentic and forged documents. The CNN
+architecture comprises three convolutional blocks with batch
+
+normalization and max pooling, followed by fully connected
+dense layers and dropout for regularization. Training is
+conducted using the Adam optimizer with a binary crossentropy loss function, a batch size of 32, and up to 50 epochs
+with early stopping to prevent overfitting. To enhance
+generalization and robustness against subtle forgeries, the
+training pipeline incorporates data augmentation techniques
+such as random rotations, flipping, cropping, and
+brightness/contrast adjustments. This approach ensures
+resilience against varied forgery attempts, including minor
+manipulations.
+E. Forgery Detection
+During inference, the trained CNN processes the extracted
+features and produces classification results. Each document
+is labeled as either Authentic or Forged, accompanied by a
+confidence score that quantifies the model’s certainty.
+Optionally, the system highlights specific regions suspected
+of forgery, such as tampered signatures, mismatched fonts, or
+irregular alignments, thereby enhancing interpretability and
+aiding human evaluators in decision-making.
+Figure.2 AI-Powered Document Verification Process
+
+i. Document
+Preprocessing
+Once the document is retrieved, it is standardized to ensure
+consistent analysis.
+Steps:
+Normalization: Standardize document size and format.
+Noise Removal: Use Gaussian and median filtering to
+eliminate scanning artifacts and background interference [3].
+Deskewing: Correct document orientation using techniques
+like Hough Line Transformation.
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:59:52 UTC from IEEE Xplore. Restrictions apply.
+
+Resizing: Standardize to 224x224 pixels to maintain
+compatibility with CNN-based models [2].
+Binarization: Convert the document into a black-and-white
+format to simplify edge, font, and shape detection [1].
+Mathematical Model:
+D′=ϕ(D)where
+ϕ(⋅)
+represents
+preprocessing
+transformations applied on the original document D.
+Mathematical Model: F=[Fi,Ft,Fs,Fb]
+where Fi, Ft, Fs, and Fb represent image, text, structural, and
+biometric features respectively.
+E. Forgery Detection and Classification
+The extracted features are classified into "authentic" or
+"forged" using hybrid models.
+Deep Learning Models:
+CNN (primary classifier)
+GAN Detector (deepfake detection)
+Machine Learning Models:
+SVM (text features)
+Random Forest (metadata & structural features)
+Training Details:
+Optimizer: Adam (η=10−4)
+Loss: Binary Cross-Entropy
+Epochs: 50 with early stopping
+Data Augmentation: rotation, flipping, brightness adjustment
+Mathematical Loss Function:
+L=−N1i=1∑N[yilog(yi)+(1−yi)log(1−yi)]
+Decision Rule:
+O(D)=Authentic, Forged , y ≥ τy <τ
+where τ is the confidence threshold.
+IV. EVALUATION
+To evaluate the proposed Document Verification System, a
+dataset comprising 1,500 images of official documents was
+assembled. These documents were obtained from some
+publicly available sources, some were manually collected and
+some were synthetically generated to reflect realistic forgery
+scenarios. The dataset includes Aadhaarcards, PAN cards,
+driver’s licenses, and academic certificates.
+A. Data and System Configuration
+Dataset:
+1,500 images of official documents, including synthetically
+generated forgeries.
+Partitioning: Training (70%), Validation (15%), and Testing
+(15%).
+Annotations: Manually verified as either "genuine" or
+"forged."
+System Configuration:
+OS: Windows 11 Pro (64-bit)
+CPU: Intel Core i7 (11th Gen) @ 2.80 GHz
+RAM: 16 GB DDR4
+GPU: NVIDIA GeForce GTX 1660Ti (6 GB)
+Tools: Jupyter Notebook, Visual Studio Code
+Libraries: Python, OpenCV, TensorFlow, Keras, Tesseract
+OCR, Scikit-learn
+B. System Architecture and Results
+The system follows a structured pipeline as shown below.
+The proposed system achieves a classification accuracy of
+98%, significantly outperforming traditional methods with
+
+lower processing time and better scalability, making it
+suitable for real-time enterprise applications.
+Time
+System
+Accuracy
+Scalability
+(s)
+Proposed CNN
+98%
+0.3
+HIGH
+Baseline
+85%
+2.0
+Low
+(Manual/OCR)
+IV. Application Scenarios
+The system is designed to integrate easily with enterprise
+workflows through RESTful APIs or lightweight mobile
+apps. It can be deployed in multiple real-world scenarios:
+Banking KYC: Automating the validation of customersubmitted IDs during onboarding, reducing manual
+workload. Academic Institutions: Verifying certificates and
+transcripts submitted during admission processes to prevent
+document fraud.Legal Sector: Authenticating legal contracts
+and affidavits before filing or digital signing.Insurance and
+Claims: Detecting tampered medical bills, ID proofs, and
+receipts in fraud-prone insurance claims.
+DigiLocker Integration (Top Layer): The unified DigiLocker
+and AI-powered document verification process integrates
+secure government-issued document retrieval with advanced
+artificial intelligence techniques for forgery detection. The
+process begins with the DigiLocker integration layer, where
+users authenticate through an OAuth 2.0 flow, and an access
+token is generated to securely fetch verified documents using
+DigiLocker APIs such as GetIssuedFiles or Download.
+Document Input & Preprocessing: Once the document is
+retrieved in PDF, JPEG, or PNG format, it enters the AI
+pipeline for verification. The preprocessing stage ensures
+consistency by applying normalization, noise removal
+through Gaussian and median filtering, resizing the input to
+fixed dimensions (224 × 224 pixels), and converting the
+document into a binary format. Optical Character
+Recognition (OCR) is then employed to extract textual
+information, enabling analysis of fonts, alignment, and
+potential tampering.
+Multi-Domain Feature Extraction: Following preprocessing,
+multi-domain feature extraction is performed to capture
+different indicators of authenticity. Visual features such as
+layout, fonts, watermarks, logos, and stamps are examined for
+irregularities, while photo analysis verifies the identity of the
+individual in ID documents using deep learning–based facial
+recognition models like FaceNet or ArcFace. Signatures and
+seals are checked against reference templates, and textual
+features are validated for font consistency, spacing, and
+regulatory formats. Structural features such as document
+margins, block alignment, and header placement are also
+analyzed to identify cloned or manipulated content.
+AI Model Classification: The extracted features are then
+passed into a classification stage powered by deep learning
+and machine learning algorithms. Convolutional Neural
+Networks (CNNs) form the backbone of the system, detecting
+visual and structural anomalies, while Support Vector
+Machines (SVMs) and Random Forest classifiers enhance
+classification accuracy on textual and structured data. A
+GAN-detector module is also included to identify AIgenerated or deepfake document forgeries. These models are
+trained using the Adam optimizer, binary cross-entropy loss
+function, and data augmentation techniques such as rotation,
+flipping, and brightness adjustments to improve robustness.
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:59:52 UTC from IEEE Xplore. Restrictions apply.
+
+Decision & Output: The final stage involves decisionmaking, where the system classifies the document as
+authentic or forged and provides a confidence score (e.g.,
+92.7%). A detailed report is generated, optionally
+highlighting suspected forged regions such as altered
+signatures, seals, or text. The output is presented to the user
+via an intuitive interface. To ensure continuous improvement,
+a feedback loop is incorporated, where verification results are
+stored and used to retrain the models, enhancing accuracy
+over time. Optionally, results can be logged on a blockchain
+to provide tamper-proof auditability.
+This end-to-end workflow ensures that documents obtained
+from a trusted source like DigiLocker undergo rigorous AIdriven analysis, combining secure retrieval with deep
+learning–based forgery detection, making the system suitable
+for high-stakes applications in government, finance, and
+enterprise environments.
+The proposed system achieves higher accuracy with lower
+processing time and better scalability, making it suitable for
+real-time enterprise applications.
+Error Analysis
+Minor false positives were observed, mainly in documents
+with unusual fonts or partially damaged regions. These can
+be mitigated through further model tuning or integration with
+attention-based architectures.
+CONCLUSION AND FUTURE WORK
+This paper presents an AI-powered document verification
+system capable of detecting forged documents with high
+accuracy and efficiency. By leveraging Convolutional Neural
+Networks (CNN) and advanced image processing techniques,
+system automatically identifies inconsistencies in fonts,
+natures, and embedded security features. Achieving a clascation accuracy of 98%, the proposed model significantly
+outperforms traditional methods and offers real-time,
+scalable verification for high-stakes applications. The
+modular design allows easy integration into enterprise
+systems and adaptability to various document types,
+including IDs, certificates, and legal records. Comparative
+evaluation with baseline systems confirms superior
+performance in terms of speed, precision, and scalability.
+Future work will focus on enhancing model robustness
+against deepfake and GAN-based forgeries by integrating
+attention mechanisms and transformer-based architectures.
+Blockchain integration is also planned to ensure tamper-proof
+and transparent document storage. Moreover, expanding the
+system to support mobile platforms, multilingual documents,
+and IoT-enabled edge devices will broaden its applicability
+in real-world scenario
+REFERENCES
+[1] M. Chawla, R. H. Arora, and S. R. Mohanty, “A hybrid
+approach for document forgery detection using image
+processing and machine learning,” Computers & Electrical
+Engineering, vol. 70, pp. 512–522, 2019.
+[2] F. Lewis, “Explainable AI in document fraud detection,”
+Explainable AI Journal, vol. 9, pp. 205–220, 2023.
+[3] L. Carter, “Optical character recognition for fraud
+detection in digital documents,” Springer Machine Vision
+Journal, vol. 8, no. 3, pp. 215–228, 2023.
+[4] F. Jia and L. Z. Kong, “Intrusion detection algorithm
+based on convolutional neural network,” Transactions of
+
+Beijing Institute of Technology, vol. 37, no. 12, pp. 1271–
+1275, 2017.
+[5] D. Cekmez, B. S. Atalay, and S. Demir, “An AI-based
+document verification system for secure online transactions,”
+Journal of Information Security, vol. 6, no. 3, pp. 227–235,
+2018.
+[6] L. Cao, D. Zhang, and J. Wang, “Machine learning
+methods in document forgery detection: A comparative
+study,” International Journal of Computer Science and
+Security, vol. 12, no. 2, pp. 120–134, 2020.
+[7] M. Patel, “The role of blockchain in enhancing document
+verification,” Decentralized Systems Journal, vol. 10, pp.
+120–135, 2023.
+[8] Y. Zhao, “Blockchain and AI in document
+authentication,” Journal of Decentralized Systems, vol. 6, pp.
+112–125, 2023.
+[9] L. Wang, “Detecting deepfake forgeries using GANbased models,” Journal of Image Analysis, vol. 14, pp. 300–
+317, 2023.
+[10] S. Verma, “IoT-enabled AI for document fraud
+detection,” IoT and AI Advances, vol. 5, no. 4, pp. 45–60,
+2023.
+[11] R. Zhang, “Adaptive AI models for real-time document
+verification,” ACM Transactions on Machine Learning, vol.
+17, pp. 270–285, 2024.
+[12] L. Alzamil, “Image forgery detection with machine
+learning,” International Journal of Engineering and
+Advanced Technology, vol. 12, no. 5, pp. 416–423, 2023.
+[13] R. Kumar and A. Singh, “Blockchain-based
+decentralized document verification and its applications,”
+Journal of Information Security and Emerging Technologies,
+vol. 6, no. 2, pp. 112–125, 2024.
+[14] C. P. Lee, “Design, development, and deployment of
+context-adaptive AI systems for enhanced end-user
+adoption,” arXiv preprint, arXiv:2401.13643, 2024.
+[15] N. Sharma and P. Gupta, “AI-based online KYC
+verification,” International Journal of Research Publication
+and Reviews, vol. 6, no. 5, pp. 457–464, 2023.
+[16] J. Smith and A. Doe, “Explainable AI for fraud
+detection: Enhancing transparency and trust in financial
+decision-making,” ResearchGate Preprint, 2024.
+[17] M. Khan and S. Ali, “Deep feature extraction for
+document
+forgery
+detection
+with
+convolutional
+autoencoder,” Computers & Electrical Engineering, p.
+107770, 2023.
+[18] A. Patel and R. Mehta, “AI-driven optical character
+recognition for fraud detection in income verification
+systems,” International Research Journal of Engineering and
+Technology, vol. 11, no. 12, pp. 116–123, 2023.
+[19] R. Verma and K. Singh, “Explainable AI for fraud
+detection: Techniques for understanding and interpreting
+adaptive fraud detection systems,” ResearchGate Preprint,
+2023.
+[20] L. Chen and Y. Wang, “A GAN-based model of
+deepfake detection in social media,” Procedia Computer
+Science, vol. 191, pp. 123–130, 2023.
+[21] M. Taylor and S. Brown, “Opportunities in real-time
+fraud detection: An explainable artificial intelligence
+approach,” International Journal of Advanced Computer
+Science and Applications, vol. 14, no. 5, pp. 121–130, 2024.
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:59:52 UTC from IEEE Xplore. Restrictions apply.
+
+[22] D. Singh and H. Kaur, “The role of AI in detecting and
+preventing document fraud,” CloudThat Blog, 2023.
+[Online]. Available: https://cloudthat.com
+[23] L. Johnson and M. Lee, “A framework for online
+document verification using self-sovereign identity,”
+Sensors, vol. 22, no. 21, p. 8408, 2024.
+[24] H. Garcia and P. Martinez, “Document forgery
+detection: A comprehensive review,” ResearchGate
+Preprint, 2023.
+[25] S. Ahmed and R. Khan, “Blockchain for secure and
+decentralized artificial intelligence in cybersecurity,” Journal
+of Information Security and Applica ons, 2024
+[26] SmartDoc Dataset, 2015. [Online]. Available:
+https://smartdoc.qmul.ac.uk/
+[27] LRDE Identity Document Video Database, 2017.
+[Online].
+Available:
+https://www.lrde.epita.fr/
+[28] V. V. Arlazarov, K. Bulatov, V. V. Arlazarov Jr., and T.
+Chernyshova, “MIDV-500: A dataset for identity document
+analysis and recognition on mobile devices in video stream,”
+in Proc. Int. Conf. Document Analysis and Recognition
+(ICDAR),
+2018,
+pp.
+387–392.
+[29] V. V. Arlazarov et al., “MIDV-2019: Challenges of
+distorted identity documents in video stream,” in Proc. Int.
+Workshop on Camera-Based Document Analysis and
+Recognition
+(CBDAR),
+2019,
+pp.
+29–34.
+[30] V. V. Arlazarov et al., “MIDV-2020: A comprehensive
+benchmark dataset for identity document analysis,” in Proc.
+Int. Conf. Pattern Recognition (ICPR), 2020, pp. 1015–1022.
+[31] FMIDV Dataset, 2021. [Online]. Available:
+https://zenodo.org/record/fmidv
+[32] SIDTD Dataset, 2022. [Online]. Available:
+https://zenodo.org/record/sidtd
+[33] Brazilian Identity Document (BID) Dataset, 2020.
+[Online]. Available: https://data.mendeley.com/datasets/bid
+[34] IDNet Benchmark Dataset, 2023. [Online]. Available:
+https://zenodo.org/record/idnet
+[35]A. Jadhav and P. Chandre, "Survey and comparative
+analysis of phishing detection techniques: current trends,
+challenges, and future directions," IAES International
+Journal of Artificial Intelligence (IJ-AI), vol. 14, no. 2, pp.
+853-866, 2025, doi: 10.11591/ijai.v14.i2.pp853-866.
+[36]P. Chandre, P. Bhujbal, A. Jadhav, B. Dinesh Shendkar,
+A. Wangikar, and R. Sachdeo, "A comprehensive review of
+interpretable machine learning techniques for phishing attack
+detection," IAES International Journal of Artificial
+Intelligence (IJ-AI), vol. 14, no. 4, pp. 3022-3032, 2025, doi:
+10.11591/ijai.v14.i4.pp3022-3032.
+[37]P. M. Bhujbal, A. Jadhav, J. N. Nandimath, P. S. Kadam,
+P. R. Chandre, and P. N. Mahalle, "Zero Trust Paradigm:
+Advancements, Challenges, and Future Directions in
+Cybersecurity," Int J Intell Syst Appl Eng, vol. 12, no. 19s,
+pp. 613-623, Mar. 2024.
+[38]A. Jadhav and P. Chandre, "A Hybrid Heuristic-Machine
+Learning Framework for Phishing Detection Using MultiDomain Feature Analysis," Engineering, Technology &
+Applied Science Research, vol. 15, no. 5, pp. 27219-27226,
+2025, doi: 10.48084/etasr.115
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:59:52 UTC from IEEE Xplore. Restrictions apply.
+
+

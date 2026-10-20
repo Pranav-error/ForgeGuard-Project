@@ -1,0 +1,767 @@
+2024 International Conference on Advancements in Smart, Secure and Intelligent Computing (ASSIC) | 979-8-3503-7018-8/24/$31.00 ©2024 IEEE | DOI: 10.1109/ASSIC60049.2024.10507928
+
+OFFLINE SIGNATURE FORGERY DETECTION
+BASED ON GEOMETRIC MEASURES USING
+TENSORFLOW MODEL
+A.Anagha Lakshmi
+
+G.Siddarth Reddy
+
+M.Sowmya Reddy
+
+Department Of Information Technology
+Vardhaman College Of Engineering
+Hyderabad, India
+
+Department Of Information Technology
+Vardhaman College Of Engineering
+Hyderabad, India
+
+Department Of Information Technology
+Vardhaman College Of Engineering
+Hyderabad, India
+
+Nikhila Kathirisetty
+Department Of Computer Science and Data Science
+Vardhaman College Of Engineering
+Hyderabad, India
+Nikhilamtech@gmail.com
+
+Abstract—The most popular method for identifying people
+from past signatures is through signatures. By using a TensorFlow
+model which is a deep learning algorithm, we created a new
+system to verify signatures on bank checks and other important
+documents. The main point is that a signature plays a crucial
+role in banking because it is necessary for money withdrawals.
+In banks there are no efficient systems to check if a signature is
+real or fake as it is the most frequently used bio-metric method
+to verify a person’s identity. This can lead to bank fraud. The
+Project will make it easier to tell whether a signature is genuine
+or not. Online and offline verification are the two methods of
+verification. We’re going to use various geometric measurements
+to accomplish offline verification. Python libraries were employed
+in this case. In the testing phase the model’s performance is
+evaluated. To protect the integrity and legitimacy of handwritten
+signatures, signature forgery detection is an essential responsibility. The capacity to recognize forged signatures with accuracy
+has grown more important as a result of the rise in digital
+transactions and the growing reliance on electronic documents.
+The act of duplicating or copying another person’s signature with
+the purpose to deceive or gain illegal access is known as signature
+forging. Manually spotting these forgeries can be difficult because
+expert forgers are adept at closely imitating the visual style and
+traits of real signatures.Therefore, there has been a lot of interest
+in the development of automated methods and algorithms to
+identify fake signatures.
+Index Terms—IQ score,distance measures,machine learning,
+and data mining.
+
+I. I NTRODUCTION
+Legal papers and financial transactions frequently employ
+signatures as an authorization technique. Given the aforementioned reality, signatures are very important in commercial
+settings and the creation of legal documents. Due to the
+value of a signature, there has been a significant increase in
+signature fraud in the modern era to commit crimes without the
+knowledge of authorized people. Signature verification is the
+Identify applicable funding agency here. If none, delete this.
+
+procedure used to determine whether a submitted signature is
+real, i.e., to check it is not a counterfeit signature. Traditional
+neural networks frequently fail to recognize the distinctive
+letter connections and stroke patterns found in real signatures.
+First, we will use a database of signatures to teach the
+system. The system has previously authorized this database of
+signatures. To verify other signatures, this system will analyze
+all signatures and create a reference signature. Between the
+claimed signature and the signature that will be scrutinized
+distance is calculated.The signature is recognized as forgery
+if the distance between the parameters of real signature and
+verification signature exceeds a predefined threshold.
+Here, we have used deep learning [1] and machine learning
+algorithms for creating a sound signature forgery detection
+system. These models can automatically extract relevant features from signature images and make accurate predictions,
+reducing the dependence on human experts and improving the
+efficiency of forgery detection. The use of signature forgery
+detection extends to various domains, including banking,
+legal documents, government identification, and authentication systems. Detecting and preventing signature forgeries
+not only helps in minimizing financial losses and fraud but
+also safeguards the reputation and credibility of organizations
+and individuals. By leveraging advanced machine learning
+techniques, these detection systems offer a reliable and efficient means to combat forgery attempts, protect individuals
+and organizations from financial and legal repercussions, and
+maintain the integrity of important documents.
+The process of signature forgery detection involves analyzing various characteristics of the signature to determine its
+authenticity. This analysis may include the examination of
+stroke patterns, line quality, pressure, rhythm, proportions, and
+overall consistency. Furthermore, aspects such as pen lifts,
+timing, and sequence of strokes may also be considered. In
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:59:09 UTC from IEEE Xplore. Restrictions apply.
+
+TABLE I
+TABLE FOR EXPANSIONS
+S. No
+1.
+2.
+3.
+4.
+5.
+6.
+7.
+8.
+9.
+10.
+11.
+
+Abbreviation
+FAR
+FRR
+SURF
+SIFT
+OSV
+SCNN
+DCNN
+PCA
+GLCM
+SKPCA
+SVM
+
+Expansion
+False Acceptance Rate
+False Rejection Rate
+Speed up Robust Features
+Scale Invariant Feature Transform
+Original Seen & Verified
+Shallow Convolutional Neural Network
+Deep Convolutional Neural Network
+Principal Component Analysis
+Gray Level Co-occurrence Matrix
+Sparse Kernel PCA
+Support vector Machine
+
+digital signatures, additional factors like metadata, encryption
+algorithms, and authentication protocols may be examined.
+To aid in signature forgery detection, experts utilize a
+range of techniques and tools. These can include manual
+examination by forensic document examiners, who possess
+specialized knowledge and expertise in analyzing signatures.
+They carefully inspect the physical or digital documents, study
+the ink or digital traces, and use various magnification and
+imaging techniques to detect irregularities consistencies. It is
+worth noting that signature forgery detection is a complex and
+specialized field, and the outcomes of such analyses are typically considered expert opinions rather than definitive proof
+[2]. The results are often presented in court proceedings or
+used in forensic investigations to provide insight and support
+decision-making processes.
+Signature forgery detection is the process of identifying
+signatures that have been falsified or tampered with. This
+is a critical task in a variety of settings, such as financial
+institutions, government agencies, and businesses. TensorFlow
+provides a number of features that make it well-suited for this
+task, including Signature forgery detection using TensorFlow
+is a complex process, but it can be a very effective way to
+protect against fraud and identity theft. The following table
+lists a few words and their expansions shown in TableI.
+A. Objectives
+1) legitimacy Assessment:: The main goal is to evaluate
+a signature’s legitimacy by separating real signatures from
+forgeries.
+2) Accuracy Improvement:: The use of a TensorFlow model
+aims to enhance the accuracy of signature forgery detection.
+By leveraging machine learning algorithms and neural networks, the model basically learns from a huge dataset of real
+and forged signatures allowing it to recognize patterns and
+subtle cues that might be challenging for human experts to
+detect.
+II. RELATED WORK
+The identity of a person is verified using a signature in
+most scenarios. The process of signature forgery includes a
+collection of data pre-processing (RGB to gray), extracting
+features, and validating signatures against training data.
+
+A person’s signature is a quick and easy way to confirm
+their identification. It can be confirmed using neural networks
+[3] by matching and stored as an image. Online or offline
+signature verification is also possible. Legendre polynomials
+are used for analyzing and verifying behavioral biometrics
+such as handwriting in banks or legal documents.
+Signature verification is used as a biometric approach in
+most legal, financial, and bank sectors. The verification process
+includes testing the signature against a real signature to assess
+the genuinity of the signature. In designing a offline signature
+model the developer might face more issues and concerns.
+Signature verification also involves analyzing pen speed,
+pressure, and motion while taking samples of the signature
+for verification which provides people with secure systems and
+services for verification. In this model, OSV (Open Seen and
+Verified) technique can also be included to verify a customer’s
+identity, address, or phone number.
+Legendre polynomial co-efficient approximation [4] makes
+signature matching or verification convenient by producing
+fixed-length representations for features and uses SGD with
+momentum to produce better Equal Error Rate Reduction. In
+this model, two styles of signatures can be used to evaluate
+the performance of the verification system namely Western and
+Chinese. The results conclude that there is a good correlation
+between verification errors and consistency factors for optimal
+combination of features.
+Developing a Signature forgery detection system using CNN
+and Capsule neural network [5] to increase the efficiency
+and accuracy of the system. The hybrid architecture of CNNCapsNet claims to reduce the complexity of the network, and
+feature extraction phase, and captures the spatial properties of
+signature images.
+Combining of GLCM and features using SVM [6] for creating a model for Offline Signature Verification System which
+uses eight geometric features and twenty-two co-occurrences
+matrices. A skew kurtosis method is also used to select optimal
+features in the final verification of signatures (forged and
+genuine). This model also shows much improvement in FAR
+and FAR parameters compared to other existing Signature
+forgery Systems.
+Offline Signature recognition and verification based on
+neural networks also include four components such as data
+acquisition, pre-processing, extracting features, recognition,
+and verification. In this system MLP (Multilayer perceptron),
+Modular Neural network, and SOM (Self Organizing maps) [7]
+are used where SOM groups data into clusters for unsupervised
+training and also includes analysis of data and visual analysis.
+The mapping problem of multi-dimensional data is tackled
+using MLP neural networks that are trained with feed-forwardback propagation. After four component steps testing of the
+model was performed through FAR, FRR, and TER.
+In reality, not every case involving signature verification will
+proceed to the forensic examination phase. We need to quickly
+validate signatures in several common application cases, such
+as business, industry, etc. For instance, when the case is still
+in the preliminary inquiry stage, investigators typically need to
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:59:09 UTC from IEEE Xplore. Restrictions apply.
+
+conduct a short signature inspection to assess the likelihood
+or direct their research. The usage of commercial signature
+verification is an additional illustration. Some businesses even
+retain a single signature for authentication when taking client
+convenience into account.
+The goal of signature forgery detection using a TensorFlow
+model is to speed up and automate the procedure. A welltrained TensorFlow model can swiftly examine a large number
+of signatures, offering consistent and objective assessments, as
+opposed to manual analysis of signatures, which can be timeconsuming and subjective.
+Scalability is made possible by the use of a TensorFlow
+model, which is capable of processing a large number of
+signatures quickly. When dealing with circumstances that
+require large amounts of documentation, such as banking institutions, legal proceedings, or governmental organizations, this
+is especially helpful. The TensorFlow model can help human
+specialists make decisions by enhancing their knowledge of
+signature forgery detection. It can provide unbiased perceptions and fact-based evaluations that help forensic document
+examiners or legal experts make choices about the veracity of
+signatures.
+As new forging methods are developed or as additional data
+becomes available, the TensorFlow model can be continuously
+updated and enhanced. The model may adapt to changing
+forging techniques and improve its detection abilities over time
+by utilizing continuous research and improvements in machine
+learning.
+The TensorFlow model needs to be taught to be flexible and
+able to generalize its understanding to recognize various kinds
+of signature forgeries. It should be able to recognize a variety
+of forging methods, such as freehand, traced, and manipulated
+digital signatures.
+In conclusion, the goals of signature forgery detection
+utilizing a TensorFlow model center on enhancing precision, effectiveness, scalability, and flexibility while supplying
+decision assistance and real-time detection capabilities. The
+model attempts to improve the overall efficiency of signature
+forgery detection procedures by utilizing the power of machine
+learning.
+III. M ETHODOLOGY
+TensorFlow’s mechanism for detecting signature fraud includes a number of crucial phases. Here is a general description of what happens:
+A. Data Gathering and Preprocessing:
+Gather a dataset of signatures that includes samples of both
+real and fake signatures. Obtain digital signatures or scan
+physical documents to convert the signatures to digital format.
+Resize, normalize, and, if necessary, use noise reduction
+techniques to preprocess the signature photos.
+B. Data Labelling:
+Label the signatures in the dataset as authentic or counterfeit
+using data labeling and annotation. If available, annotate each
+
+Fig. 1. Workflow model of TensorFlow model
+
+signature with extra information, such as the type of forgery
+(e.g., freehand forgery, traceable forgery, digital manipulation).
+C. Extract
+useful features from the signature photos using feature
+extraction. This might involve a variety of elements, such
+as proportions, line quality, pressure, rhythm, and general
+consistency. Pen lifts, time, the order of the strokes, and digital
+signature metadata are possible extra elements.
+D. Architecture design model:
+Establish the TensorFlow model’s ideal architecture. This
+may entail utilizing recurrent neural networks (RNNs) [8]
+for sequential information in signatures and convolutional
+neural networks (CNNs) for image-based characteristics. As
+a starting point or set of building blocks for the signature
+forgery detection model, think of pre-trained models like ResNet, VGG, or Inception. In this model, the following models
+are used:
+1) TensorFlow: TensorFlow is an open source and free
+software library used mostly in ML (machine learning) models
+for particularly focusing on deep neural networks and used
+across many tasks as a math-based library.
+2) Matplotlib:: Matplotlib is a plotting library for Python
+used as a NumPy for numerical mathematics. With the help
+of a GUI, it provides an object-oriented API for embedding
+plots into applications.
+3) Pandas:: Pandas provide operations and data structures
+to handle time series and numerical tables. It is mainly used
+for data manipulation and analysis.
+4) Keras:: Keras offers an interface(interface) for ANN
+(Artificial Neural Networks). It is an open-source library that is
+also used for data analysis and manipulation [8]. The following
+figure 1 represents the workflow model of the TensorFlow
+model.
+A person’s identity can be shown incontrovertibly and
+uniquely by their handwritten signature. Due to its simplicity
+and originality, it holds a crucial position in the field of
+behavioral bio metrics. Secured authentication is crucial since
+signatures are the most frequently used bio-metric attribute
+for verification by law enforcement officers and agencies,
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:59:09 UTC from IEEE Xplore. Restrictions apply.
+
+Fig. 2. Flowchart of the TensorFlow Mechanism
+
+particularly in financial institutions, legal transactions, etc.
+In the era of the digital age, there are a lot of transactions
+happening where the organizations, like banks, etc., demand
+handwritten signature verification. In these situations, the
+signature verification procedure should be quick, accurate,
+and secure, allowing for real-time verification. In this paper a
+TensorFlow model along with Pandas, Keras, and Matplotlib
+libraries. Researchers have used many technologies, such as
+neural networks and they have done parallel processing to
+signature verification and they are introducing concepts, new
+ideas, and algorithms day by day. The following figure 2
+represents the Flowchart of the TensorFlow Mechanism.
+Gather a sizable dataset of real and fake signatures before
+creating your dataset. Make sure the dataset is labeled correctly
+to distinguish between authentic and fake samples.
+The basic process of creating a TensorFlow model includes
+the following steps:
+Data pre-processing: Before training the TensorFlow
+model, make sure the signature photos are in a format
+that is appropriate for pre-processing. This can entail
+scaling the photographs, standardizing the pixel values,
+and transforming them into a common format.
+• Model Architecture: Architecture includes a number of
+layers for feature extraction, activation functions like
+sigmoid, tanh, relu based on the requirements and also
+an FC layer (Fully connected) for the output.
+• Training: The training data is inputted into the model
+and then use an appropriate loss function (such as binary
+cross-entropy) and optimization technique (like Adam)
+to refine its parameters. Adjust the weights of the model
+iterative across a number of epochs to reduce the loss on
+the training set.
+• Evaluation: After feature extraction, model architecture,
+and lots of training the performance of the model is
+assessed by validating the training dataset against the
+•
+
+new testing data. The evaluation process involves the
+calculation of precision, accuracy and recall of a model.
+• The training dataset’s quality: The training dataset should
+be sufficiently large and representative of the signature
+kinds that will be found in the actual world. The training dataset should contain only high-quality, accurately
+classified signatures.
+• The model’s complexity: The likelihood that a model will
+attain high accuracy increases with model complexity.
+However, developing and using more complicated models
+may also require more computational resources.
+• The features chosen: The features that are taken out of the
+signatures can greatly affect how accurate the model. The
+features should be able to distinguish between genuine
+and forged signatures.
+When developing and implementing a signature forgery
+detection system, it is crucial to take into account the variables that may have an impact on the model’s accuracy. The
+following figure 3 represents the pre-processing steps for the
+raw signature images taken from the dataset.
+Typically, to identify signature fraud, a machine learning model is trained to distinguish between real and fake
+signatures. Such models can be created and trained using
+TensorFlow, a well-liked deep learning framework.
+The following Table II represents the literature review.
+IV. E XPERIMENTAL R ESULTS :
+A model’s accuracy is measured by the proportion of times
+it predicts the outcome accurately. For instance, if a model
+predicts the outcome 90% of the time, it is 90% accurate. A
+model’s loss represents how well it performs on the training
+set of data.
+The TPR (True Positive Rate) measures how many positive
+instances are correctly classified, while the FPR (False Positive
+Rate) measures how many negative examples are wrongly
+labeled. The ROC curve of a successful model will be towards
+the top-left corner of the graph.
+A. RESULTS OF TENSOR FLOW MODEL FOR SCORE,
+FRR, FAR:
+The score represents the proportion of times the input
+was correctly detected by the model. The FRR measures
+how frequently a valid input was mistakenly rejected by the
+model. The FAR measures how frequently an invalid input
+was mistakenly accepted by the model. The following table
+III represents the FAR and FRR score of the TensorFlow
+Mechanism used.
+B. RESULTS FOR TENSOR FLOW MODEL FOR PREDICTED LABEL VS TRUE LABEL:
+Each entry in the table corresponds to a sample of the test
+data. The input’s true label is its actual label, whereas the
+projected label is the one the model assigned to it. The table
+demonstrates that five times out of five, the model correctly
+predicted the label. This indicates that the model’s accuracy is
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:59:09 UTC from IEEE Xplore. Restrictions apply.
+
+TABLE II
+L ITERATURE R EVIEW
+S.No
+
+Title
+
+Approach
+
+Future scope
+
+1.
+
+Signature Forgery Detection using CNN [1]
+
+CNN
+
+2.
+
+Signature
+Recognition
+and Forgery detection
+(Offline)
+using
+deep
+learning models [3]
+Efficient Signatures verification system based on
+ANN [8]
+Online Signature verification system using Dl and
+Legendre polynomial coefficient. [4]
+
+Harry’s Algorithm, surf
+Algorithm
+
+Model can be used and deployed into portable platforms such as Smart Phones and Raspberry Pi’s if a
+signature is forged or real
+85 to 89% Accuracy is obtained while detecting the
+forged signature
+
+3.
+
+4.
+
+5.
+
+6.
+
+7.
+
+8.
+
+9.
+
+10.
+
+Year
+
+Deep Learning
+
+2020
+
+2018
+
+Back Propagation using
+ANN
+
+This model obtains high Accuracy and less error rate
+
+ANN,FAR,FFR
+
+2020
+
+Legendre
+polynomial
+coefficients, deep feedforward neural network
+
+Stochastic gradient descent with momentum deep
+learning algorithm
+
+2019
+
+Offline signature verification by fusion of GLCM
+and geometric features using SVM. [6]
+Signature Forgery detection using SVMs. [2]
+
+GLCM,
+HPFI,
+PCA(SKCPCA),MLYT,
+GPDS
+
+Grasshopper is a best feature selection technique than
+compared to other heuristic approaches.
+
+CNN
+
+Improvision of CNN by improving the dataset quantity and quality to train a model.
+
+Online Signature verification using deep learning
+descriptors. [9]
+Offline Signature recognition and verification based
+on Neural Networks. [10]
+
+SVM, CNN.
+
+Thinking to enhance accuracy by using pre-created
+filters.
+
+Legendre
+polynomial
+coefficients, deep
+feed-forward
+neural network
+classifier.
+GLCM,
+HPFI,
+PCA
+(SKC
+PCA),
+MLYT,
+GPDS
+Feature
+extraction,
+model
+training
+using CNN
+SVM,CNN
+
+FAR and FRR are reduced by increasing reference sample features.
+
+Multilayer perceptron, modular neural networks.
+
+2013
+
+Offline Signature recognition with deep neural network on a large scale. [11]
+Offline signature forgery
+and detection based on the
+single known sample and
+deep learning methodologies. [12]
+
+C3, RELU
+
+Producing better accuracy for detecting forged signatures.
+
+Used
+to
+solve
+more
+complicated
+problems
+C3
+algorithm,
+RELU
+
+Python image library,
+deep learning frameworks
+like tensor flow.
+
+To further optimize the system performance more
+data is required and can be verified using the voting
+method.
+
+Meta-Analysis
+
+2020
+
+TABLE III
+T HE TABLE REPRESENTS THE S CORE , FAR, AND FRR VALUES
+Score
+0.99
+
+FRR
+0.001
+
+FAR
+0.001
+
+100 percent. The following table IV represents the predicted
+label vs the true label.
+The formulas and methods are frequently applied in TensorFlow models for the detection of signature forgery. Depending
+on the model’s requirements and architecture, the specific
+implementation could change.
+Distance-based techniques: These techniques determine
+how far apart the real and fake signatures are. The
+likelihood that the signatures are real increases with decreasing distance. The Manhattan distance, the Hamming
+distance, and the Euclidean distance are a few examples
+of common distance measures.
+• Feature-based techniques: These techniques take characteristics from both real and fake signatures. The attributes
+
+•
+
+Method / Technique
+CNN
+
+2020
+
+2022
+
+2020
+
+2019
+
+can be derived from the signature’s shape, the amount of
+pressure used, or the pace at which it was written [13]. A
+machine learning model is then trained with the attributes
+to discriminate between authentic and fake signatures.
+• Graph-based techniques: These techniques display the
+real and fake signatures as graphs. To find discrepancies,
+the graphs are then put side by side. The hidden Markov
+model method and the signature graph method are two
+popular graph-based techniques. The formula that is used
+relies on the particular signature forgery detection issue.
+For instance, distance-based approaches are frequently
+used when the signatures are of good quality and the
+characteristics are simple to extract. Feature-based approaches are frequently used when the signatures are
+of poor quality or the characteristics are challenging to
+extract. Graph-based approaches are frequently employed
+when the features are complicated or the signatures are
+of varying quality.
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:59:09 UTC from IEEE Xplore. Restrictions apply.
+
+non-linear relationships within the data, scalability to process
+large volumes of signatures effectively, and potential for
+continuous improvement through retraining with new data.
+In conclusion, detecting signature fraud using a TensorFlow
+model is a viable way to stop the spread of fraudulent activity.
+VI. F UTURE R EFERENCES :
+
+Fig. 3. pre-processing steps for the raw signature images taken from dataset
+TABLE IV
+P REDICTED LABEL VS T RUE LABEL
+S.No.
+1
+2
+3
+4
+5
+
+Predicted Label
+0
+1
+0
+1
+0
+
+True Label
+0
+1
+0
+1
+0
+
+V. CONCLUSION:
+In conclusion, detecting signature fraud using a TensorFlow
+model has enormous promise for stopping fraud and maintaining the reliability of signed papers. For instance, when
+the signatures are of good quality and the characteristics are
+simple to extract, distance-based approaches are frequently
+used. When the signatures are of poor quality or the characteristics are challenging to extract, feature-based approaches
+are frequently used. When the features are complicated or
+the signatures are of varying quality, graph-based approaches
+are frequently employed. Why do we use TensorFlow for this
+model, it is open source, free to use and is frequently updated
+with features and functionalities.
+The benefits of using a TensorFlow model for signature
+forgery detection include its capacity to handle complex and
+
+Several of the following areas show potential for future use
+in signature forgery detection:
+• The creation of more complex deep learning designs, such
+as transformer models and graph neural networks, may
+help signature forgery detection systems perform more
+accurately and effectively. These designs are better able
+to identify fraud because they can capture long-range
+linkages and hierarchical relationships in signature data.
+• Incorporating a variety of data sources, such as pressure
+data, pen tilt, and biometric traits like finger vein patterns
+[13] in addition to signature photos, might improve
+the resiliency of signature fraud detection systems. The
+fusion of multi-modal data can offer a more thorough
+and trustworthy analysis, making it more difficult for
+counterfeiters to imitate real signatures.
+• It is increasingly important to establish strong adversarial
+defense mechanisms as attackers develop advanced methods to get around signature forging detection systems.
+Adversarial training, in which models are exposed to
+artificially produced adversarial examples while being
+trained, can increase the model’s resistance to such attacks.
+• Constant Improvement and Incremental Updating: Systems for detecting signature forgeries that can incrementally adapt to new data and learn from it will be useful in a
+dynamic setting. The systems can advance over time and
+adapt to changing forging strategies by regularly updating
+the models with fresh signature samples.
+• As machine learning models are employed more frequently in crucial fields like signature verification, the
+capacity to explain and to be interpreted becomes crucial.
+To train deep neural networks we can also use three
+types of synthetic data to increase the number of samples
+and to introduce a new mechanism without the need for
+additional training. [14]
+• Large-Scale Signature Datasets [7]: To create and test
+signature forgery detection models, it is essential to have
+access to a variety of comprehensive signature datasets.
+Large-scale benchmark datasets that include a variety
+of signatures from many people can promote progress
+in the field and allow fair comparisons between various
+methodologies.
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:59:09 UTC from IEEE Xplore. Restrictions apply.
+
+R EFERENCES
+[1] J. Poddar, V. Parikh, and S. K. Bharti, “Offline signature recognition and
+forgery detection using deep learning,” Procedia Computer Science, vol.
+170, pp. 610–617, 2020.
+[2] T. M. Ghanim and A. M. Nabil, “Offline signature verification and
+forgery detection approach,” in 2018 13th international conference on
+computer engineering and systems (ICCES). IEEE, 2018, pp. 293–298.
+[3] M. Mithun and N. Manohar, “Document signature recognition and
+verification using neural network,” in 2022 International Conference on
+Futuristic Technologies (INCOFT). IEEE, 2022, pp. 1–5.
+[4] H. Rauhut and R. Ward, “Sparse legendre expansions via 1minimization,” Journal of approximation theory, vol. 164, no. 5, pp.
+517–533, 2012.
+[5] E. Parcham, M. Ilbeygi, and M. Amini, “Cbcapsnet: A novel writerindependent offline signature verification model using a cnn-based architecture and capsule neural networks,” Expert Systems with Applications,
+vol. 185, p. 115649, 2021.
+[6] F. E. Batool, M. Attique, M. Sharif, K. Javed, M. Nazir, A. A.
+Abbasi, Z. Iqbal, and N. Riaz, “Offline signature verification system:
+a novel technique of fusion of glcm and geometric features using svm,”
+Multimedia Tools and Applications, pp. 1–20, 2020.
+[7] J. R. Lopez, J. de Jesus Camacho, P. Ponce, B. MacCleery, and
+A. Molina, “A real-time digital twin and neural net cluster-based
+framework for faults identification in power converters of microgrids,
+self organized map neural network,” Energies, vol. 15, no. 19, p. 7306,
+2022.
+[8] H. Said-Ahmed and E. Natsheh, “Efficient signatures verification system
+based on artificial neural networks,” International Journal of Human and
+Technology Interaction (IJHaTI), vol. 4, no. 1, pp. 1–10, 2020.
+[9] A. Singh and S. Viriri, “Online signature verification using deep descriptors,” in 2020 Conference on information communications technology
+and society (ICTAS). IEEE, 2020, pp. 1–6.
+[10] M. A. Abdala and N. A. Yousif, “Offline signature recognition and
+verification based on artificial neural network,” Eng & Tech. Journal,
+vol. 27, no. 7, p. 20, 2009.
+[11] N. Calik, O. C. Kurban, A. R. Yilmaz, T. Yildirim, and L. D. Ata,
+“Large-scale offline signature recognition via deep neural networks and
+feature embedding,” Neurocomputing, vol. 359, pp. 1–14, 2019.
+[12] H.-H. Kao and C.-Y. Wen, “An offline signature verification and forgery
+detection method based on a single known sample and an explainable
+deep learning approach,” Applied Sciences, vol. 10, no. 11, p. 3716,
+2020.
+[13] D. Anamika and R. Kumar, “Pen pressure: An important tool in online
+signature verification,” 2019.
+[14] V. Ruiz, I. Linares, A. Sanchez, and J. F. Velez, “Off-line handwritten
+signature verification using compositional synthetic generation of signatures and siamese neural networks,” Neurocomputing, vol. 374, pp.
+30–41, 2020.
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:59:09 UTC from IEEE Xplore. Restrictions apply.
+
+

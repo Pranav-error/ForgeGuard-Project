@@ -1,0 +1,1124 @@
+2020 25th International Conference on Pattern Recognition (ICPR)
+Milan, Italy, Jan 10-15, 2021
+
+2020 25th International Conference on Pattern Recognition (ICPR) | 978-1-7281-8808-9/21/$31.00 ©2021 IEEE | DOI: 10.1109/ICPR48806.2021.9412224
+
+Documents Counterfeit Detection Through a Deep
+Learning Approach
+Darwin Saire
+
+Salvatore Tabbone
+
+University of Campinas – UNICAMP
+Institute of Computing
+Campinas, SP – Brazil
+Email: darwin.pilco@ic.unicamp.br
+
+Université de Lorraine, CNRS, LORIA
+LORIA, UMR 7503
+Campus Scientifique, 615 Rue du Jardin-Botanique,
+F-54506 Vandœuvre-lès-Nancy, France
+Email: salvatore.tabbone@univ-lorraine.fr
+
+Abstract—The main topic of this work is on the detection of
+counterfeit documents and especially banknotes. We propose an
+end-to-end learning model using a deep learning approach based
+on Adapnet++ which manages feature extraction at multiple scale
+levels using several residual units. Unlike previous models based
+on regions of interest (ROI) and high-resolution documents, our
+network is feed with simple input images (i.e., a single patch) and
+we do not need high resolution images. Besides, discriminative
+regions can be visualized at different scales. Our network learns
+by itself which regions of interest predict the better results.
+Experimental results show that we are competitive compared with
+the state-of-the-art and our deep neural network has good ability
+to generalize and can be applied to other kind of documents like
+identity or administrative one.
+
+I. I NTRODUCTION
+Forensic science is the application of scientific knowledge
+and methodology to legal problems and criminal investigations1 . Forensic research in document examination is a
+hot topic still open. Due to the rapid development of new
+information technology and the wide use of the Internet,
+digital information is obtained easily. Digital content can be
+illegally manipulated for some malicious issues such as forged
+documents or banknotes counterfeit. Nowadays, with the digital technology available to each one it becomes available
+even to untrained users to make a fake document. Therefore,
+counterfeiting is an increasing problem for both government
+agencies and private companies. From an economical point of
+view it can cause substantial havoc.
+In the field of image forensics, major research efforts have
+been made for security applications focused on image forgery
+detection and authentication [1]. Some works have inspired
+researches in documents forensic where efficient applications
+have been proposed for documents and banknotes counterfeiting detection. Particularly, most of the approaches are based
+on visual features and texture characteristics. Most of the
+cases, documents are forged applying cut and paste techniques
+to manipulate figures, letters, or words. In [2], authors use
+uniform Local Binary Patterns (LBP) to capture copy-paste
+or deletion operations through discontinuities in the texture.
+However, the approach needs some preprocessing to define
+patch (ROI) around each textual connected component and to
+1 https://legal-dictionary.thefreedictionary.com/
+
+978-1-7281-8808-9/20/$31.00 ©2020 IEEE
+
+remove the document. Other features are based on color and
+geometric features to identify false documents [3], [4].
+Identifying the source printer of a document is another
+important purpose in forgery detection. The ability to discriminate between original documents and their photocopies
+is an important task since original digital content can be
+illegally manipulated and freely printed into documents. In this
+perspective, printer feature characteristics have been proposed.
+For instance, DCT coefficients [5] have been used as a
+fingerprint for the printing technology used to create the document. In [6], 15 statistical features are proposed to describe
+pattern noise produced by 20 flatbed scanners. The approach
+is subject to a fine segmentation between the foreground
+and the background (text segmentation and noise filtering).
+A deep learning approach based on Convolutional Neural
+Networks (CNNs) is proposed in [7] to learn automatically the
+best features which characterize the printer source. Reported
+results between a feature-based SVM and the proposed CNN
+classifiers show comparable classification performances for
+scanned documents but on microscopic input images, SVM is
+clearly better. Furthermore, an interesting comparative study
+on texture descriptors [8] to differentiate between genuine
+and counterfeit documents on several ROI textures show that
+performances of several texture hand-crafted descriptors are
+comparable to CNN descriptors.
+Other works come back to the physical phenomena and
+focused on spectroscopic techniques for banknotes counterfeiting. Non-destructive analysis techniques are deployed to acquire information about the chemical composition of genuine
+and forged materials. Spectral analysis (for instance infrared or
+X-ray spectroscopy) allows to discriminate between genuine
+and counterfeit banknotes [9], [10]. Baek et al. [11] focused on
+a special sensor for ATM applications where RGB and infrared
+images are produced. A classifier is feeded with some local
+features defined on particular circular and rectangular regions.
+Sensors that are capable to identify forged banknotes are
+rather expensive. Some methods are defined for non-controlled
+environment where a mobile device is used for documents
+acquisition [12]–[15]. Dimitti et al. [14] proposed the HOG
+descriptor computed inside image patches surrounding SURF
+interest points. HOG features are classified using a SVM identifying genuine vs fake banknotes. Banknotes were captured
+
+3915
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:59:52 UTC from IEEE Xplore. Restrictions apply.
+
+using a digital camera and pre-processed mainly to reduce the
+noise and improve their quality. In [13] a system to capture
+banknote images using built-in camera of a mobile device
+is proposed. After a pre-processing step to reduce the noise
+using a median filter, a banknote is divided into four equal
+blocks with respect to its aspect ratio for which discriminative
+set of features are extracted. Then, an SVM is employed
+as a classifier. Lohweg et al. [12] focuses on the analysis
+of intrinsic features produced by Intaglio. A mobile-device
+banknote image is divided into multiple ROI (up to 360)
+and a linear discriminant-analysis classifier relies on statistical
+moments obtained from Wavelet coefficient histograms defined
+on each ROI. Berenguel et al. [15] tackle the banknotes
+counterfeit detection with a deep learning approach. A network
+based on a siamese and a recurrent comparator architecture
+with attention mechanism is adapted, learning the difference
+between genuine and counterfeit images through iterative
+glimpses (8 small regions of interest). Overall, most of the
+previous approaches rely on texture features defined on ROI
+selected manually or randomly.
+This paper is in the same vein on deep learning in a noncontrolled environment, but our network is different. Mainly,
+we use a full image as input to our network. In [15] two
+images (genuine vs counterfeit) are alternatively compared
+on randomly cropped regions. Furthermore, our model uses
+residual units for better multi-scale feature extraction allowing
+good abilities to manage low resolution images. Our main
+contributions include the following aspects.
+We propose an end-to-end trainable deep model the
+counterfeit banknote detection task, which differs from
+the literature by using full banknote image and operations
+for rich multi-scale feature extraction.
+• We present a quantitative analysis (what happens inside
+our network) of the discriminative regions on banknotes,
+which on some scales, are similar to the preselected
+patches used in the state-of-the-art.
+• We identify new discriminatory regions for counterfeit
+banknote detection which could be injected into existing
+datasets.
+•
+
+The rest of this paper is organised as follows. Section II
+is the heart of our work where we describe our deep learning
+network of four blocks of depth (respectively 64, 256, 512, and
+512) and based on AdapNet++ [16] and ResNet [17]. Unlike
+previous works, our network has larger receptive fields for a
+better features resolution and for efficient feature extraction.
+In Section III experiments results are provided along with
+analyses and a comparative study with the state-of-art. Finally,
+Section IV is devoted to the conclusion and we give some
+perspectives to our work.
+II. P ROPOSED M ETHOD
+The main characteristics of a real environment are that they
+are inherently non-controlled. That is, it presents different
+disturbances when acquiring an image, such as noise and
+variation in position, lighting, and background. Therefore the
+
+(e) Image
+
+(f) Preprocessing
+
+(g) Image
+
+(h) Preprocessing
+
+Fig. 1. Banknote sample before (left) and after (right) applying the cropping
+and up-scaling operations. Image is taken from e 10 B1 and e 50 D1
+dataset [18].
+
+main models [8], [18] proposed to use ROI and merge different
+texture descriptors.
+However, these previous models adjust a classifier for each
+banknote value, making this a not entirely viable solution. Although handcraft methods are more comfortable to configure
+than deep learning models (i.e., the definition of hyperparameters, amount of data learned), they need a trained classifier for
+each dataset type (i.e., for each value/side of the banknote).
+By using our deep learning model, we obtain a robust feature
+extraction (multi-scale), achieving a better generalization of
+the task. Our experiments show this generalization (see experimental section), where a unique model manages to classify
+relatively-well even when we use more than one dataset type
+simultaneously.
+Thus, we propose an end-to-end learning model using a
+deep learning approach. Our model is tested for each of the
+banknote values, as well as for all of them simultaneously.
+Furthermore, contrary to region-based models, we feed our
+neural network with a complete image of a banknote. We can
+see in Section III that to produce the prediction, our model
+makes the features extraction for different ROI at several scales
+without user intervention. In other words, the model internally
+learns by itself, which are the regions that will help it to predict
+better results.
+In this section, we describe our network approach to banknote counterfeiting. First, we introduce the preprocessing
+used to remove part of the background. Second, how we deal
+with the inherently unbalanced classes. Next, we describe the
+structure of our network, and finally, we present a training
+framework for our model.
+A. Preprocessing Banknotes
+To feed our network, we need banknotes samples to be
+in the close-up, i.e., an image that shows a single object in
+the foreground. Therefore, we cropp a banknote taking into
+account only the foreground and discarding any regions that
+can be considered as background. Then, we apply a rescaling
+which aims to adjust the cropping region such that the overall
+information is maximized. In Fig. 1, we show an initial sample
+(left) and after applying the cropping and up-scaling operations
+(right).
+Note that unlike models that use high-quality, noise-free
+preselected images (i.e., patches), our model deals with image
+
+3916
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:59:52 UTC from IEEE Xplore. Restrictions apply.
+
+Fig. 2. Our deep learning model, based on AdapNet++ [16] and ResNet [17]. This model consists of four blocks of depth 64, 256, 512 and 512. Besides,
+it manages the multi-level scales through its different residual blocks (A, B, C, D, E); it also has larger receptive fields (eASP P ) for a better features
+resolution and for efficient feature extraction. Finally, use a fully connected layer to make the banknote counterfeit prediction.
+
+entries of full banknotes. Hand-craft models generally cannot
+be applied to other datasets, and they are fitted to a single
+dataset. We show that our model does not have this limitation.
+Our model has greater generalization but due to the lack of
+full image banknotes datasets, we use B3, C3, D3, BCD3 to
+show that generalization. Note, the image disturbances (exhibit
+variations in lighting, position, rotation, shadow, noise) are
+particularly frequent in e 20-C2 (see Table I and Fig 6).
+B. Class Unbalanced
+A challenge in the banknote counterfeit detection task is
+the unbalanced dataset that we have in the training stage [8].
+Due to the nature of the data, these always present a lack of
+counterfeit samples. By having a fewer number of counterfeit
+samples, the network can fall into overfitting and degenerate
+the model. To address the unbalanced problem, techniques
+most used are on the dataset, i.e., resampling (over-sampling
+and under-sampling), and techniques on loss functions, i.e.,
+class weighted. Because resampling tends to lead to overfitting,
+we chose to use the class weighted technique. This technique
+gives higher weight to minority class and lower weight to
+the majority class. Among these, we selected the median
+frequency balancing [19] since it gave us the best empirical
+results. The median frequency balancing is defined by:
+τc =
+
+median f req
+,
+f req(c)
+
+C. Network Structure
+In recent years, the use of Convolutional Neural Networks
+(CNNs) has led to several improvements in many fields of
+knowledge with outstanding results, especially in computational vision. Thus, ResNet [17], [20] architecture achieves
+good performances on several benchmarks [21], [22]. Fewer
+parameters and better performance make ResNet become
+popular in the community. However, we not only need a model
+with few parameters and faster forward-pass time’s, which are
+critical attributes for deploying models. We also need a model
+capable of doing a high-resolution feature extraction on the
+multi-scale level. On the other hand, AdapNet++ [16] proposes
+a novel technique to efficiently generate multi-scale features
+throughout the network without increasing the number of parameters. For this reason, we took the encoder of AdapNet++
+based on ResNet-50, which meets the previous requirements,
+and we modified it for the banknote counterfeit detection task.
+In the model presented in Fig. 2, we opte to preserve the
+resolution while reducing the depth of the layers. This is
+mainly in block 4 and in the Atrous Spatial Pyramid Pooling
+(eASPP) [16] operations, managing to make the model ≈ 10%
+slightest. Furthermore, at the end of the network, we add four
+convolutions of size 3 × 3, 7 × 7, 3 × 3, and 3 × 3 to merge
+
+(1)
+
+where the median f req is the median of these frequencies
+and f req(c) is the number of samples of class c (e.g., positive
+class) divided by the total number of samples.
+In other words, τc is a set hyperparameter (one scalar per
+class) that increases the penalty of the loss functions (in the
+training phase) for the classes that have fewer samples.
+
+Fig. 3. Graphics of the area visualized by a convolution operation (orange)
+and by sparse convolutions with different dispersion rates, s, (purple and
+green).
+
+3917
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:59:52 UTC from IEEE Xplore. Restrictions apply.
+
+the features obtained through the eASPP. Finally, we include a
+fully connected layer (FC) to perform the binary classification.
+For better classifier performance, the last four convolutions
+and the FC, are in charge of processing (by convolution operation) the multi-scale information extracted from the network
+through the residual units and eASPP.
+Note that to capture high-resolution features, we use a larger
+receptive field (i.e., larger kernel). In other words, we need
+a wider viewing area in the image. For example, in highresolution images, using small receptive fields (e.g., orange
+kernel in Fig. 3) does not provide enough information to
+classify banknotes. Thus, to achieve the feature extraction in
+high-resolution, we apply Atrous Convolution [23] (i.e., sparse
+convolutions), which can have the same parameter number
+(i.e., 3 × 3), but its main characteristics are the dispersion rate
+parameter s which provides the convolution the capacity to
+extract features from a larger viewing area (see Fig. 3).
+Performing the sparse convolutions is not enough for robust
+feature extraction in the banknotes. Although, when using
+sparse convolutions, we obtain a larger area of vision compared to the original convolutions, they still present a single
+scale vision (e.g., s = 2). For this reason, we apply Atrous
+Spatial Pyramid Pooling (eASPP), which performs sparse
+convolution operations in parallel with a different rate of
+dispersion (s = {0, 3, 6, 12}) without sacrificing efficiency
+and capturing features in higher resolution (i.e., multi-scale
+vision).
+This way, we keep the higher resolution details while aggregating the same amount of context as before. Furthermore,
+we want to obtain a rich feature extraction at different levels
+of scale. This is because, in banknotes, we can obtain different
+types of information at several scales (see Section III-D). This
+function is developed by multi-scale units (residual units A,
+B, C, D, E from Fig. 2). These units (B, C, D, E), unlike the
+typical residual unit A used in ResNet, extract, and combine
+multi-resolution information.
+The residual units in Fig. 2 are used in different resolutions
+(i.e., sample size by downsampling), allowing them to process
+information at multiple scales, and also to conduct operations
+with sparse convolutions.
+D. Network Training
+Here, we explain the loss function used to fit our deep
+model. We want to minimize the number of misclassifications
+on the training dataset, to achieve this, the target function used
+is a binary cross-entropy, which is defined by:
+1 XX
+τc log P (yi = c|X; θ),
+N c i
+C
+
+Lbinary = −
+
+N
+
+TABLE I
+E URO DATASET TAKEN FROM [18]. T HE A LIAS COLUMN IS ITS SHORT
+NAME . S IDE REPRESENTS THE WAY THE BANKNOTE WAS PHOTOGRAPHED ,
+OBVERSE (O), REVERSE (R). L IGHT IS THE LIGHTING AND FINALLY O K
+AND FALSE ARE GENUINE AND COUNTERFEIT BANKNOTES ,
+RESPECTIVELY. T HE * SYMBOL DENOTES THE COMBINATION OF DATA
+TYPES .
+Alias
+
+Banknote
+
+Side
+
+Patch
+
+Ok
+
+False
+
+B1
+B2
+C1
+C2
+D1
+D2
+∗B3 = B1 + B2
+∗C3 = C1 + C2
+∗D3 = D1 + D2
+∗BCD3 =
+B3 + C3 + D3
+
+10 e
+10 e
+20 e
+20 e
+50 e
+50 e
+10 e
+20 e
+50 e
+10e + 20e
++50e
+
+O
+R
+O
+R
+O
+R
+O+R
+O+R
+O+R
+
+6
+6
+8
+5
+8
+5
+–
+–
+–
+
+346
+348
+392
+373
+350
+351
+694
+765
+701
+
+256
+242
+212
+216
+309
+321
+498
+428
+630
+
+O+R
+
+–
+
+2160
+
+1556
+
+image, it is authentic. In this work, we define P (·) by a
+Sigmoid function:
+P (yi |X; θ) = σ(yi ) ∈ [0, 1].
+
+(3)
+
+In Eq. 2, each class (genuine and counterfeit banknotes) is
+weighted by hyperparameter τ . The τ value is calculated in the
+preprocessing stage by applying median frequency balancing
+(see Section II-B). In the counterfeit banknote detection task,
+fake samples are infrequent. Consequently, τc=0 of counterfeit
+class is greater than the τc=1 of genuine class. This means that
+the penalty for counterfeit samples misclassification is higher
+than genuine ones.
+III. E XPERIMENTS
+Very few datasets [15], [24] are available in the litterature.
+This lack of public ressources is mainly due government data
+protection rules. For this work, we carry out our experiments
+on a camera-based Euro banknote dataset [18].
+Our experiments were conducted for entire images, unlike
+traditional methods that use patches (i.e., ROIs). Our model
+achieves promising results considering that we create a model
+that classifies all banknotes at the same time, i.e., a single
+model capable of banknote counterfeit detection independent
+of the type (B1, B2, C1, C2, D1, D2) or side (O, R) of the
+banknote. We also localize the regions used by the model to
+analyze the results. Next, we first introduce the dataset and
+the hyperparameters we use in this work. Then, we perform a
+series of experiments and, we analyze discriminative regions
+provided by our network on different scales.
+A. Datasets
+
+(2)
+
+where c represents the classes, yi is the indexed predicted
+classification (output) for the ith class from the set of ground
+truth Y . Additionally, N is the number of classes, and θ
+denotes the network parameters to optimize in the stage
+training. Also, P (·) is the probability that given a banknote
+
+The dataset [18] contains Euro banknotes by digital and
+mobile camera-based acquisition. This acquisition of the samples is made with different devices, at several resolutions, and
+in non-controlled environments. By its nature, banknotes have
+low lighting, and present noises, e.g., blur or motion blur.
+Table I shows more details of the dataset where two different
+types of lighting are considered. LN is natural lighting (e.g.,
+
+3918
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:59:52 UTC from IEEE Xplore. Restrictions apply.
+
+TABLE II
+B ENCHMARK RESULTS , USING THE AUC. METRIC ON THE TEST SET.
+VALUES TAKEN FROM [18].
+SIFT-BoW K-SVD SCSPM FSIM 2D-SIWPT 17Quality Our Net
+B1
+B2
+C1
+C2
+D1
+D2
+∗B3
+∗C3
+∗D3
+∗BCD3
+
+0.9646
+0.9606
+0.9859
+0.9822
+0.9799
+0.9643
+–
+–
+–
+–
+
+0.9892 0.9996 0.6718
+0.9865 0.9989 0.7766
+0.9949 1.0000 0.6664
+0.9943 1.0000 0.7105
+0.9913 0.9997 0.6399
+0.9938 1.0000 0.6477
+–
+–
+–
+–
+–
+–
+–
+–
+–
+–
+–
+–
+
+0.7656
+0.7448
+0.7552
+0.7510
+0.6843
+0.6734
+–
+–
+–
+–
+
+0.8829
+0.8638
+0.8860
+0.8422
+0.8554
+0.8333
+–
+–
+–
+–
+
+0.9964
+0.9676
+0.9762
+0.9111
+0.9968
+0.9774
+0.9466
+0.8561
+0.9975
+0.9612
+
+daylight), and LA is artificial lighting (e.g., a lamp). Image
+sizes are originally 751 × 1127 pixels. Note, after performing
+the preprocessing (cropping and up-scaling), the final resolution of our input image is 500 × 1000 pixels.
+B. Experimental Setup
+We implement our algorithm using the well-known deep
+learning framework of Tensorflow. The proposed network is
+built on AdapNet++. The Atrous convolution is used to have
+a receptive field of large sizes. The different residual units are
+used to obtain varied information through various scales. Due
+to the different number of samples for each type of banknotes,
+our number of iterations also changes. Models are trained for
+616 iterations for B1, B2, with 440 iterations for C1, C2,
+and 540 iterations for D1, D2. In addition to the combined
+types of B3, C3, D3, BCD3, we use 1424, 1424, 1592, 5570
+iterations, respectively. The model is training using Adam
+optimizer, with a learning rate of 1e − 4 and batch size 2
+in all the reported experiments. Each input image is cropped
+and up-scaled to a size of 500 × 1000 pixels. Experiments
+have been conducted on NVIDIA GTX Titan X with 12 GB
+of memory.
+C. Results
+Following the distribution of the dataset, for the evaluation
+of our model, we divided the samples into 60% for the training
+phase and 40% for testing ones. In addition, we carry out
+k-fold cross-validation, where we iterate over the dataset set
+5 times. To compare our results, we use the area under the
+receiver operating characteristic curve (AUC). For each type
+of dataset and classifiers, AUC is defined by:
+1 XX
+AUCt,b ,
+TB
+t=1
+B
+
+AUC =
+
+T
+
+(4)
+
+b=1
+
+where B is the total number of partitions in the dataset (5fold), and T is the total number of texture patches. Note that
+our model uses T = 1, this is because we use a unique integer
+image that can be interpreted as one patch. Furthermore,
+AUCt,b is given by AUC value for the t texture and b-sampling
+(i.e., in b-fold).
+Table II shows a comparison using the AUC metric of our
+model with the benchmarks (6 different texture classifiers).
+
+They use diverse amounts of patches (shown in the fourth
+column in Table I) to obtain a better likelihood of the
+predictions. However, although these patches are focused on
+zones with Intaglio printing [25] (ink that is below the surface
+used to engrave characters and structures), they are manually
+chosen, and they must be of high resolution. In addition, the
+number and the position of these patches is different for each
+type of dataset (see Table I and in the rightmost of Fig. 5),
+making these methods not entirely viable in real applications.
+Contrary to the previous classifiers, which use preselected
+patches to make the prediction, we input a whole image into
+our deep neural network and we let it extract the most relevant
+features at different levels of scales. Thus, by not relying on
+patches, we can create a banknote counterfeit detection model
+regardless of the type and side of the banknote (e.g., B3, C3,
+D3, BDC3). Table II shows these results. Combining all the
+dataset types (BCD3 in this table) achieves promising results
+considering that we don’t use zones with Intaglio printing (i.e.,
+patches), and giving way to systems that do not entirely depend
+on them.
+To better analyze the generalizability of our classifier, we
+plotted the Receiver Operating Characteristic (ROC) curves
+(Fig. 4), for databases that combine the different types of
+banknotes (i.e., B3, C3, D3, BCD3). We can see the behavior
+(classification) of our network for the various folds of the
+dataset in the graphics. Here we can highlight that our model
+presents a low variance due to the good use of the parameters
+(i.e., our network appropriately uses the trainable variables
+to achieve a robust feature extraction). Besides, our network
+possesses a high increasing rate for TP (our model predicts
+positive class correctly). Fig. 4 shows that the C3 database
+(from C1 + C2) is especially challenging. Note, the FP
+(our model incorrectly predicts positive class) appears very
+early in the ROC curve. We attribute this behavior to noise
+and external components (e.g., shadow) that reduce feature
+extraction efficiency. In addition, in Table III, we demonstrate
+the stable behavior of our model by presenting a relatively
+high response to the different classification metrics. A more
+detailed analysis (recall, F1-score from Table III) shows that
+particularly for class C3, our model tends to classify false
+banknotes as originals. This behavior can be corrected by
+better capturing the input image. The statement is supported
+by the results of the other data types (B3, D3) by having a
+direct relationship between outcomes and sample purity (i.e.,
+images without external components, rotation, motion, noise,
+shadow).
+On the other hand, real-time applications have restricted
+deadlines, not only in runtime but also in used memory.
+By reducing the number of parameters used by our deep
+neural network, we decrease the memory usage required. In
+Table IV, we present a comparison (in seconds) of the test
+set and the different benchmarks. We can note that although
+the best results are obtained by SCSPM, the processing time
+of this method is high, making it rather unfeasible in a
+real-time framework. SIFT-BoW and K-SVD models perform
+comparable results near SCSPM, with a reasonable processing
+
+3919
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:59:52 UTC from IEEE Xplore. Restrictions apply.
+
+1.0
+
+1.0
+
+0.8
+
+0.8
+
+0.8
+
+0.8
+
+0.6
+
+0.6
+
+0.6
+
+0.4
+
+0.2
+
+0.0
+0.0
+
+0.2
+
+0.4
+
+0.6
+FP Rate
+
+(a) B3
+
+0.8
+
+1.0
+
+0.4
+
+0.2
+
+0.0
+0.0
+
+0.2
+
+0.4
+
+0.6
+
+0.8
+
+0.6
+
+ROC fold0 (AUC= 0.9927)
+ROC fold1 (AUC= 0.9981)
+ROC fold2 (AUC= 0.9995)
+ROC fold3 (AUC= 0.9974)
+ROC fold4 (AUC= 0.9998)
+Chance
+Mean ROC (AUC= 0.9932 ± 0.00)
+±0.00 std. dev.
+
+0.4
+
+0.2
+
+0.0
+
+1.0
+
+0.0
+
+FP Rate
+
+0.2
+
+0.4
+
+0.6
+FP Rate
+
+(b) C3
+
+(c) D3
+
+0.8
+
+1.0
+
+TP Rate
+
+ROC fold0 (AUC= 0.7802)
+ROC fold1 (AUC= 0.8669)
+ROC fold2 (AUC= 0.8808)
+ROC fold3 (AUC= 0.8434)
+ROC fold4 (AUC= 0.9094)
+Chance
+Mean ROC (AUC= 0.8544 ± 0.04)
+±0.04 std. dev.
+
+TP Rate
+
+ROC fold0 (AUC= 0.9594)
+ROC fold1 (AUC= 0.9888)
+ROC fold2 (AUC= 0.8491)
+ROC fold3 (AUC= 0.9877)
+ROC fold4 (AUC= 0.9481)
+Chance
+Mean ROC (AUC= 0.9449 ± 0.05)
+±0.05 std. dev.
+
+TP Rate
+
+1.0
+
+TP Rate
+
+1.0
+
+ROC fold0 (AUC= 0.9597)
+ROC fold1 (AUC= 0.9545)
+ROC fold2 (AUC= 0.9199)
+ROC fold3 (AUC= 0.9852)
+ROC fold4 (AUC= 0.9865)
+Chance
+Mean ROC (AUC= 0.9591 ± 0.02)
+±0.02 std. dev.
+
+0.4
+
+0.2
+
+0.0
+0.0
+
+0.2
+
+0.4
+
+0.6
+
+0.8
+
+1.0
+
+FP Rate
+
+(d) BCD3
+
+Fig. 4. Graphics of the Receiver Operating Characteristic (ROC) curves on the different types of data combined (B3, C3, D3, BCD3) to visualize the behavior
+(generalization) of our neural network model. Note, the y-axis represents the true positive rate (TPR), and the x-axis denotes the false positive rate (FPR).
+
+Fig. 5. Discriminative localizations at several scales, obtained by Grad-CAM [26], which were responsible for CNN’s prediction. The columns show the
+regions activated to perform the prediction, on different scales from left to right (eASPP, at the end of block 4, at the beginning of block 4 and at the end of
+block 3). Rightmost column shows the benchmark patches used by the models.
+
+speed for images of size 256 × 256. The performance of our
+model is between SIFT-BoW and K-SVD, and unlike them,
+we do not need predefined patches. The execution time, i.e.,
+the forward with a batch size of 2, is small, considering that
+we use images of size 500 × 1000 (see Table IV).
+D. Analysis
+Current models shed little light on explaining why and
+how they achieve good performance and, as a result, are
+treated as black boxes. Therefore, it is essential to understand
+
+what these networks learn in order to gain insights into their
+representations. One way to understand CNNs is to look at
+the important image regions that influence their predictions.
+As we explained previously, in order for our model to
+manage the features extraction at multiple levels of scale, we
+use the different residual units. Thus in Fig. 5, we present the
+activation regions used when making the prediction. Fig. 5
+is distributed by data types (the rows) and by scale levels
+(the columns), where the scales are from left to right obtained
+respectively by eASPP, at the end of block 4, at the beginning
+
+3920
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:59:52 UTC from IEEE Xplore. Restrictions apply.
+
+shadows. This noise problem can be rectified in the acquisition
+of the database or using static reference points in the bounding
+box during the camera-based acquisition.
+
+TABLE III
+C OMPLEMENTARY RESULTS ON OUR NEURAL NETWORK MODEL , USING
+AUC., P RECISION (P REC .), R ECALL (R EC .), F1- SCORE (F1.), AND
+ACCURACY (ACC .), ON THE TEST SET.
+
+B1
+B2
+C1
+C2
+D1
+D2
+∗B3
+∗C3
+∗D3
+∗BCD3
+
+AUC ±10−3
+
+Prec ±10−3
+
+Rec ±10−3
+
+F1 ±10−3
+
+Acc ±10−3
+
+IV. C ONCLUSION
+
+0.997 ± 0.05
+0.968 ± 2.13
+0.976 ± 15.4
+0.911 ± 33.2
+0.997 ± 1.42
+0.977 ± 20.3
+0.947 ± 51.3
+0.856 ± 43.6
+0.998 ± 2.56
+0.961 ± 24.3
+
+0.996 ± 0.02
+0.951 ± 0.51
+0.918 ± 1.87
+0.920 ± 0.68
+0.948 ± 1.95
+0.938 ± 0.44
+0.903 ± 2.79
+0.921 ± 0.89
+0.972 ± 0.53
+0.957 ± 1.94
+
+0.994 ± 0.02
+0.880 ± 3.47
+0.899 ± 2.30
+0.887 ± 1.13
+0.985 ± 0.14
+0.955 ± 1.67
+0.860 ± 11.9
+0.633 ± 4.64
+0.956 ± 4.33
+0.849 ± 18.9
+
+0.995 ± 0.01
+0.912 ± 0.61
+0.906 ± 0.16
+0.903 ± 0.33
+0.966 ± 0.39
+0.946 ± 0.87
+0.876 ± 2.87
+0.747 ± 1.56
+0.963 ± 1.04
+0.891 ± 6, 61
+
+0.996 ± 0.01
+0.931 ± 0.30
+0.935 ± 0.43
+0.930 ± 0.16
+0.967 ± 0.42
+0.949 ± 0.75
+0.901 ± 1.55
+0.847 ± 0.24
+0.966 ± 0.76
+0.919 ± 2.67
+
+We present an end-to-end trainable model based on Adapnet++, which manages feature extraction at multiple scale
+levels using several residual units. We solve the problem
+of unbalance inherent of banknotes datasets by using the
+median frequency balance on the loss function, thus providing
+a higher penalty on counterfeit samples. Unlike benchmarks
+that work with textures on predefined regions of banknotes
+(i.e., patches), we present an independent model of these,
+and internally we show that our network uses similar regions
+or close at different scales, to perform counterfeit banknote
+detection. Besides, new regions used to make the detection
+are visualized. We believe that it would be beneficial to add
+these as patches for the previous models. Our network has
+been efficiently designed achieving an acceptable prediction
+time also, due to the reduction of parameters required by our
+model. Results with the state-of-the-art are competitive, taking
+into account that we use a simple input image (i.e., a single
+patch) and without the high resolution required by previous
+models. Furthermore, our deep neural network shows good
+abilities when reporting results combining all the different
+types of datasets.
+Finally, we believe that this work can be applied to other
+kind of documents (for instance identity and/or administrative
+one) and will guide future research in the search for real-time
+models with a higher generalization capacity.
+
+TABLE IV
+T IME COMPARISON IN SECONDS ON THE TEST SET. VALUES TAKEN
+FROM [18].
+SIFT-BoW K-SVD SCSPM FSIM 2D-SIWPT 17Quality Our Net
+256 × 256
+512 × 512
+500 × 1000
+
+0.1063
+0.5265
+–
+
+1.2408 2.0997 0.2005
+3.5376 9.4853 0.2317
+–
+–
+–
+
+0.1895
+0.4985
+–
+
+0.9072
+3.5376
+–
+
+–
+–
+0.1159
+
+Fig. 6. Examples of poor performance of our model for dataset type C2
+due to the frequency of noise, such as background regions, the presence of
+shadows, or poor reference points in bounding boxes. Image is taken from
+e 20 C2 dataset [18].
+
+ACKNOWLEDGMENT
+of block 4 and at the end of block 3. The last column shows
+the different benchmark patches (in green bounding box) used
+by each type of dataset on texture methods. We observed, in
+rightmost column, that the position and number of patches
+change for each type of dataset. Moreover, in the first and
+second columns, the resolution of the samples is reduced due
+to the successive convolution operations. Here, our network
+focuses on more general regions (i.e. large vision field, see
+the heatmap).
+Our models use the regions highlighted with heatmaps to
+predict counterfeit banknotes. Additionally, we show empirically green and orange bounding boxes, across all scales, to
+denote the additional regions used by our model (in orange) in
+addition to using most of the preselected benchmark patches
+(in green). Our model performs a dynamic selection of the
+activation regions for different samples of banknotes. Note that
+certain regions (in orange) remain constant across all scales
+and adding these regions could improve the texture models.
+Finally, we can remark that the poor performance of our
+model for dataset type C2 is due to the exaggerated presence of noise. Fig. 6 shows some preprocessed images with
+background regions, poor reference points in bounding boxes
+(i.e., guides in the dataset), blurred noise and, the presence of
+
+This work was financed in part by the São Paulo Research
+Foundation (FAPESP) under grants No. 2019/18678-0 and,
+LORIA institute for the infrastructure provided to this research
+project. We acknowledge the support of NVIDIA Corporation
+for the donation of a Titan X Pascal GPU used in this research.
+R EFERENCES
+[1] M. A. Qureshi and M. Deriche, “A bibliography of pixel-based blind
+image forgery detection techniques,” Signal Processing: Image Communication, vol. 39, 2015.
+[2] F. Cruz, N. Sidère, M. Coustaty, V. P. d’Agency, and J.-M. Ogier, “Local
+binary patterns for document forgery detection,” in 14th IAPR International Conference on Document Analysis and Recognition (ICDAR),
+2017.
+[3] B. Talbot-Wright, S. Baechler, M. Morelato, O. Ribaux, and C. Roux,
+“Image processing of false identity documents for forensic intelligence,”
+Forensic Science International, vol. 263, 2016.
+[4] M. Auberson, S. Baechler, M. Zasso, T. Genessay, L. Patiny, and
+P. Esseiva, “Development of a systematic computer vision-based method
+to analyse and compare images of false identity documents for forensic
+intelligence purposes–part 1: Acquisition, calibration and validation
+issues,” Forensic Science International, vol. 260, 2016.
+[5] C. Schulze, M. Schreyer, A. Stahl, and T. Breuel, “Using dct features
+for printing technique and copy detection,” in ADVANCES IN DIGITAL
+FORENSICS V, IFIP 306, 2009.
+[6] S. Elkasrawi and F. Shafait, “Printer identification using supervised
+learning for document forgery detection,” in IAPR International Workshop on Document Analysis Systems (DAS), 2014.
+
+3921
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:59:52 UTC from IEEE Xplore. Restrictions apply.
+
+[7] M.-J. Tsai, Y.-H. Tao, and I. Yuadi, “Deep learning for printed document source identification,” Signal Processing: Image Communication,
+vol. 70, 2019.
+[8] A. Berenguel, O. R. Terrades, J. Lladós, and C. Cañero, “Evaluation
+of texture descriptors for validation of counterfeit documents,” in 14th
+IAPR International Conference on Document Analysis and Recognition
+(ICDAR), vol. 1. IEEE, 2017, pp. 1237–1242.
+[9] E. Sonnex, M. J. Almond, J. V. Baum, and J. W. Bond, “Identification
+of forged bank of england £20 banknotes using ir spectroscopy,”
+Spectrochimica Acta Part A: Molecular and Biomolecular Spectroscopy,
+vol. 118, 2014.
+[10] A. R. N. Rodrigues, F. L. Melquiades, C. R. Appoloni, and E. N.
+Marques, “Characterization of brazilian banknotes using portable x-ray
+fluorescence and raman spectroscopy,” Forensic Science International,
+vol. 302, 2019.
+[11] S. Baek, E. Choi, Y. Baek, and C. Lee, “Detection of counterfeit banknotes using multispectral images,” Digital Signal Processing, vol. 78,
+2018.
+[12] V. Lohweg, J. L. Hoffman, H. Dörksen, R. Hildebrand, E. Gillich,
+J. Hofmann, and J. Schaede, “Banknote authentication with mobile
+devices,” in in Proceedings of SPIE - The International Society for
+Optical Engineering, 2013.
+[13] U. U. Rahman, A. B. S. ID, and U. I. Bajwa, “Android-based verification
+system for banknotes,” Journal of Imaging, vol. 3, no. 54, 2017.
+[14] T. V. Dittimi and C. Y. Suen, “Modified hog descriptor-based banknote
+recognition system,” Advances in Science, Technology and Engineering
+Systems Journal, vol. 3, no. 5, 2018.
+[15] A. Berenguel, O. R. Terrades, J. Lladós, and C. Cañero, “Recurrent
+comparator with attention models to detect counterfeit documents,”
+in 15th IAPR International Conference on Document Analysis and
+Recognition (ICDAR). IEEE, 2019.
+[16] A. Valada, R. Mohan, and W. Burgard, “Self-supervised model adaptation for multimodal semantic segmentation,” International Journal of
+Computer Vision, pp. 1–47, 2019.
+[17] K. He, X. Zhang, S. Ren, and J. Sun, “Identity mappings in deep
+residual networks,” in European conference on computer vision (ECCV).
+Springer, 2016, pp. 630–645.
+[18] A. Berenguel, O. R. Terrades, J. Lladós, and C. Cañero, “Banknote
+counterfeit detection through background texture printing analysis,” in
+2016 12th IAPR Workshop on Document Analysis Systems (DAS). IEEE,
+2016, pp. 66–71.
+[19] D. Eigen and R. Fergus, “Predicting depth, surface normals and semantic
+labels with a common multi-scale convolutional architecture,” in 15th
+IEEE International Conference on Computer Vision (ICCV), 2016, pp.
+2650–2658.
+[20] K. He, X. Zhang, S. Ren, and J. Sun, “Deep residual learning for image
+recognition,” in Proceedings of the IEEE conference on computer vision
+and pattern recognition (CVPR), 2016, pp. 770–778.
+[21] A. Krizhevsky, G. Hinton et al., “Learning multiple layers of features
+from tiny images,” in research report. Citeseer, 2009.
+[22] J. Deng, W. Dong, R. Socher, L.-J. Li, K. Li, and L. Fei-Fei, “Imagenet:
+A large-scale hierarchical image database,” in IEEE conference on
+computer vision and pattern recognition (CVPR). IEEE, 2009, pp.
+248–255.
+[23] F. Yu and V. Koltun, “Multi-scale context aggregation by dilated
+convolutions,” in International Conference on Learning Representations
+(ICLR), May 2016.
+[24] C. Artaud, N. Sidère, A. Doucet, J.-M. Ogier, and V. P. D’agency, “Find
+it! fraud detection contest report,” in International Conferecne on Pattern
+Recogntion (ICPR), 2018.
+[25] V. Lohweg, H. Dörksen, E. Gillich, R. Hildebrand, J. Hoffmann, and
+J. Schaede, “Mobile devices for banknote authentication–is it possible?”
+in Optical Document Security-The Conference on Optical Security and
+Counterfeit Detection, vol. 3, 2012, pp. 1–12.
+[26] R. R. Selvaraju, M. Cogswell, A. Das, R. Vedantam, D. Parikh, and
+D. Batra, “Grad-cam: Visual explanations from deep networks via
+gradient-based localization,” in Proceedings of the IEEE international
+conference on computer vision, 2017, pp. 618–626.
+
+3922
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:59:52 UTC from IEEE Xplore. Restrictions apply.
+
+

@@ -1,0 +1,1371 @@
+3474
+
+IEEE TRANSACTIONS ON BIG DATA, VOL. 11, NO. 6, NOVEMBER/DECEMBER 2025
+
+Document-Image Perceptual Hashing for
+Content Authentication
+Xiaotong Situ, Tong Liu, Heng Yao , Member, IEEE, Chuan Qin , Member, IEEE,
+and Xinpeng Zhang , Senior Member, IEEE
+
+Abstract—This paper proposes an end-to-end two-branch network for a document image perceptual hashing scheme, where the
+two branches focus on image visual features and text features,
+respectively. Existing perceptual hashing schemes cannot solve
+the problem of the tiny proportion of text tampering detection,
+while simple text detection is unable to solve the problem of
+background region-aware matching. To address these issues, we
+extract text information via optical character recognition (OCR)
+and then generate the text features using the bidirectional encoder
+representations from Transformers (BERT). Visual features of the
+image are extracted from the local and global features of the image
+using ResNet and Vision Transformer cascades, and then fused
+to generate the final hash sequence through the fully connected
+layer. The proposed network considers both image visual features
+and textual information to verify that the document image has not
+been tampered with. In our network, the OCR module enables
+accurate and intelligent text detection and recognition, particularly
+for dealing with text tampering that has only been conducted in tiny
+portions. It also provides more efficient and robust text recognition
+services. Experimental results show that the proposed hashing
+scheme is robust and discriminative in document images.
+Index Terms—Perceptual image hashing, document image, tam
+pering detection, two-branch network.
+
+I. INTRODUCTION
+ITH the development of multimedia computers and online social networks, information can be disseminated
+in multiple modalities, such as text, images, or videos. Images
+containing text are one of the most common media, combining both visual and textual information. Common text images
+include scanned documents, certificates, invoices, etc. In this
+paper, we broadly refer to captured or scanned images that
+contain text as document images. In modern society, document
+images are used in various application scenarios, such as online
+education and e-government file management, and have become
+
+W
+
+Received 3 March 2025; revised 1 July 2025; accepted 23 July 2025. Date of
+publication 7 August 2025; date of current version 13 November 2025. This work
+was supported in part by the Natural Science Foundation of China under Grant
+62172281, Grant 62172280, Grant U22B2047, and Grant 61702332, and in part
+by Shanghai Municipal Education Commission Project of AI-Driven Research
+Paradigm and Disciplinary Development. Recommended for acceptance by B.
+Qin. (Corresponding author: Heng Yao.)
+Xiaotong Situ, Tong Liu, Heng Yao, and Chuan Qin are with the School
+of Optical-Electrical and Computer Engineering, University of Shanghai for
+Science and Technology, Shanghai 200093, China (e-mail: 232250457@st.
+usst.edu.cn; 212230403@st.usst.edu.cn; hyao@usst.edu.cn; qin@usst.edu.cn).
+Xinpeng Zhang is with the School of Computer Science, Fudan University,
+Shanghai 200433, China (e-mail: zhangxinpeng@fudan.edu.cn).
+Digital Object Identifier 10.1109/TBDATA.2025.3596854
+
+Fig. 1. A pair of Chinese document images that change some of the Chinese
+text. The orange boxes indicate some examples of images with tampered regions,
+and the tampering traces in each image are barely visible.
+
+an essential medium for information communication. However,
+with the increasing popularity and improved functionality of
+image editing tools, the credibility of crucial document images is
+sometimes questioned. Critical information in document images
+can be altered through various image processing operations [1],
+[2], [3], [4], such as inserting text through imitation, splicing,
+and copy-paste [5], [6]. In the daily scenario, forged official
+seals, letters, insurance policies, and photo IDs are commonplace
+and are even used for commercial fraud and to influence public
+opinion. The use of tampered screenshots of important documents such as contracts, qualification certificates, or transaction
+records may result in financial loss. In the context of document
+images, unauthorized, malicious, or misleading modifications to
+the content of document images can directly affect the accuracy
+of the information conveyed by the document. Ensuring authenticity and detecting forgeries is crucial to protect individual
+rights, maintain social order, and promote information security.
+Forgery detection in document images presents unique challenges compared to natural images. In document images, the
+tampered region may be tiny and blends subtly with the background, as shown in Fig. 1, where some of the Chinese text
+has been modified to significantly alter the semantic information of the document images. This subtlety makes detecting
+forged text more challenging than detecting forgeries in natural
+images. Even with state-of-the-art generalized image forgery
+localization methods such as PSCCNet [7], identifying forged
+regions in text images is still challenging. Existing perceptual
+image hashing techniques [8], [9] play an important role in
+image content authentication; however, they focus mainly on
+the visual features of the image rather than the textual content.
+However, document images differ from general images in that
+the textual information they contain is the key to understanding
+the document’s meaning. Pure text verification can generate
+
+2332-7790 © 2025 IEEE. All rights reserved, including rights for text and data mining, and training of artificial intelligence and similar technologies.
+Personal use is permitted, but republication/redistribution requires IEEE permission. See https://www.ieee.org/publications/rights/index.html for more information.
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:02:45 UTC from IEEE Xplore. Restrictions apply.
+
+SITU et al.: DOCUMENT-IMAGE PERCEPTUAL HASHING FOR CONTENT AUTHENTICATION
+
+Fig. 2.
+
+3475
+
+Process of document image tampering authentication, including image tampering, feature extraction, hash generation, and tampering detection.
+
+false positives or recognition errors due to the diversity or
+ambiguity of text. Document image content authentication not
+only needs to consider the visual features of the image, but
+more importantly, it needs to accurately identify and encode the
+text content in the image, providing a more comprehensive and
+accurate hash sequence for the document image. The existing
+perceptual hashing methods often struggle to accurately capture
+this critical information in text-rich document images, limiting
+their performance in detecting character-level tampering. The
+optical character recognition (OCR) technique improves data
+entry efficiency by automating text extraction from images.
+However, its accuracy is highly dependent on the clarity of the
+input image. For documents that are blurry, skewed, or contain
+complex layouts, the OCR technique may struggle to recognize
+them accurately. Therefore, an OCR-based document perceptual
+image hashing algorithm is proposed to provide an efficient and
+reliable content authentication scheme for document images.
+The text in the document image is comprehensively analyzed
+using the OCR technique to solve the problem of detecting
+character tampering. At the same time, the model’s perceptual
+hash module extracts key visual features and effectively detects
+tampering in visual aspects such as background and masking.
+By combining the OCR system with perceptual hashing, the
+final generated hash sequence contains common features of
+both, and comprehensive authentication of document images
+is achieved, improving the reliability and efficiency of content
+authentication.
+A new perceptual hash model for document images is shown
+in Fig. 2, which consists of three parts: (1) Feature extraction
+module, which is the first step to represent all modalities of the
+data. For image feature extractors, many approaches use feature
+extractors based on convolutional neural networks (CNNs) [10],
+[11], but small-scale features are often lost due to the downsampling process. In addition, simple CNNs have difficulties
+in capturing global semantic interactions and contextual information. To improve the performance of deep learning models
+in image recognition and processing tasks, we combine ResNet
+and Vision Transformer (ViT) to extract visual features, employ
+an OCR module to extract textual content, and use the bidirectional encoder representations from Transformers (BERT)
+module to generate the textual feature map. (2) Feature fusion
+module, which performs a simple linear transformation of the
+textual feature map to match the image modality’s feature vector
+dimensions, and then stitches the text feature vector and image
+feature vector into a text-image feature vector. (3) Hash module,
+which compresses the fused feature information into a fixedlength hash sequence. In order to achieve tampering detection
+
+of document images, we propose the ResViT-OCR network.
+The main contributions of this paper can be summarized in the
+following four aspects:
+r To the best of our knowledge, this paper proposes for
+the first time that perceptual hashing combined with OCR
+technique can be used to tamper-proof content authentication in document images, thereby enriching existing image
+authentication systems.
+r The image hashing module consisting of ResNet and
+ViT is used to extract image features. The convolutional
+layer of ResNet excels at capturing local features, while
+the residual learning framework enables deeper networks
+without sacrificing training efficiency. ViT’s self-attention
+mechanism effectively handles global dependencies. This
+combined approach leverages ResNet’s ability to capture
+image details at different scales and ViT’s ability to process
+and understand global image content, resulting in more
+refined and comprehensive feature extraction.
+r The text hash module extracts the textual information from
+document images, using the BERT module for the extraction of text features. After adding the OCR technique, the
+designed system not only captures the basic visual features
+of the image but also recognizes and processes the textual
+information, significantly enhancing the hash algorithm’s
+sensitivity to textual information and the accuracy of the
+hash values.
+r Our scheme efficiently extracts image and text features,
+integrates the feature extractor and hash generator in an
+end-to-end framework and demonstrates robust performance in document image authentication.
+The rest of this paper is organized as follows. Section II reviews the related work on image hashing algorithms. Section III
+details our proposed hashing algorithm. Section IV presents
+comprehensive experiments, visualization analysis, and performance comparison. Finally, we summarize the whole work in
+Section V.
+II. RELATED WORK
+A. Document Image Editing and Tampering
+With deep learning, image editing algorithms can tamper with
+the textual information of an image in an end-to-end manner,
+thus posing a considerable security threat to document images.
+Wu et al. [3] introduced a network designed for text image
+editing that can replace text in scene text without destroying the
+image’s inherent stylistic features. The technique first learns the
+style of foreground text and then transfers this style to new text
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:02:45 UTC from IEEE Xplore. Restrictions apply.
+
+3476
+
+IEEE TRANSACTIONS ON BIG DATA, VOL. 11, NO. 6, NOVEMBER/DECEMBER 2025
+
+provided by the user. Then, the newly styled text is merged with
+a texture that seamlessly matches the background of the original
+image. In another study, Roy et al. [12] proposed a characterlevel text editing network that modifies individual characters in
+a text image. Liu et al. [13] presented a technique that attempts
+to erase or conceal text within an image, favoring privacy protection. However, it may be exploited for nefarious purposes.
+The squeezing-excitation (SE) network proposed by Zhang et
+al. [14] is a multi-task SE network with two encoder-decoder
+streams, which utilizes image edges to learn the splicing mask.
+These advanced text editing techniques highlight the growing
+need for robust document image authentication methods.
+B. Perceptual Image Hashing
+According to the different feature extraction of image hashing, the traditional hashing schemes can be categorized into
+three types. Based on the spatial domain approach, Huang and
+Liu [15] extracted the maximum gradient and the corresponding
+orientation information from RGB color channels, and then
+further obtained the normalized histogram and local frequency
+coefficient features to generate the hash sequences. Su et al. [16]
+proposed a new personalized authentication framework, which
+incorporates the distance metric learning technique and the
+supervised quantization strategy into the image authentication
+process. Based on the transformed domain methods, they mainly
+include orthogonal and integral transforms to extract image
+features in the transform domain to generate hash. In [17],
+the image hash was generated based on the discrete cosine
+transform invariance at the same locations in separate blocks
+of the image. Tang et al. [18] proposed to present the edge
+image of the normalized image by Canny’s algorithm and applied the 2D-discret wavelet transform (2D-DWT) to obtain
+the different sub-bands and calculate the weighted sum of the
+DWT of these sub-bands for generating the hash. Dimensionality
+reduction methods mainly utilize data dimensionality reduction
+algorithms to construct image hashes through low dimensional
+feature data, such as singular value decomposition [19], local
+linear embedding, nonnegative matrix factorization [20], and
+principal component analysis (PCA). Tang et al. [21] utilized
+quaternionic singular value decomposition to construct image
+hashes, improving the algorithm’s uniqueness.
+With the advancement of image processing technology and
+the development of deep learning, deep neural networks have
+been increasingly used in image hashing algorithms and have
+achieved better performance than traditional algorithms. Li et
+al. [22] applied deep learning methods to the field of perceptual
+hashing and demonstrated performance that outperformed traditional hashing algorithms. They proposed a robust and secure
+image hashing scheme based on deep neural networks, which
+utilized denoising self-coding to train to restore distorted images
+to their original state. Qin et al. [10] proposed a perceptual
+hashing algorithm based on a multi-constrained convolutional
+neural network using two constraints to model training and
+dynamically adjust the constraint values to improve perceptual
+robustness and discriminative ability. Liu et al. [23] proposed
+a Swin Transformer-based perceptual image hashing scheme to
+
+resist the effect of LCD screen distortion on content authentication; the scheme added a distortion simulator to assist the
+feature extractor and hash generator to learn and resist screen
+distortion. Yu et al. [24] proposed a robust hashing scheme with
+deep features and Meixner moments for image copy detection,
+extracting global deep features and local features separately.
+Hash is ultimately determined by quantifying and combining
+global depth features and local features.
+The development of robust perceptual hashing methods for
+document images based on deep learning hashing technology
+provides a solution. The traditional method is based on artificial
+features, by comparing the histogram, edge features, and texture
+features of images to evaluate the similarity of documents. It is
+difficult to fully and accurately describe a document image’s semantic and content characteristics because of the characteristics
+of manual design. The deep learning model can automatically
+learn the complex features in document images. Our work integrates visual and textual features to achieve comprehensive
+tampering detection and content authentication.
+C. Perceptual Image Hashing versus Semantic Retrieval
+Hashing
+Image hashing research primarily focuses on semantic image
+hashing retrieval and perceptual hashing authentication. Although both rely on hashing techniques, their goals and methods
+are somewhat different. Semantic retrieval hashing aims to find
+images semantically similar to the query image. For instance,
+Xing et al. [25] proposed deep incremental hashing, which
+uses a pointwise loss function to guide hash neural network
+learning and combines hash tables from different time steps
+via a weighted method to form a multi-table hash system.
+Nie et al. [26] introduced ssupervised discrete multiple-length
+hashin, enabling simultaneous learning of hash codes with multiple lengths, significantly improving retrieval flexibility and
+accuracy. Yang et al. [27] developed robust discrete hashing
+for large-scale image semantic indexing, which learns discrete
+binary codes and hash functions in a unified model. Lu et
+al. [28] proposed a subregion-guided transformer hash network
+for fine-grained image retrieval, generating compact binary
+codes through partial effective region erasure and multi-stage
+hybrid loss. Cao et al. [29] designed a privacy-preserving image
+retrieval framework using cycle-consistent adversarial networks
+and visual graph convolutional network to enhance retrieval
+accuracy. While semantic image hashing methods perform well
+in capturing high-level semantic information for efficient image
+retrieval, they are not directly applicable to document image
+authentication tasks.
+D. Bidirectional Encoder Representations From Transformers
+Text features need to be extracted first to fuse text and image
+information. BERT is a pre-trained language representation
+model proposed by Google [30] in 2018, which has shown great
+success in a wide range. The core of the BERT model is based on
+the Transformer architecture, which is capable of understanding
+and generating complex nuances and contextual dependencies in
+text through deep bi-directional learning. The pre-training of the
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:02:45 UTC from IEEE Xplore. Restrictions apply.
+
+SITU et al.: DOCUMENT-IMAGE PERCEPTUAL HASHING FOR CONTENT AUTHENTICATION
+
+Fig. 3.
+
+3477
+
+Overview of the proposed model.
+
+BERT model consists of two main tasks: the masked language
+model (MLM) and the next sentence prediction (NSP). The
+MLM task learns a rich linguistic representation by randomly
+masking some words in the input sentences and then allowing the
+model to predict these masked words. Additionally, the NSP task
+enables the model to understand the logical relationship between
+two sentences and trains the model by predicting whether two
+sentences are sequential.
+III. PROPOSED METHOD
+This section describes our proposed framework in detail. First,
+Section III-A introduces the overall architecture of the network,
+which consists of three main stages: text feature extractor, image
+feature extractor, feature fusion, and loss function detailed in
+Section III-B, III-C, III-D and III-E, respectively.
+A. Overall Architecture
+In this subsection, we present the ResViT-OCR hashing
+framework. Fig. 3 illustrates the proposed overall framework,
+which consists of a text-modal branch and an image-model
+branch, each including feature learning modules. The image and
+text are converted to a common coding space where similarities
+between image and text are preserved. The text features are
+converted to the feature size required for image modality using
+a fully connected (FC) layer, and then fused together. Finally, a
+hash sequence of length 50 is generated by an FC layer.
+Specifically, we preprocess the training data to unify the image
+size and then feed it into the image and text feature extractors.
+The OCR module extracts the text content, and the extracted
+text information is input into BERT to generate text feature
+fT . Similarly, the image is generated by the ResViT module
+to generate an image feature fI . Then, fT and fI with the same
+size are fused to form the text image feature map. The hash
+generator converts the multidimensional feature map into a
+fixed-length image hash sequence. The effective combination
+of feature extractor and hash generator realizes the end-to-end
+learning process of the network model.
+B. Text Extraction Module
+The OCR module consists of two main parts: text region
+detection based on the Connectionist Text Proposal Network
+
+Fig. 4. Network architecture of the CPTN model. The green box indicates
+a 3 × 3 sliding window on Conv5, where each point is combined with the
+surrounding 3 × 3 area features to obtain a feature vector of length 3 × 3 × C.
+
+(CTPN) [31] and text recognition based on the Convolutional
+Recurrent Neural Network (CRNN) [32]. The CTPN combines the advantages of CNNs and Recurrent Neural Networks
+(RNNs) to generate high-quality text candidate regions. It further
+utilizes a regression network to pinpoint text box locations. The
+network architecture is shown in Fig. 4. Feature maps are extracted from the input image using CNNs, typically a pre-trained
+CNN (e.g. VGG or ResNet). The size of the feature map is
+C × H × W , where H and W denote the height and width of the
+image, and C is the number of channels of feature maps. On the
+last convolutional layer (Conv5) of the CNN, a spatial window
+of 3 × 3 size is used for dense sliding to generate the learned
+spatial features. These features are utilized to make predictions
+for multiple anchors, where the convolutional features of each
+window are 3 × 3 × C. The obtained features are then input
+into a 256-dimensional bi-directional Long Short-Term Memory
+(BLSTM) Network, which captures the visual information of
+the image and provides the basis for subsequent text candidate
+generation. The output of the BLSTM network is input into
+the FC layer, and designs K vertical anchors to predict the
+y-coordinate of each proposal. The FC layer outputs three parts:
+2K vertical coordinates represent the height of the selection box
+and the y-axis coordinates of the center; 2K scores represent the
+category information of the K anchors, stating whether they are
+characters or not; and K side-refinement offsets represent the
+horizontal offsets of the selection boxes. Then adjust the predicted anchors to determine the text candidate regions. Finally,
+output the accurate localized position of the text.
+CRNN network for text recognition mainly consists of convolutional layers, recurrent layers, and transcription layer, as
+shown in Fig. 5. CNN is used to extract the features sequence
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:02:45 UTC from IEEE Xplore. Restrictions apply.
+
+3478
+
+IEEE TRANSACTIONS ON BIG DATA, VOL. 11, NO. 6, NOVEMBER/DECEMBER 2025
+
+Fig. 5. Illustration of the CRNN framework for text recognition network.
+Convolutional layers: extract features from the input image and obtain a feature
+map. Recurrent layers: learn each feature vector in the sequence and output
+the predicted label distribution. Transcription layer: converts a series of label
+distributions obtained from the recurrent layer into a final labeled sequence.
+
+of text location information obtained through CPTN. An RNN,
+such as an LSTM or a Gated Recurrent Unit (GRU), is used
+to capture the temporal dependencies in the sequence. This is
+crucial for understanding the context of the sequence. After RNN
+processing, each time step outputs a probability distribution
+of possible labels, including a special ’blank’ label (usually
+denoted by ’-’ or a special null character). The main function of
+this blank label is to handle time steps without corresponding
+characters in the target sequence. In a transcription module that
+utilizes Connectionist Temporal Classification (CTC) technique,
+the CTC method evaluates all potential paths that can be taken
+to match the output of the model to the target sequence by
+inserting ’blanks’ or repeating characters between characters.
+During decoding, the system removes repetitive and blank tags
+from the generated sequence to obtain the final text results. If
+it is assumed that the prediction results of each time frame are
+relatively independent, the conditional probability of each path
+can be expressed as
+p(π|y) =
+
+T
+
+
+yπt t ,
+
+(1)
+
+t=1
+
+where y and π represent the input sequence and valid paths,
+respectively, yπt t denotes the probability value on valid path πt
+at time t, and T is the length of the sequence. By summing up
+the conditional probabilities of all valid paths, we can calculate
+the overall probability of the output string as
+
+p(π|y),
+(2)
+P (l|y) =
+π:B(π)=l
+
+where l and B represent the output string and the de-duplication
+operation, respectively. Finally, the character with maximum
+probability is taken as the output character for that time step to
+obtain the final predicted text result for the recognition of the
+whole text image.
+Deep learning-based CRNN and CTPN models make full
+use of the advantages of CTPN in text region localization and
+the efficient performance of CRNN in sequence recognition.
+This scheme achieves the extraction and recognition of image
+text information and provides support for subsequent content
+authentication.
+C. Image Hashing Module
+In the document image hash module, the visual features of the
+document image are extracted, and a perceptual hash sequence
+is generated. We use ResNet and ViT in cascade to consider
+
+Fig. 6.
+
+Residual block internals. F (x, Wj ) is the residual function.
+TABLE I
+SPECIFIC NETWORK PARAMETERS FOR RESNET18
+
+both local and global features. This process is mainly divided
+into two stages: local and global feature extractions.
+We choose to use ResNet as the backbone network for local
+feature extraction. The problem of gradient vanishing with increasing network depth is addressed by introducing the concept
+of residual learning. ResNet is a deep convolutional network
+consisting of multiple residual blocks. Each block contains
+several convolutional layers, and the input is directly summed
+with the output through skip connections. This design facilitates
+gradient propagation and reduces the number of parameters.
+The ability to train very deep network structures improves
+the model’s expressiveness and performance. Additionally, the
+residual connection preserves the original features, leading to a
+more stable learning process and enhancing both accuracy and
+generalization.
+The internal structure of the residual block in ResNet is shown
+in Fig. 6. Each residual block contains two 3 × 3 convolutional
+layers, and each convolutional layer is followed by ReLU activation function. It can be represented as
+z = F (x, Wj ) + x,
+
+(3)
+
+where x and z are the input and output feature maps, respectively, Wj is the set of weight parameters for all operations in
+the j-th residual block. F (x, Wj ) represents the output of the
+layer with weights Wj . ResNet extracts features ranging from
+basic to complex, such as edges, textures, and object parts, thus
+efficiently capturing details and local structures in the image.
+This provides a solid foundation for further fusion of global
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:02:45 UTC from IEEE Xplore. Restrictions apply.
+
+SITU et al.: DOCUMENT-IMAGE PERCEPTUAL HASHING FOR CONTENT AUTHENTICATION
+
+features. We use ResNet18in our framework and Table I lists
+the specific network parameters of ResNet18.
+ViT introduces the Transformer architecture to the vision
+domain, utilizing a self-attentive mechanism to capture global
+contextual information. Compared with ResNet, it is better at
+extracting global features. ViT segments an image into patches,
+which are treated as elements in a sequence and then processed
+by the Transformer’s Encoder. The ViT model processes the local feature maps extracted by ResNet, which are first segmented
+into several non-overlapping patches of a fixed size S × S by
+ViT. These patches are then linearly expanded and converted into
+a series of tokens through a FC layer, with positional encoding
+added to preserve their spatial information. The transformed
+tokens are then fed into ViT’s encoder for further processing.
+Inside the encoder, the self-attention mechanism allows the
+model to consider the information of all other tokens while
+processing each token. The three matrices Q, K, and V are
+obtained by multiplying the tokens with three learnable matrices.
+Next, the model calculates the dot product of Q and K to evaluate
+the similarity between tokens, generating an attention scores
+matrix. A Softmax function processes this matrix to obtain a
+probability distribution, which is then multiplied with V to
+produce a weighted output. The model captures relationships
+between tokens from multiple perspectives by repeatedly applying the multi-head attention mechanism. The tokens, after
+being processed through multiple encoder layers, are eventually
+extracted. This mechanism allows the model to consider local
+features and capture global contextual information when processing images. Calculation of the attention mechanism can be
+represented as
+
+
+QKT
+V,
+(4)
+Attention(Q, K, V) = Softmax √
+D
+where D represents the dimension of K.
+
+E. Loss Function
+During the training of the OCR module, the negative loglikelihood function is used as the loss function. Denote the
+training dataset by X = {In , ln }, where In is the training images
+for the OCR module, and ln is the truth label sequence. After the
+transcription layer in the CRNN module outputs the final text
+information, the CTC loss function is introduced in the training
+process.
+
+log(ln |yn ),
+(5)
+Losstext = −
+In ,ln ∈X
+
+where yn represents the input sequence produced by the CNN
+and RNN from In .
+When training the document image perception model, besides
+the original input image, denoted as Iori , the set of images input
+to the feature extractor consists of M perceptually identical
+images of Iori , denoted as Ii , i = 1, 2, . . . , M , and the perceptually different images of Iori , denoted as Pi , i = 1, 2, . . . , M .
+Note that unlike the existing deep perception hashing methods,
+instead of perceptually different images, we here use tampered document images to increase the document tampering
+detection sensitivity of the proposed model in this paper. Each
+batch eventually obtains 2M + 1 hash sequences, denoted as
+H(Iori ), H(I1 ), . . . , H(IM ), H(P1 ), . . . , H(PM ), and each hash
+is with the length of L. Using these hash sequences, the corre(i)
+sponding distances of H(Iori ) and H(Ii ), denoted as ζs , are
+obtained for evaluating the feature mapping similarity between
+perceptually identical image pairs. Similarly, the corresponding
+ i ),
+perceptually different image pair distances of H(Iori ) and H(P
+(i)
+denoted as ζd , also can be calculated. In this paper, these
+distances are measured by the mean square error (MSE), which
+measures the difference between the hash sequences of the
+comparison images and the original image hash sequences by
+calculating the mean of the squared differences, i.e.,
+
+D. Feature Fusion
+Before feature fusion, we use BERT to extract the textual
+feature of the sentence. We have chosen the only Chinese
+BERT model published by Google [33], because our training
+set and test set are Chinese document images. The BERT model
+is replaceable, and if we want to process English document
+images, we can choose other BERT models. BERT efficiently
+represents highly unstructured textual data as vectors, which is
+a trained stack of Transformer encoders. After extracting the
+textual information, we embed some special tags to distinguish
+each different sentence. At the beginning of the sentence, we
+embed ’[CLS]’ as the first token of each sequence, refer to the
+sequence of input tokens passed to BERT, and embed ’[SEP]’
+at the end of the sentence. We can distinguish sentences by
+this unique token. Once the input tokens are ready, they are
+processed by each layer, which applies self-attention, passes the
+result through a feed-forward network, and hands it off to the
+next encoder. In terms of architecture, it remains the same as
+the Transformer. After extracting the text feature, it is fed into a
+FC layer, which means that the text and image features have the
+exact dimensions. Finally, the two features are spliced and fed
+into a FC layer to generate the final hash sequence.
+
+3479
+
+2
+1 
+H(Iori )k − H(Ii )k , i = 1, 2, . . . , M,
+L
+L
+
+ζs(i) =
+
+(6)
+
+k=1
+
+(i)
+
+ζd =
+
+2
+1 
+ i )k , i = 1, 2, . . . , M, (7)
+H(Iori )k − H(P
+L
+L
+
+k=1
+
+where L denotes the length of image hash, k denotes the k-th
+element.
+In order to ensure that the hashing algorithm robustness and
+discrimination achieve a satisfactory balanced effect during the
+training process, the value of MSE is minimized by the gradient
+descent optimization algorithm, and the distances between pairs
+of images with the same perception and pairs of images with
+different perception is normalized by using the sigmoid function
+as a way to achieve faster convergence of the model. The loss
+function used is
+Losshash = α
+
+M
+M
+1   (i) 
+1   (i) 
+−β
+S ζs
+S ζd ,
+M i=1
+M i=1
+
+(8)
+
+where S is the sigmoid normalization function, and α, β are
+hyperparameters of the loss function that minimize the loss
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:02:45 UTC from IEEE Xplore. Restrictions apply.
+
+3480
+
+IEEE TRANSACTIONS ON BIG DATA, VOL. 11, NO. 6, NOVEMBER/DECEMBER 2025
+
+Algorithm 1: Training Process of Robust Perceptual Document Image Hashing.
+1: Input: Training and validation document images, the
+proposed ResViT-OCR model H(·), epoch
+2: Output: Hash sequence H(·)
+3: Each batch contains the original image Iori , the
+perceptually similar images Ii , and the tampered images
+Pi , i = 1, 2, . . . , M ;
+4: Initialize the parameters of H(·);
+5: t = 0;
+6: while t < epoch do
+7:
+for each batch do
+8:
+Generate hash H(·) through H(·)
+9:
+Calculate hashing distances between
+corresponding image pairs, i.e., Losshash , via (8);
+10:
+Update the model parameters of H(·) to
+minimize Losshash ;
+11:
+end for
+12:
+Feed validation images into the network to calculate
+hash values for evaluation;
+13:
+t = t + 1;
+14: end while
+15: return H(·)
+
+function to generate hash distances that can distinguish between
+similar and different images.
+To better understand, Algorithm 1 presents the training process of the proposed robust perceptual document image hashing.
+IV. EXPERIMENTAL RESULTS
+In this section, we first describe the datasets and training
+parameter settings. In order to evaluate the effectiveness of the
+proposed model, we conduct a series of experiments, including robustness, discriminative ability, discussion of threshold,
+authentication ability, adversarial attacks, ablation experiments,
+computational complexity, and key-dependent performance.
+A. Experiment Setup
+1) Dataset Construction: We construct a text tampering
+dataset to evaluate the proposed scheme’s effectiveness and
+superiority. We employ the tampering method from [34], which
+selectively tampers to generate realistic images of tampered documents. In [34], it consists of selective copy-paste and selective
+generation. The former acquires groups of texts with similar
+styles and performs copy-paste in the grouped text instances to
+generate the tampered texts. The latter uses OpenCV [35] to
+erase their original text content and then prints the new text with
+a predefined similar style and font. Following [34], the entire
+data synthesis approach for text tampering we used is described
+as follows: (1) use powerful open-source OCR tools such as
+PPOCRLabel in Paddle-OCR [36] to obtain the bounding boxes
+of the words and characters and extract the parts of the text
+that we want to tamper; (2) use styleText [3] to separate the
+foreground color of the text from its background and use the
+background to generate new text content; (3) selectively copy
+
+and paste the generated new text content to the original image
+to obtain the tampered document image.
+We randomly select 500 document images as original images
+from the Document Forgery Attack dataset of Alibaba Tenchi
+Competition [37]. Using the method described above, we tamper
+with these images so that each original image yields 35 corresponding tampered versions. Based on this, we perform multiple
+content-preserving operations with different parameters on each
+image, as listed in Table II. We use seven types of image
+content-preserving operations, including JPEG compression,
+Gaussian noise, cropping, and scaling. These adjustments to the
+document images do not affect the semantic information they
+contain; hence, we all consider the images to be perceptually
+similar. Therefore, each original image has 35 perceptually
+similar versions, and the proposed document image perceptual
+hashing dataset for training, referred to as DIPHD1, consists of
+500 + 500 × 35 + 500 × 35 = 35, 500 images. In order to ensure the diversity of the detection data, we also choose DocuImg,
+a document image dataset proposed by Chen et al. [38] as the
+detection database for the following experiments.
+2) Implementation and Training Details: The framework
+proposed in this paper is implemented in Pytorch and trained
+on an NVIDIA RTX3090 GPU to obtain the final hash model.
+We train the OCR module and the document image perceptual
+hashing module in steps. The Synthetic Word dataset [39] is
+used during the training of the OCR module, which is widely
+used in computer vision and machine learning, especially in
+text recognition and detection tasks. This dataset consists of
+synthetically generated images, each of which is automatically
+generated and contains text in different fonts, sizes, colors, and
+backgrounds to cover a wide range of possible scenarios. For
+the training of the OCR module, we use RMSProp [40] as the
+optimizer and set the learning rate as 1 × 10−4 . The epoch of
+the model is set to 200.
+In training the document image perceptual hash model, we
+use our proposed and constructed tampered document image
+dataset DIPHD1. This dataset includes the original document
+images, the similar version of the original images, and the
+tampered version of the original images. In addition, we set
+the training learning rate to e−4 , optimize the algorithm using
+the Adam optimizer [41], and the corresponding batch size is
+set to 71. Respectively, the model’s epoch is set to obtain the
+final perceptual hash network. Before feeding the images into
+the model, we normalized the images to a size of 224 × 224 for
+model training. In addition, the length of the hash sequence is
+set to 50.
+3) Similarity Measurement: We use MSE to calculate the
+distance between two image hashes H(I) and H(I ) as
+D (H(I), H(I )) =
+
+1
+2
+(H(I)k − H(I )k ) ,
+L
+L
+
+(9)
+
+k=1
+
+where H(I)k and H(I )k denote the k-th element of H(I) and
+H(I ), respectively. If the similarity of the two hashes is less than
+a preset threshold, their corresponding images are considered to
+be perceptually similar; conversely, they are considered to be
+tampered images.
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:02:45 UTC from IEEE Xplore. Restrictions apply.
+
+SITU et al.: DOCUMENT-IMAGE PERCEPTUAL HASHING FOR CONTENT AUTHENTICATION
+
+3481
+
+TABLE II
+SEVEN DIFFERENT CONTENT-PRESERVING OPERATIONS WITH DIFFERENT PARAMETER SETTINGS
+
+TABLE III
+STATISTICS OF HASH DISTANCES BASED ON CONTENT-PRESERVING IMAGE OPERATIONS
+
+B. Perceptual Robustness
+In order to verify the perceptual robustness of the proposed
+algorithm to the content-preserving operations, additional 100
+images are randomly selected from the Alibaba Tenchi Competition dataset as the original version and use the content-preserving
+operations on them as shown in Table II. Each image generates
+35 perceptually similar images, and 35 tampered images are
+generated using the tampering method in dataset construction.
+Denote this test dataset as DIPHD2. In this experiment, only
+the original images and their perceptually similar versions are
+used. Then, we calculate the similarity distance between the
+original image and the perceptually similar image hash sequence
+according to (9).
+We refer to each original image and its perceptually identical
+versions as an image group. The total number of hash distances
+between perceptually identical pictures are 100 × 35 + 100 =
+3, 600 pairs of hash distances. Table III shows the statistics
+of hash distances for dataset DIPHD2 based on the different
+content-preserving operations. The hash distances range from
+0.0000 to 15.2626, the mean of these distances is 1.6850, and the
+standard deviation is 1.6869. Table III shows that the minimum
+distances for all content-preserving operations are close to 0,
+and the average hash distances are almost always less than 2.
+However, the maximum hash distances under the Gamma correction and motion blur operations are relatively large because
+the accuracy of OCR technology relies heavily on the sharpness
+of the input image. The accuracy of the OCR technique is highly
+dependent on the clarity of the input image. The OCR technique
+may have difficulty accurately recognizing blurry, too bright
+documents, or documents that contain complex layouts, leading
+to relatively large hash distances when the parameter values
+are set relatively large under some operations. However, most
+perceptually similar images are correctly recognized and can be
+distinguished from tampered images, which will be discussed in
+more detail in Section IV-D.
+
+Fig. 7. Histogram of the hash distance between 3,500 sets of perceptually
+identical images obtained from 100 original test images in DIPHD3.
+
+In order to further verify the robustness of the scheme,
+we also randomly select 100 images from the DocuImg
+dataset as the original versions, referred to as dataset DIPHD3,
+and conduct different content-preserving operations listed in
+Table II. Fig. 7 illustrates the histogram of 3,500 hashing distances between perceptual identical images. From the figure, we
+can conclude that the hash distances under all content-preserving
+operations are mainly concentrated in the range of [0, 2), and
+even the minimum values of hash distances are close to 0,
+which indicates that the hash values are almost the same as those
+processed version and the original images. Based on the above
+experiments, we can conclude that our document image hashing
+scheme shows satisfactory robustness to the commonly used
+content-preserving operations.
+C. Discrimination Capability
+A robust document image hashing scheme needs to be discriminative, and for tampered images, the hash value should
+be significantly different from the original image. To verify
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:02:45 UTC from IEEE Xplore. Restrictions apply.
+
+3482
+
+Fig. 8.
+
+IEEE TRANSACTIONS ON BIG DATA, VOL. 11, NO. 6, NOVEMBER/DECEMBER 2025
+
+Some tampered document images.
+
+hashing algorithms often conflict, and an increase in the power
+of one affects the performance of the other. We use ROC curves
+to better demonstrate the algorithm’s authentication ability. The
+True Positive Rate (TPR) and False Positive Rate (FPR) are
+calculated by setting different thresholds as
+TPR =
+
+TP
+TP + FN
+
+(10)
+
+FPR =
+
+FP
+,
+TN + FP
+
+(11)
+
+and
+
+Fig. 9.
+
+Distance distribution between perceptually distinct images.
+
+the discrimination capability of this scheme, additional 100
+images are randomly selected from the DocuImg dataset, and
+900 tampered images are generated for testing by the tampering
+method described in dataset construction. Denote this dataset
+as DIPHD4, and some tampered examples are shown in Fig. 8.
+Then the hash value for each image in DIPHD4 is generated.
+We calculate the hash distances between each image and the
+other 999 images separately and obtained a total of 499,500 hash
+distances. The mean value of these hash distances is 50.69, and
+the standard deviation is 26.88. In order to show the distribution
+of these hash distances more intuitively, the experiments are
+statistically analyzed using pie charts, and the specific results are
+shown in Fig. 9. The histogram and pie chart show that the hash
+distances of the perceived different images are mainly distributed
+in the interval [20, +∞). Compared with the distribution of hash
+distances of the images of the content-preserving operations in
+the robustness experiments mentioned in Section IV-B, it can be
+found that there is a significant difference between the two in the
+range of hash distances. This indicates that the proposed hashing
+network is able to yield significant differences between the hash
+values of different images and thus has a good discriminative
+ability.
+D. Performance of Content Identifications
+In order to better evaluate the superiority of our scheme in content authentication, authentication experiments are conducted
+using the constructed dataset DIPHD2, which contains original images, perceptually similar images and tampered images.
+Fig. 10 illustrates the proposed content recognition workflow.
+We extract the hash values of the test images using the proposed
+algorithm and then calculate their hash distance using MSE. If
+the distance is smaller than a preset threshold T , the proposed
+framework considers that the document image has not been
+tampered with; otherwise, it is judged as tampered or a different
+image. Our algorithm is compared with the current state-ofthe-art perceptual image hashing algorithm schemes DAE [22],
+MCNN [10], ProtoHash [42], TMCIH [43], Swin-T [23] as well
+as the traditional methods RP-IVD [44] and 2D-2D PCA [45]. It
+is worth noting that the robustness and discriminative power of
+
+respectively, where TP is the number of perceptually similar
+images that are correctly judged to be similar, FN is the number
+of perceptually similar images that are incorrectly judged to
+be different, FP is the number of perceptually distinct images
+that are incorrectly judged to be similar, and TN is the number of perceptually distinct images that are correctly judged
+to be different. TPR and FPR represent the robustness and
+discriminatory ability of the hashing algorithm, respectively.
+The closer the ROC curve is to the upper left corner, the better the performance of content authentication achieved by the
+scheme. The ROC curves in Fig. 11 demonstrate the content
+authentication performance of various hashing schemes. It can
+be observed that our scheme is closer to the upper left corner
+than the other schemes because we have added the OCR module
+to utilize the text information to help the hashing algorithms
+accomplish the content authentication task. The contrasting
+hashing algorithms perform well when dealing with masked and
+background-tampered images, but perform poorly in scenarios
+where textual information tampering is recognized. This finding
+further shows the effectiveness of the proposed scheme in this
+paper in solving the content authentication of document images.
+The F1 score is a measure for evaluating algorithm through
+combining the accuracy and recall of an algorithm’s classification. The maximum value of the F1 score is 1, and the
+minimum value is 0. A higher F1 score indicates better classifier
+performance. To more fully evaluate the content authentication
+capabilities of each hashing algorithm, we calculate the F1
+scores of various algorithms for different content-preserving
+operations as
+F1 =
+
+TP
+.
+TP + 12 (FP + FN)
+
+(12)
+
+Table IV shows the comparison of F1 scores for different
+image processing operations, where our scheme is closer to 1 and
+outperforms all other schemes for all content operations. This
+is because in detecting document images, the OCR technique of
+our scheme can provide more accurate and intelligent text detection and recognition capabilities, especially in the face of text
+tampering with only a tiny portion of the text, and can provide
+more efficient, accurate, and robust text recognition services.
+Therefore, the image hash generated by our proposed method
+shows good authentication capability in document image tampering detection, validating the algorithm’s effectiveness.
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:02:45 UTC from IEEE Xplore. Restrictions apply.
+
+SITU et al.: DOCUMENT-IMAGE PERCEPTUAL HASHING FOR CONTENT AUTHENTICATION
+
+Fig. 10.
+
+3483
+
+Workflow of image content authentication.
+
+TABLE IV
+COMPARISON OF F1 SCORES OF VARIOUS HASHING ALGORITHMS FOR DIFFERENT CONTENT-PRESERVING OPERATIONS
+
+images are correctly judged, and the average of the correctness
+of perceptual robustness and discriminative ability is largest.
+This threshold corresponds to the point closest to the upper left
+corner on the DIPHD2-based ROC curve of this paper’s scheme.
+To maintain a balance between robustness and discrimination,
+we recommend a threshold T of 2.1.
+F. Ablation Experiments
+
+Fig. 11. ROC curves of content authentication performance for the proposed
+scheme, [22], [10], [42], [44], [45], [43], and [23].
+
+E. Threshold Discussion
+There is a trade-off between the robustness and discriminability of document image hashing schemes, where a decrease in the
+other inevitably accompanies an increase in the performance. A
+smaller threshold value ensures better discriminative capability
+but at the expense of robustness. Therefore, choosing an appropriate threshold is of great importance. For optimal performance,
+the threshold value corresponding to the point closest to the
+upper left corner of the ROC curve is recommended. In different application scenarios, users may assign different levels of
+importance to robustness or discriminability. Table V provides
+the authentication correctness results for perceptually similar
+images and tampered images, where all selected images are
+from DIPHD2 and Γi and Γd denote the accuracy of perceived
+robustness and discriminative ability under different thresholds
+T , respectively. Taking the threshold value of 1.5 as an example,
+in this case, 92.10% of the same images are correctly judged as
+perceiving the same, and 96.4% of the tampered images are
+correctly judged as perceiving different. It can be found that
+when the threshold T is 2.1, 93.54% of similar images are
+correctly judged as perceptually identical, 95.46% of tampered
+
+In order to verify the impact of OCR module on the performance of content authentication in document image hashing
+schemes, we design ablation experiments and compare the performance by ROC curves. In this experiment, a complete hash
+model containing the OCR module is first set as the baseline
+model. Subsequently, an ablation model is created by removing
+the OCR module, leaving all other processing steps unchanged,
+and the two models are called IOH and IH, respectively. This
+facilitates us to directly observe the change in the performance of
+the model in terms of content authentication of document images
+when the OCR module is not used, and thus to evaluate the
+performance of the model in recognizing and authenticating the
+content of document images in the absence of the OCR technique
+for text extraction performance. Note that each model is tested
+on DIPHD2 In this experiment.
+The performance comparison with or without the OCR module is visualized in Fig. 12. The ROC curve of the hashing
+algorithm, which includes the OCR module, is higher than that
+of the ablation model, showing a tendency to be closer to the
+upper left corner, which indicates that the model which includes
+the OCR module is able to achieve a higher true positive rate.
+A more accurate authentication of the content of the document
+image while maintaining a low false positive rate. By analyzing
+the ROC curves, it can be seen that the OCR module significantly
+contributed to improving the accuracy and reliability of the
+document image hashing scheme for the content authentication
+task. In order to further illustrate the impact of the OCR module
+on the detection algorithm, we calculate the hash distances
+distribution with and without the OCR module, using the
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:02:45 UTC from IEEE Xplore. Restrictions apply.
+
+3484
+
+IEEE TRANSACTIONS ON BIG DATA, VOL. 11, NO. 6, NOVEMBER/DECEMBER 2025
+
+TABLE V
+RESULTS OF Γi , Γd AND THEIR AVERAGE UNDER DIFFERENT THRESHOLDS
+
+Fig. 12.
+
+ROC curves with or without OCR module.
+
+Fig. 13. Histogram of the hash distance between the identical images and
+tampered images without the OCR module.
+
+module. We selected 100 images from the DocuImg dataset
+and performed adversarial attacks on these 100 images using
+PGD and FGSM methods to test the accuracy. We set different
+perturbation threshold parameters ε, and each image generates
+100 adversarial samples. We validate these 1000 images, and
+Fig. 15 shows the comparison of the model’s performance under
+different perturbation thresholds for the adversarial example
+methods, FGSM and PGD. We calculate the accuracy of the
+model’s correct prediction based on the threshold T = 2.1.
+When the hash distance is less than the threshold, it indicates that
+the adversarial sample is still correctly judged, proving that the
+attack was unsuccessful, thereby assessing our model’s defense
+capability.
+From the attack results, it can be seen that our model has a
+certain degree of defense capability. Under the attack of FGSM
+and PGD, when the perturbation threshold is less than 0.025,
+these adversarial sample images can be correctly distinguished
+as perceptually similar images. For the FGSM method, when the
+perturbation threshold is greater than 0.3, the accuracy decreases
+to 59.6%. For the PGD method, when the perturbation threshold
+is greater than 0.35, the accuracy drops to 62.2%. Comparing the
+attack results without the OCR module, it can be concluded that
+adding the OCR module has improved the defense performance
+of the model.
+H. Computational Complexity
+
+Fig. 14. Histogram of the hash distance between the identical images and
+tampered images with the OCR module.
+
+DIPHD2 dataset. Figs. 13 and 14 show the hash distances
+of samples at the threshold edge. Many tampered images are
+incorrectly classified as perceptually similar without an OCR
+module. This confirms the important role of the OCR module in
+improving the document image content authentication model.
+G. Adversarial Attacks
+To test the adversarial security of proposed scheme, we used
+FGSM [46] and PGD [47] to attack the perceptual image hash
+
+Computational complexity plays a crucial role in practical
+applications. In this section, we evaluate the time complexity of
+our scheme and compare it with DAE [22], MCNN [10], ProtoHash [42], TMCIH [43], Swin-T [23] as well as RP-IVD [44]
+and 2D-2D PCA [45]. We randomly select 10,000 images from
+DocuImg dataset and resize them to the size of 256 × 256 using
+a bilinear interpolation. We count the time spent by each hashing
+algorithm to generate 1, 10, 100, 1,000, and 10,000 image
+hashes. By calculating the average of these times, the time taken
+by the algorithms to generate hashes can be obtained. It is worth
+noting that all the algorithms generate hash sequences with a
+length of 50 digits, except for the two conventional methods,
+RP-IVD and 2D-2D PCA. The average time taken by each
+algorithm to generate hash values is shown in Table VI. Based
+on the table, although the proposed model is slightly slower than
+other deep hashing schemes; this is probably due to the fact that
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:02:45 UTC from IEEE Xplore. Restrictions apply.
+
+SITU et al.: DOCUMENT-IMAGE PERCEPTUAL HASHING FOR CONTENT AUTHENTICATION
+
+Fig. 15.
+
+3485
+
+Performance of adversarial robustness under FGSM and PGD attacks.
+
+TABLE VI
+AVERAGE TIME FOR GENERATING HASH SEQUENCES WITH DIFFERENT
+ALGORITHMS
+
+the hash sequences generated by our model need to extract the
+textual content first and then use the BERT model to change the
+textual content into feature vectors. The BERT model possesses
+many parameters, requiring more computational resources and
+time to process the input data. Therefore, in the subsequent
+research, we will continue to optimize the model to improve
+computational efficiency.
+I. Key Dependence
+Key dependence is essential to ensure the hash function’s efficiency, security, and reliability. This requires the hash algorithm
+to generate secure hashes while ensuring excellent robustness
+and differentiation. In our scheme, key Hkey is used for the
+final stage of hash generation. In the validation experiments,
+
+Fig. 16.
+
+Distance between hashes generated from different keys.
+
+we generate random keys to encrypt the image hash, and the
+whole framework does not change the parameters other than the
+key. To validate the key dependency of the proposed framework,
+we select an image from the DocuImg dataset, choose a key to
+generate an encrypted hash key Hkey for it, and then randomly
+select 100 incorrect keys to obtain other encrypted versions. The
+key security performance is quantitatively analyzed by calculating the mean square error distance between these 100 incorrect
+key encryption hashes and Hkey . The experimental results are
+presented in Fig. 16, where the horizontal axis represents the
+index encrypted by the 100 different keys, and the vertical axis
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:02:45 UTC from IEEE Xplore. Restrictions apply.
+
+3486
+
+IEEE TRANSACTIONS ON BIG DATA, VOL. 11, NO. 6, NOVEMBER/DECEMBER 2025
+
+shows the distance between Hkey and the sequence of incorrect
+hashes.
+From the experimental results, it can be observed that there
+is a significant difference in the distance between the hashes
+generated by the correct key and the wrong key. Specific values
+show that the maximum value of these distances reaches 8.92,
+the minimum value is 6.18, and the average value is 7.59, accompanied by a standard deviation of 0.70. It is worth noting that
+even the smallest hash distance far exceeds the preset threshold
+in this paper, which means that the hash sequence cannot be
+accurately obtained or recovered without the correct key. This
+experimental result verifies that the hashing framework in this
+chapter has a high key dependency and demonstrates satisfactory
+security.
+V. CONCLUSION
+In this paper, we propose a perceptual hashing algorithm for
+document images. The whole algorithm is divided into OCR
+modules and text image hash modules, and they are trained
+separately to compose a complete hashing framework. The text
+information recognized by OCR is used to detect the tampering
+of characters in the document image, while the perceptual image
+hash module is used to detect the tampering of visual features
+such as background and masking of the image. Combining
+the OCR system with perceptual image hashing technology, it
+realizes all-around content authentication of document images,
+taking into account both textual and visual features of document
+images. In addition, by adopting a deep residual network with
+ViT cascade, we realize the comprehensive extraction of visual
+features of the image. In order to verify the effectiveness of the
+proposed algorithm, we have designed a series of experiments.
+The experimental results show that the proposed perceptual
+hashing scheme exhibits excellent performance in the face of
+tampering detection of document images. Experimental comparisons with other state-of-the-art schemes and results based on
+ROC and F1 score evaluation metrics show that our algorithm
+also achieves satisfactory results in terms of robustness and
+discrimination.
+We will continue improving tamper detection performance
+under OCR noise in future research. In addition, we will further
+improve the proposed scheme by exploring more effective fusion
+methods to integrate text and image feature information, simplifying the model complexity by utilizing knowledge distillation
+and quantization, and developing more lightweight modules to
+enhance computational efficiency.
+ACKNOWLEDGMENT
+The authors would like to thank the anonymous reviewers
+for their valuable suggestions, which helped to improve this
+paper. Our dataset can be downloaded from https://1drv.ms/
+f/c/f6dba7ae8a6cd6de/Es-D-F6fM7VEnIKcvcqj-3MBRU0SZ
+39a0qtvUzLPBO-Ahw?e=7vg153. The code of this paper is
+available at https://github.com/HengYao/Document-ImagePerceptual-Hashing-for-Content-Authentication.
+
+REFERENCES
+[1] L. Zhao, C. Chen, and J. Huang, “Deep learning-based forgery attack on
+document images,” IEEE Trans. Image Process., vol. 30, pp. 7964–7979,
+2021.
+[2] L. Verdoliva, “Media forensics and DeepFakes: An overview,” IEEE J.
+Sel. Topics Signal Process., vol. 14, no. 5, pp. 910–932, Aug. 2020.
+[3] L. Wu et al., “Editing text in the wild,” in Proc. 27th ACM Int. Conf.
+Multimedia, 2019, pp. 1500–1508.
+[4] Q. Yang, J. Huang, and W. Lin, “SwapText: Image based texts transfer in
+scenes,” in Proc. IEEE/CVF Conf. Comput. Vis. Pattern Recognit., 2020,
+pp. 14 700–14 709.
+[5] Y. Wang, B. Zhang, H. Xie, and Y. Zhang, “Tampered text detection via
+RGB and frequency relationship modeling,” Chin. J. Netw. Inf. Secur.,
+vol. 8, no. 3, pp. 29–40, 2022.
+[6] S. Abramova and R. Böhme, “Detecting copy–move forgeries in scanned
+text documents,” Electron. Imag., vol. 28, pp. 1–9, 2016.
+[7] X. Liu, Y. Liu, J. Chen, and X. Liu, “PSCC-Net: Progressive spatio-channel
+correlation network for image manipulation detection and localization,”
+IEEE Trans. Circuits Syst. Video Technol., vol. 32, no. 11, pp. 7505–7517,
+Nov. 2022.
+[8] Y. Ding, W. K. Wong, Z. Lai, and Z. Zhang, “Bilinear supervised hashing
+based on 2D image features,” IEEE Trans. Circuits Syst. Video Technol.,
+vol. 30, no. 2, pp. 590–602, Feb. 2020.
+[9] J. Zhang and Y. Peng, “SSDH: Semi-supervised deep hashing for large
+scale image retrieval,” IEEE Trans. Circuits Syst. Video Technol., vol. 29,
+no. 1, pp. 212–225, Jan. 2019.
+[10] C. Qin, E. Liu, G. Feng, and X. Zhang, “Perceptual image hashing
+for content authentication based on convolutional neural network with
+multiple constraints,” IEEE Trans. Circuits Syst. Video Technol., vol. 31,
+no. 11, pp. 4523–4537, Nov. 2021.
+[11] J. Fonseca-Bustos, K. A. Ramírez-Gutiérrez, and C. Feregrino-Uribe,
+“Robust image hashing for content identification through contrastive selfsupervised learning,” Neural Netw., vol. 156, pp. 81–94, 2022.
+[12] P. Roy, S. Bhattacharya, S. Ghosh, and U. Pal, “STEFANN: Scene text
+editor using font adaptive neural network,” in Proc. IEEE/CVF Conf.
+Comput. Vis. Pattern Recognit., 2020, pp. 13 228–13 237.
+[13] C. Liu, Y. Liu, L. Jin, S. Zhang, C. Luo, and Y. Wang, “EraseNet: Endto-end text removal in the wild,” IEEE Trans. Image Process., vol. 29,
+pp. 8760–8775, 2020.
+[14] Y. Zhang, G. Zhu, L. Wu, S. Kwong, H. Zhang, and Y. Zhou, “Multi-task
+SE-network for image splicing localization,” IEEE Trans. Circuits Syst.
+Video Technol., vol. 32, no. 7, pp. 4828–4840, Jul. 2022.
+[15] Z. Huang and S. Liu, “Perceptual hashing with visual content understanding for reduced-reference screen content image quality assessment,”
+IEEE Trans. Circuits Syst. Video Technol., vol. 31, no. 7, pp. 2808–2823,
+Jul. 2021.
+[16] Z. Su, L. Yao, J. Mei, L. Zhou, and W. Li, “Learning to hash for personalized image authentication,” IEEE Trans. Circuits Syst. Video Technol.,
+vol. 31, no. 4, pp. 1648–1660, Apr. 2021.
+[17] C.-Y. Lin and S.-F. Chang, “A robust image authentication method distinguishing JPEG compression from malicious manipulation,” IEEE Trans.
+Circuits Syst. Video Technol., vol. 11, no. 2, pp. 153–168, Feb. 2001.
+[18] Z. Tang, Z. Huang, H. Yao, X. Zhang, L. Chen, and C. Yu, “Perceptual
+image hashing with weighted DWT features for reduced-reference image
+quality assessment,” Comput. J., vol. 61, no. 11, pp. 1695–1709, 2018.
+[19] C. Qin, M. Sun, and C.-C. Chang, “Perceptual hashing for color images
+based on hybrid extraction of structural features,” Signal Process., vol. 142,
+pp. 194–205, 2018.
+[20] Z. Tang, X. Zhang, and S. Zhang, “Robust perceptual image hashing based
+on ring partition and NMF,” IEEE Trans. Knowl. Data Eng., vol. 26, no. 3,
+pp. 711–724, Mar. 2014.
+[21] Z. Tang, M. Yu, H. Yao, H. Zhang, C. Yu, and X. Zhang, “Robust image
+hashing with singular values of quaternion SVD,” Comput. J., vol. 64,
+no. 11, pp. 1656–1671, 2021.
+[22] Y. Li, D. Wang, and L. Tang, “Robust and secure image fingerprinting
+learned by neural network,” IEEE Trans. Circuits Syst. Video Technol.,
+vol. 30, no. 2, pp. 362–375, Feb. 2020.
+[23] T. Liu, H. Yao, X. Li, and C. Qin, “Robust perceptual image hashing for
+screen-shooting attack,” IEEE Trans. Consum. Electron., vol. 70, no. 1,
+pp. 4367–4378, Feb. 2024.
+[24] M. Yu, Z. Tang, X. Liang, X. Zhang, Z. Li, and X. Zhang, “Robust hashing
+with deep features and Meixner moments for image copy detection,” ACM
+Trans. Multimedia Comput., Commun., Appl., vol. 20, no. 12, pp. 1–23,
+2024, doi: 10.1145/3696669.
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:02:45 UTC from IEEE Xplore. Restrictions apply.
+
+SITU et al.: DOCUMENT-IMAGE PERCEPTUAL HASHING FOR CONTENT AUTHENTICATION
+
+[25] X. Tian, W. W. Y. Ng, and H. Xu, “Deep incremental hashing for semantic
+image retrieval with concept drift,” IEEE Trans. Big Data, vol. 9, no. 4,
+pp. 1102–1115, Aug. 2023.
+[26] X. Nie, X. Liu, J. Guo, L. Wang, and Y. Yin, “Supervised discrete multiplelength hashing for image retrieval,” IEEE Trans. Big Data, vol. 9, no. 1,
+pp. 312–327, Feb. 2023.
+[27] Y. Yang, F. Shen, H. T. Shen, H. Li, and X. Li, “Robust discrete spectral
+hashing for large-scale image semantic indexing,” IEEE Trans. Big Data,
+vol. 1, no. 4, pp. 162–171, Dec. 2015.
+[28] H. Lu, S. He, X. Li, M. Han, and C. Wu, “SRGTNet: Subregionguided transformer hash network for fine-grained image retrieval,”
+IEEE Trans. Big Data, early access, Jan. 27, 2025, doi: 10.1109/TBDATA.2025.3533916.
+[29] Y. Cao, F. Meng, X. Shang, J. Gui, and Y. Y. Tang, “A privacy-preserving
+large-scale image retrieval framework with vision GNN hashing,” IEEE
+Trans. Big Data, vol. 11, no. 4, pp. 1970–1982, Aug. 2025.
+[30] J. D. M.-W. C. Kenton and L. K. Toutanova, “BERT: Pre-training of deep
+bidirectional transformers for language understanding,” in Proc. Conf.
+North Amer. Chapter Assoc. Comput. Linguistics - Hum. Lang. Technol.,
+Minneapolis, MN, 2019, Art. no. 2.
+[31] Z. Tian, W. Huang, T. He, P. He, and Y. Qiao, “Detecting text in natural
+image with connectionist text proposal network,” in Proc. 14th Eur. Conf.
+Comput. Vis., Amsterdam, The Netherlands, Springer, Oct. 11–14, 2016,
+pp. 56–72.
+[32] B. Shi, X. Bai, and C. Yao, “An end-to-end trainable neural network
+for image-based sequence recognition and its application to scene text
+recognition,” IEEE Trans. Pattern Anal. Mach. Intell., vol. 39, no. 11,
+pp. 2298–2304, Nov. 2017.
+[33] Y. Cui, W. Che, T. Liu, B. Qin, and Z. Yang, “Pre-training with whole word
+masking for Chinese BERT,” IEEE/ACM Trans. Audio, Speech, Lang.
+Process., vol. 29, pp. 3504–3514, 2021.
+[34] C. Qu et al., “Towards robust tampered text detection in document image:
+New dataset and new solution,” in Proc. IEEE/CVF Conf. Comput. Vis.
+Pattern Recognit., 2023, pp. 5937–5946.
+[35] G. Bradski, “The OpenCV library,” Dr. Dobb’s J. Softw. Tools, vol. 25,
+pp. 120–123, 2000.
+[36] C. Li et al., “PP-OCRv3: More attempts for the improvement of ultra
+lightweight OCR system,” 2022, arXiv:2206.03001.
+[37] Aliyun, Security AI challenger program phase 5: Counterattacks on forged
+images. Accessed: Dec. 12, 2024. [Online]. Available: https://tianchi.
+aliyun.com/competition/entrance/531945/information
+[38] C. Chen, L. Zhao, J. Yan, and H. Li, “A distortion model-based prescreening method for document image tampering localization under recapturing attack,” Signal Process., vol. 200, 2022, Art. no. 108666.
+[39] M. Jaderberg, K. Simonyan, A. Vedaldi, and A. Zisserman, “Synthetic
+data and artificial neural networks for natural scene text recognition,”
+2014, arXiv:1406.2227.
+[40] G. Hinton, N. Srivastava, and K. Swersky, “Neural networks for machine learning lecture 6a overview of mini-batch gradient descent,” Cited,
+vol. 14, no. 8, 2012, Art. no. 2.
+[41] D. P. Kingma, “Adam: A method for stochastic optimization,”
+2014, arXiv:1412.6980.
+[42] V. Monga and B. Evans, “Perceptual image hashing via feature points: Performance evaluation and tradeoffs,” IEEE Trans. Image Process., vol. 15,
+no. 11, pp. 3452–3465, Nov. 2006.
+[43] Y. Fang, Y. Zhou, X. Li, P. Kong, and C. Qin, “TMCIH: Perceptual robust
+image hashing with transformer-based multi-layer constraints,” in Proc.
+2023 ACM Workshop Inf. Hiding Multimedia Secur., New York, NY, USA,
+2023, pp. 7–12, doi: 10.1145/3577163.3595113.
+[44] Z. Tang, X. Zhang, X. Li, and S. Zhang, “Robust image hashing with ring
+partition and invariant vector distance,” IEEE Trans. Inf. Forensics Secur.,
+vol. 11, no. 1, pp. 200–214, Jan. 2016.
+[45] X. Liang, Z. Tang, Z. Huang, X. Zhang, and S. Zhang, “Efficient hashing
+method using 2D-2D PCA for image copy detection,” IEEE Trans. Knowl.
+Data Eng., vol. 35, no. 4, pp. 3765–3778, Apr. 2023.
+[46] I. J. Goodfellow, J. Shlens, and C. Szegedy, “Explaining and Harnessing
+Adversarial Examples,” Dec. 2014, arXiv:1412.6572.
+[47] A. Madry, A. Makelov, L. Schmidt, D. Tsipras, and A. Vladu, “Towards deep learning models resistant to adversarial attacks,” Jun. 2017,
+arXiv:1706.06083.
+
+3487
+
+Xiaotong Situ received the BS degree from the
+University of Shanghai for Science and Technology,
+China, in 2023. She is currently working toward the
+PhD degree with the University of Shanghai for Science and Technology, China. Her research interests
+include image hashing.
+
+Tong Liu received the BS degree from the Zhengzhou
+University of Aeronautics and the MS degree from the
+University of Shanghai for Science and Technology,
+China, in 2021 and 2024, respectively. His research
+interests include image hashing.
+
+Heng Yao (Member, IEEE) received the BS degree
+from Hefei University of Technology, China, in 2004,
+the ME degree from Shanghai Normal University,
+China, in 2008, and the PhD degree in signal and
+information processing from Shanghai University,
+China, in 2012. He is currently a professor at University of Shanghai for Science and Technology. His
+research interests include image forensics, data hiding, and perceptual hashing. He has published over
+70 international peer-reviewed journal papers.
+Chuan Qin (Member, IEEE) received the BS degree in electronic engineering and the MS degree in
+signal and information processing from Hefei University of Technology, Anhui, China, in 2002 and
+2005, respectively, and the PhD degree in signal and
+information processing from Shanghai University,
+Shanghai, China, in 2008. Since 2008, he has been
+with the faculty of the School of Optical-Electrical
+and Computer Engineering, University of Shanghai
+for Science and Technology, where he is currently a
+professor. He was with Feng Chia University, Taiwan,
+as a postdoctoral researcher, from 2010 to 2012. His research interests include
+image processing and multimedia security. He has published more than 180
+papers in these research areas.
+Xinpeng Zhang (Senior Member, IEEE) received the
+BS degree in computational mathematics from Jilin
+University, China, in 1995, and the ME and PhD
+degrees in communication and information system
+from Shanghai University, China, in 2001 and 2004,
+respectively. Since 2004, he has been with the faculty
+of the School of Communication and Information
+Engineering, Shanghai University, where he is currently a professor. He was with the State University
+of New York at Binghamton as a visiting scholar from
+2010 to 2011 and with the Konstanz University as
+an Experienced researcher small sponsored by the Alexander von Humboldt
+Foundation from 2011 to 2012. He is currently with the faculty with the School of
+Computer Science, Fudan University. His research interests include multimedia
+security, image processing, and digital forensics. He has published more than 200
+papers in these areas. He has served as an associate editor for IEEE Transactions
+on Information Forensics and Security from 2014 to 2017.
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:02:45 UTC from IEEE Xplore. Restrictions apply.
+
+

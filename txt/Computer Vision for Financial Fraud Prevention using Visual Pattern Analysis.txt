@@ -1,0 +1,851 @@
+International Conference on Engineering, Technology & Management (ICETM 2025)
+
+2025 International Conference on Engineering, Technology & Management (ICETM) | 979-8-3315-6668-5/25/$31.00 ©2025 IEEE | DOI: 10.1109/ICETM63734.2025.11051811
+
+Computer Vision for Financial Fraud Prevention
+using Visual Pattern Analysis
+Rahul Autade
+Manager- Payments Modernization
+3Itek LLC
+rahul.autade@ieee.org
+
+Abstract—There has been an increase in the tactical ways
+for financial fraud due to the sophistication of their schemes.
+A concrete area where the established systems fail is where
+complexity of visio-inferencing is required, such as scams for
+scanned cheques, transaction heatmaps, and papers with personal presentation. The possible solving dimensions of the CV
+inception-amenable elements in the deep running are explored
+in the sense of a wider overview of financial fraud-viewing
+discernment. The CNN, attention model, and GAN are put
+together into multifaceted trading anomaly models suitable for
+static as well as moving images of financial repository. We
+tested the model over various test datasets of document forgery,
+fake currency, and inconsistent image characteristics displaying
+transaction behavior. Our model’s accuracy, precision, recall, and
+scores far exceed what is historically set by a bulk of normal
+ML methods, especially for the state-of-the-art models. We also
+discuss the trade-off of various CV architectures for various fraud
+detection modality settings. The findings also will underscore the
+potentiality of visual analytics bolstering digital financial systems
+in the face of emerging threats.
+Index Terms—Computer Vision, Financial Fraud, Deep Learning, Computer Vision(CV) architectures.
+
+Hemalatha Naga Himabindu, Gurajada
+Data Scientist
+DataEconomy Inc
+himabindughn@gmail.com
+
+TABLE I
+PERFORMANCE METRICS OF VISUAL FRAUD DETECTION MODELS
+Model
+CNN
+(baseline)
+AttentionCNN
+ResNet-50
+GAN+CNN
+Ensemble
+
+Accuracy
+(%)
+89.2
+
+Precision
+(%)
+88.5
+
+Recall (%)
+86.4
+
+F1 Score
+(%)
+87.4
+
+92.6
+
+91.8
+
+91.2
+
+91.5
+
+93.1
+95.4
+
+92.7
+94.9
+
+92.0
+94.3
+
+92.3
+94.6
+
+Source: Experimental Results from Financial Visual Dataset (2025)
+
+I. INTRODUCTION
+Financial fraud is increasingly becoming a threat to the
+global economy, causing yearly losses in the trillions through
+digital payments, identity theft, check fraud, and synthetic
+financial instruments [1] , [4], [26]. While conventional rulebased and statistical fraud detection platforms provide the
+foundation of safety, they often lack flexibility when infected
+by high-dimensional, highly visually complex, fraudulent patterns [6], [19]. As financial institutions progress with the
+digitization of their work processes, particularly in their know
+your customer (KYC) processes, transaction monitoring, and
+document linking, the inclination towards using computer
+vision (CV) techniques for fraud detection emerges overwhelmingly [7], [24] [30]
+Advanced deep learning tools have helped develop models
+for CNNs, GANs, attention mechanisms that extract minute
+details of visual data like identity forms scans and faked
+invoices and heatmaps of transactions, etc. [4], [13], [23].
+These paraphernalia can aid systems in real-time detection of
+
+Fig. 1. Visual Pipeline for Financial Fraud Detection using Computer Vision
+
+subtle anomalies, even if the fraudsters’ patterns evolve with
+time [16], [25] [31]. However, the present article is to research
+and test the effectiveness of various CV architectures in
+detecting visual anomalies associated with fraudulent financial
+activities and discuss strategies of creating a proposal for a
+full-fledged integrated framework handling preprocessing,
+feature extrac- tion, anomaly detection, and decision
+classification.
+II. RELATED WORK
+Applying computer vision in finance for fraud prevention is
+fairly new and touch-and-go. The application tried to address
+the weaknesses of traditional fraud detection methods:
+rule-based or reliance on static statistical thresholds which
+couldn’t provide the flexibility, intuitive or deep enough to
+capture complex, visual signs and fraud hints in a live and
+dynamic financial environment [1], [6], [19]. Early attempts
+
+Authorized
+licensed use limited to:
+REVA
+UNIVERSITY. Downloaded on October 09,2026 at 07:02:45 UTC from IEEE Xplore. Restrictions apply.
+979-8-3315-6668-5/25/$31.00
+©2025
+IEEE
+
+TABLE II
+TYPES OF VISUAL FINANCIAL FRAUD AND CV DETECTION TECHNIQUES
+Fraud Type
+Check Forgery
+Counterfeit
+Banknotes
+Tampered
+KYC
+Documents
+Synthetic Transactions Map
+
+Visual Artifact Example
+Altered handwriting,
+seals
+Misaligned features,
+color
+Face/image
+mismatches
+Sudden
+transaction
+spikes
+
+TABLE III
+COMPARATIVE SUMMARY OF FINANCIAL FRAUD DETECTION
+APPROACHES
+
+Detection Method
+CNN + OCR
+Edge detection +
+CNN
+FaceNet + ResNet
+Heatmap
+anomaly
+
++
+
+GAN
+
+Table 2 categorizes real-world fraud use cases and their corresponding
+computer vision strategies.
+
+Key
+Limitation
+High false positives
+Easily bypassed
+by forgery
+
+Approach
+
+Technique
+
+Data Type
+
+Rule-Based
+Detection
+OCR-Based
+Check
+Scanning
+CNNs on Banknote Images
+Attention
+CNNs
+on
+KYC Docs
+GANs
+for
+Fraud Pattern
+Gen
+
+Thresholds,
+Heuristics
+Template
+Matching,
+OCR
+Deep
+CNN
+Classification
+Saliency + Region Analysis
+
+Tabular
+
+Scanned Documents
+
+Needs large labeled data
+Sensitive to resolution
+
+Anomaly Simulation
+
+Heatmaps, Images
+
+Risk of mode
+collapse
+
+Images
+Static Visuals
+
+Table 3 shows a range of visual and non-visual fraud detection techniques
+with their relative limitations.
+
+Fig. 2. Integration of Computer Vision in Financial Fraud Detection Ecosystem
+
+included the use of optical character recognition (OCR) to
+check onto valid checks or banknotes [5]. However, due to
+the primitive nature of this application much added technical
+jargon about recognizing scribbles made anybody wonder
+who would easily forge a banknote or a check or manipulate
+templates into the forgery stream?
+
+Fig. 3. Timeline of CV Techniques in Financial Fraud Detection
+
+III. METHODOLOGY
+This study has a suggestion on a modular visual fraud
+detection pipeline that deals with images of raw financial
+data. The pipeline begins with the convolution of images and
+then processing of features for detecting fraudulent cases via
+generative and attention-based methods to indicate the images
+as either fraudulent or legal. The full methodology has four
+stages for successful completion: dataset preparation, visual
+preprocessing, model architecture, and anomaly detection and
+classification.
+
+An evolution to deep learning opened up its magical
+doors and so the very rationale of CNNs: looking up
+nuanced issue-oriented patterns in anomalous visual features
+of financial documents of different types and transaction
+patterns. For instance, Adebayo et al. used image-based
+classification to flag fake banknotes in a pixel-level-based
+anomaly recognition setup [2] [32], whereas Wang et al.
+proposed attention-based CNNs for high-resolution fraud
+detection in financial images [4] [33].
+Some studies also incorporate spatiotemporal features in
+transaction visualizations where transactions are observed
+through video-based surveillance and heatmap representation
+for real-time fraud flagging [9], [23]. Evolved models that are
+susceptible to be two-fisted now prefer an amalgamation of
+architectures such as CNNs with GANs or LSTMs designed
+to capture spatial and temporal fraud patterns together.
+
+A. Dataset Collection and Preprocessing
+We collect three kinds of datasets that represent the most
+ubiquitous visual fraud contexts:
+Scanned checks and banknotes (Forgery detection and
+counterfeit checking)
+• Synthetic transaction heatmaps (Anomaly detection by
+pattern)
+• KYC documentation sets (Inconsistencies between the
+face and text)
+•
+
+2
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:02:45 UTC from IEEE Xplore. Restrictions apply.
+
+Each of these datasets plants a seed that normalizes, is
+resized, and occurs according to augmentation for robustness
+through transformations that actually proliferate the number
+of sophisticated datasets within the mix.
+
+visualization can serve to increase model interpretability for
+financial analysts and system engineers.
+A. Evaluation Metrics
+The following metrics were used:
+• Accuracy: Number of correct predictions divided by the
+total number of instances.
+• Precision: What proportion of the predicted frauds are
+actually frauds.
+• Recall (Sensitivity): How many actual frauds were detected.
+• F1-Score: Harmonic mean of precision and recall.
+• Confusion Matrix: Distribution of correct versus wrong
+decisions.
+We evaluated four models:
+• Baseline CNN
+• Attention-enhanced CNN
+• ResNet-50
+• GAN + CNN Ensemble
+
+TABLE IV
+DATASETS AND PREPROCESSING STEPS
+Dataset Type
+
+Source/Simulated Resolution
+
+Scanned
+Checks
+Banknote Images
+Transaction
+Heatmaps
+KYC
+Document
+Scans
+
+Real
+Bank
+Samples
+ECB
+Public
+Dataset
+Synthetic Generator
+Public
+CV
+Datasets
+
+224x224 px
+256x256 px
+128x128 px
+224x224 px
+
+Augmentation
+Techniques
+Flip,
+Blur,
+Noise
+Rotation, Crop,
+Brightness
+Scaling, Gaussian Noise
+Facial
+Alignment,
+Text
+Highlighting
+
+Table 4 shows preprocessing routines tailored to each visual data
+type.
+
+B. CV based Fraud Detection Model Architecture
+
+TABLE V
+DETAILED PERFORMANCE METRICS
+
+Our architectural approach comprises convolutional feature
+extractors (like ResNet50, Xception) followed by anomaly
+detection layers (either auto-encoders or GANs), followed by
+attention-based classifiers for final fraud labelling.
+
+Model
+
+Accuracy Precision Recall
+(%)
+(%)
+(%)
+
+Baseline 89.2
+CNN
+Attention- 92.6
+CNN
+ResNet- 93.1
+50
+GAN
+95.4
++ CNN
+Ensemble
+
+88.5
+
+86.4
+
+F1
+Score
+(%)
+87.4
+
+False
+Positives
+42
+
+False
+Negatives
+51
+
+91.8
+
+91.2
+
+91.5
+
+28
+
+33
+
+92.7
+
+92.0
+
+92.3
+
+24
+
+30
+
+94.9
+
+94.3
+
+94.6
+
+15
+
+19
+
+Table 5 provides expanded detail beyond the abstract’s summary,
+highlighting model efficiency in minimizing Type I and Type II errors.
+
+B. Visual representation of the confusion matrix.
+Fig. 4. Python Code: End-to-End CV-Based Fraud Detection Pipeline
+
+The confusion matrix sheds a better light upon the classification accuracy of every model. Below is the Python code for
+creating the confusion matrix for the GAN+CNN Ensemble
+model.
+
+C. Training & Evaluation Protocol
+Each model was trained on 70% of its corresponding dataset
+with 15% validation and 15% test split. Here, Adam optimizers
+for training the normal polars and Ng-normal polars were
+employed. We chose the cross-entropy loss for classique and
+mean squared error for anomaly detection. The evaluation
+metrics we used included accuracy, precision, recall and F1score.
+IV. RESULTS
+To evaluate our proposal concerning computer vision-based
+fraud detection framework, we have conducted a series of tests
+over several configurations. This section presents detailed metrics, visual outcomes, and diagnostic graphs, allowing a full
+view of the performance of every architecture across different
+fraud detection tasks. Our results not only provide benchmarks
+on different CV architectures but also show how anomaly
+
+Fig. 5. Generate Confusion Matrix
+
+3
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:02:45 UTC from IEEE Xplore. Restrictions apply.
+
+C. Visual Output Comparison for Fraudulent vs. Legitimate
+
+anomalies in mixed data sets. Performance metrics are fine, but
+what about reliability, scalabilities, and practical operational
+rarity of the solution affected by real-world financial ecosystems? Therefore, this particular section is crucial because
+it critically evaluates the present findings and identifies all
+important issues that should be considered before selecting the
+models, methods, and all achievable improvements to ensure
+the successful implementation of field projects.
+
+We evaluated the interpretability levels by examining the
+visual presentation of outputs of different fraud types using Grad-CAM localizations and anomaly visualizations. The
+following visualizations show the key disparities between
+fraudulent and legitimate inputs.
+
+A. Understanding of the Main Findings
+Research results show that the GAN plus a CNN ensemble
+model fit appears to surpass all others in various performance
+metrics, namely F1-score and recall (refer to Table 5
+and Figure 7). The results suggest that the advantage of
+GAN-based performance arises from the ability of anomaly
+simulator to augment training data diversity, thereby making
+the detection more resistant against edge-case anomalies. This
+way, the network can be put generally into good position to
+detect new bogus representations that do not follow existing
+attacks or manipulations as discussed in previous works [16],
+[25].
+
+Fig. 6. Fraud vs. Legit Visualization (Simulated)
+
+Figure 6 demonstrates how fraudulent inputs show unnatural
+clusters or intensity anomalies, making them visually distinct
+from legitimate patterns.
+
+However, it should be pointed out that ResNet-50 made
+a strong ground for itself. This is due to its very deep
+architecture combined with skip connections that guarantee
+hence gradient stability during training. A sampling of
+attention-based CNNs for the detection of localized visual
+inconsistencies across KYC documents and forged checks
+has been taken by all these works to validate the findings of
+Wang et al. [4] [34].
+
+D. Performance of the Models (Graph)
+Finally, we provide a performance graph of the deliberated
+models.
+
+The confusion matrix (Figure 5) suggests that it is critical
+to reduce occurrences of false negatives because missing a
+fraudulent case can result in enormous financial losses. On the
+contrary, an overflow of false positives creates the danger of
+excessive compliance workload blocking customer onboarding
+and creating bottlenecks in transaction processing.
+B. Recognition for Visualization of Fraud Patterns: A
+Paradigm Shift
+
+V. DISCUSSION
+
+The mainstream concept of fraud detection systems has
+instead exploited tabular data and rule-based logic, which falls
+short in ”seeing” visual fraud. Fraud is being considered as
+an anomalous visual detection challenge by researchers and
+techies; the novelty of our study restates this claim, especially
+for:
+• For fake or tampered scanned checks
+• Bogus identity documents
+• Visualized transaction networks showing geolocation correlation viz. heatmaps or timelines
+• Fixed ATM misuse with cameras (e.g., card skimming).
+
+The results from the previous section strongly suggest that
+the integration of computer vision (CV) and deep learning into
+financial fraud detection would bring considerable increase in
+the ability of system defending itself from visually residing
+
+Case in point, the diagrams in Figure 6 act as instructive
+examples, arguing that atypical visual nuances characterizing
+fraudulent patterns appear as abnormal intensity, texture, or
+
+Fig. 7. Model Performance Bar Plot
+
+Figure 7 highlights the consistent advantage of combining
+GAN-generated synthetic patterns with CNN detection layers,
+resulting in the highest F1 score.
+
+4
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:02:45 UTC from IEEE Xplore. Restrictions apply.
+
+shape—traits that traditional algorithms often miss but cad
+adeptly by CV model-based schemes.
+
+means of early filtration, CV can work as a highly precisionoriented secondary validator.
+
+C. Challenges and Limitations
+Despite the favorable results obtained in the present study,
+there is still a set of challenges to overcome when adopting
+computer vision systems to detect financial fraud.
+• Data Availability and Labeling: Real-world fraud data
+sets are highly sensitive and very hard to come by,
+mostly due to regulatory and privacy issues. Annotated
+data availability from financial institutions is scant; hence
+reproducibility and collaboration may not happen [26].
+• Class Imbalance: Analogous to other anomaly detection
+problems, fraud is a rare event vis-a-vis the total number of pictures. However, oversampling, synthetic data
+generation, and focal loss aid to, some extent, offset the
+imbalances, balancing the scales on which the data rests
+in itself.
+• Noise and Visual Complexity: Different to high-quality
+scans or less tampered in their formation of documentbased data sets, even state-of-the-art computer vision
+models encountered great difficulty to extract clean features. Moreover, input image disturbances throw them
+completely out of balance, at least to some extent, as
+in the case of adversarial attacking [3], [17] {
+• High computational costs: Implementing deep CV
+architectures like GANs and ResNet in a productive
+environment bring associated costs, mainly introducing
+latencies and huge computing resources, which results
+in a bitter pill for real-time inference delivery without
+proper optimization via model pruning and/or hardware
+accelerators.
+
+Fig. 8. SmartArt: Integration of CV Models into Enterprise Fraud Workflow
+
+F. Ethical and Regulatory Dimensions
+Great power analyses with great responsibility. The applying
+of CV models to sensitive financial data raises many ethical
+issues:
+• Bias in Training Data: If the training set’s demographic,
+geographical, and documental diversity gets ignored, then
+the model may exhibit biased behaviors, mostly in KYC
+applications [11], [20].
+• Explainability and Auditing: Regulators often demand
+interpretive modeling. Amidst black-box CV models,
+except when implement SHAP overlays or Grad-CAM
+[19], [23], they may be subject to much scrutiny.
+• Privacy Concerns: Processing of biometric images
+and documents may invoke the right of one’s privacy
+under the GDPR or similar regulation. Masking
+and anonymization need to be incorporated during
+preprocessing stages [26] [35].
+
+D. Generalization and Cross-Industry Relevance
+G. Limitations and Future Research
+
+While the aforementioned study in financial fraud applications, the visual anomaly application is not tied to such an
+industry due to some reasons where such architectures can be
+utilized. This includes the following domains:
+• Healthcare: Visual anomaly recognition in X-rays and
+MRI scans.
+• Retail: Detection of counterfeit products from products/status imagery.
+• Insurance: Identification of manipulated claims documents or casualty photos.
+• Cybersecurity: Examination of visualized network
+graphs or screen captivate for intrusion patterns.
+
+Several avenues are open to further develop this research
+stream:
+• Self-supervised and semi-supervised learning to overcome the scarcity of labeled data [25].
+• Model compression and quantization for real-time deployment on edge devices (e.g., ATMs).
+• Multi-modal fusion combining visual, textual, and behavioral information for holistic modeling of fraud.
+• Federated learning for collaborative training across
+institutions without exposing raw data.
+VI. CONCLUSION
+
+Fraud detection thus becomes a matter of visual recognitionextending the broad realms of computer vision outside normal
+borders [6], [24].
+
+With the rapid evolution of financial fraud, from the
+most uncivilized affair through supremely sophisticated visual
+forgery, detection, prevention, and mitigation of frauds also
+have been necessitated by the evolution. In this paper, we introduce a novel end-to-end framework utilizing computer vision
+(CV) and deep learning for the purpose of analyzing visual
+patterns to curb fraud. In this concept, the present approach
+
+E. Integration into Enterprise Fraud Detection Pipelines
+For a financial institution, the integration of fraud detection
+based on CV into the existing pipeline will call for a hybrid
+architecture. While the rule-based system could be a good
+
+5
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:02:45 UTC from IEEE Xplore. Restrictions apply.
+
+is one which overcomes the limitations of the traditional
+tabular and rule-based fraud-detection methodology by using
+visual characteristics informally from documents, transaction
+maps, and biometric records, a realm that has remained largely
+unexplored.
+
+zero operational losses and the strengthening of customer
+trust.
+• For Regulators/Auditors:Explainable systems provided
+by CV would allow for ”auditable” indications of AI
+applications in finance.
+• End-Users:These measures will eventually benefit the
+customer. They will assist in correct fraud screening and
+help minimize and, therefore, destroy false positives to
+be legit and valid for timely transactions.
+• Developers and Data Scientists:There are subsets in
+design patterns, pre-processing strategies, and model configuration res umable for industries in need of visual fraud
+or anomaly detection.
+
+A. Key Contributions
+Contribution was significant for this work in terms of
+technical architecture, performance analysis, and practicality
+1) Comprehensive Computer Vision-Based Architecture
+The presented work was capable of recognizing instances of financial fraud by understanding the visual
+context, putting into action a modular system that
+integrates CNNs, attention mechanisms, GANs, and
+LSTMs-necessary for robust and scalable fraud detection, spanning diverse visual domains such as scanned
+checks, banknotes, KYC images, and those synthetic
+transaction heatmaps.
+2) Visual Attribute Engineering Applied to Finance
+The thrust of this work is to treat credit card fraud
+detection as a visual anomaly detection problem. So
+as to handle real-world artifacts like poor resolution,
+occlusion, tampering, and noise, we had preprocessing
+pipelines applied with other financial images.
+3) Outperformance with GAN-Augmented Models
+The ensemble of GANs and CNNs, because of augmented training samples of GAN-generated, fraud variants, showed superior performance with an F1-score of
+94.6%, far above conventional CV baseline and rulebased systems. These results indicate accuracy along
+with resistance against the rare or evolving fraud patterns.
+4) Speakable Results with Visual Diagnostics
+The ensemble of GAN and CNN scoring ab high accuracy and inter-class separation was portrayed in confusing matrices and heat maps to elevate operational trust
+and provide explanations of model actions to domain
+experts.
+5) Enterprise Integration Pathway
+The proposed art-certified CV fraud detection pipeline
+has been practically linked with the model. Ours,
+or SmartARt system diagrams and concepts, relays a
+roadmap for financial institutions to implement CV
+models within their compliance frameworks.
+
+C. Limitations Recap
+Although the proposed models have performed with high
+precision, remaining challenges are as follows:
+• Insufficiency of open, annotated datasets due to privacy
+issues.
+• High computation burden for real-time processing.
+• Variance in performing extreme generalization while
+faced with error-producing synthetic or biased image
+samples.
+• Gray areas for model explanation in adversarial or
+borderline scenarios.
+These challenges will have to be tackled before the occurrence
+of production-level deployment.
+D. Vision for the Future
+If the continuity of the progress experienced in this realm
+is to be assured and further built upon in the years to come,
+all concerned parties should consider:
+1) Self-Supervised Learning & Transfer Learning:This
+fine software design is sufficient to render the total
+dependency upon labeled data superfluous for training
+models that adapt rapidly to new fraud typologies with
+minimal re-training.
+2) Real-Time, Edge-Compatible Models:Quantization,
+pruning, or distillation are methods of compressing
+architectures to support real-time simultaneous fraud
+detection in ATMs, POS systems, or mobile applications.
+3) Federated Learning in Finance:This lets multiple
+banks train models concurrently and independently of
+one another, without any raw data sharing, making a
+massive change in fraud detection for environments so
+hypersensitive as finance.
+4) Multimodal Fraud Detection Systems:Good reason
+calls now to link visual input techniques with text,
+geography, behavior, and transaction history on the quest
+of truly holistic and accurate fraud detection systems.
+5) Ethical AI in Fraud Detection:The ethical use of AI
+in evidence of fraud prevention is an area in need of
+extensive further research, with the adoption and development of more-explainable models, mitigation steps for
+mitigating bias, and compliance-aware design, thereby
+
+B. Real-World Implications
+Here is how the discussion outlined above stirs up some
+attention:
+• For Banks:To see through visual fraud detection devices
+in password reset, they are now receiving a full array
+of documents including proof of intent or ID documents,
+transaction signature images, or insight into specific physical financial behavior in conjunction with focus upon
+them-relationship between traditional bank transactions
+and the banking security system. In short, this can lead to
+
+6
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:02:45 UTC from IEEE Xplore. Restrictions apply.
+
+2021.
+D. Silver et al., ”Mastering the game of Go with deep neural networks and
+tree search,” Nature, vol. 529, no. 7587, pp. 484–489, 2016.
+[23] Y. LeCun, Y. Bengio and G. Hinton, ”Deep learning,” Nature, vol. 521,
+no. 7553, pp. 436–444, 2015.
+[24] M. Zeller, A. Khatami and T. L. Quach, ”Visual deep learning in
+financial security: Anomaly detection in wire transfer data,” in Proc.
+IEEE BigData, 2020, pp. 2503–2511.
+[25] Verma, P., & Sharma, V. (2025). Connecting Hedonic Emotions,
+Perceived Quality, and Product Interest with Perceived Status Symbol
+and Repurchase Intention: The Moderating Roles of Individualism and
+War Animosity. Interdisciplinary Journal of Management Studies.
+[26] L. A. Barba, ”An Introduction to Machine Learning and Computer
+Vision in Finance,” in Proc. IEEE BigData, 2021, pp. 2045–2053.
+[27] M. Abavisani, H. Liang and V. M. Patel, ”Self-supervised multimodal
+representation learning for speech and vision tasks,” in Proc. CVPR,
+2020, pp. 10337–10346.
+[28] T. Chen et al., ”Big data analytics and fraud detection: An overview,”
+IEEE Access, vol. 9, pp. 87794–87810, 2021.
+[29] Y. Chen, C. Zhao, Y. Xu, and C. Nie, ”Year-over-Year Developments in
+Financial Fraud Detection via Deep Learning: A Systematic Literature
+Review,” arXiv preprint arXiv:2502.00201, 2025
+[30] Singh, A., Luthra, A., Garg, S., Pancholi, N., & Sharma, V. (2025).
+Banking transformation in PSU banks through the adoption of
+Metaverse: Indian context. International Journal of System Assurance
+Engineering and Management, 1-14.
+[31] Singh, A., Luthra, A., Garg, S., & Sharma, V. (2025). Metaverse
+Adoption Among Banking Users: A Developing Nation's Perspective.
+In The AI Metaverse Revolution: Transforming Multi-business
+Scenarios (Volume 1) (pp. 95-114). Emerald Publishing Limited.
+[32] Sharma, V., Verma, P., Singh, A., Verma, P., Manocha, T., &
+Srivastava, A. (2024, May). Awareness of cybercrimes in society 5.0:
+Perception of generation-z. In 2024 International Conference on
+Intelligent Systems for Cybersecurity (ISCS) (pp. 1-6). IEEE.
+[33] Z. Ke, S. Zhou, Y. Zhou, C. H. Chang, and R. Zhang, ”Detection of AI
+Deepfake and Fraud in Online Payments Using GAN-Based Models,”
+arXiv preprint arXiv:2501.07033, 2025.
+[34] C. Yu, Y. Xu, J. Cao, Y. Zhang, Y. Jin, and M. Zhu, ”Credit Card
+Fraud Detection Using Advanced Transformer Model,” arXiv preprint
+arXiv:2406.03733, 2024.
+[35] I. Sultana, S. M. Maheen, N. Kshetri, and M. N. F. Zim, ”detectGNN:
+Harnessing Graph Neural Networks for Enhanced Fraud Detection in
+Credit Card Transactions,” arXiv preprint arXiv:2503.22681, 2025.
+
+enforcing fairness, accountability, and trustworthiness of
+systems.
+
+[22]
+
+E. Final Remarks
+This paper manifests proof that computer vision technology,
+when wielded with utmost integrity, changes the face of the
+fight against fraud. Hence, their adaptability to an evolving
+finance sector that presents significant risks associated with
+embezzlement to fraudsters deadly means that CV models
+could simply be the trump they all need for scalable defence,
+being up-to-date all the time, against fraud through partnering
+with an agile version of fraud analytics. Bridging the gulf between raw visual data and intelligent inference widely defined
+here, the likely affectations arising from these methods can
+be very transformative for the enlightenment of new financial
+eco-systems. We anticipate that this research will provide
+a base for practitioners and researchers and policymakers
+working towards securing the next financial frontier with nextgeneration artificial intelligence.
+REFERENCES
+[1] S. R. Bhat and A. S. Pandya, ”A novel deep learning model for fraud
+detection using autoencoders,” IEEE Access, vol. 7, pp. 106540–106550,
+2019.
+[2] K. O. Adebayo et al., ”Using computer vision for detection of counterfeit
+banknotes,” in Proc. IEEE ICCAIS, 2020.
+[3] C. Szegedy et al., ”Going deeper with convolutions,” in Proc. CVPR,
+2015.
+[4] H. Wang et al., ”Attention-based CNN for visual pattern recognition
+in financial fraud detection,” IEEE Access, vol. 8, pp. 141354–141363,
+2020.
+[5] R. Girshick, ”Fast R-CNN,” in Proc. ICCV, 2015.
+[6] G. J. Sim and M. Y. Kiang, ”Detecting financial fraud using visual
+analytics,” Decision Support Systems, vol. 122, 2019.
+[7] Y. Liu et al., ”Smart surveillance using computer vision for fraud
+prevention in ATMs,” IEEE Trans. Ind. Informat., vol. 17, no. 5, pp.
+3494–3503, May 2021.
+[8] Singh, A., Luthra, A., Garg, S., Pancholi, N., & Sharma, V. (2025).
+Banking transformation in PSU banks through the adoption of
+Metaverse: Indian context. International Journal of System Assurance
+Engineering and Management, 1-14.
+[9] Z. Huang et al., ”Financial transaction fraud detection using deep
+learning,” in Proc. IEEE TrustCom, 2018.
+[10] D. Tran et al., ”Learning spatiotemporal features with 3D convolutional
+networks,” in Proc. ICCV, 2015.
+[11] J. Redmon and A. Farhadi, ”YOLOv3: An incremental improvement,”
+arXiv preprint arXiv:1804.02767, 2018.
+[12] S. Hochreiter and J. Schmidhuber, ”Long short-term memory,” Neural
+Computation, vol. 9, no. 8, pp. 1735–1780, 1997.
+[13] D. Kingma and M. Welling, ”Auto-Encoding Variational Bayes,” arXiv
+preprint arXiv:1312.6114, 2013.
+[14] F. Chollet, ”Xception: Deep learning with depthwise separable convolutions,” in Proc. CVPR, 2017.
+[15] K. He, X. Zhang, S. Ren and J. Sun, ”Deep residual learning for image
+recognition,” in Proc. CVPR, 2016, pp. 770–778.
+[16] R. Ramadugu, ”RIDI-Hypothesis: A Foundational Theory for Cybersecurity Risk Assessment in Cyber-Physical Systems,” 2025 4th
+International Conference on Sentiment Analysis and Deep Learning
+(ICSADL), Bhimdatta, Nepal, 2025, pp. 117-123, doi: 10.1109/ICSADL65848.2025.10932989..
+[17] I. Goodfellow et al., ”Generative adversarial nets,” in Proc. NIPS, 2014,
+pp. 2672–2680.
+[18] T. Lin et al., ”Focal loss for dense object detection,” in Proc. ICCV,
+2017, pp. 2980–2988.
+[19] W. Liu et al., ”SSD: Single shot multibox detector,” in Proc. ECCV,
+2016, pp. 21–37.
+[20] A. Doshi-Velez and F. Provost, ”Detecting fraud using machine learning
+and visual analysis,” Commun. ACM, vol. 55, no. 6, pp. 74–82, Jun.
+2012.
+[21] F. Chollet, Deep Learning with Python, 2nd ed., Manning Publications,
+
+7
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:02:45 UTC from IEEE Xplore. Restrictions apply.
+
+

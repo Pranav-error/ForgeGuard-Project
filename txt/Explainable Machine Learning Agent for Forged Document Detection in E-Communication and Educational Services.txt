@@ -1,0 +1,894 @@
+2026 IEEE International Conference for Convergence in Computing Technology (I3CTCON) | 979-8-3315-7656-1/26/$31.00 ©2026 IEEE | DOI: 10.1109/I3CTCON68242.2026.11507731
+
+2026 IEEE International Conference for Convergence in Computing Technology (I3CTCON)
+Lonavala, India. Mar 14 - 15, 2026
+
+Explainable Machine Learning Agent for Forged
+Document Detection in E-Communication and
+Educational Services
+Dr N Kamal
+Professor
+Department of Computer Science and
+Engineering
+GRT Institute of Engineering and
+Technology,
+Tiruttani
+kamal.n@grt.edu.in
+
+Aarthi V
+Assistant Professor
+Department of Computer Science and
+Engineering
+GRT Institute of Engineering and
+Technology,
+Tiruttani
+aarthi.v@grt.edu.in
+
+Yuvasri. G
+UG Student
+Department of Computer Science and
+Engineering
+GRT Institute of Engineering and
+Technology,
+Tiruttani
+yuvasricse2022@grt.edu.in
+
+Madhumitha S.N
+UG Student
+Department of Computer Science and
+Engineering
+GRT Institute of Engineering and
+Technology,
+Tiruttani
+madhumithasn2005@gmail.com
+
+Rogini. S
+UG Student
+Department of Computer Science and
+Engineering
+GRT Institute of Engineering and
+Technology,
+Tiruttani
+rogini0202@gmail.com
+
+Rohini.S
+UG Student
+Department of Computer Science and
+Engineering
+GRT Institute of Engineering and
+Technology,
+Tiruttani
+rohinis282005@gmail.com
+
+document sharing secure. Our best ResNet50 model was the
+best performing based on the research results, which
+indicates the highest accuracy.
+
+Abstract— Since even small forgeries can have major
+ethical and managerial ramifications, the quick development of
+electronic communication and web-based learning services
+makes document verification more difficult. Time-consuming
+manual checking is ineffective against complex forgeries. To
+close this gap, this paper proposes an Explainable Machine
+Learning Agent that leverages a refined ResNet50 model to
+identify forged documents and signatures. The proposed
+model uses a deep residual learning-based spatial feature
+extractor with SHAP-based interpretability that allows high
+accuracy along with transparency in decisions. The model was
+trained on an 80-20 stratified split of the combined dataset of
+handwritten signatures, namely CEDAR, BHSig260–Bengali,
+and BHSig260–Hindi. Key performance indicators for
+accuracy, precision, recall, F1-score, and AUROC were used to
+test the results. With an overall accuracy of 95% and an AUC
+of 0.96, this design surpassed previous benchmarks such
+VGG19, MobileNetV2, Random Forest, and Logistic
+Regression. In addition to performance, SHAP explainability
+analysis offered feature attributions that could be interpreted
+for forecast tracking and auditing. Therefore, the agent
+provides a workable, intelligible method that can be readily
+implemented for document forgery detection in real-world ecommunications and educational verification systems.
+
+Using CNNs and spatial edge augmentation, this edgefocused deep learning method finds tampered regions in
+document photos. The claimed accuracy on benchmark
+datasets like DocTamper and MIDV-2020 is still below 95%,
+despite the fact that this approach enhances localisation,
+particularly when low-resolution and compressed [1]. A
+multi-scale feature fusion network that operates in both the
+spatial and frequency domains is also employed to improve
+forgery classification. Although the system was effective in
+detecting different types of manipulation, its accuracy in
+multi-category contexts was less than 94% [2]. A robust
+localization model that detects fine-grained document
+alterations. For low-quality scanned papers, the overall
+detection performance dramatically declined, while being
+successful in localising modified parts [3]. In a different
+study, the model was run on artificial data, however it only
+obtained an accuracy of 92–93% on real-world test cases [4].
+A multi-modal large language models (MLLMs) for
+document fraud detection through reasoning over visualtextual data. The average detection accuracy remained below
+90%, mainly because of inadequate alignment between text
+and picture modalities, even though their findings indicated
+significant promise for semantic understanding [5].
+Additionally, it stayed below 95%, highlighting the
+difficulties in spotting minute indications of change [6]. For a
+number of scholarly datasets, the performance ranged from
+90 to 94 percent, indicating a satisfactory efficacy score but
+causing concern for the models to become more dependable
+and explicable [7].
+
+Keywords— Explainable Artificial Intelligence (XAI), Forged
+Document Detection, Handwritten Signature Verification,
+ResNet50, Deep Learning, Machine Learning Agent, SHAP
+Analysis.
+
+I.
+
+INTRODUCTION
+
+In our work, we propose to build an Explainable Machine
+Learning Agent based on the ResNet50 architecture for
+signature forgery detection. To prove the effectiveness of this
+model, Traditional manual verification is slow, laborintensive, and often ineffective against these modern
+falsifications. Therefore, the development of intelligent
+systems that can automatically detect forged documents
+using technologies such as deep learning and machine
+learning has been an important step in making digital
+
+979-8-3315-7656-1/26/$31.00 ©2026 IEEE
+
+Nevertheless, in spite of these advancements, the existing
+methods are unable to combine high reliability with model
+explainability.
+Our Contributions:
+
+1
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:59:52 UTC from IEEE Xplore. Restrictions apply.
+
+x
+
+III.
+
+It outperformed all baseline models, including
+VGG19 (91%), MobileNetV2 (87%), Random
+Forest (81%), and Logistic Regression (77%), with
+an accuracy of 95% and an AUC of 0.96.
+
+x
+
+By learning from fine-grained stroke abnormalities,
+curvature discontinuities, and spatial signals, deep
+residual connections were utilized to enhance
+forged-text detection in ResNet50. By combining
+SHAP-based global interpretability with transparent
+traceable decision-making, the essential features of
+embeddings were discovered.
+
+x
+
+The robustness and flexibility of the model are
+demonstrated by its performance on unseen forgeddocument samples in school record and ecommunication data.
+II.
+
+METHODOLOGY
+
+A. Dataset description
+In this study, we used the Handwritten Signature Datasets
+fetched from Kaggle, which consolidate three widely used
+offline benchmarks for signature verification: CEDAR (Latin
+script; 55 writers, 24 genuine and 24 forged signatures per
+writer), BHSig260-Bengali (Bengali script; 100 writers, 24
+genuine and 30 forged per writer), and BHSig260-Hindi
+(Hindi script; 160 writers, 24 genuine and 30 forged per
+writer). All samples are offline scanned images organized in
+a consistent folder hierarchy by subject ID (e.g.,
+DATASET/1/images, DATASET/2/images, …), facilitating
+deterministic splits and per-writer evaluation. For
+reproducibility, we specifically reference the BHSig260Bengali directory provided in the Kaggle bundle, which
+contains 100 subject folders, and we pair it with CEDAR and
+BHSig260-Hindi to enable cross-script experiments spanning
+Latin, Bengali, and Hindi signatures.
+
+LITARETURE REVIEW
+
+Deep learning-based methods for digital document
+forgery detection have been investigated in recent studies;
+while they have achieved varied degrees of accuracy, they
+frequently lack interpretability.
+
+B. Data Preprocessing and Visualization
+During training and evaluation, the preprocessing
+pipeline standardizes the dataset while preserving
+consistency and enhancing the discriminative features. Two
+distinct datasets have been developed in this regard: the
+Triplet Dataset, which uses Triplet Loss for embedding
+learning, and the Duplet Dataset, which uses logistic
+regression for verification. The gathered signature image
+repositories were used to create two datasets:
+
+Rouis (2024) [8] introduced a Deep Discriminative
+Feature Learning model that improved representation
+learning yet failed to exceed 95% accuracy on noisy datasets.
+With an accuracy of 93.46%, a CNN-based study that
+contrasted pre-trained models like ResNet-101 and VGG16
+demonstrated the power of CNNs but also their limited
+resilience [9]. For multimedia post-editing detection, Jonker
+et al. (2024) [10] employed transfer learning with VGG16;
+this method had a 75% accuracy rate, but there were
+problems with text-level document forgeries. Similarly, the
+Noisesniffer model, which focusses on noise inconsistency
+for forgery detection, provided interpretability but performed
+poorly when compressed [11]. CNNs, transformers, and
+hybrid frameworks are only a few of the conventional and
+contemporary techniques that were assembled in a TechRxiv
+survey on fraudulent document detection conducted between
+2024 and 2025. A lack of a consistent, interpretable strategy
+that is appropriate for a variety of real-world datasets is
+shown by the survey's findings that the majority of models
+obtained accuracies between 70% and 94% [12]. Barglazan
+et al. (2024) [13] highlighted instability across datasets with
+accuracies ranging from 70% to 94%.
+
+x
+
+Triplet Dataset: Every data instance comprises of
+three samples T = {(‫ܣ‬௜ , ܲ௜ , ܰ௜ ) | ‫ܣ‬௜ , ‫ܣ‬௜ ߳ ‫ܩ‬௝ , ܰ௜ ߝ ‫ܨ‬௝ }
+where ‫ܣ‬௜ is the anchor, ܲ௜ the positive (same writer),
+and ܰ௜ the negative (forged writer). This
+configuration allows the model to learn intra-class
+similarity
+and
+inter-class
+dissimilarity
+simultaneously.
+
+x
+
+An automated fake document localisation approach was
+proposed by Fadl et al. (2023) [14], although it had a low
+IoU and an accuracy of less than 95%. In order to identify
+bill forgeries, a more modern model called Bill Safe (2025)
+[15] used CNN in conjunction with Sand Cat Swarm
+Optimisation; nonetheless, it was prone to overfitting.
+Likewise, the Sirajudeen (2025) [16] hybrid framework
+integrated classical and machine learning methods, achieving
+moderate results without explainability.
+
+Duplet Dataset: For classification, an image was
+generated as ( ‫ܫ‬ଵ , ‫ܫ‬ଶ , y), where the label y=1 for
+genuine pairs and y=0 for forged pairs. It is possible
+to distinguish between authentic and counterfeit
+samples using this dataset. Ten randomly chosen
+images were chosen for each person in order to
+preserve variety and avoid overfitting, resulting in a
+balanced dataset of 30,000 triplets. In addition to
+producing a fair mix of real and fake events, random
+sampling preserved statistical independence between
+samples.
+A preprocessing pipeline was created to extract
+signature contours, improve edges, and eliminate
+background noise.
+Each raw RGB image was
+subjected to the subsequent changes.
+
+Overall, most prior works exhibit limited generalization,
+low interpretability, and accuracy below 95%. By using
+SHAP and Grad-CAM visualisation for transparent,
+dependable forgery detection across the proposed
+Explainable ResNet50 model addresses these limitations
+across a range of content formats.
+
+x
+
+Grayscale Conversion: Color information was
+discarded to simplify computation and focus on
+textural features.
+‫ܫ‬௚ (‫ݔ‬, ‫ = )ݕ‬0.299ܴ(‫ݔ‬, ‫ )ݕ‬+ 0.587‫ݔ(ܩ‬, ‫)ݕ‬
++ 0.114‫ݔ(ܤ‬, ‫)ݕ‬
+where R, G, B denote the red, green, and blue
+channels, respectively.
+
+2
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:59:52 UTC from IEEE Xplore. Restrictions apply.
+
+x
+
+C. Baseline Model Comparison and Proposed Architecture
+We compare four baselines—Logistic Regression (LR),
+Random Forest (RF), MobileNetV2, and VGG19—against
+our proposed ResNet50-based Explainable Verification
+Agent. All models operate on identically preprocessed,
+offline signature images from CEDAR, BHSig260-Bengali,
+and BHSig260-Hindi (grayscale, morphological closing,
+Gaussian smoothing, Otsu binarization, tight cropping with
+padding, and resizing to 330×175330), and are trained under
+both triplet (embedding learning) and duplet (pairwise
+verification) regimes with an 80–20 stratified split.
+Evaluation follows standard verification metrics (Accuracy,
+Precision, Recall, F1, AUC), while explainability is provided
+for the proposed model via SHAP on a calibrated, tabular
+verifier.
+
+Morphological Filtering: To control small gaps and
+reduce speckle noise, morphological closing was
+employed using an elliptical kernel K:
+‫ܫ‬௠ = ( ‫ܫ‬௚ ْ ‫ ٓ )ܭ‬K.
+
+x
+
+Gaussian Smoothing and Binarization: Highfrequency noise was reduced, and uneven areas were
+smoothed using a Gaussian blur. Otsu's thresholding
+method was used to binarize the final image,
+allowing the foreground (signature) and background
+pixels to be clearly distinguished.
+
+x
+
+Cropping and Padding: To isolate the region of
+interest, the bounding box around non-zero pixels is
+computed:
+ܴ = [ ‫ݔ‬௠௜௡ , ‫ݕ‬௠௜௡ , ‫ݔ‬௠௔௫ , ‫ݕ‬௠௔௫ ]
+
+x
+
+Padding of p=5 pixels is added to prevent contextual
+boundaries, followed by resizing to 330 × 175 pixels
+to maintain uniform spatial input dimensions.
+x
+
+Data Augmentation: To enhance generalization and
+control overfitting, stochastic transformations were
+introduced:
+
+o
+
+Random rotation ș‫ ׽‬U(í5‫ ל‬,+5‫) ל‬
+
+o
+
+Additive Gaussian noise Ș‫׽‬N(0,0.1ଶ ) applied with
+probability p=0.3
+
+o
+
+Normalization and conversion to PyTorch tensors
+
+p(y=1| ‫ܫ‬ଵ ,‫ܫ‬ଶ ) ௘ ௘ı(‫ࢥ ் ݓ‬+b), ı(z) =
+
+,ƍ ܴఏ (‫ܫ‬௕ ) + ߟ
+
+x
+
+Where, ܴఏ presents therotation operator.
+
+x
+
+ଵ
+ଵା ௘ ష೥
+
+.
+
+Training minimizes cross-entropy with
+κଶ
+regularization. LR offers a transparent linear
+decision boundary and fast convergence. However,
+its capacity to capture curvature, stroke continuity,
+and local texture is limited; the model is also
+sensitive to residual misalignment and intra-writer
+variation that persists beyond our normalization
+pipeline.
+
+Formally, every augmented image is followed by:
+
+x
+
+Logistic Regression (LR): For a pair (‫ܫ‬ଵ ,‫ܫ‬ଶ ), we
+construct a simple similarity descriptor ࢥ ( ‫ܫ‬ଵ , ‫ܫ‬ଶ )
+(e.g., vectorized absolute pixel difference,
+normalized cross-correlation, binarized overlap
+ratios). LR models the genuine probability as
+
+Dataset Interfaces: Custom PyTorch dataset
+interfaces were developed to facilitate the loading
+and preprocessing of data during training. Whereas
+the DupletDataset class generated pairs of tuples in
+the form of (image1, image2, label) for binary
+classification tasks, the TripletDataset class was
+developed to create batches of image tensors as
+tuples of the form (anchor, positive, negative) for
+triplet loss optimization. On-the-fly preprocessing
+and GPU-efficient transformations were attached to
+both datasets. Both were then wrapped in PyTorch's
+DataLoader for random mini-batch loading of 32
+samples, enabling parallelized data processing, faster
+computation, and efficient memory management
+during training.
+
+Random Forest (RF): Using the same ࢥ (‫ܫ‬ଵ ,‫ܫ‬ଶ )
+augmented with low-order statistics, RF learns an
+ensemble of decision trees and outputs the averaged
+class probability
+்
+
+1
+‫݌‬Ƹ (‫ = ݕ‬1| ߶) = ෍ ‫݌‬௧ (‫ = ݕ‬1| ߶)
+ܶ
+௧ୀଵ
+
+RF captures nonlinear interactions among pairwise
+features and is resilient to outliers. Yet, with highdimensional, mostly local descriptors it struggles to represent
+long-range stroke dependencies (e.g., pen-lift patterns, macro
+curvature), yielding limited gains over LR in cross-script
+scenarios.
+x
+
+Visualization of Triplet Samples: Fig. 1. Triplet
+visualization showing anchor, positive, and negative
+signature images
+
+MobileNetV2 (Siamese): Each Siamese tower in
+this configuration is based on MobileNetV2, which
+uses inverted residual blocks with depthwise
+separable convolutions and linear bottlenecks to
+reduce parameters:
+
+Y=Bܰଷ (DWConv(ReLU(Bܰଶ (‫ݒ݊݋ܥ‬ଵ×ଵ (‫ܰܤ‬ଵ (ܺ))))))
+Here, ‫ݒ݊݋ܥ‬ଵ×ଵ H[SDQGVFKDQQHOV&ĺW& ZLWKH[SDQVLRQ
+factor t > 1), followed by a depthwise convolution and then a
+linear projection to the output channels. MobileNetV2 is
+computationally efficient and well-suited to learning texturelevel features and minor deformations, such as those caused
+by scanner noise.
+x
+
+Fig. 1. Triplet visualization showing anchor, positive, and negative
+signature images
+
+VGG19 (Siamese): VGG19 employs a deep stack of
+3×3 convolutional layers with ReLU activations and
+periodic max-pooling, ending in global average
+
+3
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:59:52 UTC from IEEE Xplore. Restrictions apply.
+
+pooling to limit parameters for our 330×175 input
+size. The architecture can be described as:
+
+Weight Decay=1e-4
+
+Y = GAP (‫ ݒ݊݋ܥ‬௅ ‫……ל‬.‫ ݒ݊݋ܥ ל‬ଵ (X))
+
+IV.
+
+When it comes to capturing rich edge maps and local
+textures, this model is more discriminative than lighter
+backbones.
+x
+
+A. Experimental Setup
+All experiment was performed on a workstation with
+Intel® Core™ i7 (8 cores, 3.2 GHz), 32 GB RAM, and a
+single NVIDIA GPU (RTX 3060, 12 GB). For
+reproducibility, outputs were checked for consistency on
+Google Colab Pro with Tesla T4 (16 GB). The stack
+consisted of Python 3.10, TensorFlow/Keras 2.15 (finetuning ResNet50, VGG19, MobileNetV2), scikit-learn 1.4
+(metrics, train/test split), XGBoost 2.0 (embedding-level
+classifier for SHAP), SHAP 0.45 (Tree/GradientExplainer),
+NumPy/Pandas (data manipulation), Matplotlib (plots), and
+OpenCV (I/O and pre-processing). OS: Ubuntu 22.04 LTS
+with CUDA 12.x and cuDNN compatible with TensorFlow's
+build. The Kaggle handwritten-signature dataset was divided
+using a stratified 80/20 split (subject-balanced) to avoid class
+skew. Images were resized to network input (ResNet50:
+224×224), channel triplicated to grayscale-to-RGB, and
+normalized to [0,1]. Adam (lr = 1e-4) with batch size 32 was
+used to train the models for up to 40 epochs with
+ReduceLROnPlateau and EarlyStopping (patience = 6). GAP
+embeddings from fine-tuned ResNet50 were extracted for
+SHAP, and the downstream XGBoost decision function was
+explained with an interventional background of 200 train
+embeddings. All the comparisons were performed on the
+20% held-out test set. Accuracy, Precision, Recall, F1-score,
+and AUROC were the primary metrics, which were reported
+for each of the models; confusion matrices, ROC curves, and
+SHAP visualizations complemented the quantitative
+evaluation.
+
+ResNet50: Each tower of our Siamese model uses
+ResNet50, which incorporates bottleneck residual
+blocks to enable deep representation learning
+without degradation. The core structure is:
+
+y ௘ ௘) [ ௘ ௘[
+where F(x) is a residual function defined as:
+F(x)=
+‫ݒ݊݋ܥ‬ଵ×ଵ
+ĺ%1ĺ5H/8ĺ
+ĺ%1ĺ5H/8ĺ‫ݒ݊݋ܥ‬ଵ×ଵ ĺBN
+
+‫ݒ݊݋ܥ‬ଷ×ଷ
+
+When input/output dimensions mismatch, a projection
+shortcut using ‫ݒ݊݋ܥ‬ଵ×ଵ is applied. The model is very
+successful at cross-script signature verification because
+residual connections preserve fine-scale features.
+We first learn an L2-normalized embedding ݂ఏ (‫ )ܫ‬using
+triplet loss on (A, P, N):
+‫ܮ‬௧௥௜௣௟௘ =
+
+1
+෍
+|߬|
+
+ൣ||݂ఏ (‫ )ܣ‬െ ݂ఏ (ܲ)||
+
+(஺,௉,ே)
+
+െ ||݂ఏ (‫ )ܣ‬െ ݂ఏ (ܰ)| | + ߙ ൧
+For pairwise verification, we construct a relation vector:
+߰ = [|݂(‫ܫ‬ଵ ) - f(‫ܫ‬ଶ )|; f(‫ܫ‬ଵ ) ‫ ڄ‬f(‫ܫ‬ଶ )]
+and train a logistic classifier using cross-entropy loss. A
+hybrid loss (triplet + duplet) improves stability and
+calibration.
+
+B. Ouantitative Evaluation
+The proposed Explainable Machine Learning Agent, built
+upon a fine-tuned ResNet50 backbone, was evaluated against
+multiple baseline models including VGG19, MobileNetV2,
+Random Forest (RF), and Logistic Regression (LR). All
+models were trained and tested on the Handwritten Signature
+Dataset using an 80–20 stratified split under identical
+preprocessing and optimization conditions.
+
+The embedding is then sent to a calibrated XGBoost
+verifier. SHAP is used to assign decisions to specific
+embedding dimensions, providing explainability aligned with
+domain cues such as curvature changes and stroke
+discontinuities.
+TABLE I.
+
+RESULT AND DISCUSSION
+
+CONFIGURATION AND HYPERPARAMETERS OF THE
+PROPOSED RESNET50 MODEL
+
+TABLE II.
+
+PERFORMANCE EVALUATION OF MODELS
+
+Component
+Dataset
+
+Configuration
+Handwritten Signature Datasets
+
+Model
+
+Accuracy
+
+Precision
+
+Recall
+
+F1
+
+AUC
+
+Backbone Architecture
+
+ResNet50 (Siamese)
+
+LR
+
+77%
+
+0.77
+
+0.77
+
+0.77
+
+0.78
+
+Input Size
+
+330 × 175 (grayscale)
+
+RF
+
+81%
+
+0.81
+
+0.82
+
+0.81
+
+0.82
+
+Batch Size
+
+32
+
+MobileNetV2
+
+87%
+
+0.87
+
+0.87
+
+0.87
+
+0.88
+
+Embedding Dimension
+
+256
+
+VGG19
+
+91%
+
+0.91
+
+0.91
+
+0.91
+
+0.92
+
+Optimizer
+
+$GDP ȕ ȕ 
+
+ResNet50
+(Proposed)
+
+95%
+
+0.95
+
+0.96
+
+0.95
+
+0.96
+
+Learning Rate
+
+1e-4 (with cosine annealing)
+
+Triplet Loss Margin ((\alpha))
+
+0.2
+
+Number of Triplet Epochs
+
+30
+
+Data Augmentation
+
+Rotation (±5°), Gaussian
+noise (p=0.3)
+
+Regularization
+
+BatchNorm, Dropout (p=0.3),
+
+As shown in Table 2, the proposed ResNet50 achieved
+the highest overall accuracy of 95%, with Precision = 0.95,
+Recall = 0.96, F1-Score = 0.95, and AUC = 0.96,
+outperforming all competing baselines. The deep residual
+architecture enabled the model to extract complex spatial
+dependencies and subtle contour variations, resulting in
+superior classification performance between genuine and
+forged samples.
+
+4
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:59:52 UTC from IEEE Xplore. Restrictions apply.
+
+plateau close to 0.06. Batch normalization, learning-rate
+scheduling, and early stopping regularization succeeded in
+keeping numerical stability and avoiding gradient explosion,
+as supported by the narrow difference between the two
+curves.
+Fig. 4 presents the confusion matrix of the suggested
+ResNet50-based Explainable ML Agent with regards to the
+classification performance of real versus fake signatures. The
+model turns out to be very consistent in its predictive
+behavior, correctly classifying 99.6% of the fake and 91.8%
+of the real samples. The overall structure of the matrix
+indicates near-diagonal dominance, which means the agent
+has successfully separated the genuine from the fake, though
+there is a little intersection in both groups.
+
+Fig. 2. AUC-ROC Curves for All Models
+
+Further confirming the discriminative capability of
+ResNet50 is the AUC-ROC curve shown in Fig. 2. With a
+0.96 AUC, the curve rises steeply upward to the top-left
+corner, reflecting an excellent trade-off between sensitivity
+and specificity with near-optimal separation of the decision
+boundary. Contrasted are simpler models, such as LR and
+RF, whose ROC profiles are considerably flatter-a reflection
+of their much weaker ability to generalize across class
+boundaries.
+
+In the majority of real-world authentication applications,
+a much stricter sensitivity to forgery, where non-authentic
+cases are rejected, is preferred over the low, acceptable rate
+of 8.2% for false negatives, the rate at which genuine
+signatures are mistakenly detected as forged. Accordingly,
+only 0.4% of forged signatures are successfully detected and
+mistakenly identified as authentic, demonstrating the
+robustness and dependability of the suggested framework.
+
+C. Training & Validation Performance Analysis
+Training and validation accuracy and loss curves of the
+proposed ResNet50-based Explainable ML Agent as shown
+in Fig. 3. The curves altogether indicate that there is a
+smooth and generalizable learning process during
+optimization.
+
+This distribution supports the metrics presented in
+Section V-A by confirming that the model shows a balanced
+trade-off between precision and recall. The residual learning
+structure's ability to capture the unique stroke irregularities,
+pressure discontinuities, and curvature distortions present in
+forged handwriting is demonstrated by the high classification
+consistency between the two classes.
+
+With residual layers capturing the three most salient
+features of authenticity, namely stroke orientation, penpressure uniformity, and contour consistency, accuracy
+increases rapidly in the first few epochs. The training and
+validation accuracies stabilize above 0.96 after the tenth
+epoch, with a slight divergence between them, thus
+indicating that the deep spatial representations learned are
+invariant to variations in handwriting. Loss curves support
+this hypothesis by showing a steep drop in loss during the
+beginning and gradual saturation toward 0.06 for the training
+loss. The validation loss also follows the same trend;
+however, there are minor fluctuations in this curve due to
+intra-class variability within handwriting. The small gap
+between the two curves shows the effectiveness of batch
+normalization, learning rate scheduling, and early stopping
+regularization in avoiding numerical overflow and gradient
+explosion.
+
+Fig. 4. Confusion Matrix of the presented model
+
+E. Explainable and Interpretability
+We employ SHAP TreeExplainer on the downstream
+XGBoost classifier in Fig. 6 to compute global feature
+attributions over the ResNet50 penultimate (GAP)
+embeddings in order to provide clear, model-agnostic insight
+into the decision process. This decoupled setup (deep visual
+HQFRGHU ĺ WDEXODU FODVVLILHU  \LHOGV D FRPSDFW VWDEOH
+representation on which feature attribution is well-posed and
+computationally efficient.
+Fig. 5 presents a SHAP beeswarm summarizing the topK most influential embedding dimensions (“F1…FK”). Each
+point corresponds to a test sample’s contribution on the
+‘Forged’ log-odds; positive SHAP values increase the
+probability of Forged, whereas negative SHAP values push
+predictions toward Genuine. The horizontal dispersion within
+a feature indicates variability across subjects (writer/style
+
+Fig. 3. Training & Validation Performance Analysis
+
+D. Confusion Matrix Analysis
+This stability is further supported by the loss curves: the
+validation loss follows a similar trend, only slightly
+oscillating due to intra-class variability of handwriting, while
+the training loss starts off sharply declining and reaches a
+
+5
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:59:52 UTC from IEEE Xplore. Restrictions apply.
+
+heterogeneity), while the vertical density reflects how
+consistently that feature contributes across the cohort.
+
+REFERENCES
+[1]
+
+Bae, Yong-Yeol, Dae-Jea Cho, and Ki-Hyun Jung. "Enhancing
+Document Forgery Detection with Edge-Focused Deep
+Learning." Symmetry 17, no. 8 (2025): 1208.
+[2] Li, Li, Yu Bai, Shanqing Zhang, and Mahmoud Emam. "Document
+forgery detection based on spatial-frequency and multi-scale feature
+network." Journal of Visual Communication and Image
+Representation 107 (2025): 104393.
+[3] Wong, Kahim, Jicheng Zhou, Haiwei Wu, Yain-Whar Si, and Jiantao
+Zhou. "ADCD-Net: Robust Document Image Forgery Localization
+via Adaptive DCT Feature and Hierarchical Content
+Disentanglement." arXiv preprint arXiv:2507.16397 (2025).
+[4] George, Anjith, and Sebastien Marcel. "EdgeDoc: Hybrid CNNTransformer Model for Accurate Forgery Detection and Localization
+in ID Documents." arXiv preprint arXiv:2508.16284 (2025).
+[5] Liang, Z. et al. (2025). Can Multi-Modal LLMs Detect Document
+Forgery? arXiv preprint.
+[6] Zia, Muhammad Abdul Moiz, and Mary Adedayo. "Tool Type
+Identification for Forensic Digital Document Examination." Available
+at SSRN 4980749.
+[7] Boonkrong, Sirapat. "Design of an academic document forgery
+detection system." International Journal of Information
+Technology (2024): 1-13.
+[8] Rouis, Kais, Petra Gomez-Krämer, Mickaël Coustaty, Saddock
+Kébairi, and Vincent Poulain d’Andecy. "Deep Discriminative
+Feature
+Learning
+for
+Document
+Image
+Manipulation
+Detection." Proceedings Copyright 567 (2024): 574.
+[9] Meepaganithage, Ayesh, Suman Rath, Mircea Nicolescu, Monica
+Nicolescu, and Shamik Sengupta. "Image forgery detection using
+convolutional neural networks." In 2024 12th International
+Symposium on Digital Forensics and Security (ISDFS), pp. 1-6.
+IEEE, 2024.
+[10] Jonker, Simon, Malthe Jelstrup, Weizhi Meng, and Brooke Lampe.
+"Detecting post editing of multimedia images using transfer learning
+and fine tuning." ACM Transactions on Multimedia Computing,
+Communications and Applications 20, no. 6 (2024): 1-22.
+[11] Gardella, Marina, Pablo Musé, Miguel Colom, and Jean-Michel
+Morel. "Image Forgery Detection Based on Noise Inspection:
+Analysis and Refinement of the Noisesniffer Method." Image
+Processing On Line 14 (2024): 86-115.
+[12] Nogueira, Diogo Marcelo, Matilde Simões, Carlos Ferreira, Rita P.
+Ribeiro, David Martínez-Rego, Amanda Cai, and João Gama. "Survey
+on Detection of Fraudulent Documents." Authorea Preprints (2025).
+[13] Barglazan, Adrian-Alin, Remus Brad, and Constantin Constantinescu.
+"Image Inpainting forgery detection: a review." Journal of
+Imaging 10, no. 2 (2024): 42.
+[14] Fadl, Sondos, Khalid M. Hosny, and Mohamed Hammad. "Automatic
+fake document identification and localization using DE-Net and
+color-based features of foreign inks." Journal of Visual
+Communication and Image Representation 92 (2023): 103801.
+[15] Chakraborty, Debjani. "Bill safe: intelligent forgery detection with
+CNN and upgrade sand cat swarm optimization." Discover
+Computing 28, no. 1 (2025): 84.
+[16] Sirajudeen, Mohamed, and R. Anitha. "Forgery document detection in
+information management system using cognitive techniques." Journal
+of Intelligent & Fuzzy Systems 39, no. 6 (2020): 8057-8068.
+
+Fig. 5. Global explainability via SHAP on ResNET50
+
+Two properties make this analysis actionable for hightrust workflows in e-communication and academic
+verification. First, the ranking by mean |SHAP| highlights a
+small set of dominant representation axes that consistently
+drive the decision boundary evidence that the model is not
+arbitrarily diffuse in its reasoning. Second, the F-index
+PDSSLQJILOH )ĺHPEHGGLQJLQGH[ HQDEOHVUHSURGXFLELOLW\
+and audit: the most influential dimensions can be traced back
+to concrete channels in the learned representation for targeted
+ablations or compliance reviews. Together with the
+confusion-matrix and ROC analyses, these explanations
+show that the agent’s high accuracy is accompanied by
+diagnosable and auditable reasoning behavior.
+V.
+
+CONCLUSION
+
+In order to identify signature forgeries in academic
+documents and electronic communications, this work
+presented an Explainable Machine Learning Agent built on
+the ResNet50 architecture.
+The suggested model
+outperformed baseline methods such as VGG19,
+MobileNetV2, Random Forest, and Logistic Regression,
+achieving an exceptional accuracy of 95%. The system is
+reliable for real-world verification tasks because of its mix of
+SHAP and Grad-CAM visualisations, which provide
+transparency and interpretability.
+The model's resilience and dependability were
+demonstrated by the confusion matrix and ROC evaluations,
+which verified consistent generalisation and low
+misclassification.
+Larger and more varied datasets, transformer-based
+vision models for deeper contextual learning, and multimodal fusion integrating textual and visual clues for
+sophisticated counterfeit detection are some ways that future
+research might expand the framework.
+
+6
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:59:52 UTC from IEEE Xplore. Restrictions apply.
+
+

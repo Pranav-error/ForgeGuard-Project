@@ -1,0 +1,713 @@
+2025 5th Asian Conference on Innovation in Technology (ASIANCON)
+Pune, India. Aug 22-23, 2025
+
+2025 5th Asian Conference on Innovation in Technology (ASIANCON) | 979-8-3503-5699-1/25/$31.00 ©2025 IEEE | DOI: 10.1109/ASIANCON66527.2025.11281314
+
+Understanding Offline Signature Verification
+Models: An Explainable AI Study using ArcFace
+and Grad-CAM
+Femila Irene G
+Department of Computer Science Engineering
+Saveetha School of Engineering
+Saveetha Institute of Medical And Technical Sciences
+Chennai, Tamil Nadu, India.
+femilairene@gmail.com
+
+Surendran R
+Department of Computer Science Engineering,
+Saveetha School of Engineering,
+Saveetha Institute of Medical And Technical Sciences
+Chennai, Tamil Nadu, India.
+surendran.phd.it@gmail.com
+writing pressure and speed data, and forged signatures that
+look almost real. Verifying these offline signatures
+automatically is called Offline Signature Verification (OSV).
+Traditional methods for OSV used hand-crafted features
+such as curves, angles, or image texture. But these
+approaches often fail when new or unseen users are tested.
+Recently, deep learning has shown better results by
+automatically learning useful features. Many of these models
+use Siamese networks or triplet loss functions, where the
+network learns to compare pairs or groups of signatures to
+decide if they match. While these methods work well, they
+are not always easy to train. They need carefully selected
+sample pairs, and training can be unstable or slow. In this
+work, propose using a classification approach instead of a
+comparison approach. Work treat each writer (person) as a
+class and use a method called ArcFace [1], which was
+originally made for face recognition. ArcFace improves how
+well the network separates different people by adding a small
+angle margin between each class [2]. Other similar losses,
+like FaceNet [3] and CosFace [4], have also done well in
+face-related tasks. In our case, show that ArcFace works very
+well for signature verification too. This method helps the
+model learn strong features for each writer, and training
+becomes more stable and efficient. Another problem in deep
+learning is explain ability. Work don’t know why certain
+decision is made. This is a big issue when the system is used
+in banks or courts, where trust and clarity are important. To
+solve this, use Grad-CAM [5] to highlight which parts of the
+signature image influenced the model’s decision. These
+heatmaps can help humans understand and trust the system’s
+predictions. Our system includes:
+
+Abstract—Verifying handwritten signatures is a challenging
+task because people do not sign exactly the same way every
+time. Small changes in how a person writes like pressure,
+speed, or the way they move the pen make it hard for systems
+to tell real signatures from fake ones. In this study, propose an
+effective method for offline signature verification (OSV) using
+ArcFace, a loss function originally developed for face
+recognition. While ArcFace has been explored in a few existing
+OSV studies, our work is distinct in its focus on writer
+independent verification, combined with explainable AI using
+Grad-CAM. This pairing not only improves verification
+performance but also adds transparency to the model's
+decisions an area still underexplored in the OSV domain.
+Unlike traditional Siamese or triplet-based models that
+compare signature pairs, our approach treats each writer as a
+separate class and trains a classification-based model. This
+method makes training more stable, avoids the need for
+manually creating sample pairs, and allows the model to learn
+stronger writer-specific features. Work trained our model on a
+large offline signature dataset with 486 writers and evaluated it
+on a completely separate test set containing unseen writers.
+The best model achieved a high ROC AUC score of 0.9194 and
+an Equal Error Rate (EER) of 0.1762, indicating its strong
+ability to distinguish genuine from forged signatures. To
+improve transparency and trust in the system, used GradCAM to generate heatmaps that show which parts of the
+signature the model focuses on when making a prediction.
+These visual explanations revealed that the model pays close
+attention to distinctive curves, loops, and intersections that are
+important for verifying signatures. Our approach shows that
+ArcFace is not only effective but also interpretable for offline
+signature verification. The system is suitable for real-world
+applications where both accuracy and explainability are
+critical, such as in banking, legal documents, and forensics.
+Keywords—Offline
+Signature
+Verification,
+ArcFace,
+Explainable AI, Grad-CAM, ROC AUC, Equal Error Rate, Deep
+Learning, Feature Extraction, Handwritten Signature, Forgery
+Detection
+
+A deep CNN trained on signature images.
+
+x
+
+An ArcFace layer to classify signatures based on
+writer.
+
+x
+
+Grad-CAM for visual explanations.
+
+Work trained the model on a large dataset with 486
+writers and tested it on writers not seen during training. Also
+tested different network sizes, learning rates, and image
+formats to find the best setup. Work measured performance
+using Equal Error Rate (EER) and ROC AUC, which are
+standard metrics in biometric systems [6]. Our model
+achieved an AUC of 0.9194 and an EER of 0.1762, which
+are better than models using triplet loss or Siamese networks.
+
+I. INTRODUCTION
+Signatures have been used for centuries to confirm
+identity, especially in documents like cheques, legal
+agreements, and certificates. Even today, in many places,
+handwritten signatures are required for verification. In many
+real-world applications, only the offline version of the
+signature written on paper and then scanned is available.
+This brings challenges, such as poor image quality, missing
+
+979-8-3503-5699-1/25/$31.00 ©2025 IEEE
+
+x
+
+1
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:02:46 UTC from IEEE Xplore. Restrictions apply.
+
+Also, training was smoother and faster. To summarize, our
+key contributions are: Using ArcFace for OSV, which brings
+stable and accurate results [7]. Adding explainability to the
+model using Grad-CAM tools. Studying how different
+settings affect performance, and choosing the best.
+Improving over older methods with simple, stable training
+and good accuracy.
+
+preprocessing, model design, training, evaluation, and visual
+analysis of the model’s decisions.
+A. Data Collection and Preprocessing
+The dataset used in this study was formed by combining
+multiple publicly available offline signature datasets. These
+include CEDAR (versions 1 and 2), Signature Matching,
+Handwritten Signature Datasets and a completely separate
+test dataset named signature-verification-dataset briefly
+listed in below Table I. All datasets were accessed from
+Google Drive and preprocessed before use [15]. The
+preprocessing steps ensured consistency in image quality
+and format. All signature images were converted to
+grayscale and resized to 128x128 pixels. Although explicit
+normalization was not applied separately, normalization
+effects were handled using Batch Normalization layers
+within the network. After processing, the images were saved
+along with their [16] corresponding writer IDs and labels
+(genuine or forged) to Google Drive for efficient access
+during training.
+
+II. RELATED WORKS
+Work will review related work in detail and show
+how our approach fits in.
+A. Deep Learning for Signature Verification
+Older OSV systems relied on fixed rules or features
+chosen by experts. These included shape, angle, pressure
+points, or stroke direction. But such features did not work
+well when writers changed their style or when scanned
+signatures were noisy. Deep learning made this task easier.
+[8] was one of the first popular models, using a Siamese
+network to learn whether two signatures match. Later [9]
+used attention maps and triplet loss to improve accuracy.
+[10] used local and global features and deep metric learning
+for better results. However, these methods are harder to train
+and require carefully chosen signature pairs. Some models
+tried simpler ideas. Used MobileNet and selected only the
+best features for classification, getting high accuracy [11].
+But these models don’t explain how decisions are made and
+are not always reliable with unseen writers.
+
+TABLE I. DATASET DISTRIBUTION
+
+B. ArcFace and Margin-Based Losses
+
+Number of Images
+
+CEDAR v1 (Train/Val)
+CEDAR v2 (Train/Val)
+Signature Matching (Train/Val)
+Handwritten Signature Datasets (Train/Val)
+Separate Test Dataset
+Total Train/Val
+Total Separate Test
+
+2640
+2640
+4181
+14040
+500
+23501
+500
+
+B. Data Splitting Strategy
+
+Face recognition models have helped improve
+verification tasks in general. FaceNet used triplet loss, while
+ArcFace and CosFace introduced margin-based losses to
+push different classes apart in feature space [12]. Sub-Center
+ArcFace further improved ArcFace by handling class
+imbalance. Even though these methods worked well in face
+tasks, they were not often used in signature verification. In
+this work, show that ArcFace works very well for writerbased classification. It allows the model to learn distinct
+patterns for each writer and gives better performance than
+distance-based losses.
+
+To ensure the model could generalize to new writers, a
+writer independent splitting strategy was used. Writers in
+the combined dataset were split into training and validation
+groups using an 80:20 ratio. Importantly, a separate test
+dataset containing entirely different writers was reserved for
+final evaluation. This separation helps test the system's
+ability to verify signatures from writers it has never seen
+during training.
+C. Model Architecture
+At the core of our system is a Convolutional Neural
+Network (CNN) built to learn strong and meaningful
+features from signature images. This base network was
+improved step by step through experiments and testing
+different designs. It follows a sequence of layers that are
+commonly used in deep learning for image-related tasks.
+The network begins with several Conv2D layers that apply
+filters to detect important patterns in the signature, such as
+curves, edges, and textures. Each convolutional layer is
+followed by a MaxPooling layer, which reduces the size of
+the feature maps. This makes the model more efficient and
+helps it ignore small shifts or changes in the signature's
+position or size [17]. After each convolution, a Batch
+Normalization layer is added to keep the training stable and
+improve accuracy. These building blocks Conv2D,
+MaxPooling, and Batch Normalization are repeated multiple
+times to extract deeper and more abstract features as the
+network goes deeper. Once these features are extracted, a
+Flatten layer converts the 2D feature maps into a 1D vector.
+This is passed to a dense layer that outputs a 128
+dimensional vector. This vector acts as the signature’s
+"identity" signatures from the same person will have similar
+
+C. Explainability in Deep Learning Models
+Explainable AI is important in biometric applications.
+Grad-CAM is a tool that shows heatmaps of what part of an
+image the network focused on [13]. Grad-CAM++ improves
+this by offering better localization. Some earlier works [14],
+explored explanation by using attention mechanisms to
+detect forgeries with only one sample per writer. Still, very
+few studies in OSV used proper explanation tools. Our
+model uses Grad-CAM to show which parts of the signature
+were important for classification. This makes the system
+easier to trust, especially in legal or banking systems.
+III.
+
+Dataset Name
+
+PROPOSED METHODOLOGY
+
+This section explains the complete process used for
+offline signature verification using a Convolutional Neural
+Network (CNN) trained with the ArcFace loss function. To
+improve transparency and interpretability, the system also
+uses Explainable AI (XAI) techniques, specifically GradCAM. The methodology includes data collection and
+
+2
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:02:46 UTC from IEEE Xplore. Restrictions apply.
+
+vectors, while forgeries or different writers will have
+different ones. Batch Normalization is again applied to
+improve consistency.
+
+Crossentropy loss. Since the ArcFace layer produces raw
+logits, the from_logits=True option was used during
+compilation. Training used a custom data generator that
+provided batches of images and their associated writer IDs.
+A batch size of 512 was selected for efficient training. To
+ensure a stable training process and prevent overfitting,
+several callbacks were used: a) Model Checkpoint: Saved
+the best model weights based on validation loss. b) Early
+Stopping: Stopped training if the validation loss did not
+improve over several epochs. c) NaN Stopping: A custom
+safeguard to halt training if unstable values like NaN or Inf
+appeared in the loss. The goal of training was to reduce the
+ArcFace loss, helping the model learn compact and
+separable embeddings for each writer.
+
+Finally, this 128 dimensional vector is passed into the
+ArcFace layer. Unlike regular softmax, ArcFace adds an
+angular margin between classes and scales the scores. This
+forces the model to separate features of different writers
+more clearly and group signatures from the same writer
+closely together [18]. During training, the model uses both
+the signature image and the writer’s ID (as the class label) to
+learn these strong, writer-specific representations. This
+results in better performance in distinguishing between
+genuine and forged signatures
+
+E. Model Evaluation
+After training, the model was evaluated using the
+separate test dataset. This step tested the system's ability to
+perform signature verification for unseen writers. The
+evaluation process began with generating 128 dimensional
+embeddings for each signature in the test set. Then,
+signature pairs were formed some from the same writer
+(genuine-genuine pairs) and some from different writers
+(genuine-imposter pairs). For each pair, cosine similarity
+was calculated between the embedding vectors. Based on
+the similarity scores and true labels, two main metrics were
+used: ROC AUC (Receiver Operating Characteristic Area
+Under Curve): Measures how well the model distinguishes
+between genuine and imposter pairs across thresholds.
+Approximate Equal Error Rate (EER): The point where the
+false match rate equals the false non-match rate. These
+metrics help assess the verification quality and robustness of
+the model.
+
+Fig. 1. Signature Verification Architecture Analysis
+
+Figure 1 presents the architecture of a deep learning
+based signature verification system designed to distinguish
+between genuine and forged signatures. The process begins
+with data collection and preprocessing, where signature
+images are cleaned and prepared for analysis. These
+processed images are passed through a Convolutional
+Neural Network (CNN) that extracts meaningful features
+from the input [19]. To improve the model's ability to
+separate genuine signatures from forgeries, ArcFace Loss is
+applied during training, which introduces an angular margin
+to enhance feature discrimination. Signature pairs are then
+evaluated to determine authenticity. Signature pair is shown
+below in Figure 2. Additionally, Grad-CAM analysis is used
+to visualize the areas of the signature that contributed most
+to the model’s decision, providing interpretability and
+transparency in the verification process.
+
+F. Explainable AI (XAI) Analysis
+To understand what the model focuses on when
+analyzing a signature, Grad-CAM (Gradient-weighted Class
+Activation Mapping) was used. Grad-CAM creates visual
+heatmaps that highlight the important areas in a signature
+image influencing the model’s prediction [20]. This analysis
+was applied to selected images from the test set. Gradients
+flowing into the final convolutional layer were used to
+create these heatmaps. By overlaying the heatmaps on top of
+the original images, could visually inspect the regions that
+the model considered important for classification. This adds
+a layer of transparency and helps build trust in the system,
+especially in sensitive use cases like banking or document
+authentication.
+IV.
+
+RESULTS AND DISCUSSION
+
+This section presents the results obtained by evaluating
+the trained ArcFace model on a completely separate test set
+consisting of unseen writers. It also discusses the
+significance of these results in the context of offline
+signature verification. In addition, insights from Explainable
+AI (XAI) analysis using Grad-CAM are provided to explain
+how the model makes its decisions whether it’s genuine or
+forged.
+Fig. 2. Signature Pair
+
+A. Training Process and Loss Analysis
+
+D. Model Training
+
+The ArcFace model was trained using a supervised
+learning approach, where the model learned by seeing
+signature images along with their writer labels. To handle
+
+The model was trained on the combined training dataset,
+using the Adam optimizer and Sparse Categorical
+
+3
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:02:46 UTC from IEEE Xplore. Restrictions apply.
+
+the large amount of data efficiently, used custom data
+generators. These generators helped feed batches of images
+and their corresponding writer IDs (as integer labels) to the
+model during training. Although all images were already
+preprocessed, the generators made it easy to manage data
+loading in real time. Work used the Adam optimizer to train
+the model. This optimizer is commonly used in deep
+learning because it adjusts the learning rate automatically,
+helping the model learn faster and more efficiently. The loss
+function used was Sparse Categorical Crossentropy, which
+is suitable when provide class labels as integers. Since the
+ArcFace layer outputs raw values (logits) before applying
+softmax, this loss function helps guide the model to
+correctly match the signature with the right writer while also
+applying the angular margin enforced by ArcFace
+
+suggests that the model has a good balance between false
+positives (accepting forgeries) and false negatives (rejecting
+genuine signatures). Lower EER is desirable in any
+verification task. The ROC curve (from the evaluation)
+shows the trade-off between the false match rate (FMR) and
+the true match rate (1 - false non-match rate or FNMR). The
+curve helps visualize how well the model separates genuine
+and impostor pairs at different threshold settings. The point
+where FMR and FNMR intersect gives the EER. Together,
+these two metrics ROC AUC and EER offer a
+comprehensive view of model performance across operating
+thresholds and at a balanced decision point.
+
+.
+
+Fig. 4. ROC curve
+Fig. 3. Training and validation loss curves
+
+Figure 4, the ROC (Receiver Operating Characteristic)
+curve shows how well the model can tell the difference
+between real (genuine) and fake (forged) signatures. What
+the axes mean:
+a) X-axis (False Positive Rate / FMR):This shows
+how often the model mistakenly accepts a fake
+signature as real. A lower number here is better.
+b) Y-axis (True Positive Rate / 1 - FNMR):
+This shows how often the model correctly accepts a
+real signature as real. A higher number here is
+better.
+What the curve shows: The curve is created by
+changing the cutoff point (threshold) the model uses to
+decide if a signature is real or fake. If the curve is closer to
+the top-left corner, the model is doing a good job. If the
+curve is near the diagonal line, the model is just guessing
+(like flipping a coin). What the AUC (Area Under Curve)
+means: AUC tells how good the model is at telling apart real
+and fake signatures. A perfect model gets an AUC of 1.0
+(best case). A model that guesses randomly gets an AUC of
+0.5 (worst case). Model has an AUC of 0.91, which means
+it’s better than guessing and has ability to tell genuine from
+forged signatures. What about the EER (Equal Error Rate)?
+EER is the point where the model makes mistakes equally it
+accepts as many fake signatures as it wrongly rejects real
+ones. This point is useful when need a balanced system.
+
+Figure 3 shows the training and validation loss curves
+over the training epochs. From the graph, can see that the
+training loss steadily decreases, showing that the model is
+learning from the training data. The validation loss also
+decreases in the beginning, but after a certain point, it starts
+to level off and slightly rise. This rise in validation loss
+while training loss continues to drop is a sign of overfitting
+the model is learning too much from the training data and
+not generalizing well to new data. To prevent this, Early
+Stopping was triggered at epoch 7, selecting the model
+weights from the point where the validation loss was at its
+lowest. These saved weights were then used to evaluate the
+model on a completely separate test set. This helped ensure
+that the model performs well not just on training data, but
+also on new, unseen signatures.
+B. Evaluation Results
+The ArcFace-based CNN model was tested on a separate
+dataset containing genuine and forged signatures from
+writers who were not part of the training or validation data.
+The following metrics were used to evaluate the
+performance:
+ROC AUC (Receiver Operating Characteristic - Area
+Under Curve): 0.9194
+EER (Equal Error Rate): 0.1762
+A high ROC AUC value indicates the model's strong
+ability to distinguish between genuine and forged signatures
+across a range of thresholds. A value close to 1.0 means the
+model performs well. On the other hand, a low EER value
+
+C. Performance Discussion
+The model showed strong results on the test set,
+indicating its capability to perform writer-independent
+
+4
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:02:46 UTC from IEEE Xplore. Restrictions apply.
+
+offline signature verification. This means the model
+generalizes well, even when verifying signatures of people
+it has never seen before. The iterative improvement process
+during development played a critical role. Through
+experimentation with different CNN architectures, filter
+sizes, batch sizes, and ArcFace parameters (like margin and
+scale), the final setup was found to be the most effective.
+Some of the major improvements observed included:
+Adding deeper convolutional layers improved feature
+extraction. Using Batch Normalization stabilized training.
+A batch size of 512 worked well for gradient updates. Fine
+tuning ArcFace parameters led to more discriminative
+embeddings. This method not only improved the accuracy
+but also maintained training stability and prevented
+overfitting. In terms of comparison with existing methods,
+models using standard softmax or contrastive loss typically
+show slightly lower performance for unseen writers,
+especially when trained on smaller datasets. The ArcFace
+loss helped enforce tighter class boundaries and greater
+separation between signature classes, making it more
+robust.
+
+writer's signature. This specific example demonstrates the
+model's capability to distinguish genuine signatures from
+skilled forgeries for a writer it has never seen before
+E. Insights from Explainable AI (Grad-CAM)
+To gain a better understanding of how the model
+interprets signature images during verification, we applied
+Grad-CAM (Gradient-weighted Class Activation Mapping)
+to selected test samples. Grad-CAM generates visual
+heatmaps that highlight the most influential regions in the
+input image areas that contributed most strongly to the
+model’s predictions. These heatmaps offer a visual
+explanation of the internal decision-making process, which
+is often considered a black box in deep learning models.
+The visualizations revealed several consistent patterns. For
+genuine signatures, the model typically focused on
+distinctive structural elements, such as unique loops,
+curves, stroke thicknesses, and crossing points particularly
+in the central region of the signature, where writing
+pressure and control are usually most stable. These features
+are often difficult for a forger to replicate consistently,
+which makes them highly valuable for distinguishing
+genuine signatures from forgeries. In contrast, for forged
+signatures, the attention maps were more scattered. The
+model appeared to either focus on less defined strokes or
+sometimes even ignored noise or unnatural artifacts
+introduced during imitation. In several cases, the heatmaps
+showed reduced focus on the beginning or end of the
+signature, likely because these regions tend to vary even in
+genuine samples and carry less discriminative information.
+These observations align well with human reasoning:
+complex or personalized parts of a signature are naturally
+more informative than simple straight lines or repeated
+patterns. By confirming that the model pays attention to
+such regions, Grad-CAM helps validate the reliability of
+the learned features. Importantly, this layer of visual
+explainability increases trust in the model’s predictions
+especially in sensitive use cases like banking, legal
+verification, and forensic document analysis. Stakeholders
+can better interpret the outcome and have more confidence
+in deploying such a system in real-world environments
+where interpretability is just as critical as accuracy.
+
+D. Demonstration
+To understand how well the model works on new writers it
+hasn't seen before, tested it using signatures from one such
+writer in the test set. This writer had both real and forged
+signatures. Work picked one real and one forged signature
+and passed them through the trained model, which
+converted them into numeric representations (embeddings).
+Then, work measured how similar they were using cosine
+similarity. Based on the earlier decided threshold for
+deciding if two signatures are similar, the model classified
+this pair as a forged pair. This prediction was correct,
+showing that the model can recognize forged signatures
+even from a writer it hasn't seen during training.
+
+Fig. 5. Genuine vs. Forged Signature Verification
+
+Figure 5 displays a genuine signature and a forged
+signature from a writer present in the separate test set, who
+was not included in the training or validation data. To
+verify if these two signatures belong to the same person,
+their embeddings were extracted using the trained base
+network, and the cosine similarity between them was
+calculated. The resulting similarity score was 377.2191.
+Based on the established EER threshold of 717.1418, the
+model compares the calculated similarity to this threshold.
+Since the similarity (377.2191) was less than the threshold
+(717.1418), the model predicted a Forged Pair. This means
+the cosine similarity between the genuine and forged
+signatures was below the EER threshold, leading the model
+to correctly identify that these two signatures did not
+originate from the same person, even though one is a
+genuine instance and the other is a forgery of that same
+
+Fig. 6. Genuine Signature
+
+Figure 6 shows the original image of a genuine signature
+alongside its Grad-CAM heatmap. The heatmap reveals that
+the model focuses mainly on key structural parts of the
+signature, such as loops, curves, and intersections—
+especially around the central body of the signature. Warmer
+color regions (red and yellow) highlight where the model
+gives the most attention, often aligning with smoother, more
+natural strokes that reflect the writer's original style. This
+focus suggests that the model relies on the fluidity and
+
+5
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:02:46 UTC from IEEE Xplore. Restrictions apply.
+
+Convolutional Neural Network. In 2022 4th International Conference
+on Inventive Research in Computing Applications (ICIRCA) (pp.
+1145-1150). IEEE.
+
+consistency of these strokes to identify the signature as
+genuine.
+
+[4] Kumar, G. M., Satyanarayana, P., Sridhar, B., Rohith, K. T., Rao, G. P.,
+& Krishnan, V. G. (2024, September). Deep Neural Networks based
+Handwritten Signature Verification using Machine Learning
+Algorithms. In 2024 Asian Conference on Intelligent Technologies
+(ACOIT) (pp. 1-6). IEEE.
+[5] S. Chattopadhyay, S. Manna, S. Bhattacharya, and U. Pal, “SURDS:
+Self‑Supervised Attention‑guided Reconstruction and Dual Triplet
+Loss for Writer Independent Offline Signature Verification,” arXiv,
+Jan. 2022.
+[6] T. Yan et al., “Signature Detection, Restoration and Verification: A
+Novel Chinese Document Signature Forgery Detection Benchmark,”
+in Proc. CVPR Workshops, 2022, pp. 5163–5172.
+[7] H.-H. Kao and C.-Y. Wen, “An Offline Signature Verification and
+Forgery Detection Method Based on a Single Known Sample and an
+Explainable Deep Learning Approach,” Appl. Sciences, vol. 10,
+no. 11, 2020, Art. 3716.
+[8] W. Xiao and H. Wu, “Learning Features for Offline Handwritten
+Signature Verification Using Spatial Transformer Network,”
+*Scientific Reports*, vol. 15, Art. 9453, 2025.
+[9] O. Ozyurt et al., “Offline Handwriting Signature Verification: A
+Transfer Learning and Feature Selection Approach,” arXiv, Jan. 2024.
+[10] S. Dey, A. Dutta, J. I. Toledo, S. K. Ghosh, J. Llados, and U. Pal,
+“SigNet: Convolutional Siamese Network for Writer-Independent
+Offline Signature Verification,” arXiv, Jul. 2017.
+[11] Krishnan, S., Rajendran, S. and Zakariah, M., 2025. A secured
+accreditation and equivalency certification using Merkle mountain
+range and transformer based deep learning model for the education
+ecosystem. Scientific Reports, 15(1), p.22511.
+[12] D. Engin et al., “Offline Signature Verification on Real‑World
+Documents,” arXiv, Apr. 2020.
+[13] L. Li, L. Huang, F. Yin, and F. Chen, “Offline Signature Verification
+Using a Region‑Based Deep Metric Learning Network,” Pattern
+Recognition, vol. 118, 2021, Art. 108009.
+[14] D. Tsourounis, “Application to Offline Handwritten Signature
+Verification,” arXiv, 2023.
+[15] A. Parziale et al., “SM‑DTW: Stability‑Modulated Dynamic Time
+Warping for Signature Verification,” arXiv, 2024.
+[16] M. Schuckers, “Receiver Operating Characteristic Curve and Equal
+Error Rate,” in *Biometric Systems: Technology, Design and
+Performance Evaluation*, edited by L. O’Gorman and J. P. Benaloh,
+Springer, 2010, ch. 5, pp. 135–154. doi:10.1007/978-1-84996-2025_5
+[17] J. C. Wu, “Operational Measures and Accuracies of ROC Curve on
+Large Fingerprint Data Sets,” *NIST Internal Report*, NISTIR 7495,
+2008.
+[18] T. Fawcett, “An Introduction to ROC Analysis,” *Pattern Recognition
+Letters*,
+vol. 27,
+no. 8,
+pp. 861–874,
+2006.
+doi:10.1016/j.patrec.2005.10.010.
+[19] Ajitha, P., Sundara Rajulu Navaneethakrishnan, A. Sivasangari, and R.
+Surendran. "Multibio Authentication of Online Users in Proctoring
+and E-Learning." In 2024 Third International Conference on
+Electrical, Electronics, Information and Communication Technologies
+(ICEEICT), pp. 1-7. IEEE, 2024.
+[20] Jayaprakash, P., and G. Ramkumar. "Accurate Detection of Forgery in
+Signature using Deep Learning Algorithm in Comparison with
+Random Forest Model." In 2023 9th International Conference on
+Smart Structures and Systems (ICSSS), pp. 1-5. IEEE, 2023.
+
+Fig. 7. Forged Signature
+
+Figure 7, on the other hand, presents the original image
+of a forged signature and its corresponding heatmap. Unlike
+the genuine case, the forged heatmap shows attention
+focused on scattered regions, including the irregular loop
+and less confidently executed strokes. The warmer regions
+in this case are more diffused and less aligned with the main
+structural flow of the signature. This might indicate that the
+model is picking up on inconsistencies or unnatural stroke
+formations, which could reflect hesitation or replication
+effort typically seen in forgeries. The comparative analysis
+of these Grad-CAM outputs highlights that the model learns
+to distinguish genuine and forged signatures by focusing on
+specific, critical regions. For genuine signatures, these are
+consistent and well-defined structural elements, whereas for
+forgeries, attention is drawn to atypical or erratic stroke
+formations. This qualitative insight supports the reliability
+of the model’s internal feature representations in
+differentiating between authentic and fake signatures.
+V. CONCLUSION AND FUTURE DIRECTION
+In summary, the proposed ArcFace-based CNN model
+performs strongly in the task of offline signature
+verification, especially when verifying signatures from
+unseen writers. The key results, with a ROC AUC of 0.9194
+and an EER of 0.1762 demonstrate that the model is both
+accurate and generalizable. The iterative training and
+optimization process significantly contributed to achieving
+these results. Moreover, the use of Grad-CAM helped verify
+that the model's attention aligns with human-understood
+signature features, increasing the explainability and
+trustworthiness of the system. While the current system
+performs well, there is room for further improvement.
+Future work could focus on: Expanding the dataset to
+include more writers and cultural variations in signatures.
+Exploring alternative explainability techniques like LIME or
+SHAP. Enhancing forgery detection by incorporating pen
+pressure or dynamic features (in online signatures).
+Converting this system into a mobile or web application for
+practical deployment.
+REFERENCES
+[1] J. Deng, J. Guo, N. Xue, and S. Zafeiriou, “ArcFace: Additive Angular
+Margin Loss for Deep Face Recognition,” in Proc. IEEE/CVF CVPR,
+2019, pp. 4690–4699.
+[2] R. R. Selvaraju et al., “Grad‑CAM: Visual Explanations from Deep
+Networks via Gradient‑Based Localization,” in Proc. IEEE ICCV,
+2017, pp. 618–626.
+[3] Tamilvizhi, T., Surendran, R. and Geetha Rani, K., 2022, September.
+Image Pre-Processing based Sign Language Recognition using
+
+6
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:02:46 UTC from IEEE Xplore. Restrictions apply.
+
+

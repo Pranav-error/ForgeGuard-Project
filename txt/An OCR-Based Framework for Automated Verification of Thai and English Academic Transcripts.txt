@@ -1,0 +1,656 @@
+2025 29th International Computer Science and Engineering Conference (ICSEC) | 979-8-3315-7383-6/25/$31.00 ©2025 IEEE | DOI: 10.1109/ICSEC67360.2025.11298018
+
+2025 29th International Computer Science and Engineering Conference (ICSEC)
+
+An OCR-Based Framework for Automated
+Verification of Thai and English Academic
+Transcripts
+Bhattarabhorn Wattanacheep† , Pannathorn Komkris‡ , Issariyapon Heymun§ , Wongsawan Srimontrisanga∗
+†‡§ School of Information Technology,∗ KMITL Registration and Educational Service Office
+
+King Mongkut’s Institute of Technology Ladkrabang
+Bangkok, Thailand
+bhattarabhorn@it.kmitl.ac.th† , 65070134@kmitl.ac.th‡ , 65070256@kmitl.ac.th§ , wongsawan.sr@kmitl.ac.th∗
+Abstract—Academic transcripts are essential documents for
+employment and higher education but remain susceptible to
+forgery and manipulation, creating a need for efficient and
+reliable verification methods. Traditional verification is often
+time-consuming due to the structural complexity of transcripts
+and the challenges of extracting information from PDF and
+image formats. This study presents an OCR-based framework
+for automated transcript verification that integrates preprocessing and postprocessing techniques to enhance data extraction
+quality. English transcripts were evaluated using OCR models
+PaddleOCR, Tesseract, and EasyOCR, while Thai transcripts
+were assessed with Tesseract and EasyOCR. Experimental
+results demonstrate that preprocessing substantially improves
+extraction accuracy and that postprocessing further refines the
+outputs. Among the evaluated models, PaddleOCR achieved
+the highest performance on English transcripts with an overall
+accuracy of 81.87%, whereas Tesseract yielded the best accuracy
+for Thai transcripts at 81.11%. These findings underscore the
+effectiveness of combining OCR with tailored preprocessing
+and postprocessing strategies to support reliable and efficient
+transcript verification in academic settings.
+Index Terms—Optical character recognition (OCR), PaddleOCR, Tesseract, EasyOCR, Academic transcripts, Document
+classification.
+
+I. I NTRODUCTION
+In the current landscape of employment and higher education, applicants are typically required to submit supporting
+documents such as resumes, identification, certificates, and
+academic transcripts. Among these, transcripts play a critical
+role in validating academic achievements and qualifications.
+However, they are also vulnerable to alteration and forgery,
+creating a pressing need for reliable and efficient verification
+mechanisms.
+Transcript verification at King Mongkut’s Institute of Technology Ladkrabang (KMITL) is still conducted through conventional channels. External organizations—such as companies or universities—submit inquiries via email or postal
+mail to the registrar’s office, where staff manually compare
+the submitted documents, usually in PDF or scanned form,
+against the official database. Although transcripts at KMITL
+follow a standardized layout, this approach remains slow,
+* Corresponding author: wongsawan.sr@kmitl.ac.th
+
+error-prone, and increasingly burdensome, with verification
+requests already exceeding 2,500 cases annually and continuing to rise.
+Optical Character Recognition (OCR) technology provides
+a promising pathway to address these challenges by automatically extracting textual information from non-editable transcript files (e.g., PDFs or scanned images) and converting it
+into structured digital data. When combined with appropriate
+preprocessing to enhance image quality and postprocessing to
+refine textual outputs, OCR enables accurate alignment with
+institutional records, thereby accelerating verification and
+reducing the likelihood of human error. The adoption of OCRbased verification can thus transform transcript validation at
+KMITL into a faster, more accurate, and scalable system
+that strengthens institutional efficiency and builds trust with
+external stakeholders.
+This study develops and evaluates an OCR-based framework specifically tailored for KMITL’s transcript verification.
+The framework integrates preprocessing techniques, applies
+multiple OCR models for both Thai and English transcripts,
+and incorporates postprocessing methods to improve accuracy.
+Experimental evaluations were conducted on widely used
+OCR models, including PaddleOCR [1], Tesseract [2], and
+EasyOCR [3]. Results show that preprocessing and postprocessing substantially enhance extraction quality, with PaddleOCR achieving the highest accuracy for English transcripts
+and Tesseract performing best for Thai transcripts. Overall,
+this research not only delivers a practical solution for transcript verification at KMITL but also establishes a foundation
+for scalable applications in academic institutions, contributing toward secure, efficient, and technology-driven academic
+document verification in higher education institutions.
+II. R ELATED W ORKS
+Optical Character Recognition (OCR) has long served as
+a foundational technology for digitizing textual content. By
+converting printed or handwritten text in images or scanned
+documents into machine-readable formats, OCR enables efficient storage, retrieval, and analysis of paper- and imagebased records. Modern OCR engines, enhanced by machine
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:02:45 UTC from IEEE Xplore. Restrictions apply.
+
+979-8-3315-7383-6/25/$31.00 ©2025 IEEE
+
+147
+
+2025 29th International Computer Science and Engineering Conference (ICSEC)
+
+learning and deep learning, have demonstrated robust recognition capabilities across diverse fonts, layouts, and even
+handwritten styles. Beyond digitization, OCR has increasingly
+been integrated into higher-level applications such as information extraction, natural language processing (NLP), and
+document understanding.
+Research has also focused on addressing language-specific
+challenges within OCR-based pipelines. For example, a notable study investigated Thai spelling correction from OCR
+word outputs [4]. The Thai language presents unique challenges due to its complex script system—44 consonants, 12
+vowels, 4 tone marks, and 10 special characters—together
+with the absence of explicit word boundaries. These characteristics complicate downstream applications such as sentiment
+analysis, machine translation, and OCR postprocessing. The
+study introduced a two-stage framework of error detection and
+correction. Using 133,757 sentences from the Thai Digital
+Collection (TDC), containing over 224,000 erroneous syllables, synthetic text-image datasets were generated across
+multiple fonts and sizes to simulate OCR scenarios. Tesseract
+OCR was used to extract text, exposing common errors such
+as missing characters and improper line breaks. Experimental
+comparisons showed that Bi-LSTM achieved the best performance for error detection. These results underscore the role
+of advanced deep learning methods in enhancing Thai OCR
+postprocessing.
+Beyond language-specific tasks, general-purpose OCRbased approaches have targeted structured information extraction. The FUNSD dataset [5], derived from RVL-CDIP,
+provides annotated forms with entities labeled as key, value,
+header, or other, along with semantic relationships. While the
+dataset proved useful, annotation inconsistencies limited its
+broader applicability. Subsequent work revised the dataset and
+introduced U-Net models enhanced with Channel-Invariant
+Deformable Convolutions for improved key-value pair detection. These efforts highlight how spatial layout analysis and
+structured annotations can augment OCR-based approaches
+for practical document understanding.
+In contrast to OCR-dependent pipelines, recent studies have
+advanced OCR-free methods for document understanding.
+The Document Understanding Transformer (DONUT) [6]
+was introduced as an end-to-end framework that directly
+encodes document images into structured outputs such as
+JSON, thereby eliminating the need for OCR. By pretraining
+on large-scale datasets, including IIT-CDIP and the synthetic
+SynthDoG corpus, DONUT demonstrated superior accuracy,
+efficiency, and generalizability compared to OCR-based visual
+document understanding systems, marking a pivotal step
+toward scalable OCR-free solutions. Building on this line of
+work, an OCR-free approach for identity document information extraction [7] combined a Swin Transformer encoder with
+a BART decoder to jointly capture visual layouts and semantic
+content. To mitigate data scarcity, the study generated more
+than 7,000 synthetic documents in addition to 969 real Italian
+identity records. Experimental results showed that models pretrained with synthetic data substantially outperformed those
+
+trained only on real data, particularly in low-resource scenarios. While OCR-free methods have proven highly effective in
+structured domains such as identity documents, preliminary
+experiments in applying DONUT to educational transcripts
+suggest challenges in generalizing to the more complex and
+heterogeneous layouts of transcript data.
+Taken together, these studies illustrate both the advances
+and challenges in OCR and document understanding. OCRbased pipelines remain indispensable for digitizing textual
+information and handling language-specific contexts such
+as Thai, but they often require sophisticated postprocessing
+to overcome recognition errors. OCR-free models such as
+DONUT demonstrate promising alternatives for structured
+document interpretation and identity verification, yet their
+adaptability to domain-specific applications like academic
+transcripts remains limited. This gap underscores the need for
+tailored OCR frameworks that integrate preprocessing, robust
+recognition, and postprocessing to enable reliable verification
+in transcript-focused scenarios.
+III. M ETHODOLOGY
+The proposed methodology for developing an OCR-based
+framework for the automated verification of Thai and English academic transcripts at KMITL is organized into five
+sequential stages, as illustrated in Figure 1. The workflow
+begins with image acquisition, where transcript images are
+collected for further processing. This is followed by data
+preprocessing, which enhances image quality and prepares the
+documents for recognition through techniques such as denoising, binarization, and deskewing. In the information extraction
+stage, OCR models are applied to detect and convert textual
+content from the transcript images into machine-readable
+text. The extracted text then proceeds to the postprocessing
+stage, where it is transformed into a structured key–value
+JSON format and further refined through error correction
+techniques leveraging domain-specific rules, dictionaries, and
+statistical models. Finally, the validated JSON output is crossreferenced with the KMITL Registration and Educational
+Service Office (KRESO) database, the authoritative source
+of student records, thereby enabling automated verification of
+transcript content and consistency.
+A. Image Acquisition and Data Preprocessing
+The process begins with the acquisition of transcript documents, which may be provided as scanned images, PDF
+exports, or captured images. In cases where the input is a
+PDF file, it is first converted into image format (.png), with
+a resolution set at 300 DPI to ensure optimal quality for
+subsequent processing.
+Once converted, the images are passed through a Transcript
+Classification Model to verify whether the input corresponds
+to an academic transcript. The dataset used for developing
+this model comprised a total of 9,130 images, including 3,510
+transcript document from King Mongkut’s Institute of Technology Ladkrabang (KMITL) and 5,620 non-transcript images
+collected from various sources. These non-transcript samples
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:02:45 UTC from IEEE Xplore. Restrictions apply.
+
+148
+
+2025 29th International Computer Science and Engineering Conference (ICSEC)
+
+Fig. 1. End-to-end pipeline of the proposed OCR-based methodology for
+automated verification of Thai and English academic transcripts.
+
+included diverse document types such as textbooks (e.g.,
+Physical Science Interactive Textbook, Gr10 Mathematics,
+Basic Mathematics, NCERT Class 10 Science), financial and
+receipt datasets, stamp verification datasets, scanned images,
+and even natural scene and pet image datasets. This diversity
+was intentionally included to ensure the model’s robustness
+in distinguishing transcript documents from irrelevant or
+misleading inputs.
+The dataset was divided into training (72%), validation
+(18%), and test (10%) sets. A custom deep learning model
+based on a Convolutional Neural Network (CNN) with a
+sequential architecture was employed, consisting of convolutional layers followed by max pooling, flattening, and
+fully connected dense layers with ReLU activation. The final
+classification layer used a softmax function for binary classification. The model was trained using the Adam optimizer and
+categorical cross-entropy as the loss function. The evaluation
+results demonstrated a high level of performance, achieving
+an accuracy of 99.89% with a loss of 1.41%. If the input
+is classified as non-transcript, the system immediately alerts
+the user and terminates the process. Conversely, if identified
+as a valid transcript, the image is forwarded to the image
+enhancement stage.
+In this stage, several preprocessing operations are applied
+to improve the image quality for OCR. First, watermarks
+or colored institutional stamps are suppressed by filtering
+high-saturation and high-value pixels and replacing them with
+white, thereby enhancing text prominence. Next, brightness
+adjustment and illumination correction are performed, followed by noise reduction to further enhance the continuity of
+text strokes. Since some fine details may be lost, a character
+thickening process is applied to restore clarity and improve
+OCR recognition. Deskewing is then carried out by detecting
+skew angles via the Hough Line Transform and rotating the
+image accordingly. Finally, the document region is cropped
+to exclude unnecessary background elements. The results
+of each enhancement step are illustrated in Figure 2. After
+enhancement, image quality is reassessed to ensure the docu-
+
+Fig. 2. Image Enhancement Workflow in Data Preprocessing.
+
+ment remains valid as a transcript. If the quality is insufficient,
+the user is notified to recheck the input; otherwise, the
+document proceeds to the Transcript Language and Degree
+Classification Model. This model determines the language
+(Thai or English) and the academic level (undergraduate or
+graduate). It was trained on 3,510 transcript images evenly
+distributed across the four target classes, with additional nontranscript samples included for robustness. The dataset was
+divided into training (80%) and testing (20%) subsets. A
+ResNet-18 architecture with pretrained weights was adopted
+as the feature extractor, and transfer learning was applied for
+multi-output classification. The model demonstrated strong
+generalization ability on the test set, achieving highly satisfactory results for both tasks.
+Following classification, the system performs table structure analysis to segment each transcript into four logical regions: header, left body, right body, and footer. Morphological
+operations with horizontal and vertical kernels are applied
+to detect table lines, followed by region-based cropping.
+To address misalignment, the widths of the left and right
+body regions are compared, and if a predefined threshold
+is exceeded, the middle block is adjusted and re-divided.
+Aspect ratios of the cropped regions are also validated to
+ensure structural consistency. Validated segments are then
+forwarded for subsequent processing, while failures trigger
+an error message indicating segmentation issues.
+B. Information Extraction
+After segmentation, each region enters the Information
+Extraction stage, where Optical Character Recognition (OCR)
+is applied to convert visual characters into machine-readable
+text. To improve reliability, postprocessing techniques such as
+dictionary-based spell-checking are employed. In this study,
+three widely adopted OCR frameworks were evaluated: EasyOCR, PaddleOCR, and Tesseract. EasyOCR supports more
+than 80 languages, including Thai and English, making it
+suitable for multilingual tasks with minimal configuration.
+PaddleOCR, developed under the PaddlePaddle deep learning platform, provides high-performance recognition across
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:02:45 UTC from IEEE Xplore. Restrictions apply.
+
+149
+
+2025 29th International Computer Science and Engineering Conference (ICSEC)
+
+multiple languages but does not include official support for
+Thai. Tesseract, one of the most established open-source
+OCR engines, supports over 100 languages including Thai
+and English, and since version 4.0 integrates Long ShortTerm Memory (LSTM) networks to improve recognition,
+particularly for complex scripts and degraded images. By
+benchmarking these frameworks on both Thai and English
+transcripts, the system ensures accurate and consistent text
+extraction tailored to the requirements of KMITL’s verification process.
+C. Data Transformation and Error-correction
+The outputs generated by OCR models are inherently
+heterogeneous and must undergo transformation to ensure
+consistency with the database schema. At this stage, errorcorrection mechanisms are also integrated. The extracted text
+is reformatted into a structured key–value representation,
+enabling direct comparison with reference records stored in
+the KRESO database. Specifically, PaddleOCR and EasyOCR
+produce structured lists containing bounding box coordinates,
+recognized text, and confidence scores, whereas Tesseract
+generates plain text without explicit structural annotations.
+Consequently, the transformation pipeline is adapted to each
+framework.
+The process begins with the Header, which serves as a
+primary quality indicator. If critical attributes (e.g., student
+name or ID) are missing, and if fewer than 70% of required
+header fields are successfully extracted, the document is
+flagged as low quality and rejected. Otherwise, the Body
+and Footer are transformed into the predefined schema. For
+PaddleOCR and EasyOCR, line merging is performed based
+on y-axis alignment, while for Tesseract segmentation is
+guided by predefined keywords (e.g., “Name,” “Student ID,”
+“Degree”). Preprocessing operations, including case normalization, whitespace trimming, and removal of extraneous
+symbols, are applied uniformly across all frameworks.
+Error-correction is integrated throughout the document. In
+the Header, fuzzy matching based on Levenshtein distance is
+employed to mitigate OCR-induced variations, and similarity
+with reference keywords (e.g., institutional name) is accepted
+when exceeding 80%. Academic honors are normalized into
+numeric codes (e.g., 1 = first-class honors, 2 = second-class
+honors), and date formats are standardized by converting
+month names and synchronizing Gregorian and Buddhist
+calendar years.
+In the Body, transcript content extracted from left and right
+pages is merged and organized by semester. Core attributes
+include academic year, semester, credit units, GPA, course
+code, course title, and grade (e.g., A–F, S/U, O, G, P, I,
+T(A–B)). Graduate transcripts has additionally specify course
+types (e.g., Cr, Nc, Tr), and special cases such as thesis defenses are identified through domain-specific keywords. Errorcorrection in this section emphasizes course code validation:
+if a course code matches an entry in the database and the
+corresponding course title is sufficiently similar, the system
+corrects the course title to align with the reference record.
+
+GPA values and course grades are not altered but reformatted
+into standardized patterns (e.g., X.XX), thereby facilitating reliable database-level verification while preserving the integrity
+of the original course records. For graduate-level transcripts,
+examination-related fields are further validated against the
+graduate assessment database.
+The Footer includes the date of issue, the name of the
+authorized registrar, and the position of the signatory. These
+elements are extracted and structured into the schema, after
+which error-correction procedures cross-check registrar names
+and positions against authoritative records.
+Finally, all extracted and corrected information from the
+Header, Body, and Footer is consolidated into a JSON structure, producing a standardized key–value representation that
+ensures compatibility with automated verification workflows.
+IV. E VALUATION
+The dataset used in this study comprises synthetically
+generated academic transcripts provided by the KMITL Registration and Educational Services Office (KRESO). All documents were anonymized to preserve confidentiality while
+maintaining the structural and linguistic characteristics of
+authentic records. The corpus covers both undergraduate and
+graduate levels, consisting of 211 undergraduate transcripts in
+English, 211 undergraduate transcripts in Thai, 140 graduate
+transcripts in English, and 140 graduate transcripts in Thai,
+for a total of 702 documents. Each transcript follows the
+standard structure of an academic record, including header
+fields (e.g., student name, program, degree level, graduation
+status), body sections (e.g., course lists, credit units, grades),
+summary fields (e.g., GPA), and footer elements (e.g., date of
+issue, signatory name, and position). Representative examples
+of these transcript types are illustrated in Figure 3.
+To enhance model robustness and account for potential
+variations in real-world scenarios, data augmentation was
+applied to the original set of transcripts. Four augmentation
+techniques were employed: (i) random rotation within a
+range of −10◦ to +10◦ , (ii) noise injection using five noise
+types (Gaussian, Salt, Pepper, Salt-and-Pepper, and Speckle)
+with varying variances, (iii) brightness adjustment by scaling
+image intensity between 20% and 200% of the original,
+and (iv) a combined augmentation simultaneously applying
+rotation, noise, and brightness adjustment. In total, these
+procedures generated 2,808 augmented images. Combined
+with the original 702 transcripts, the final dataset comprised
+3,510 samples. The details of the augmentation methods and
+sample distributions are summarized in Table I.
+The original transcript documents, together with their augmented counterparts, were evaluated under four experimental configurations: (i) without image enhancement or error
+correction, (ii) with image enhancement only, (iii) with error
+correction only, and (iv) with both image enhancement and
+error correction. Across all configurations, three OCR models—Tesseract, PaddleOCR, and EasyOCR—were applied to
+English transcripts, while Tesseract and EasyOCR were used
+for Thai transcripts. System performance was evaluated using
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:02:45 UTC from IEEE Xplore. Restrictions apply.
+
+150
+
+2025 29th International Computer Science and Engineering Conference (ICSEC)
+
+TABLE II
+OCR MODEL PERFORMANCE ON E NGLISH (EN) AND T HAI (TH)
+TRANSCRIPTS UNDER FOUR CONFIGURATIONS : R AW, E NHANCEMENT,
+C ORRECTION , AND E NHANCEMENT + C ORRECTION .
+OCR Model
+Tesseract
+
+PaddleOCR
+
+EasyOCR
+
+Tesseract
+
+EasyOCR
+
+Fig. 3. Illustration of the original transcript documents used in this study,
+consisting of (a) undergraduate transcript in English, (b) undergraduate
+transcript in Thai, (c) graduate transcript in English, and (d) graduate
+transcript in Thai.
+TABLE I
+S UMMARY OF TRANSCRIPT DATASET INCLUDING ORIGINAL AND
+AUGMENTED SAMPLES
+
+Dataset Category
+Original transcripts
+
+Augmented transcripts
+
+Grand Total
+
+Method
+Undergraduate (English)
+Undergraduate (Thai)
+Graduate (English)
+Graduate (Thai)
+Total Original
+(i) Rotation (−10◦ to +10◦ )
+(ii) Noise injection (5 types)
+(iii) Brightness adjustment (20%–200%)
+(iv) Combined augmentation
+Total Augmented
+
+No. of Samples
+211
+211
+140
+140
+702
+702
+702
+702
+702
+2,808
+3,510
+
+four metrics: Accuracy, F1-Score, Word Error Rate (WER),
+and Character Error Rate (CER). A summary of the results is
+presented in Table II.
+In Configuration 1 (no enhancement and no correction), the
+raw transcript images were directly processed by the OCR
+models. Many documents exhibiting skew or rotation could
+not be segmented into the required four sub-sections, as the
+table lines used for segmentation were undetectable. Only
+documents with minimal skew (less than ±0.35°) and clearly
+defined grid lines were successfully processed. Nevertheless,
+documents with varying levels of noise or brightness were
+
+Doc. Type
+Raw
+Enhancement Only
+Correction Only
+Enh.+ Corr.
+Raw
+Enhancement Only
+Correction Only
+Enh.+Corr.
+Raw
+Enhancement Only
+Correction Only
+Enh.+ Corr.
+Raw
+Enhancement Only
+Correction Only
+Enh.+ Corr.
+Raw
+Enhancement Only
+Correction Only
+Enh.+ Corr.
+
+Doc. Lang.
+EN
+
+EN
+
+EN
+
+TH
+
+TH
+
+Accuracy
+0.5924
+0.7575
+0.6091
+0.7776
+0.5612
+0.6740
+0.6605
+0.8187
+0.4904
+0.5145
+0.5803
+0.6262
+0.4812
+0.5973
+0.6209
+0.8111
+0.4602
+0.5423
+0.5843
+0.7164
+
+F1-Score
+0.5926
+0.7576
+0.6094
+0.7776
+0.5620
+0.6747
+0.6612
+0.8193
+0.4896
+0.5093
+0.5800
+0.6212
+0.4817
+0.5980
+0.6220
+0.8126
+0.4616
+0.5432
+0.5849
+0.7166
+
+WER
+0.5023
+0.3855
+0.4743
+0.3425
+0.5613
+0.5089
+0.4184
+0.2983
+0.6343
+0.6566
+0.5048
+0.4993
+0.6215
+0.5712
+0.4191
+0.2497
+0.6352
+0.6236
+0.4642
+0.3784
+
+CER
+0.3673
+.1987
+0.3640
+0.1964
+0.3454
+0.1969
+0.3121
+0.1486
+0.4114
+0.3364
+0.3823
+0.2968
+0.4082
+0.2316
+0.3790
+0.1879
+0.4353
+0.2825
+0.4035
+0.2422
+
+still segmentable and could undergo OCR. Among English
+transcripts, Tesseract achieved the best performance, followed
+by PaddleOCR and EasyOCR. For Thai transcripts, Tesseract
+again outperformed EasyOCR.
+In Configuration 2 (with enhancement but without correction), performance improved considerably. For English
+transcripts, Tesseract remained the top-performing model,
+followed by PaddleOCR and EasyOCR. For Thai transcripts, Tesseract again outperformed EasyOCR. Enhancement yielded substantial performance gains, particularly for
+Tesseract on English transcripts (+16.51%) and PaddleOCR
+on English transcripts (+11.28%). Similar improvements were
+also observed in Thai transcripts, where Tesseract improved
+by +11.61% and EasyOCR by +8.21%.
+In Configuration 3 (without enhancement but with correction), extracted text was validated against mandatory attributes, including the student’s name and student ID, and was
+required to contain at least 70% of the expected header information. This filtering ensured that only structurally valid outputs were processed further. Under this setting, PaddleOCR
+achieved the highest performance on English transcripts,
+followed by Tesseract and EasyOCR, whereas EasyOCR surpassed Tesseract on Thai transcripts. Post-processing applied
+directly to raw outputs provided notable improvements for
+Thai transcripts (Tesseract +13.97%, EasyOCR +12.41%)
+but only a minor gain for Tesseract on English transcripts
+(+1.67%). When correction was applied after enhancement,
+performance increased further, most prominently for Tesseract on Thai transcripts (+21.38%) and EasyOCR on Thai
+transcripts (+17.41%), as well as for PaddleOCR on English
+transcripts (+14.47%).
+Finally, Configuration 4 (with both enhancement and correction) achieved the highest performance across all models
+and both languages. The combined approach consistently
+delivered the greatest improvements, with Tesseract on Thai
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:02:45 UTC from IEEE Xplore. Restrictions apply.
+
+151
+
+2025 29th International Computer Science and Engineering Conference (ICSEC)
+
+transcripts improving by +32.99% and PaddleOCR on English
+transcripts by +25.75%, thereby highlighting the synergistic
+advantage of combining enhancement and correction strategies within the OCR pipeline.
+Overall, the findings clearly demonstrate that enhancement
+substantially improves OCR robustness, particularly in addressing document skew and variations in image quality, while
+correction plays a critical role in ensuring both structural
+completeness and semantic validity of the extracted content.
+Among the evaluated OCR models, Tesseract consistently
+achieved the highest performance on English transcripts and
+also led in Thai transcripts, except under the correctiononly setting, where EasyOCR exhibited superior adaptability.
+PaddleOCR, although not always the top performer, delivered competitive results, particularly in English transcript
+extraction. These outcomes highlight that effective dataset
+preparation, coupled with the integration of both enhancement
+and correction strategies, is essential for achieving reliable
+and accurate OCR performance on academic transcript documents.
+
+[4] J. Mengkaw and P. Thiengburanathum, Thai spelling correction investigation framework based on OCR word extraction, Independent Study, Chiang Mai Univ., 2024. [Online]. Available:
+http://cmuir.cmu.ac.th/jspui/handle/6653943832/79707
+[5] C. Li and D. T.-N. Nguyen, “Revising FUNSD dataset for key-value
+detection in document images,” arXiv preprint arXiv:2010.05322, 2020.
+doi: 10.48550/arXiv.2010.05322
+[6] G. Kim, T. Hong, M. Yim, J. Nam, J. Park, J. Yim, W. Hwang,
+S. Yun, D. Han, and S. Park, “OCR-free document understanding
+transformer,” in Proc. Eur. Conf. Computer Vision (ECCV), 2022. doi:
+10.48550/arXiv.2111.15664
+[7] S. Carta, A. Giuliani, L. Piano, and S. G. Tiddia, “An end-toend OCR-free solution for identity document information extraction,” Procedia Computer Science, vol. 246, pp. 453–462, 2024. doi:
+10.1016/j.procs.2024.09.425
+
+V. C ONCLUSION
+This study presented an end-to-end pipeline for transcript
+digitization and verification that integrates image enhancement, OCR extraction, and correction for structured database
+validation. The framework begins with transcript classification, image enhancement, applies language- and degree-level
+classification, and then layout segmentation. The extracted
+text is subsequently transformed and corrected to ensure
+consistency and accuracy before being verified against the
+registrar’s records.
+Experimental evaluation on a synthetic dataset of 3,510
+transcripts in English and Thai demonstrated the effectiveness
+of the proposed approach. Image enhancement substantially
+improved OCR robustness—most notably for English with
+gains up to +16.51% (Tesseract) and for Thai with gains up
+to +11.61% (Tesseract) over raw inputs. Applying correction
+further boosted reliability: when applied after enhancement,
+improvements reached +14.47% for English (PaddleOCR) and
++21.38% for Thai (Tesseract). Combining both enhancement
+and correction yielded the highest overall performance, with
+aggregate gains up to +25.75% for English (PaddleOCR) and
++32.99% for Thai (Tesseract) relative to raw inputs. Among
+the OCR models, PaddleOCR achieved the best English performance under the combined setting, while Tesseract consistently led on Thai, with EasyOCR showing competitive results
+in Thai—particularly under the correction-only condition.
+R EFERENCES
+[1] PaddleOCR, PaddleOCR: Awesome multilingual OCR toolkit. [Online].
+Available: https://github.com/PaddlePaddle/PaddleOCR
+[2] R. Smith, “An overview of the Tesseract OCR engine,” in Proc.
+Int. Conf. Document Analysis and Recognition (ICDAR), 2007, pp.
+629–633.
+[3] A. Mahajan, EasyOCR: A Comprehensive Guide. [Online]. Available:
+https://medium.com/@adityamahajan.work/easyocr-a-comprehensiveguide-5ff1cb850168
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:02:45 UTC from IEEE Xplore. Restrictions apply.
+
+152
+
+

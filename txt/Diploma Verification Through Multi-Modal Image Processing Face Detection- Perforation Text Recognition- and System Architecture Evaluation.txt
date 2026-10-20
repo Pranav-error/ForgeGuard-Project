@@ -1,0 +1,885 @@
+2024 7th International Conference on Information and Communications Technology (ICOIACT)
+
+2024 7th International Conference on Information and Communications Technology (ICOIACT) | 979-8-3315-3620-6/24/$31.00 ©2024 IEEE | DOI: 10.1109/ICOIACT64819.2024.10913411
+
+Diploma Verification Through Multi-Modal Image
+Processing: Face Detection, Perforation Text
+Recognition, and System Architecture Evaluation
+1st Muh. Iqbal Ahmad
+Departement of Informatics
+Hasanuddin University
+Makassar, Indonesia
+ahmadmi20d@student.unhas.ac.id
+
+2nd Ingrid Nurtanio
+Departement of Informatics
+Hasanuddin University
+Makassar, Indonesia
+ingrid@unhas.ac.id
+
+3rd Zahir Zainuddin
+Departement of Informatics
+Hasanuddin University
+Makassar, Indonesia
+zahir@unhas.ac.id
+
+applications or to gain official positions. This practice is not
+limited to ordinary individuals but also includes public
+figures and officials who buy degrees to gain respect or
+appear more intelligent[2]
+• Face Detection: The system detects and locates faces
+within an image or video stream by scanning the input
+data to identify regions of interest (ROI) corresponding to
+human faces. This process is carried out using advanced
+algorithms, often based on cascading classifiers or deep
+convolutional neural networks (CNN). As demonstrated
+in [3], a CNN cascade for face detection was developed
+with a strong discriminative ability, leading to highly
+effective performance.
+• Feature Extraction: After detecting faces, the next vital
+step is extracting unique facial features. This process
+converts the facial image into a set of numerical
+representations called feature vectors. Deep learningbased feature extraction using Convolutional Neural
+Networks (CNNs).
+• Verification or Recognition: The final stage involves
+matching extracted facial feature vectors with a database
+using methods advanced Deep Learning techniques are
+also employed for identity verification. The system
+assigns an identity label based on the closest match,
+determined by the chosen distance metric or classification
+method.
+
+Abstract—This research presents a novel approach to
+digitally verify diploma authenticity using a combination of
+Siamese Neural Network (SNN) for face verification and
+YOLOv8 for text perforation detection. The SNN model,
+utilizing a binary cross-entropy loss function, successfully
+minimized the loss value from 0.169 to 0.0025 by the sixtieth
+epoch, achieving an accuracy of 0.98. This demonstrates the
+model's high proficiency in differentiating between anchor and
+positive/negative images. Additionally, the YOLOv8 model
+achieved a mean Average Precision (mAP) of 0.93 at a 0.5 IoU
+threshold, further enhancing the precision of text perforation
+detection. This integrated system offers a robust and efficient
+method for ensuring the authenticity of diploma documents,
+contributing significantly to digital document security and
+forgery prevention. The research supports the implementation
+of deep learning in official document verification.
+Keywords—diploma document, face verification, perforations
+detection, machine learning, deep learning.
+
+I. INTRODUCTION
+In the modern era, many people pursue instant gratification
+unethically, disregarding the consequences. This drive for
+self-satisfaction, often disproportionate to one's efforts, leads
+individuals to employ various means to achieve their goals.
+Higher education, for instance, is essential for many, yet its
+complexities involve not only academic performance but also
+oversight by institutions and the government. Technological
+advances, such as digital image processing tools like Adobe
+Photoshop, have facilitated forgery, especially in education,
+where certificates and diplomas are falsified for personal gain
+at the expense of others[1]
+
+Research on perforation in security documents remains
+limited, with manual inspection methods being timeconsuming and error-prone. Few efforts focus on automated
+systems combining local (hole shape) and global (alignment)
+feature analysis, while the lack of public datasets and reliance
+on basic image processing hinder progress. This highlights
+the need for advanced, efficient solutions to improve forgery
+detection[4].
+
+A diploma is a vital document from universities, proving
+that an individual has completed their education and passed
+the necessary exams. Traditional diplomas, being physical,
+are prone to loss or damage, and verifying their authenticity
+is difficult without contacting the issuing authority. The
+current process requires direct verification and legalization
+through the issuer's signature. Diplomas from accredited
+institutions are crucial for employment, and due to high
+competition in Indonesia, cases of fake diplomas are
+common, often reported in the media[2]
+
+The model's dependence on prior high-quality images of
+original artworks limits its use when such images are
+unavailable. Integrating traditional AI techniques could
+improve its accuracy and adaptability for various artwork and
+counterfeit detection tasks. Future research could explore
+methods to authenticate artworks without prior image data,
+expanding the model's applicability [5].
+
+Software like Adobe Photoshop and GIMP provides
+various tools for image manipulation, including editing. Due
+to this, a method is needed to help the public verify the
+authenticity of digital images. Diploma forgery has become a
+notable issue, as fake diplomas are often used for job
+
+The current study reveals that existing face detection
+algorithms struggle with identity documents under complex
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:00:41 UTC from IEEE Xplore. Restrictions apply.
+
+979-8-3315-3620-6/24/$31.00 ©2024 IEEE
+
+73
+
+real-world conditions. Future research should focus on
+developing specialized algorithms or enhancing existing ones
+to improve robustness and accuracy in face detection across
+diverse and challenging scenarios, particularly for documents
+with varying image qualities and environmental conditions
+[6].
+
+In the first scenario, we use face-based verification by
+applying the Haar cascade algorithm for its accuracy and
+efficiency in detecting faces. A pre-trained Siamese Neural
+Network (SNN) architecture is employed for feature
+extraction, which captures hierarchical facial details. We then
+compare the results using SNN and Binary cross-entropy
+loss. SNN helps detect intricate facial patterns, providing a
+stronger basis for comparison, ultimately improving the
+accuracy of the face recognition model.
+
+The study shows that trained forgery detectors surpass
+humans in identifying manipulated images, but more
+adaptable and generalizable methods are needed. Current
+models may struggle with novel or uncommon manipulation
+techniques not covered in training data. Future research
+should focus on algorithms that quickly adapt to new
+forgeries with minimal training, improving robustness in
+real-world scenarios. Additionally, exploring the ethical and
+legal implications of synthetic media and establishing
+detection standards are critical areas for further study. [7].
+While batch correction improves efficiency and accuracy,
+further research should explore active learning techniques to
+better identify and prioritize error clusters for postprocessing. Future work could also focus on adapting the
+OCR recognizer itself to handle document collections,
+reducing error rates. Dynamic updates to the OCR model
+based on document characteristics could enhance system
+robustness and performance. [8].
+While the hybrid approach helps overcome limited
+annotated data for OCR training, more research is needed to
+improve the quality and diversity of synthetic data,
+particularly for historical documents. Advancing character
+generation and line synthesis techniques that capture
+historical script nuances could boost accuracy. Additionally,
+integrating diverse historical datasets, including handwritten
+and degraded documents, would enhance the OCR system's
+robustness across various types of texts. [9].
+
+Fig 1.
+
+Block diagram of face variable
+
+The following outlines each step in the facial verification
+process, which uses a Siamese Neural Network (SNN) for
+both the training and testing phases.
+1. Data Collection
+The initial phase of training involves gathering a
+substantial dataset of facial images, primarily sourced
+from diploma documents. To enhance the model’s
+efficiency and generalization, this data is expanded
+through augmentation techniques, which aim to create a
+more robust and diverse training set.
+
+Research on perforation in forensic document
+examination lacks automation, relying heavily on manual
+methods that are time-consuming and error-prone. The
+absence of advanced computational approaches highlights
+the need for automated solutions to improve accuracy and
+efficiency in analyzing perforation characteristics[10].
+
+2.
+
+Pre-Processing
+Once the data is collected, it undergoes further
+processing to prepare it for the model. This stage
+involves several key sub-processes, including:
+a) Resizing: Adjusting the image dimensions to
+align with the model’s input size (typically a
+fixed size, such as 250x250 pixels for SNN).
+b) Normalization: Converting each pixel value to
+a standardized range (e.g., 0 to 1) to accelerate
+convergence during training.
+c) Labeling: Assigning labels to the images,
+indicating whether two images depict the same
+person or different individuals.
+d) Augmentation:
+Applying
+various
+transformations to the face images, such as
+rotation, flipping, or changes in lighting,
+increases the dataset’s diversity and enhances
+the model's generalization ability.
+
+II. PROPOSED METHOD
+This study presents two methods for verifying diploma
+authenticity. The first method uses face-based verification,
+where the Haar cascade algorithm detects facial images from
+diploma documents from the different levels in Table 1.
+Features are extracted using a Siamese Neural Network
+(SNN) and compared with official student photos from prior
+academic records, such as junior and senior high school
+images. Binary cross entropy loss is then used to evaluate the
+accuracy of the matches. The second method focuses on
+detecting and validating perforated text, typically located in
+the center-right section of the diploma, which includes key
+details like the year of issuance and education level (e.g., "D2020" for primary education, "M-2020" for secondary
+education). The YOLO object detection model identifies the
+perforation. The results are combined to enhance the overall
+accuracy and reliability of the diploma verification system.
+
+3.
+
+Feature Face Extraction
+Following pre-processing, the Haarcascades
+algorithm is applied to each diploma document image to
+
+A. Scenario 1
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:00:41 UTC from IEEE Xplore. Restrictions apply.
+
+74
+
+detect faces. The identified faces are then processed into
+feature representations using a Siamese Neural Network,
+which compares the embeddings or feature vectors of
+three faces for verification.
+
+In the second method, the system detects and verifies
+perforated text in the center-right of the diploma, where
+crucial details like the year and education level are marked.
+A YOLO object detection model identifies the perforation
+and validates its authenticity, working in tandem to increase
+the accuracy and reliability of the diploma verification
+process.
+
+4.
+
+Model Training
+At this stage, the Siamese Neural Network (SNN) is
+trained for face matching by generating embedding
+vectors for pairs of face images. The network learns to
+differentiate between matching and non-matching faces
+by minimizing a binary cross-entropy loss or triplet loss.
+The model adjusts its parameters to ensure that similar
+embeddings represent faces from the same person while
+distinct embeddings represent faces from different
+people.
+
+M2020
+D13456789
+
+5.
+
+Model Validation and Optimization
+Once the Siamese Neural Network (SNN) has been
+trained, the next step is validation and optimization. The
+model is evaluated using validation data to assess its
+accuracy in verifying face matching. Adjustments are
+made to the threshold for similarity and hyperparameters
+to improve the model’s performance in distinguishing
+between matching and non-matching faces. This ensures
+that the system reliably identifies faces with high
+precision and performs consistently in face verification
+tasks.
+TABLE I.
+
+Fig 3.
+
+Figure 3 shows perforated text images, a key anticounterfeiting method in security documents. These images
+consist of small holes created through needle or laser
+perforation with diameters between 0.1 and 0.8 mm[4].
+1) Perforations Detection
+This research aims to develop a system capable of
+detecting perforations in scanned diploma documents using
+computer vision techniques, specifically by applying the
+"You Only Look Once" (YOLO) algorithm.[11] YOLO,
+initially created by Joseph Redmon, a PhD candidate at the
+University of Washington, has evolved through several
+iterations, including YOLOv2 and YOLOv3.
+The primary goal of instance segmentation is to
+identify and classify each distinct object within an image,
+such as various types of text perforations, by labeling each
+pixel associated with that object. This method allows for the
+differentiation of different perforation types by generating an
+image where every pixel is annotated, revealing the object it
+corresponds to, and specifying the associated perforation text.
+
+DIPLOMA DOCUMENTS FROM DIFFERENT LEVELS
+
+Junior High
+
+Educational Level
+Senior High
+Senior High
+
+a)
+
+Preprocessing Stage
+In the preprocessing stage, images are gathered from
+various sections of the object, annotated, and then utilized to
+train the YOLOv8 model using the free GPU available on
+Google Colab. The model's effectiveness is assessed through
+performance metrics such as Precision, Recall, and Mean
+Average Precision (mAP).
+
+a) SNN (Siamese Neural Network)
+In a Siamese Neural Network (SNN), two facial images
+pass through identical networks with shared weights,
+generating feature embeddings (Features 1 and 2) that capture
+key facial characteristics, as shown in Figure 2. A classifier
+then compares the features using a distance metric, like
+Euclidean distance, to assess similarity. If the distance is
+below a set threshold, the faces are classified as the same
+person; otherwise, they are different. This architecture excels
+in facial verification by effectively learning and comparing
+image similarities.
+
+Fig 2.
+
+The perforated text images and text classes
+
+Siamese network architecture
+
+B. Scenario 2
+Fig 4.
+
+Block Diagram of Perforation Year Detection
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:00:41 UTC from IEEE Xplore. Restrictions apply.
+
+75
+
+1) Data Collection
+The diploma images were captured using both a
+scanner and a mobile phone, resulting in varying resolutions.
+Subsequently, these images were resized to 640 x 640 pixels
+to improve processing speed.
+
+In the given equation, N(1) represents the total number
+of classes, while AP denotes the average precision for each
+class. Therefore, mAP(1) evaluates a system's overall
+(1)
+performance in accurately identifying objects across various
+classes by averaging the precision values for each class. This
+metric provides a comprehensive assessment of the system's
+ability to detect and classify objects correctly across the entire
+dataset.
+
+2) Data Preparation
+During this phase, subject identification and
+detection in the images are performed using polygon masks
+for annotation. Once the annotation is completed, the dataset
+is divided into three subsets: training, validation, and test sets.
+Specifically, 90% of the data is allocated for training, 6% for
+validation, and 4% for testing, with this division being
+handled through the Roboflow platform.[12]. The dataset is
+categorized into 13 text classes: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, D,
+M and Perforation, as shown in Fig 3.
+
+2) Precision and Recall
+(2)
+
+(3)
+Precision is the ratio of True Positives (TP) to
+the sum of True Positives and False Positives (FP), calculated
+as Precision = TP / (TP + FP). It reflects how many of the
+model’s positive predictions are correct. Recall, or
+Sensitivity, measures the model's ability to identify all actual
+positives, calculated as Recall = TP / (TP + FN). It evaluates
+how well the model detects true positive cases.
+
+3) Training Model
+The YOLOv8 model is trained using the free
+Graphics Processing Unit (GPU) available through Google’s
+collaborative platforms. This training consists of several
+cycles, known as epochs, with the entire dataset being
+processed over 137 epochs.
+4) Performance Evaluation
+At this stage, the effectiveness of the model is
+evaluated. Using advanced deep learning techniques, the
+evaluation includes metrics such as Precision, Recall,
+accuracy rate, confusion matrix, and Mean Average Precision
+(mAP).
+
+3) Confusion Matrix
+A confusion matrix is used to assess the
+performance model. In binary classification, it includes True
+Positives (TP), True Negatives (TN), False Positives (FP),
+and False Negatives (FN), representing the model’s correct
+and incorrect predictions. Key metrics like accuracy,
+precision, and recall are derived from it. For multi-class
+classification, the matrix expands to an n x n table, where n
+is the number of classes. This is crucial in cases where certain
+errors have more significant consequences than others.[14].
+
+a) Training Stage
+
+III. RESULT AND DISCUSSION
+
+Fig 5.
+
+In this section of results and discussion, we study the
+complexity of diploma verification in two different scenarios,
+evaluating their performance in recognition and accuracy
+across datasets consisting of 200 to 500 individuals. Our
+experiments reveal interesting patterns on how these
+recognition methods function across different dataset sizes
+using our proposed model, which provides valuable insights
+into our research.
+
+YOLOv8 Architecture [11]
+
+The YOLO (You Only Look Once) algorithm was
+initially proposed by Joseph Redmon, a computer vision
+researcher [11]. It processes diploma images at a resolution
+of 640x640 pixels. At its foundation, a deep learning neural
+network leverages convolutional layers within the Darknet
+framework [13]. To extract features. The algorithm segments
+the image into a grid, with each segment responsible for
+predicting objects within its region.
+
+a) Dataset Description
+We used a scanner and a cell phone to capture diploma
+documents in detail. This effort resulted in our primary facial
+images on diploma dataset, which includes 20-30 sample
+images for each of the approximately 200 students. In
+addition, we increased the diversity and completeness of the
+dataset by integrating the LFW dataset, selecting 360 people
+for inclusion.
+
+1) Model Evaluation
+Mean Average Precision (mAP) is an essential
+metric used to evaluate the effectiveness of object detection
+models across various classes. It is calculated by
+determining the average precision for each category. It is
+derived by evaluating the area under the precision-recall
+curve and is analyzed using the Intersection over Union
+(IoU) metric. Once the average precision for each class is
+determined, the mean of these values is computed to yield
+the overall performance score.
+1
+
+(a)
+
+(1)
+
+(b)
+
+Fig 6. Data collection: (a) primary face dataset, (b) secondary face
+dataset
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:00:41 UTC from IEEE Xplore. Restrictions apply.
+
+76
+
+We curated a dataset of approximately 2,000 grayscale
+images representing 200 individuals (Figure 6a), sourced
+from diploma documents with faces automatically cropped
+using OpenCV. To enhance this, we included a subset of the
+Labeled Faces in the Wild (LFW) dataset (Figure 6b),
+focusing on 200 individuals with at least three samples for
+comparison.
+
+number of epochs was determined by tracking the steady
+improvement in mAP scores during training. Table 4 shows
+the comparison of mAP50 and mAP50-95 across epochs,
+highlighting the model’s consistent learning progress, with
+peak performance at the 137th epoch.
+TABLE IV.
+
+b) Scenario 1 (Face-Based Verification)
+In our proposed system, we assess two different scenario
+models, the first scenario model is outlined in Table 2. In
+Table 2, the initial step involves face detection from the input
+image, followed by preprocessing tasks such as grayscaling
+and cropping using Haaarcascade. Next, the system proceeds
+to recognize the input image for person identification. It then
+presents a feature approach with three stages of detection:
+first detecting anchors and positives, and then detecting
+negative face samples.
+TABLE II.
+
+Epoch
+10
+30
+50
+70
+90
+127
+137
+
+Recognition
+
+Triplet Loss in a Siamese Neural Network minimizes the
+distance between similar face embeddings (Anchor and
+Positive) while maximizing the distance between dissimilar
+ones (Anchor and Negative). The network processes three
+inputs, Anchor, Positive, and Negative, through shared
+weights to generate feature embeddings. The Anchor is the
+reference image, the Positive is from the same person, and the
+Negative is from a different one. The objective is to make the
+Anchor-Positive distance smaller than the Anchor-Negative
+distance by a set margin, enhancing face recognition
+accuracy.
+TABLE III.
+
+Epoch
+10
+20
+30
+40
+50
+60
+
+Loss
+0.169
+0.066
+0.083
+0.467
+0.0270
+0.0025
+
+mAP50-95
+0.195
+0.492
+0.612
+0.672
+0.733
+0.765
+0.761
+
+Fig 7. mAP50-95 at each epoch and class bar chart
+
+The training data includes 200 diploma document images
+with orientation variations, both normal and tilted. The
+results, shown in the accompanying illustration in Fig 8,
+demonstrate the model's ability to classify diploma
+documents such as perforation, D,M,0,1,2,3,4,5,6,7,8, and 9.
+The illustration highlights the recognition outcomes for these
+document levels.
+
+MEAN PREDICTION MODEL SNN
+
+Recall
+0.591
+0.882
+0.943
+0.939
+0.975
+0.986
+
+mAP50
+0.339
+0.650
+0.822
+0.867
+0.893
+0.934
+0.935
+
+Furthermore, the precision and recall results highlight
+the model's performance, which was trained over 137 epochs
+on various diploma document classes, such as Perforation,
+D,M,0,1,2,3,4,5,6,7,8 and 9. Fig 7 illustrates the mAP50-95
+throughout the training process for each class at different
+epochs.
+
+FACE VARIABLE RECOGNITION PROCESS
+Preprocessing & Feature Extraction
+Positive
+Anchor
+Negative
+
+Detection
+
+COMPARISON OF MAP 50 WITH MAP 50-95 ACROSS EACH
+EPOCH AND EPOCH STEPS
+
+Precision
+0.878
+0.968
+0.990
+0.984
+0.990
+0.991
+
+A binary cross-entropy loss function was used to
+evaluate the model's ability to determine if two input images
+(anchor and positive/negative) belonged to the same person.
+In Table 3, the loss dropped significantly from 0.169 in the
+first epoch to 0.0025 by the sixtieth, showing the model's
+learning efficiency. Accuracy also improved from 0.591 in
+the first epoch to over 0.975 by the fiftieth, reaching 0.986 by
+the sixtieth, indicating the model's strong performance in
+distinguishing between the image pairs.
+
+Fig 8. Recognition results perforation.
+
+d) Performance Evaluation
+The training dataset consisted of 300 diploma documents,
+including 630 labeled face images (anchor, positive,
+negative) and text perforation detection, classified as
+"verified" or "unverified." Image augmentation was applied
+to improve quality. A validation process followed to assess
+the model's generalization to unseen data, evaluating two
+scenarios using Mean Average Precision (mAP) and training
+loss. The results are summarized in Table 5.
+
+c)
+
+Scenario 2 (Perforation Detection)
+The model was trained on 200 diploma document images
+over 137 epochs, achieving a mean Average Precision (mAP)
+of 0.935 at 50% detection threshold (mAP50) and 0.761
+across 50%-95% thresholds (mAP50-95). The optimal
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:00:41 UTC from IEEE Xplore. Restrictions apply.
+
+77
+
+TABLE V.
+
+TESTING OF THE MODEL
+
+0.5 at 0.93, further validating its performance. The
+combination of multi-level face matching and visual feature
+detection provides a robust and efficient solution for
+verifying document authenticity. This approach is crucial in
+enhancing the security of digital documents and preventing
+forgery and can be adapted for various official document
+verification applications. The findings of this research
+support the use of deep learning methods in document
+verification and reveal significant potential for further
+advancements in the future.
+
+Overall model results
+model result
+
+val_map_05
+
+train_loss
+
+SNN
+
+0.98
+
+0.0025
+
+Perfo_YOLO V8
+
+0.93
+
+2.55
+
+The table compares two models: Siamese Neural
+Network (SNN) for facial verification and YOLOv8 for text
+perforation detection. The SNN achieved a "val_map_05" of
+0.98 with a low training loss of 0.0025, showing strong
+optimization in distinguishing face pairs. YOLOv8
+outperformed in text detection with a "val_map_05" of 0.93,
+though it had a higher training loss of 2.55, typical for
+complex object detection tasks. Both models excelled, with
+YOLOv8 leading in text detection precision and SNN in
+training optimization for facial verification.
+TABLE VI.
+No
+
+Test Data
+
+1
+2
+3
+4
+5
+6
+…
+96
+
+Test Data 1
+Test Data 2
+Test Data 3
+Test Data 4
+Test Data 5
+Test Data 6
+…
+Test Data 96
+
+REFERENCES
+[1]
+
+[2]
+
+TESTING SCENARIO MODEL
+
+Face-Based
+Verification
+Verified
+Verified
+Verified
+Unverified
+Verified
+Unverified
+…
+Verified
+
+Perforation
+Detection
+Verified
+Verified
+Verified
+Unverified
+Verified
+Unverified
+…
+Verified
+
+Validation
+
+[3]
+
+Valid
+Valid
+Valid
+Invalid
+Valid
+Invalid
+…
+Valid
+
+[4]
+
+[5]
+
+[6]
+
+In this testing scenario presented in Table 6, the model
+evaluates 96 test data. The model's predictions are compared
+with the actual values. The “verified” class is represented by
+the value 1, which shows that diploma documents were
+successfully detected for the same person and perforation. The
+value 0 represents the “unverified” class, indicating that
+diploma documents did not detect the same person and
+perforation. The Confusion Matrix table can be seen in Table
+7.
+
+Model
+Prediction
+
+TABLE VII.
+
+[7]
+
+[8]
+
+THE CONFUSION MATRIX
+Actual Value
+Verified
+
+Unverified
+
+Verified
+
+46
+
+2
+
+Unverified
+
+1
+
+47
+
+[9]
+
+[10]
+
+IV. CONCLUSION
+
+[11]
+
+This study demonstrates that the Siamese Neural
+Network (SNN) method for face verification when combined
+with text perforation detection on documents, delivers highly
+accurate results in digitally verifying the authenticity of
+diploma documents. Using a binary cross-entropy loss
+function, the SNN model significantly reduced the loss value
+from 0.169 in the initial epoch to 0.0025 by the sixtieth epoch,
+showcasing its ability to learn patterns and minimize
+prediction errors. The model’s accuracy consistently
+improved during training, reaching a peak value of 0.98 in
+several epochs, reflecting its effectiveness in distinguishing
+between anchor images and positive/negative pairs.
+Additionally, text perforation detection on diploma
+documents, using the YOLOv8 model, achieved a mAP of
+
+[12]
+
+[13]
+
+[14]
+
+E. Ardhianto and N. Wakhidah, “Pengembangan Metode
+Otentikasi Keaslian Ijasah Dengan Memanfaatkan Gambar Qr
+Code,” Jurnal Transformatika, vol. 13, no. 2, p. 35, 2016, doi:
+10.26623/transformatika.v13i2.325.
+W. R. Putri, A. W. Widodo, and B. Rahayudi, “Penerapan Ciri
+Geometric pada Deteksi dan Verifikasi Tanda Tangan Offline,”
+Jurnal Pengembangan Teknologi Informasi dan Ilmu Komputer
+(JPTIIK) Universitas Brawijaya, vol. 2, no. 5, pp. 1960–1969,
+2018, [Online]. Available: https://docplayer.info/53150196Penerapan-ciri-geometric-pada-deteksi-dan-verifikasi-tandatangan-offline.html
+H. Li, Z. Lin, X. Shen, J. Brandt, and G. Hua, “A Convolutional
+Neural Network Cascade for Face Detection.”
+E. Zhang and Y. Zhang, “Forgery detection for perforated number
+in security document by analyzing the perforated holes,” Imaging
+Science Journal, vol. 65, no. 1, pp. 40–48, Jan. 2017, doi:
+10.1080/13682199.2016.1257674.
+M. Mirbod, “Artwork’s Authenticity Recognition Model Using
+Machine Vision and Applications,” 2023, doi: 10.21203/rs.3.rs3758505/v1.
+S. Bakkali, M. M. Luqman, Z. Ming, and J.-C. Burie, “Face
+Detection in Camera Captured Images of Identity Documents
+Under Challenging Conditions,” Institute of Electrical and
+Electronics Engineers (IEEE), Nov. 2019, pp. 55–60. doi:
+10.1109/icdarw.2019.30065.
+A. Rossler, D. Cozzolino, L. Verdoliva, C. Riess, J. Thies, and M.
+Niessner, “FaceForensics++: Learning to detect manipulated facial
+images,” in Proceedings of the IEEE International Conference on
+Computer Vision, Institute of Electrical and Electronics Engineers
+Inc., Oct. 2019, pp. 1–11. doi: 10.1109/ICCV.2019.00009.
+D. Das, J. Philip, M. Mathew, and C. V. Jawahar, “A cost-efficient
+approach to correct OCR errors in large document collections,” in
+Proceedings of the International Conference on Document
+Analysis and Recognition, ICDAR, IEEE Computer Society, Sep.
+2019, pp. 655–662. doi: 10.1109/ICDAR.2019.00110.
+J. Martinek, L. Lenc, P. Kral, A. Nicolaou, and V. Christlein,
+“Hybrid training data for historical text OCR,” in Proceedings of
+the International Conference on Document Analysis and
+Recognition, ICDAR, IEEE Computer Society, Sep. 2019, pp.
+565–570. doi: 10.1109/ICDAR.2019.00096.
+J. Seaman Kelly and M. Angel, “Forensic Document Examination
+in the 21st Century,” 2021.
+J. Redmon, S. Divvala, R. Girshick, and A. Farhadi, “You only
+look once: Unified, real-time object detection,” in Proceedings of
+the IEEE Computer Society Conference on Computer Vision and
+Pattern Recognition, IEEE Computer Society, Dec. 2016, pp. 779–
+788. doi: 10.1109/CVPR.2016.91.
+F. Ciaglia, F. S. Zuppichini, P. Guerrie, M. McQuade, and J.
+Solawetz, “Roboflow 100: A Rich, Multi-Domain Object
+Detection Benchmark,” Nov. 2022, [Online]. Available:
+http://arxiv.org/abs/2211.13523
+T. Diwan, G. Anirudh, and J. V. Tembhurne, “Object detection
+using YOLO: challenges, architectural successors, datasets and
+applications,” Multimed Tools Appl, vol. 82, no. 6, pp. 9243–9275,
+Mar. 2023, doi: 10.1007/s11042-022-13644-y.
+I. Markoulidakis, I. Rallis, I. Georgoulas, G. Kopsiaftis, A.
+Doulamis, and N. Doulamis, “Multiclass Confusion Matrix
+Reduction Method and Its Application on Net Promoter Score
+Classification Problem,” Technologies (Basel), vol. 9, no. 4, Dec.
+2021, doi: 10.3390/technologies9040081.
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:00:41 UTC from IEEE Xplore. Restrictions apply.
+
+78
+
+

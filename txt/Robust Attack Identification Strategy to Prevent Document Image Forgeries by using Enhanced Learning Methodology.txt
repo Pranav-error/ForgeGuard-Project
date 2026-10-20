@@ -1,0 +1,994 @@
+2023 International Conference on Research Methodologies in Knowledge Management, Artificial Intelligence and Telecommunication Engineering (RMKMATE) | 979-8-3503-0570-8/23/$31.00 ©2023 IEEE | DOI: 10.1109/RMKMATE59243.2023.10369395
+
+Robust Attack Identification Strategy to Prevent
+Document Image Forgeries by using Enhanced
+Learning Methodology
+
+R.T Prabu
+Department of ECE
+Saveetha School of Engineering,
+SIMATS
+Chennai, India.
+ptrprabu@gmail.com
+
+A Balaji
+Department of ECE
+Rajalakshmi Institute of Technology
+Chennai, India.
+balaji.a@ritchennai.edu.in
+
+K. M Dhanalakshmi
+Department of ECE
+S.A Engineering College
+Chennai, India.
+dhanalakshmi@saec.ac.in
+
+S Diwakaran
+Department of ECE
+Kalasalingam Academy of Research
+and Education
+Srivilliputhur, India
+s.divakaran@klu.ac.in
+
+Ch Prathima
+Department of Data Science
+School of Computing, Mohan
+Babu University
+(Erstwhile Sree Vidyanikethan
+Engineering College)
+Tirupati, India
+chilukuriprathi@gmail.com
+
+S Vijayakumar
+Department of ECE
+Paavai Engineering College
+Namakkal, India
+svijece@gmail.com
+
+Abstract— Forgery in images is a long-standing issue that
+
+spans back to ancient times. Throughout history, images
+have been employed as evidence or documentation of
+events. In the present day, the accessibility of image
+preprocessing tools and affordable hardware has
+facilitated the creation of manipulated images with ease,
+often driven by ulterior motives such as disseminating
+false information or pursuing personal gains unlawfully.
+In recent years, the spotlight has turned to Artificial
+Neural Networks (ANNs), sparking significant interest in
+the realm of image forgery identification. Nevertheless,
+prevailing image forgery techniques rooted in ANNs are
+often specialized, geared towards identifying distinct
+types of forgeries. Consequently, a pressing need arises
+for an approach adept at efficiently and accurately
+uncovering unfamiliar forms of image manipulation. This
+research fills that gap by presenting a robust deep
+learning-based system designed specifically to spot fakes
+while working with double image compression. The
+model's training hinges upon discerning disparities
+between an original image and its recompressed
+iterations. To enhance the model's performance, the Ant
+Lion Optimization (ALO) technique is employed to finetune the features of the input data. Noteworthy for its
+efficiency, the proposed model stands out as a lightweight
+solution. Empirical results underscore its prowess,
+showcasing swifter effectiveness compared to prevailing
+state-of-the-art technique. Encouragingly, the model
+achieves an impressive overall validation accuracy of
+95.87%, reinforcing its efficacy in identifying image
+forgeries.
+
+Keywords: Image Forgery Detection, Artificial Neural Networks,
+Ant Lion Optimization (ALO) technique, Document Image
+Forgeries.
+
+I. INTRODUCTION
+The widespread availability and low cost of
+electronic equipment is a result of both technical progress and
+globalization. This has led to the widespread use of digital
+cameras. All around us are camera sensors, and we utilize
+them to amass a vast visual database. Numerous scanned
+
+photographs are needed for filing various papers online, and
+many more are posted on social media every day. Visuals are
+incredible because they can convey meaning even to the nonliterate. Therefore, photographs are crucial in the digital era,
+both for archiving and disseminating information. Numerous
+tools are at your disposal for instantaneous image
+modification. These resources were developed to help people
+get better results while working with photos [1]. However,
+some people use their ability to fake photos and spread lies
+rather than improve their image. The harm done by these
+phony photographs is often irreparable and therefore poses a
+serious concern.
+Humanity has struggled with forgeries for a very long time.
+A picture is worth a thousand words, as the old adage goes.
+As technology has progressed, it has become increasingly
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:57:50 UTC from IEEE Xplore. Restrictions apply.
+
+difficult to believe the evidence that is presented. Images play
+an increasingly important role in today's media of expression.
+Better picture editing tools and software have been made
+possible by technological progress.
+The branch of machine learning known as "deep learning"
+has shown to be extraordinarily effective in identifying and
+making sense of intricate patterns in data. Researchers and
+practitioners have created cutting-edge methods to spot and
+stop document counterfeiting by using the power of deep
+neural networks. In this introductory piece, we'll look at deep
+learning-based forgery attacks on document pictures, in
+which attackers employ these methods to build plausible
+fakes.
+In the field of picture forensics known as digital image
+forgery, many methods are used to examine photos from a
+given scenario in order to prove their authenticity and
+trustworthiness. Image processing and computer vision are
+only two areas where the fast development of deep learning
+techniques has had a profound impact [2]. Despite the
+progress that has been made, new difficulties have arisen,
+most notably in the areas of document security and forgery
+detection. The growing expertise of counterfeiters and the
+possible consequences of using forged papers have made
+document forging an urgent issue.
+These digitally altered photos proliferate rapidly over the
+web and other media platforms. A hazardous and serious
+situation for the globe has been heightened by the advent of
+cutting-edge digital technologies, the widespread availability
+of low-cost processing machines and tools, and the extensive
+transmissions over numerous websites like Facebook,
+Twitter, Telegram, Pinterest, and so on. This is a significant
+issue and contributes to the deterioration of digital image
+quality. With this in mind, the primary goal of visual
+forensics is forgery detection [3]. Since these images are
+often used as legal evidence (Aadhar card, id card, bank
+passbook), as well as in other official documents (financial
+documents, newspapers, parts of medical records, and
+academic records), it is imperative that they be verified as
+authentic. Figure 1 displays many processed examples of the
+photos seen in the figure. In addition, social media
+applications like WhatsApp, Instagram, and Snapchat have
+led to the widespread adoption of cloud-based picture sharing
+and editing services like Picasa and Flickr, which in turn have
+facilitated the widespread distribution of image graphs
+throughout the Internet.
+
+Fig. 1. A Wide Range of Images and Their Finished Products
+
+Forgery attacks on document images involve bad
+actors trying to change or make up the information on official
+papers including ID cards, passports, bank statements, and
+contracts [4]. Forgery detection has always required timeconsuming and error-prone manual examination by
+specialists. Automation and efficiency had hitherto been
+unattainable in this space, but recent deep learning-based
+technologies have changed all that.
+Image forging is used to convey false information by
+replacing its target's original picture with a fake one. Image
+fraud has transformed what was once a very reliable medium
+for sharing information into a tool for spreading falsehoods.
+The public's faith in pictures is suffering as a result, because
+it's not always easy to tell if an image has been tampered with
+[5] [12]. To prevent the spread of misinformation and restore
+public trust in visual media, it is essential to detect photo
+forgeries. To do this, a number of image processing
+techniques may be used to identify forging artifacts. In this
+study, we introduce a powerful deep learning-based system
+tailored to the detection of picture forgeries within the
+framework of double image compression. The key to training
+our model is learning to recognize differences between the
+uncompressed and compressed versions of a picture. To
+enhance the model's feature extraction process, we harness
+the power of Ant Lion Optimization (ALO).
+II. RELATED STUDY
+The counterfeiting of currency, academic
+credentials, artwork, and other papers has increased during
+the past several years [6]. This is becoming an increasingly
+critical issue as more and more paperwork must be kept. As
+a result of individual differences in text characters, pen
+pressure, writing angle, as well as stroke structures, document
+forgery as well as forensics are inextricably intertwined
+fields. As a result, handwriting analysis may be used as a
+biometric for identity verification and document authenticity
+checking. However, traditional authorship determination
+methods are intrusive, time-consuming, and need a high skill
+level. To that aim, this research investigates hyperspectral
+imaging's (HSI) viability as a cutting-edge, nondestructive
+method for uncovering and averting document forgery. Small
+spectral differences between handwritten samples can be
+detected [6] because to the granular scene spectral
+information provided by HSI. This imaging method might be
+used in many different contexts, from agricultural and
+ecological surveillance to remote detection as well as
+forensics to document analysis as well as medical imaging.
+Convolutional Autoencoder (CAE) for feature extraction, as
+well as Support Vector Machine (SVM) for author
+recognition, are the two pillars of our novel unsupervised
+technique, CAE-SVM. The approach was tested on the UWA
+writing ink hyperspectral pictures dataset for blue and black
+inks, and the results were compared to those of state-of-theart algorithms and convolutional neural network (CNN). In a
+first, the proposed approach improved accuracy for blue ink
+to 92.78%. The findings of this research suggest that HSI may
+be an effective forensic analytical method for spotting and
+avoiding document forgery [6] [11].
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:57:50 UTC from IEEE Xplore. Restrictions apply.
+
+Image forgery detection [7] may make use of deep
+learning to assess if an image has been tampered with. This
+is especially important now, when anybody with a computer
+and photo editing software may alter images for nefarious or
+criminal ends. Deep learning algorithms [7] are able to learn
+to recognize forgery-indicative patterns and traits when
+trained on large picture datasets. After such algorithms have
+been developed, we might be able to look at newly taken
+photographs to detect modification. One way to use deep
+learning to detect picture forgery is to train a CNN on a
+database which involves both real and fake pictures. Once the
+CNN has been taught to recognize particular characteristics,
+it may be used to verify the authenticity of an unidentified
+image. Generative adversarial networks (GANs) are another
+viable alternative. This method [7] uses a combination of two
+neural networks for image generation and labeling. The
+discriminator system may be taught to detect the
+characteristics of forged pictures and accurately classify them
+by training the GAN on a collection of actual and false
+photographs. Utilizing deep learning to identify fake photos
+presents a number of obstacles. These challenges haven't
+stopped researchers from exploring the potential of deep
+learning for spotting fake photos. The future dependability of
+digital images will likely be aided by the application of deep
+learning algorithms for detecting and avoiding picture
+forgery [7].
+The widespread availability of cameras has
+contributed to the rise in popularity of photographing events
+[8]. Images transmit a wealth of information that is vital to
+our day-to-day lives, thus enhancing photographs to get
+further information is often necessary. Because of their
+accessibility, photo editing programs are routinely exploited
+to create fake photos that distribute false information. This
+has made the issue of fake artworks far more urgent. Several
+traditional techniques have evolved throughout time to detect
+photo forgeries. Recently popularized CNNs have sparked
+interest in the field of visual forgery detection. However,
+most CNN-based photo forgery methods in the literature [8]
+can only detect a single type of fraud. This is why we need a
+system that can quickly and precisely detect the existence of
+even the most subtle forms of picture manipulation. In this
+work [8], we provide a deep learning-based method that is
+both effective and efficient for identifying photo forgeries
+under conditions of double image compression. To train our
+model, we first compare the original image to its compressed
+counterpart. It has been proven that the proposed model
+outperforms state-of-the-art techniques while using less
+computer resources. Positive experimental findings include
+an overall validation accuracy of 92.23 % [8].
+You may find photographs in newspapers,
+magazines, online, and academic journals [9]. Photoshop,
+GIMP, and Coral Draw have made it extremely difficult to
+distinguish between the original and the edited version of a
+picture. Traditional methods for identifying fake photographs
+have relied mainly on human-generated attributes. However,
+the current methods for detecting image manipulation have a
+major shortcoming in that they can only identify one type of
+tampering by looking for very specific alterations to the
+features of the image. Today, deep learning methods are used
+to detect digitally manipulated images. These methods have
+
+shown to be more reliable than traditional ones because of
+their ability to accurately extract intricate properties from
+photos. Including analyses, conclusions, and details on
+publicly available image forgery datasets, this paper [9]
+provides a complete assessment of deep learning-based
+systems for photo fraud detection.
+Document forgery has been a concern for decades
+[10] due to the extensive use of paper-based documentation.
+Traditional destructive procedures cannot be utilized to
+resolve this issue since they create holes in the document
+being studied. Hyperspectral imaging is a nondestructive
+method of identifying an image's unique qualities through
+spectral fingerprint analysis. Applying deep learning methods
+to the analysis of hyperspectral images, which are notoriously
+challenging, has yielded state-of-the-art results. Supervised
+categorization of hyperspectral pictures is laborious because
+of the time and effort required to get picture labels and label
+the training data. In this research, we provide an unsupervised
+technique for categorizing hyperspectral document images
+[10].
+III. METHODOLOGY
+A computer model that mimics the structure and
+behavior of real neural networks, such those found in the
+human brain, is called an ANN. It plays a crucial role in the
+deep learning as well as machine learning processes. ANNs
+are designed to process and learn from data, enabling them to
+perform tasks like pattern recognition, classification,
+regression, and more.
+The artificial neuron, sometimes called a node or
+perceptron, is the network's fundamental element. Neurons
+take in data, process it, and then send it out as a signal.
+Typically, neurons in a neural network are arranged in several
+layers:
+i.
+ii.
+
+iii.
+
+Input Layer: This layer receives the initial data or
+features that are fed into the network.
+Hidden Layers: These levels are intermediate
+among the input as well as output levels. In order to
+discover useful patterns and characteristics from the
+incoming data, they execute sophisticated
+computations. The depth of these layers contributes
+to the term "deep" in deep learning.
+Output Layer: The network's ultimate output is
+generated at this layer, and it might take several
+forms (such as a categorization label or regression
+value).
+
+The intensity of the signal sent from one neuron to
+another is based on the weight assigned to each link between
+neurons. The neuron also has an associated bias that affects
+its output. The network's non-linearity is introduced when the
+weighted sum of inputs and bias is fed into an activation
+function. The sigmoid, the hyperbolic tangent (tanh), and the
+rectified linear unit (ReLU) are all examples of activation
+functions that are commonly used.
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:57:50 UTC from IEEE Xplore. Restrictions apply.
+
+When training a neural network, the weights and
+biases are adjusted so as to minimize a loss function that
+measures how far off the actual output is from the expected
+one. This is typically done through optimization algorithms
+like gradient descent or its variants. During training, the
+network iteratively updates its parameters to improve its
+ability to make accurate forecast on new, unseen data.
+
+Input Image
+
+Deep neural networks, or systems with several
+hidden layers, are the subject of deep learning, a subfield of
+machine learning. With state-of-the-art outcomes in
+numerous tasks, deep learning has revolutionized many
+different industries, including image identification, the
+processing of natural languages, speech recognition, and
+more.
+
+Recompressed Image
+
+Ant Lion
+Optimization
+
+CNNs are specialized architectures for image and
+spatial data, while Recurrent Neural Networks (RNNs) are
+designed for sequence data. There are also more advanced
+architectures like Transformers, which have proven highly
+effective in natural language processing tasks.
+
+Reshaping
+
+Overall, artificial neural networks are a foundational
+concept in modern machine learning and have led to
+significant advancements in various fields, making them an
+integral part of the AI landscape.
+
+Forgery Detection ANN
+
+When one picture is superimposed on top of another,
+the resulting hybrid will almost certainly have an entirely
+distinct distribution of DCT parameters than the original.
+These recurring trends in the histogram are the consequence
+of the legitimate region being squashed twice: once by the
+camera and once by the fake. When using the second
+compression table, the merged chunk performs like a
+normally compressed chunk would.
+As was said before, if a fabricated piece of a photo
+is present and the picture is recompressed, the fabricated
+portion will be compressed significantly from the rest of the
+picture since the origin of the initial picture and the source of
+the forged portion will be unique. The conceptual diagram of
+the suggested paradigm is presented in Figure 2. Comparing
+the altered image to the original reveals a striking degree of
+fraud when the two are compared side by side. So, we employ
+it to teach our artificial neural network-based algorithm to
+spot fake photos.
+Create a training set, a validation set, as well as a testing set
+from your information. Train your ANN using the provided
+data. Throughout training, the system makes changes to its
+parameters and weights in order to minimize the loss
+function's predicted-to-actual label discrepancy. Check your
+model's progress during training against the validation set to
+see how well it's doing. Adjust hyperparameters (e.g.,
+learning rate, dropout rate) based on the validation results to
+achieve the best performance.
+
+Genuine Image
+
+Forgery Image
+
+Fig. 2. Flowchart of the Proposed Method
+
+In our suggested model, we used a small number of
+parameters to keep the weight down. The following is a
+description of the model we built, which consists of three
+convolutional layers followed by a dense fully connected
+layer:
+•
+•
+•
+•
+
+There are 32 3-by-3-inch filters in the first
+convolutional layer, with a stride size of one and a
+"relu" activation function.
+There are 32 3-by-3-inch filters in the second
+convolutional layer, with a stride size of one and a
+"relu" activation function.
+There are 32 7x7 filters in the third convolutional
+layer, with a stride size of one and a "relu" activation
+function, followed by a 2x2 max-pooling layer.
+Then there's the dense layer, which consists of 256
+neurons activated by the "relu" function and linked
+to two neurons activated by the "sigmoid" function
+(the output neurons).
+
+The network is fed a 128x128 version of the original
+feature picture. Through the feature photos, the network is
+able to detect the existence of any manipulation. The
+suggested algorithm is trained to detect forged images by
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:57:50 UTC from IEEE Xplore. Restrictions apply.
+
+analyzing the wide variety of telltale artifacts that remain
+after a photo has been tampered with.
+
+vii.
+
+Parameter Tuning: ALO has various parameters
+that can affect its performance. Experiment with
+different parameter values to find the settings that
+work best for your forgery detection problem.
+
+A. Ant Lion Optimization (ALO)
+The ALO algorithm is modelled by the catching
+technique used by ant lions, which involves digging conical
+trenches to ambush their prey. The program attempts to
+identify the best possible solutions to optimization issues by
+modeling their behavior on that of ant lions and ants.
+Although ALO is often used to optimization problems, it has
+found usage in other areas, such as forgery detection.
+It is important to keep in mind that ALO is not as
+well-known or as widely used as other optimization
+algorithms in the machine learning and image processing
+fields, such as genetic algorithms, particle swarm
+optimization, or gradient-based optimization techniques.
+There may not be a well-documented standard strategy to
+utilize ALO in this context, and as of my last knowledge
+update in September 2021, its acceptance and
+implementation in specialized tasks like forgery detection
+may be restricted.
+i.
+
+Problem Formulation: Define the forgery detection
+problem as an optimization problem. You would
+need to map the forgery detection task into a
+mathematical form that can be solved using an
+optimization algorithm.
+
+ii.
+
+Fitness Function: Create a fitness function that
+quantifies the quality of a solution (or candidate
+solution) in terms of forgery detection. This function
+should consider the characteristics of forged and
+authentic images, and it should guide the
+optimization algorithm toward solutions that are
+effective at distinguishing between them.
+
+iii.
+
+iv.
+
+v.
+
+vi.
+
+Encoding Solutions: Determine how solutions will
+be represented in the optimization space. This might
+involve encoding features, thresholds, or parameters
+related to your forgery detection algorithm.
+Ant Lion Optimization Implementation: Implement
+the ALO algorithm, which typically involves
+simulating the movement of ant lions and ants
+within the optimization space. At each iteration, ant
+lions adjust their positions to find regions with better
+fitness values.
+Local Search and Movement Rules: Define how ant
+lions move based on their current positions and
+fitness values. This movement should aim to
+improve solutions while also ensuring exploration
+of the solution space.
+Validation and Evaluation: Use a validation dataset
+to evaluate the performance of the solutions
+generated by ALO. Monitor metrics that reflect the
+accuracy and effectiveness of forgery detection.
+
+The success of ALO its application to forgery
+detection will depend on various factors, including the
+complexity of the forgery detection problem, the suitability
+of ALO for optimization in this domain, and the availability
+of relevant resources and expertise. The fields of optimization
+and artificial intelligence are always developing and
+expanding, therefore it's crucial to keep up with the newest
+studies and innovations in the area.
+IV. RESULTS AND DISCUSSIONS
+In this subsection, we will discuss the context in
+which the suggested method would be trained and evaluated.
+In addition, we'll compare its results to those of competing
+methods.
+a.
+
+Experimental Setup
+
+We looked at the suggested method's performance
+on the widely-used CASIA 2.0 picture forgery database. 7500
+are authentic photos and 5100 are fakes out of a total of
+12000. CASIA 2.0 has pictures of animals, buildings, articles,
+characters, plants, nature, sceneries, textures, and interiors,
+among many other things. Images in the archive come in a
+wide variety of sizes. The Intel(R) Core (TM) i5-2400 at 3.1
+GHz and 16 GB of RAM have been used in the tests.
+Initial assessment terms are determined as follows.:
+•
+•
+•
+•
+•
+
+Total Images: Total number of examined pictures.
+TPos (true positive): Recognized the altered pictures
+as real.
+TNeg (true negative): Authenticity of photos was
+successfully verified.
+FNeg (false negative): False positives are photos that
+have been checked and found to be fake when they
+are actually forgeries.
+FPos (false positive): False positives are original
+photos that were mistakenly labelled as fakes.
+
+For the purpose of evaluating the suggested
+technique and making comparisons to others, we compute its
+accuracy (Acc), precision (Pre), recall (Rec), and F_Score.
+The formulas for these are as follows:
+Here is a formal definition of precision:
+𝐴𝑐𝑐 =
+
+𝑇𝑃𝑜𝑠 + 𝑇𝑁𝑒𝑔
+𝑇𝑜𝑡𝑎𝑙 𝐼𝑚𝑎𝑔𝑒𝑠
+
+𝑅𝑒𝑐 =
+
+𝑃𝑟𝑒 =
+
+× 100
+
+𝑇𝑃𝑜𝑠
+𝑇𝑃𝑜𝑠 + 𝐹𝑁𝑒𝑔
+𝑇𝑃𝑜𝑠
+𝑇𝑃𝑜𝑠 + 𝐹𝑃𝑜𝑠
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:57:50 UTC from IEEE Xplore. Restrictions apply.
+
+𝐹_𝑆𝑐𝑜𝑟𝑒 =
+b.
+
+2 × 𝑅𝑒𝑐 × 𝑃𝑟𝑒
+× 100
+𝑅𝑒𝑐 + 𝑃𝑟𝑒
+
+Model Training and Testing
+
+In order to test the efficacy of the suggested
+technique, we randomly split the CASIA 2.0 database into
+two halves, using 5800 genuine photos and 4000 tampered
+images (for a grand total of 9800 images) for model training.
+We utilized Adam as our optimizer, setting the batch size to
+64 and the starting learning rate to 1 x 105. To put the
+suggested model to the test and to compare it to other existing
+frameworks, we will use the remaining 20% of photos (1500
+authentic photographs, 1000 tampered images, total 2500
+images). As can be seen in Figure 3, both training as well as
+testing accuracy dramatically increased when the proposed
+model was developed on the CASIA 2.0 database with the
+previously mentioned settings.
+
+models are included in Table 1. Following retraining, these
+techniques are more accurate than before, but the
+recommended technique still excels. Precision, sensitivity,
+specificity, and accuracy are compared among models in
+Figures 4, 5, 6, and 7.
+TABLE I. PERFORMANCE EVALUATION OF VARIOUS MODELS
+
+Model
+
+Precision
+
+Sensitivity
+
+Specificity
+
+Accuracy
+
+AlexNet
+
+90.23
+
+91.23
+
+89.58
+
+91.28
+
+SVM
+
+90.22
+
+91.52
+
+90.93
+
+91.61
+
+CNN
+
+91.18
+
+92.04
+
+91.39
+
+92.91
+
+MobileNet
+
+93.21
+
+92.06
+
+92.23
+
+93.92
+
+GoogleNet
+
+94.08
+
+93.98
+
+93.18
+
+93.75
+
+Proposed
+
+96.18
+
+95.34
+
+95.96
+
+95.87
+
+Precision Comparison with Proposed Model
+97
+96
+95
+94
+93
+92
+91
+90
+89
+88
+87
+AlexNet
+
+SVM
+
+CNN
+
+MobileNet GoogleNet Proposed
+
+Fig. 3. Train and Test Accuracy
+Fig. 4. Precision Comparison of Various Models
+
+c.
+
+Comparison with Other Techniques
+Sensitivity Comparison with Proposed Model
+
+We evaluate how well and how quickly the proposed
+method detects picture forgeries in comparison to existing
+methods.
+
+96
+95
+94
+
+d.
+
+Accuracy Comparison
+
+The effectiveness of several methods for detecting
+picture fraud is compared in Table 2. These methods, along
+with the one being offered, have all been tested on the same
+CASIA 2.0 database photos. In the case of the
+aforementioned methods, we classify the input picture as
+tampered if the mask formed from them indicates forgery,
+and else we classify it as a genuine image. Many other models
+have been used as benchmarks for the proposed model.
+Support Vector Machine, Convolutional Neural Network,
+AlexNet, MobileNet, and GoogleNet are the preexisting
+models employed here. Methods are compared and
+contrasted using the CASIA 2.0 database. We utilized a
+publicly available, pre-trained model for these techniques in
+our research. In addition, we updated their models employing
+the CASIA 2.0 images that were used to create the suggested
+model. Both the original and retrained versions of these
+
+93
+92
+91
+90
+89
+AlexNet
+
+SVM
+
+CNN
+
+MobileNet GoogleNet Proposed
+
+Fig. 5. Sensitivity Comparison of Various Models
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:57:50 UTC from IEEE Xplore. Restrictions apply.
+
+e.
+
+Specificity Comparison with Proposed Model
+
+Processing Time Comparison
+
+In Table 2, we can see how long it takes for different
+methods to analyses a picture and make a determination on
+whether or not it has been tampered with. The suggested
+method is faster and less expensive than current state-of-theart methods when it comes to making forgery predictions in
+images. The mean amount of time required by the suggested
+approach and the other strategies for identifying forgery in a
+picture is graphically compared in Figure 8.
+
+Proposed
+GoogleNet
+MobileNet
+CNN
+SVM
+AlexNet
+86
+
+88
+
+90
+
+92
+
+94
+
+96
+
+98
+
+Fig. 6. Specificity Comparison of Various Models
+
+TABLE II. COMPUTATION TIME OF VARIOUS MODELS
+
+Model
+
+Computation Time
+
+AlexNet
+
+4478
+
+SVM
+
+3486
+
+CNN
+
+1962
+
+MobileNet
+
+MobileNet
+
+2286
+
+Fig. 7. Accuracy Comparison of Various Models
+
+GoogleNet
+
+515
+
+Proposed
+
+57
+
+Accuracy Comparison with Proposed Model
+
+AlexNet
+100
+Proposed 95
+90
+85
+
+SVM
+
+GoogleNet
+
+CNN
+
+The proposed approach makes advantage of the
+feature image that is the contrast among the original as well
+as compressed copies of the picture, to improve the accuracy
+with which fraud is detected. This aids in detecting image
+fraud since it is easy to see that the faked component of the
+picture is emphasized in the feature image. As a result, we
+have been able to get quite precise results. On the other hand,
+these methods' low quality in detecting picture fraud stems
+from the fact that they search for it at the pixel level, where
+false positive pixels are reported and therefore lower the
+overall accuracy of the forgery detection at the image level.
+We recompressed the image using JPEG compression, as
+was indicated before; this allows us to choose from a wide
+range of quality settings. In addition, we have shared the
+findings of our testing of the proposed model using several
+different JPEG quality criteria. Accuracy is maximized by
+maintaining a quality factor of 90 or above. The proposed
+approach enhances precision by making use of more
+sophisticated input features, as opposed to systems that
+merely employ the original image as input characteristics. To
+achieve this, in addition to the enhanced processed
+characteristics, we also supply the results of training our
+algorithm utilizing the raw data. As a result of using the
+altered input characteristics (the distinction between the
+uncompressed and compressed versions of the image), the
+model's accuracy drops from 92.23 to 72.37. When we get a
+quality factor (JPEG compression) of 98 for the recompressed
+pictures as well as an accuracy of 95.87% on test images, we
+may call it a success. Our method outperformed other
+methods by a wide margin when it came to identifying forged
+images. Furthermore, our approach can deal with copy-move
+as well as spliced-image forgeries. However, only a small
+fraction of state-of-the-art methods are capable of dealing
+with both forms of picture forgeries, and most can only
+manage one.
+
+Computation Time
+5157
+2286
+4478
+
+1962
+
+3486
+AlexNet
+
+SVM
+
+CNN
+
+MobileNet
+
+GoogleNet
+
+Proposed
+
+Fig. 8. Computation Time of Various Models
+
+The suggested ANN-based model is lightweight
+compared to existing strategies, and we supply an efficient
+feature image to our model. This implies that it can make
+predictions much more quickly than before. This means that
+our concept has practical applications.
+V. CONCLUSION AND FUTURE SCOPE
+Digital image forgery involves manipulating
+original photographic images through actions like resizing,
+rotation, and scaling. When presenting photographic images
+as evidence in court, it becomes crucial to discern whether a
+given image is genuine or a forgery. While Artificial Neural
+Networks (ANNs) have gained prominence in recent years
+and influenced image forgery detection, many existing ANNbased techniques are tailored to detect specific forgery types.
+As a result of this shortcoming, there is a pressing need for a
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:57:50 UTC from IEEE Xplore. Restrictions apply.
+
+method that can quickly and reliably detect unsuspected
+instances of picture alteration. Within the framework of
+double image compression, we provide a powerful deep
+learning-based method aimed at detecting picture frauds. Our
+method makes use of differences between the original and
+compressed versions of a picture to teach the model. To
+enhance the effectiveness of the model, we incorporate Ant
+Lion Optimization (ALO) to fine-tune the input data's
+features. Notably streamlined, the proposed model stands out
+for its efficiency. Empirical evidence underscores its
+superiority, demonstrating swifter effectiveness compared to
+prevailing
+state-of-the-art
+methods.
+Encouragingly,
+experimental results reveal an overall validation accuracy of
+95.87%, highlighting the model's capability to detect image
+forgeries effectively.
+REFERENCES
+[1] Preeti Sharma, et al., "Comprehensive analyses of image forgery
+
+[2]
+
+[3]
+
+detection methods from traditional to deep learning approaches:
+an evaluation", Multimed Tools Appl., DOI: 10.1007/s11042022-13808-w, 2023.
+Dr.Prasanna-Lakshmi, et al., "Deep Learning Based Forgery
+Attack on Document Images", International Journal of Innovative
+Research in Science, Engineering and Technology, DOI:
+10.15680/IJIRSET.2023.1205298, 2023.
+P.Appala Naidu, "Image Forgery Detection Using Open-Cv and
+Md5",
+Industrial
+Engineering
+Journal,
+DOI:
+10.36893.IEJ.2023.V52I04.221-226, 2023.
+
+[4] P. Yang, et al., "Document Image Forgery Detection Based on
+
+Deep Learning Models," 2022 International Symposium on
+Electrical, Electronics and Information Engineering (ISEEIE),
+Chiang
+Mai,
+Thailand,
+2022,
+pp.
+36-41,
+doi:
+10.1109/ISEEIE55684.2022.00014.
+[5] W. Liang, et al., "Robust Document Image Forgery Localization
+Against Image Blending," 2022 IEEE International Conference
+on Trust, Security and Privacy in Computing and
+Communications (TrustCom), Wuhan, China, 2022, pp. 810-817,
+doi: 10.1109/TrustCom56396.2022.00113.
+[6] Prachi Tyagi, et al., "Forged document detection and writer
+identification through unsupervised deep learning approach",
+Multimedia Tools and Applications, DOI: 10.1007/s11042-02316146-7, 2023.
+[7] Devarshi Patrikar, et al., "Comprehensive study on image forgery
+techniques using deep learning", IEEE, ICETET - SIP, DOI:
+10.1109/ICETET-SIP58143.2023.10151540, 2023.
+[8] Syed Sadaf-Ali, et al., "Image Forgery Detection Using Deep
+Learning by Recompressing Images", Electronics, DOI:
+10.3390/electronics11030403, 2022.
+[9] Zankhana-J.Barad, et al., "Image Forgery Detection using Deep
+Learning: A Survey", Artificial Intelligence, ICACCS, DOI:
+10.1109/ICACCS48705.2020.9074408, 2020.
+[10] Garima Jaiswal, et al., "Deep feature extraction for document
+forgery detection with convolutional autoencoders", Computers
+and Electrical Engineering, 2022.
+[11] R. T et al , "Automated Crack and Damage Identification in
+Premises using Aerial Images based on Machine Learning
+Techniques," (I-SMAC), Dharan, Nepal, 2022, pp. 498-504, doi:
+10.1109/I-SMAC55078.2022.9987391.
+[12] M. T, "A Novel Text Recognition Scheme using Classification
+Assisted Digital Image Processing Strategy," (ACCAI), Chennai,
+India, 2022, pp. 1-6, doi: 10.1109/ACCAI53970.2022.9752542.
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:57:50 UTC from IEEE Xplore. Restrictions apply.
+
+

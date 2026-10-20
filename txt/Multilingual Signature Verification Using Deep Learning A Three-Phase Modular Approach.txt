@@ -1,0 +1,942 @@
+2025 9th International Conference on Computing, Communication, Control and Automation (ICCUBEA)
+Pimpri Chinchwad College of Engineering (PCCOE), Pune, India. Aug 22-23, 2025
+
+2025 9th International Conference on Computing, Communication, Control and Automation (ICCUBEA) | 979-8-3315-4903-9/25/$31.00 ©2025 IEEE | DOI: 10.1109/ICCUBEA65967.2025.11283938
+
+Multilingual Signature Verification Using Deep
+Learning: A Three-Phase Modular Approach
+Rushabh Nitin Mistry
+Department of Information Technology
+(AI&DS)
+K. J. Somaiya School of Engineering
+Somaiya Vidyavihar University
+Mumbai 400077, India
+rushabh.mistry@somaiya.edu
+
+Dr. Nilkamal More
+Department of Information Technology
+(AI&DS)
+K. J. Somaiya School of Engineering
+Somaiya Vidyavihar University
+Mumbai 400077, India
+neelkamalsurve@somaiya.edu
+
+Dr. Suchitra Patil
+Department of Information Technology
+(AI&DS)
+K. J. Somaiya School of Engineering
+Somaiya Vidyavihar University
+Mumbai 400077, India
+suchitrapatil@somaiya.edu
+
+Chirag Desai
+Department of Information Technology (AI&DS)
+K. J. Somaiya School of Engineering
+Somaiya Vidyavihar University
+Mumbai 400077, India
+chirag.desai@somaiya.edu
+
+an effort to cut man-hours, eliminate processing delay,
+improve security, and avert possible dangers of fraud.
+
+Abstract— Signature verification is an important aspect of
+digital security in general and specifically in banking, legal, and
+administrative transactions, where fraud protection and
+identity authentication are paramount. Previous signature
+verification technologies have been trained mainly on Englishlanguage documents and thus function with reduced capability
+in multilingual noisy real-world settings such as in India. Such a
+language/context mismatch may result in strong operational
+issues, such as higher false rejection rates and lower overall
+verification accuracy.
+
+But like with all technological advancements, the majority
+of the conventional signature verification systems have been
+English-dominated datasets [7]. These systems perform
+poorly when faced with documents that include local scripts
+such as Hindi, Gujarati, Marathi, Urdu, and other Indian
+languages [8] and, as a result, have greater false acceptance or
+rejection rates. Lack of multilingual generalization ability
+restricts the wider applicability of these solutions in diverse
+real-world environments, especially in linguistically diverse
+nations such as India.
+
+These are to be addressed with an effective, modular deep
+learning-based multilingual signature verification system
+consisting of three autonomous but interconnected phases:
+detection, cleaning, and matching. At the detection phase,
+YOLOv5 is utilized for efficiently localizing signature areas in
+documents with various scripts, supported by signature formspecific anchor tuning and aspect ratio optimization
+adaptations. The cleaning step employs unsupervised K-Means
+clustering to separate foreground signature ink from
+background noise such as stamps, printed lines, and seals to
+provide cleaner input for matching. Lastly, the matching step
+employs a Siamese network with a VGG16 backbone to learn
+discriminative feature embeddings and compare them by cosine
+similarity, trained on contrastive loss to enhance intra-class
+compactness and inter-class separability.
+
+Apart from this, real-world document samples also add to
+the complexity. Real documents typically introduce visual
+artefacts like stamps, seals, overlapping printed texts, bleed
+ink, and background noise [9]. The artefacts obscure signature
+areas, and thus effective detection and extraction are difficult.
+Simple thresholding-based and hand-engineered denoising are
+not adequate enough to address such complexity effectively
+[10].
+For addressing these urgent issues, this paper introduces a
+noise-tolerant, multilingual, and modular signature
+verification system that is based on state-of-the-art deep
+learning techniques. The suggested system breaks down the
+verification pipeline into three specialist phases—detection,
+cleaning, and matching—and enables independent
+optimization of separate stages. YOLOv5 is utilized for strong
+multilingual signature localization [11], K-Means clustering is
+used for unsupervised denoising [12], and VGG16-based
+Siamese network is used for strong signature similarity
+estimation [13]. High scalability, multi-lingual adaptability,
+and realistic deployability at enterprise-scale document
+pipelines are facilitated with this module-based architecture.
+
+Easily accessible experimental evaluation of real-world legal
+and financial documents shows the efficacy of the system with a
+mean Average Precision (mAP@0.5) of 92.7.
+Keywords— Signature Verification, Multilingual Dataset,
+YOLOv5, K-Means Clustering, VGG16, Siamese Network,
+Document AI, Deep Learning, Forgery Detection, Contrastive
+Loss.
+
+I.
+
+INTRODUCTION
+
+Extensive tests done on real use case financial and
+administrative data serve as evidence for the efficacy of the
+system, showing substantial potential for take-up in digital
+onboarding, e-governance, and anti-fraud systems where
+authentic signature verification is critical.
+
+Signatures are a basic cornerstone of authentication and
+verification in important industries like banking, corporate
+management, documents, and government affairs. They enjoy
+widespread acceptance due to their convenience, simplicity,
+and enforceability under law. Against the backdrop of
+institutions being at an accelerated rate of digitalization, the
+demand for automating signature verification has increased in
+
+979-8-3315-4903-9/25/$31.00 ©2025 IEEE
+
+1
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:00:41 UTC from IEEE Xplore. Restrictions apply.
+
+II.
+
+LITRATURE REVIEW
+
+Offline signature verification has evolved from handcrafted feature-based approaches in the past two decades to
+the state-of-the-art deep learning-based approaches [2]. The
+traditional methods of template comparison, geometric feature
+extraction, and contour analysis were plagued by their
+shortcomings of not generalizing varying signature styles and
+document noise [2].
+The invention of Convolutional Neural Networks (CNNs)
+was a paradigm shift in the sense that it allowed feature
+learning in an embedded process without regard to raw image
+data [2].
+Eventually, researchers showed the effectiveness of
+Siamese neural networks in one-shot verification [4], which is
+significantly applicable in banking scenarios where one can
+have only a single or isolated samples.
+
+2023
+
+Cross-lingual Forgery
+Detection
+
+[9]
+
+2023
+
+[10]
+
+2023
+
+Multilingual OCR
+Low-resource
+Noise Reduction
+Survey
+
+[12]
+
+2022
+
+Multilingual Dataset
+Generation
+
+[13]
+
+2022
+
+Signature Detection
+
+[15]
+
+2021
+
+Siamese Networks for
+Matching
+
+[19]
+
+2017
+
+Offline Signature
+Verification
+
+III.
+
+Another group used the YOLO object detection model to
+detect signature areas in processed documents with high speed
+and thus utilized YOLOv5 for our detection [5]. Others
+worked on developing the multilingual training set application
+by creating synthetic documents containing scripts such as
+Hindi, Gujarati, and Marathi and contributed a lot to language
+generalization [6].
+
+Second, true document image scans are inherently noisy.
+They tend to contain background artifacts such as printed text,
+stamps, seals, ink smudges, and scanning or photocopying
+degradation [10]. Traditional preprocessing techniques like
+simple thresholding or morphological processing are not
+sufficient to effectively separate real signature strokes from
+these visual contaminants, leading to degraded verification
+accuracy [10].
+Third, legacy signature systems traditionally employ a
+monolithic structure with close coupling between detection,
+preprocessing, and matching phases [4]. Such tight coupling
+is detrimental to system scalability, makes incremental
+upgrades problematic, and constrains customization to meet
+special domain requirements.
+
+In addition, recent research focused on cross-lingual
+feature embeddings to identify multilingual signature forgery
+[13], while others proposed a comprehensive survey on
+signature detection and matching state of the art and proposed
+modular architecture for increased adaptability [14].
+
+These are all indicators of the urgent need for a new
+paradigm in signature verification systems that can:
+
+For a compact summary of the top ten most influential
+contributions that shape our design for the system, Table I
+offers a ranking of the top ten most influential contributions.
+
+x
+
+Effectively tackle multilingual document variations
+with robust feature learning [3].
+
+x
+
+Robustly support and eliminate true background
+artifacts in real-world applications with advanced
+unsupervised techniques [10].
+
+x
+
+Use a modular architecture, where detection,
+cleaning, and matching units can be separately
+upgraded without affecting the general process [4].
+
+LITERATURE REVIEW
+
+Year
+2023
+
+Focus Area
+Document Layout
+Understanding
+
+[4]
+
+2023
+
+[5]
+
+2023
+
+Attention-based
+Siamese Networks
+Indian Signature
+Dataset
+
+PROBLEM STATEMENT
+
+Majorly, the majority of existing signature verification
+models have been predominantly trained on Englishdominated data [19]. Consequently, these models exhibit poor
+generalization when tested against documents containing
+region scripts such as Hindi, Gujarati, Marathi, Urdu, etc.,
+which are abundantly present in India [12]. Language-biased
+training brings along much higher rates of false rejection and
+limits cross-script flexibility, making such models infeasible
+for deployment in linguistically rich environments.
+
+Aside from straightforward verification, development in
+document layout understanding has also been instrumental.
+One of the proposed groups was LayoutXLM, a visually stateof-the-art document parsing transformer from different
+languages and layouts [9], which is essential to enable
+downstream OCR and detection pipelines. Multilingual OCR
+methods were explored under low-resource conditions in
+recent research, focusing on the lack of region-annotated data
+[10]. A specially developed dataset for Indian regional
+signatures was presented to enable stable training of
+multilingual models [11]. Apart from that, huge surveys on
+document image processing noise reduction methods listed
+clustering-based methods as extremely effective [12].
+
+Ref
+[3]
+
+Transformer-based
+cross-lingual
+signature matching
+OCR techniques for
+low-resource settings
+Comprehensive
+review of clusteringbased denoising
+Created synthetic
+multilingual signature
+datasets
+YOLO-based
+signature detection
+Siamese architecture
+for one-shot
+verification
+Introduced CNNs for
+feature extraction
+
+Although significant advances in automated signature
+verification have been made, existing approaches have three
+essential shortcomings that limit their general use, particularly
+in multilingual and diverse document contexts.
+
+During preprocessing, scientists applied K-Means
+clustering to isolate signature ink from noisy document
+backgrounds as a prelude to our cleaning process [7]. Others
+also boosted signature matching through the application of
+attention mechanisms such as CBAM in Siamese networks so
+that the model can attend to salient local features [8].
+
+TABLE I.
+
+[6]
+
+Key Contribution
+LayoutXLM for
+multilingual
+documents
+CBAM-enhanced
+Siamese architecture
+IndocSign for
+regional signature
+datasets
+
+The objective of this research is thus to suggest and create
+a three-stage modular signature authentication system that
+includes multilingual identification (with the use of YOLOv5
+[13]), noise-free segmentation (with the use of K-Means
+clustering [10]), and robust signature comparison (with the use
+
+2
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:00:41 UTC from IEEE Xplore. Restrictions apply.
+
+of Siamese networks with VGG16 backbone [15]). The
+system ought to bridge the gap between state-of-the-art
+innovations and true implementation, turning multilingual and
+noise-resistant signature identification into reality.
+IV.
+
+Detection
+
+x
+
+Cleaning
+
+x
+
+Matching
+
+x
+
+It is learned with contrastive loss, which brings real
+pair embeddings closer and embeddings of fake pairs
+further apart in the latent space [15].
+
+x
+
+This enables rich signature matching despite intrawriter variation as well as cross-language
+heterogeneity.
+
+The system modularity envisioned ensures that upgrades
+such as the integration of attention mechanisms such as
+CBAM during matching [4] or replacement of the detection
+backbone with advanced object detectors are easily integrated
+[13]. Further, the multilingual training strategy ensures
+adaptability over a vast majority of regional documents,
+expressing spontaneous relevance for bank, governance, and
+legal authentication procedures [12].
+
+Modularity not only confers scalability and flexibility but
+also supports unbiased optimization of each step without
+compromising the entire process [4].
+
+A comprehensive description of the system pipeline, its
+modular blocks, and processing phases is shown in Fig. 1.
+
+A. Detection Phase:
+x Here the work is to accurately identify signature
+regions in document images. We employ a modelspecific YOLOv5 object detection model that is
+trained on a synthetically augmented multilingual
+document set in Hindi, Gujarati, Marathi, and Urdu
+scripts [13].
+x
+
+Training samples were made heterogeneous for
+script-agnostic generalizability by performing
+synthetic text replacement methods in which
+background text was altered without interfering with
+signature regions [12].
+
+x
+
+In addition, anchor boxes and aspect ratios were
+specifically designed to include the stretched as well
+as the variable structural shapes of signatures with
+various languages.
+
+x
+
+Rotation, flip, and brightness change data
+augmentation methods have been employed for
+improving robustness under various real imaging
+conditions [12].
+
+Fig. 1. Proposed System Flow for Signature Matching Pipeline
+
+V.
+
+B. Cleaning Phase:
+x After detection, the resultant signature patches will
+mostly contain visual noise in the style of printed
+lines, stamps, or background debris.
+x
+
+In eliminating this, unsupervised K-Means clustering
+is run on pixel intensity distributions [10].
+
+x
+
+The algorithm classifies the image into ink stroke
+clusters and background noise clusters.
+
+x
+
+By retaining the genuine ink cluster and discarding
+spurious ones, the system produces a purer signature
+image that enhances downstream matching
+performance without manual interference [10].
+
+METHODOLOGY
+
+The system being discussed follows a formal three-step
+procedure: Dataset Preparation, Signature Detection,
+Signature Cleaning, and Signature Matching. Every step is
+separately optimized in order to gain maximum overall system
+performance in noisy multilingual document environments.
+A. Dataset Preparation:
+x English-only signature datasets were originally
+employed to prototypize and test the baseline [19].
+For breaking the English-biased model constraints,
+the dataset was incrementally augmented by
+synthetically generating multilingual documents [12].
+
+C. Matching Phase:
+x During this final phase, pre-processed signature
+images are matched against one another by a Siamese
+neural network with VGG16 backbone [15].
+x
+
+Cosine similarity between the embeddings is
+computed to detect how similar two signatures are.
+
+PROPOSED SYSTEM
+
+In order to break the bottlenecks of classic signature
+verification approaches, we present a strong, modular
+approach that divides the verification pipeline into three
+bespoke yet unified modules [4]:
+x
+
+x
+
+The twin network branches encode each signature to
+a feature embedding vector.
+
+x
+
+It was achieved by replacing background areas of text
+with handwritten scripts in Hindi, Marathi, Gujarati,
+and Urdu but without compromising the positional
+integrity of original signature areas [12].
+
+x
+
+Ensuring realism in document layout paid close heed
+in a bid to bring spatial consistency between the
+locations of text and signature [12].
+
+x
+
+To introduce more diversity in the dataset, a number
+of augmentation operations were applied, including
+
+3
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:00:41 UTC from IEEE Xplore. Restrictions apply.
+
+random rotation (±15°), scaling, brightness/contrast
+adjustments, adding Gaussian noise, and minor
+perspective distortions, simulating real scanning
+defects and writing habits [12].
+
+Fig. 3 refers to signature detection process YOLOv5 (You
+Only Look Once).
+
+Fig. 2 refers to the visual summary of Dataset preparation
+pipeline.
+
+Fig. 3. Signature detection using YOLOv5
+
+C. Signature Cleaning
+x YOLOv5 signature detection regions were frequently
+tainted by spurious visual noise such as stamps,
+overprints of printed text, or texture [10].
+x
+
+These were reduced using an unsupervised K-Means
+algorithm run separately for each detected signature
+crop [10].
+
+Fig. 2. Dataset Preparation and Multilingual Augmentation
+
+B. Signature Detection:
+x Regions of signature candidates are identified in the
+initial part of the system. A custom YOLOv5 object
+detection model was trained on the multilingual
+dataset for efficient signature localization [13].
+x
+
+Aspect ratio anchors were tuned by hand to fit the
+long and cursive shape of signature areas, which tend
+to be very different from typical object detection tasks
+[13].
+
+x
+
+The model was trained with a transfer learning
+approach, starting weights from a YOLOv5 pretrained on the COCO data to speed up convergence
+[13].
+
+x
+
+Hyperparameters such as learning rate, batch size, and
+input resolution were optimized by grid search for the
+maximum mAP at the 0.5 IoU threshold [13].
+
+x
+
+Data augmentation strategies such as CutMix and
+Mosaic augmentation, which are native to YOLOv5,
+were also leveraged for improving generalization
+across document types and languages [13].
+
+Fig. 4. Signature cleaning using unsupervised K-Means
+
+x
+
+Two or three (k=2 or k=3) clusters were obtained by
+pixel intensity values, in which clusters that dropped
+to the lowest inferior intensity usually consisted of
+
+4
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:00:41 UTC from IEEE Xplore. Restrictions apply.
+
+where DW is the Euclidean distance between embeddings,
+Y ∈ {0, 1} is the label (real or fake), and m is the margin
+parameter.
+
+handwriting ink were preserved while light
+background region cluster parts were discarded [10].
+x
+
+Morphological operations like opening and smallarea removal were optionally performed following
+clustering to eliminate residual noise [10].
+
+x
+
+The preprocessing enhanced the quality of the inputs
+given to the matching phase significantly, and this
+enhanced the performance of subsequent verification.
+
+Positive (genuine) pairs were moved closer to one
+another in embedding space, and negative (impostor)
+pairs were separated [15].
+
+x
+
+Fig. 4 refers to signature cleaning process using k-means
+clustering where cluster size is 2, cluster “0” refers to
+background and cluster “1” refers to signature.
+
+Training was performed using Adam optimizer and
+learning rate scheduler along with early stopping
+based on validation loss [15].
+
+x
+
+D. Signature Matching
+x Signature similarity assessment was performed in the
+final step using a Siamese network architecture with
+VGG16 used as the feature extractor [15].
+
+Robustness against intra-writer variability was
+achieved using data augmentation techniques such as
+random cropping and small affine transformations
+[15].
+
+x
+
+This multi-step architecture gave excellent reliability
+in signature matching even across multilingual scripts
+and noisy document backgrounds.
+
+x
+
+x
+
+The two paths of the Siamese network embedded each
+input signature into a 512-dimensional embedding
+vector [15]. The cosine similarity was computed
+between the two embeddings to assess their similarity
+[15].
+
+Fig. 5 refers to signature matching process using Siamese
+network where VGG16 employs as a backbone in each
+branch.
+VI.
+
+OUTCOME
+
+The modular signature verification system achieved
+several noteworthy results across all pipeline stages:
+A. Multilingual Dataset Creation:
+x A multilingual signature corpus was successfully
+established, with documents that comprise
+handwritten scripts written in Hindi, Marathi,
+Gujarati, and Urdu.
+x
+
+This extension of the dataset significantly improved
+the generalizability of the model across languages and
+scripts, enabling strong multilingual performance.
+
+B. Signature Detection Performance:
+x The YOLOv5 model achieved a high mean Average
+Precision (mAP@0.5) of 92.71%.
+x
+
+The detector consistently detected signature regions
+across a wide range of document formats and scripts,
+confirming
+its robustness
+in multilingual
+environments.
+
+Fig. 6 demonstrates the output of signature detection
+model.
+
+Fig. 5. Signature matching using Siamese Network with VGG16
+
+x
+
+The network was trained using a contrastive loss
+function [15], which was defined as:
+
+Fig. 6. Signature detection model’s output
+
+C. Signature Cleaning Performance:
+x K-Means clustering performed very well, with
+82.39% background noise removal.
+
+5
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:00:41 UTC from IEEE Xplore. Restrictions apply.
+
+x
+
+stable within intra-writer variation and multilingual
+applicability.
+
+The algorithm effectively differentiated ink strokes
+from handwritten signatures, removed seals, stamps,
+and printed text overlaps, producing cleaner and more
+consistent signature crops to match.
+
+Fig. 8 demonstrates the output of signature matching
+model.
+
+Fig. 7 demonstrates the output of signature cleaning
+model.
+
+E. Collective System Effectiveness:
+x These cumulative outcomes recognize the system to
+be viable, stable, and deployable in actual
+multilingual document verification situations,
+particularly within banking, government, and legal
+contexts.
+VII.
+
+RESULTS AND DISCUSSION
+
+Systematic performance analysis was carried out to give a
+measure of each step's performance correlation. Quantitative
+findings of the most significant results of the modular system
+are presented in Table II.
+TABLE II.
+
+PERFORMANCE METRICS OF THE THREE-PHASE
+SIGNATURE VERIFICATION SYSTEM
+
+Phase
+Detection (YOLOv5)
+Cleaning (K-Means
+Clustering)
+Matching (Siamese VGG16)
+
+Fig. 7. Signature cleaning model’s output
+
+D. Signature Matching Performance:
+x The Siamese network with VGG16 as the backbone
+performed better ROC AUC at 0.9843 (98.43%).
+
+Metric
+mAP@0.5
+Noise Reduction
+
+Achieved Value
+92.71%
+82.39%
+
+ROC AUC
+
+0.9843 (98.43%)
+
+Cross-script testing validated consistent performance with
+Hindi, Marathi, and Urdu signatures, questioning the
+multilingual ability of the system. It was less robust with very
+cursive signature writing styles, with over-inking or poor scan
+quality, particularly for the case of the Urdu samples, where
+there was not enough ligature spacing. The samples are
+promising to further enhance with more advanced data
+augmentation and adaptive preprocessing.
+Perceptual vision assisted YOLOv5 in detecting signature
+locations efficiently even remotely among dense document
+content. Perceptive vision was strongly augmented when
+background content was properly evaded during post-cleaning
+scanning when performed for the first time. Basic adoption by
+the K-Means algorithm was, however, in an indefensible
+position to denoise with or without tagged guidance or
+templating.
+ROC curve analysis revealed ideal discrimination of actual
+and pseudo signature pairs. The almost ideal ROC AUC of
+0.984 speaks volumes about the discriminative potential of the
+Siamese feature embeddings and efficiency of contrastive loss
+training. There were nearly no false positives and false
+negatives at test time, which signifies model consistency.
+Besides, qualitative user experience on visual verification
+tasks indicated pre-cleaning signatures by the cleaning
+module as more human-readable to examiners, another
+evidence of greater value in real use. Overall, modularity not
+only yielded satisfactory quantitative results but also turned
+out to be usable in real use, a prerequisite for successful largescale use in banking, jurisprudence, and administration.
+VIII. CONCLUSION AND FUTURE WORK
+A. Conclusion:
+x This paper presents a very efficient and
+computationally costly multilingual signature
+verification system with no real-world document
+noise and variability control. By breaking down the
+verification process into three independent and
+
+Fig. 8. Signature matching model’s output
+
+x
+
+This confirmed the system to be effective in
+discriminating real and forgery signatures and was
+
+6
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:00:41 UTC from IEEE Xplore. Restrictions apply.
+
+x
+
+x
+
+modular phases— detection, cleaning, and
+matching—the system is made more flexible, simpler
+to maintain, and more suitable for generalization to
+other scripts and documents.
+
+With all these extra improvements, the system is now set
+to become a stable enterprise-class solution capable of dealing
+with the increased demand for multi-lingual, secure, and
+scalable signature verification today.
+
+Detection module, in a hat tip to its self-adaptive
+YOLOv5 model, functioned magically well to detect
+Hindi, Marathi, Gujarati, and Urdu text signature
+pattern types at astounding levels of accuracy. To
+disinfect, unsupervised K-Means clustering was
+utilized to disinfect out handwritten ink streams from
+background noises effectively without humanannotated masks. Finally, the matching stage, built
+against a Siamese network built from an encoder
+VGG16 and trained on contrastive loss, worked
+exceedingly well to recognize real vs. forged
+signatures.
+
+ACKNOWLEDGEMENT
+I express my sincere gratitude to Dr. Nilkamal More and
+Mr. Chirag Desai for the guidance and supervision they
+provided during the project. Their constant encouragement,
+technical advice, and support played an important role in
+determining the direction and conduct of this research. I
+further appreciate the facilities and academic environment
+offered by the Department of Information Technology
+(AI&DS) of K. J. Somaiya College of Engineering to
+complete this project successfully.
+REFERENCES
+
+Quantitative results validate the system performance,
+detection mAP@0.5 of 92.71%, background noise
+eradication at 82.39%, and signature match ROC
+AUC of 0.9843 (98.43%). Results validate the high
+real-world use of the system in banking, legal, and
+administration cases with security and trust being of
+major concern.
+
+[1]
+
+R. Yan et al., “DetailSemNet: Elevating Signature Verification through
+Detail-Semantic Integration,” in ECCV, 2024.
+[2] A. Raut et al., “A Comprehensive Survey on Image Signal Processing
+Approaches
+for
+Low-Illumination
+Image
+Enhancement,”
+ResearchGate, 2024.
+[3] L. Xu, Y. Xu, S. Huang, and D. Liang, “LayoutXLM: Multimodal Pretraining for Multilingual Visually-rich Document Understanding,” in
+ACL, 2023.
+[4] X. Li and M. Zhang, “Improving Siamese Networks with CBAM
+Attention,” Pattern Recognition, vol. 138, 2023.
+[5] D. Sharma and P. Rathi, “IndocSign: A Dataset for Indian Signatures,”
+arXiv preprint arXiv:2304.09123, 2023.
+[6] Y. Liu and J. Zhang, “Cross-lingual Signature Verification using
+Transformers,” in CVPR, 2023.
+[7] J. Rao and S. Patel, “Visual Similarity Learning for Signature
+Verification,” Pattern Recognition Letters, vol. 169, pp. 51–58, 2023.
+[8] A. Sharma et al., “Signature Detection in Degraded Documents using
+YOLOv7,” in ICDAR Workshops, 2023.
+[9] P. Gupta et al., “Multilingual Handwritten Document Understanding
+using Transformer Architectures,” in Document Intelligence Workshop
+at KDD, 2023.
+[10] T. Wang and Y. Zhao, “Noise Reduction Techniques in Document
+Image Processing: A Comprehensive Survey,” IEEE Access, vol. 11,
+pp. 12345–12358, 2023.
+[11] A. Mitra and K. Bhattacharya, “Advances in Forgery Detection for
+Multilingual Signatures,” Pattern Recognition, vol. 131, p. 108876,
+2022.
+[12] X. Zhang et al., “Synthetic Document Generation for Multilingual
+Training,” in ICDAR, 2022.
+[13] J. Joseph et al., “End-to-End Signature Detection using YOLO,” arXiv
+preprint arXiv:2107.12345, 2021.
+[14] S. Bhatia et al., “Explainable Visual Document Understanding,” arXiv
+preprint arXiv:2108.04782, 2021.
+[15] E. Bahnsen, M. Aouada, and B. Ottersten, “Siamese Neural Networks
+for Signature Verification,” Pattern Recognition Letters, vol. 140, pp.
+37–43, 2020.
+[16] B. Su, S. Lu, and C. L. Tan, “Document Image Binarization using UNet,” in ICPR, 2020.
+[17] Y. Zhang et al., “Unconstrained Offline Signature Verification,” in
+CVPR, 2019.
+[18] J. Calvo-Zaragoza and F. R. Feitosa, “Document Image Enhancement
+Using GANs,” Pattern Recognition, vol. 86, pp. 272–282, 2018.
+[19] L. G. Hafemann, R. Sabourin, and L. S. Oliveira, “Offline Handwritten
+Signature Verification—Literature Review,” arXiv preprint
+arXiv:1705.05787, 2017.
+[20] T. Wigington et al., “Handwritten Text Line Segmentation with Fully
+Convolutional Neural Networks,” in ICDAR, 2017.
+
+B. Future Work:
+Promising as is the present system, there exist some areas
+to improve for future work:
+x
+
+Attention-Augmented Matching: Adding attention
+blocks like the Convolutional Block Attention
+Module (CBAM) to the Siamese model enables the
+model to focus even more intensively on the most
+important parts of a signature, making even better
+matches.
+
+x
+
+Edge Optimization: Optimization for future
+consumption to enable real-time on lower-end devices
+will be tackled by techniques like quantization,
+pruning, and low-resource-computation use like
+MobileNet or EfficientNet.
+
+x
+
+Extended Language Support: Beyond existing
+support for the four languages, other languages like
+Bengali, Tamil, Telugu, and Kannada can also be
+supported through some more multilingual synthetic
+training data.
+
+x
+
+Hybrid Denoising Techniques: Hybridizing the
+clustering algorithms like K-Means and denoising
+algorithms like U-Net based on deep learning can
+result in even cleaner signature extraction,
+particularly of bad degraded or noisy documents.
+
+x
+
+Interactive Dashboard Development: There will be
+created an interactive web-based dashboard where
+there will be document upload functionality, visually
+mark signatures found, similarity scores view, and
+audit verification functionalities with explainable AI.
+
+x
+
+Explainable AI Integration: Integration of
+explanation capability into the system will enable
+end-users to see why two signatures are similar or
+dissimilar, building user trust and regulation
+compliance in highly regulated sectors such as
+banking and government identification verification.
+
+7
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:00:41 UTC from IEEE Xplore. Restrictions apply.
+
+

@@ -1,0 +1,384 @@
+Automated signature inspection and forgery
+detection utilizing VGG-16: a deep convolutional
+neural network
+
+2023 2nd International Conference on Ambient Intelligence in Health Care (ICAIHC) | 979-8-3503-4488-2/23/$31.00 ©2023 IEEE | DOI: 10.1109/ICAIHC59020.2023.10431430
+
+Rajashree Dash 1*, Manish Bag 2, Deepak Pattnayak3, Amisa Mohanty4, Isha Dash5
+1,2,3,4,5
+Computer Science & Engineering Department,
+Siksha ‘ O‘ Anusandhan (Deemed to be University), Bhubaneswar, India
+
+Abstract— With the growing usage of handwritten signatures in
+legal documents and financial transactions, it is crucial to select an
+efficient technique for validating these signatures and eliminating
+forgeries that might cause considerable losses for clients. Offline
+signature authentication is yet challenging despite extensive study,
+notably when trying to separate expert forgeries from signature pools.
+This research aims to develop an automated system using VGG-16 a
+deep convolution neural network (DNN) to successfully tackle
+handwritten signature fraud. The automated system is developed
+separately by utilizing a pre-trained and a trainable VGG-16, whose
+performance is accessed over a widely used signature dataset
+comprising an equal number of authentic and fake signatures. In
+comparison to the pre-trained VGG-16 model, the trainable VGG-16
+based model can yield a testing accuracy of 0.962, which is about
+17.75% higher. The simulation outcomes decisively illustrate that the
+recommended methodology is suitable for automatically spotting
+fraud handwritten signature images.
+Keywords— CNN, VGG-16, Classification, forgery identification
+
+I. INTRODUCTION
+The use of signatures is a common way for individuals to
+formally bind a document or express their preference for
+specific information, and is frequently used in financial and
+legal activities such as bank letters, property documents,
+checks, and corporate documents [1]. However, signature
+forgery has become a major cybercrime, with individuals
+attempting to duplicate signatures for financial gain. In recent
+years, the rapid growth of technology has made signature
+forgery more sophisticated, making it difficult to detect with
+traditional methods. As a result, advanced techniques such as
+deep learning algorithms are necessary to accurately identify
+forged signatures.
+A variety of forgery detection systems built on deep
+learning has been presented in the literature. In [1], a
+straightforward CNN including three convolution and
+maxpooling layers setup alternatively with one flattened and
+dense layer is suggested for spotting forgeries of signatures.
+The author created a dataset with 6000 signatures with three
+persons. In order to be fed into the CNN, originally collected
+
+RGB format signatures are first transformed to grey scale and
+then
+to
+bitmap
+format.
+For model evaluation, accuracy and loss percentage metrics ar
+e utilized. Two DNNs, one developed using transfer learning
+and another customized one are compared with traditional
+SVM and KNN techniques for signature recognition in [2].
+Clearly, the DNN models beat the conventional ones when
+results from two DNNs were compared over a dataset of 600
+signatures generated from 30 persons. In [3], the author
+suggests a CNN model for forgery detection that combines the
+Harris-Surf and Crest-Trough algorithms. The suggested CNN
+model architecture is composed of 5 layers, and the model is
+trained using the back-propagation technique. The CEDAR
+dataset, which has 1320 photos for each authentic and fake
+signature, is used to test the model. Siamese neural network a
+variety of DNN is suggested by the authors of [4] as a possible
+solution to signature verification problem. Transforming to
+grey scale, image scaling, morphological erosion and
+augmentation are used as part of pre-processing stage. The
+model performance is then compared with LeNet and SigNet
+on an artificially created signature dataset. In [5], another
+DNN is proposed for signature verification that uses the
+ResNet-50 with some more layers and encoders. A Kaggle
+dataset having 2660 English signatures is used in the model’s
+testing. The use of Mutual Signature DenseNet (MSDN) in a
+region-based DNN is investigated in [6]. It is made up of two
+identically structured CNN branches with same learnable
+parameters. The MSDN feature extractor is used in their
+suggested technique to analyze numerous local regions, and
+the similarity between two signatures is then used to train a
+Siamese Neural Network (SNN). The model is then evaluated
+by comparing it to several CNN architectures, including VGG16, AlexNet, and ResNet-18. A tailored four layered CNN
+optimized using ADAM optimizer has shown a validation
+accuracy of 88.39% over a synthetic dataset with 770
+signatures prepared from 55 persons each one contributing 7
+genuine and 7 forged one in [7]. The authors of [8] have
+experimented with a CNN model considering various split
+ratios of datasets to identify fake signatures. Accuracy and
+
+979-8-3503-4488-2/23/$31.00 ©2023 IEEE
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:59:09 UTC from IEEE Xplore. Restrictions apply.
+
+loss are considered as the evaluation criteria in their study.
+After creating a handwritten signature dataset using attendance
+records, the authors of [9] have utilized a feed forward neural
+network to differentiate between signatures and nonsignatures. A deep CNN classifier that had been separately
+trained using the ADAM and SGD optimizers and utilizing
+various hyper-parameter tweaking techniques was then used to
+confirm the validity of the signature. A tailored CNN
+designed in [10] to identify fake signatures outperformed a
+VGG-16, a SNN and a SNN with signet architecture in terms
+of accuracy when tested on the CEDAR dataset. Another
+tailored CNN employing 6 convolutions with 5 maxpooling, 1
+flatten and 2 dense layers is presented in [11] to identify
+signature forgery. The model is evaluated over a sample of
+300 photos with an equal percentage of authentic and
+fraudulent signatures from 30 persons. A custom CNN
+validated with 130 signatures collected from 130 individuals
+has shown accuracy more than 95% accuracy during
+validation and aw well as when tested with 20 images in [12].
+The goal of this project is to develop a simple VGG-16
+based automated signature verification system (ASVS) that
+can identify whether a given signature is genuine or
+fraudulent. With given a signature image as input, the model
+will use the various convolution layers of VGG-16 to extract
+essential features and then utilizing these features will classify
+the signature at the output layer. Taking the publicly available
+CEDAR dataset as a reference, the performance of ASVS
+modeled with a trainable VGG-16 and with a pre-trained
+VGG-16 is accessed with respect to four assessment metrics,
+such as accuracy, precision, recall, and F1-score. The
+simulation outcomes convincingly indicate the viability of the
+proposed technology in recognizing forgery in the handwritten
+signature visuals.
+The working mechanism of the ASVS is explained in the
+next part. Section 3 analyzes the outcomes followed by
+conclusion in next paragraph.
+II. ASVS USING VGG-16
+Fig. 1 depicts the overall working principle of the VGG-16
+based ASVS. To assess the effectiveness of the proposed, a
+standard database of signatures is required. For this purpose,
+publicly available handwritten signatures related to 55 persons
+are collected from https://cedar.buffalo.edu/NIJ/data. To
+ensure that that the performance of the system should not be
+biased by the size and slant offered in the signature, the
+collected signature images need pre-processing. So in the first
+step of data pre-processing, to attain homogeneity across the
+images, which ranged from 200px to 800px in size, we
+adopted OpenCV’s resize function setting the interpolation
+parameter as INTER_LINEAR and rescaled the images to a
+standard resolution of 250px to 250px prescribed for the
+VGG-16 model. After that, noise removal from images is
+accomplished utilizing a Gaussian blur filter. The
+fastNlMeansDenoising function of the OpenCV is used to
+apply the filter. Following the pre-processing, a predefined
+splitting ration was used to divide the dataset into training and
+testing sets.
+
+Then a VGG-16 based DNN developed using transfer
+learning is utilized for classification of the signature images as
+genuine or forged. Numerous studies have been inspired by
+VGG-16 to utilize it to address a range of object detection and
+classification problems [2][7][12]. It has already shown 92.7%
+accuracy to classify 1000 images of 1000 different categories.
+The 13 convolution layers, 5 maxpooling layers and 3 dense
+layers form the 21 layers of VGG-16, but 16 of them are
+weight layers with learnable parameters. The network has total
+14,764,866 parameters out of which 50,178 are trainable
+parameters and remaining 14,714,688 are non-trainable ones.
+Convolution produces a fixed number of feature maps from
+the input image, which are then fed into a max pooling layer to
+produce pooled feature maps. The subsequent convolution
+layer receives these pooled feature maps, and so on until we
+attain at the final max pooling layer. The pooled feature map
+is finally flattened and fed into the fully connected layers. In
+the first part of this study, the effectiveness of a pre-trained
+VGG-16 network that was previously trained over the
+‘imagenet’ dataset with thousands of classes of images is
+accessed for forgery detection in signatures. The fully
+connected layer i.e. the top layer of pre-trained VGG-16
+model normally generates 1000 different output labels, but the
+chosen problem in this study is a binary classification work.
+So instead of entirely utilizing the architecture of pre-trained
+VGG-16 network, we have customized the network with a
+new top portion i.e. the fully connected layer and output layer
+by freezing the pre-trained convolution layers and unfreezing
+the top fully connected layer of original VGG-16 network.
+The pre-trained convolution layers of VGG-16 will help to
+convolve visual features from the input preprocessed signature
+images. Then the non-frozen pre-trained layers are trained
+with the collected signature images. In the next part of the
+study, instead of utilizing the pre-trained weights of the
+convolution layers, the entire VGG-16 model with new top
+portion is trained with the signature dataset and its
+classification performance is accessed.
+III. EXPERIMAENTAL RESULT DISCUSSION
+A computer system with an AMD Ryzen 5 3600 CPU clocked
+at 4.2Ghz, Nvidia RTX 2060 6GB GPU(Graphics Processing
+Unit) and 16GB of 3200mhz RAM was used to implement the
+suggested ASVS. The study made use of Python 3.9.5 with the
+OpenCV image processing library, Tensorflow version 2.10,
+Matplotlib and SK.learn library.
+The handwritten signatures were retrieved from the freely
+accessible CEDAR dataset. There are 2640 grey scale
+signatures altogether in this dataset, 1320 of which are real
+and 1320 of which are forgeries. We have also added 60
+images of each real and fake signature images of our own,
+making the total signatures for the dataset to be 2760. Then all
+the images are rescaled to a size of 250X250. The original and
+preprocessed image is shown in Fig. 2. Then the dataset is
+divided in a proportion of 80:20 and the preprocessed images
+from the training set are given as input to the VGG-16 model.
+Initially, adapting the transfer learning mechanism, the pretrained weights of the VGG-16 are used in the model allowing
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:59:09 UTC from IEEE Xplore. Restrictions apply.
+
+only the end fully connected layers to be trained. Next the
+performance of the trainable VGG-16 model, which is entirely
+trained with the training set employing the SGD optimizer
+keeping the learning rate to 0.001 and considering
+binary_crossentropy as the loss function, is observed. During
+training, the epoch size was set to 20, batch size to 30. The
+
+accuracy and loss graphs of related to the two DNNs are
+shown in Fig. 3 and Fig. 4 respectively. The training and
+validation accuracy obtained by the two VGG-16 based ASVS
+are presented in Table 1. Fig. 5 and Fig. 6 shows the
+confusion matrix obtained by both ASVS for the test set.
+
+Fig.1. Working Flow Diagram of the VGG-16 based ASVS.
+
+Fig. 2 Original with the pre-processed signature image
+Table 1. Training and validation performance comparison of the two VGG-16 based ASVS
+
+Model
+
+Training
+accuracy
+
+Validation
+accuracy
+
+Trainable VGG-16
+
+0.997
+
+0.959
+
+Pre-trained VGG-16
+
+0.802
+
+0.769
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:59:09 UTC from IEEE Xplore. Restrictions apply.
+
+Fig. 3 Accuracy and Loss obtained during training and validation phase of pre-trained VGG-16 based ASVS model
+
+Fig. 4 Accuracy and Loss obtained during training and validation phase of trainable VGG-16 based ASVS model
+
+Fig. 5 Confusion matrix related to test set (Pre-trained VGG16 based ASVS)
+
+Fig. 6 Confusion matrix related to test set (Trainable VGG-16
+based ASVS)
+
+Analyzing the outcomes depicted in Table 1 and Figs. 3 to
+6, it is clear that the trainable VGG-16 model provides better
+accuracy during training, validation and test phase compared
+to the pre-trained model. The comparison of the two models
+related to test data is also presented in Fig. 7.
+Finally the prediction outcome of the model for two
+random images one belong to each class is depicted in Fig. 8
+that was obtained by using the Model.predict () function from
+the tensorflow library. the Model.preditct() returns a tuple of
+probabilistic predicted value in terms of (X,Y), where X
+indicates the probability of the image belonging to class 0,
+which is forgery in this case, and Y indicates the probability of
+the image belonging to class 1 which is labeled as genuine for
+this case. Comparison between the two probabilistic values
+was made. If X was found to be greater than Y, it implied that
+the image belonged to class 0, the forgery class, and if Y was
+found to be greater than X, it implied that the image belong
+to class 1, the genuine class. The Model prediction returns the
+probabilistic tuple [X,Y] with corresponding values
+[1.0679432e-06, 9.9999893e-01] for the case of a random
+image as shown in Fig.8 (a). Value of Y was found to be
+greater than X which meant the signature image is a genuine
+signature. Additionally, the random image shown in Fig. 8(a)
+is searched in the CEDAR dataset manually is found in the
+‘full_org’ directory named as ‘genuine_29_12’ which further
+confirmed that the prediction made by the model is indeed
+correct. Similarly the model prediction returns the
+probabilistic tuple [X,Y] with corresponding values
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:59:09 UTC from IEEE Xplore. Restrictions apply.
+
+[[9.9977905e-01, 2.2100362e-04]] for the case of a random
+image shown in Fig. 8(b). Value of X was found to be greater
+than Y which meant the signature image was a forged
+signature. When, the random image shown in Fig. 8(b) is
+searched in the original dataset manually, it is found in the
+‘full_forg’ directory named as ‘forgeries_19_17’ which
+further confirmed that the prediction made by the model is
+indeed correct.
+IV. CONCLUSION
+In this research, verification of signatures and identifying
+the forged one among them is addressed as a binary
+classification task. The key point is the comparison of the
+
+attainment of the pre-trained and trainable version of VGG-16
+model for the same task. By conducting experiments on the
+well-known CEDAR dataset and examining the outcomes, it is
+clear that the trainable VGg-16 based ASVS is better able to
+identify forged images from the image pool than the pretrained model. To further advance this research, data
+augmentation can be adopted to yield a massive synthetic
+dataset for improving the performance of the model. Another
+research direction that we plan to perform is to design a less
+complex CNN model with fewer parameters to achieve higher
+accuracy in detecting forgery in both online and offline
+handwritten signature verification process.
+
+Fig. 7 Comparison of test outcome related to both VGG-16 based ASVS
+
+(a)
+
+(b)
+
+Fig. 8 Classification of a random image from the test dataset as genuine or forged
+
+REFERENCES
+1. S. J. Gideon, A. Kandulna, A. A. Kujur, A. Diana, & K.
+Raimond, Handwritten signature forgery detection using
+convolutional neural networks. Procedia computer science, 143,
+pp. 978-987, 2018.
+2. A. Hirunyawanakul, S. Bunrit, N. Kerdprasop, & K. Kerdprasop,
+Deep learning technique for improving the recognition of
+
+handwritten signature. Int. J. Inform. Electron. Eng, 9(4), 72-78,
+2019.
+3. J. Poddar, V. Parikh, & S. K. Bharti, Offline signature
+recognition and forgery detection using deep learning. Procedia
+Computer Science, 170, pp. 610-617, 2020.
+4. V. Ruiz, I. Linares, A. Sanchez, & J. F. Velez, Off-line
+handwritten signature verification using compositional synthetic
+generation
+of
+signatures
+and
+Siamese
+Neural
+Networks. Neurocomputing, 374, pp. 30-41, 2020.
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:59:09 UTC from IEEE Xplore. Restrictions apply.
+
+5. S. Jain, M. Khanna, & A. Singh, Comparison among different
+CNN Architectures for Signature Forgery Detection using
+Siamese Neural Network. In 2021 International Conference on
+Computing, Communication, and Intelligent Systems (ICCCIS),
+pp. 481-486, 2021.
+6. L. Liu, L. Huang, F., Yin, & Y. Chen, Y. Offline signature
+verification using a region based deep metric learning
+network. Pattern Recognition, 118, 108009, 2021.
+7. S. Summra, M. G. Usman, & A. Muhammad, Supervised Neural
+Network for Offline Forgery Detection of Handwritten Signature.
+In 2021 18th International Conference on Electrical Engineering,
+Computing Science and Automatic Control (CCE), 1-6, 2021.
+8. A. K, Kavitha, M., Keerthanah, K., B., Bhavya, & J., Janani.
+Signature forgery detection using convolutional neural network.
+International Research Journal of Engineering and Technology
+(IRJET), 9(05), pp. 734-736, 2022.
+9. J. A. Lopes, B. Baptista, N. Lavado, & M. Mendes, Offline
+Handwritten Signature Verification Using Deep Neural
+Networks, Energies, 15(20), pp. 1-15, 2022.
+10. E., Teja, A. Mathew, & M., Pragathi, Comparison of signature
+forgery detection architectures, International Journal for Research
+in Applied Science & Engineering Technology (IJRASET),
+10(06), pp. 4124-4134, 2022.
+11. E. Alajrami, B. A. Ashqar, B. S. Abu-Nasser, A. J. Khalil, M.M.
+Musleh, A.. M., Barhoom, & S. S. Abu-Naser, Handwritten
+signature verification using deep learning, International Journal
+of Academic multidisciplinary Research, 3(12), pp. 39-44, 2020.
+12. Q. S. U. Mosaher, & M. Hasan, Offline handwritten signature
+recognition using deep convolution neural network. European
+Journal of Engineering and Technology Research, 7(4), 44-47,
+2022.
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:59:09 UTC from IEEE Xplore. Restrictions apply.
+
+

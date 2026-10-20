@@ -1,0 +1,518 @@
+2026 International Conference on Computational Robotics, Testing and Engineering Evaluation (ICCRTEE) | 979-8-3315-5256-5/26/$31.00 ©2026 IEEE | DOI: 10.1109/ICCRTEE68719.2026.11566679
+
+2026 International Conference on Computational Robotics, Testing and Engineering Evaluation (ICCRTEE)
+
+An Intelligent Framework for Legal Document
+Comparison and Verification
+Dr. S. Amutha1
+
+Sure Manusha2
+
+Pandaraboina Abhilash3
+
+Professor , Department of CSE
+Vel Tech Rangarajan
+Dr.Sagunthala R&D Institute of
+Science and Technology,
+Chennai, India
+dramuthas@veltech.edu.in
+
+Scholar , Department of CSE(AIDS)
+Vel Tech Rangarajan
+Dr.Sagunthala R&D Institute of
+Science and Technology,
+Chennai, India
+vtu24167@veltech.edu.in
+
+Scholar , Department of CSE(AIDS)
+Vel Tech Rangarajan
+Dr.Sagunthala R&D Institute of
+Science and Technology,
+Chennai, India
+vtu22331@veltech.edu.in
+
+Abstract—Legal documents consisting of contracts, agreements, or certifications are considered the basis for many
+decision-making processes, rendering the integrity of the documents to be of primary importance. Due to the rise in
+digitalization in the field of law with its consequent growth in the
+number of digital documents, manual verification of the
+documents was considered to be a tedious, difficult, or inefficient
+process prone to errors due to the involvement of the manual
+factor. Especially detecting changes to the texts within the
+documents or determining the legitimacy of the signature
+associated with the documents is considered to be a tedious job
+by itself for the concerned professionals dealing with documents
+using the manual method. This article proposes an intelligent
+system for matching the nature of the documents with the aim of
+assisting the verification process by using the facility of artificial
+intelligence for document verification by including the aspects
+like natural language processing for the verification of the
+documents with the help of the signature associated with the
+document.The experimental evaluations performed using
+different sets of legal documents verify the superiority of the
+proposed approach in terms of high precision for finding similar
+contents as well as signature irregularities. The results confirm
+the potential of the system in developing an efficient solution for
+improving the efficiency, reliability, and robustness of the
+verification process for legal documents.
+Index Terms—Legal document verification, document similarity analysis, natural language processing, signature authentication, semantic text analysis, machine learning, artificial intelligence, legal informatics.
+
+I. INTRODUCTION
+Legal documents include contracts, agreements,
+certificates, and affidavits; these are, in fact, the very
+backbone of any le- gal, financial, and administrative system.
+Ensuring authenticity and integrity of such documents is
+pivotal to avoiding fraud, unauthorized changes, and possible
+related litigations. The fast digitization of legal records and the
+ever-growing move toward electronic document exchange
+have turned traditional manual verification processes
+inefficient, very time-consuming, and prone to human error.
+Therefore, automated and intelligent methods that are able to
+verify legal documents with high accuracy and speed have
+become increasingly in demand.
+Advances in AI have allowed the use of natural language
+processing and computer vision methodologies on document
+analysis. The semantic text similarity approach enables one to
+
+contrast the contents of documents beyond just superficial
+matches of keywords, which would allow for the detection of
+paraphrased or structurally modified text.Transformer-based
+language models achieve better performance with respect to
+contextual understanding of legally complex language. Human
+handwritten signature verification has been studied extensively
+using both machine learning and deep learning approaches, and
+convolutional neural networks achieve remarkable success in
+extracting discriminative visual features from signatures.
+Nevertheless, despite such advancements in automated document analysis, automated verification of legal documents still
+proves to be an daunting task, particularly since legal documents
+are highly structured and domain-specific in nature, where
+clauses can be very complex in both meaning and lengths.
+Furthermore, signature verification has proved to be an additional
+complex process with issues of intra-writer variation, inter-writer
+similarity, as well as skilled forgery. Typically, most of the
+existing systems address issues of semantic text analysis and
+signature verification individually or in isolation from each other,
+producing incomplete or unre- liable results of document
+verification in practical applications. The need for this paper is
+based on the shortcomings of the existing system by proposing an
+AI-based framework for semantic legal text similarity and
+handwritten signature veri- fication. The proposed framework
+can perform semantic text similarity for contractual clauses and
+authenticity for hand- written signatures by utilizing a
+transformer and CNN-based models, respectively. The proposed
+framework can perform comprehensive verification by utilizing
+joint text and signature authenticity. Thus, this proposed
+framework can perform more
+reliable and comprehensive verification for documents.
+II. RELATED WORK
+Automated analysis of legal documents has advanced significantly with the advent of natural language processing
+techniques, which are increasingly being used for the analysis of
+legal documents. Existing techniques analyzed documents using
+lexical techniques based on TF-IDF and Cosine Sim- ilarity,
+which are more limited compared to the semantic analysis being
+performed in the latest techniques, which are more efficient and
+robust to paraphrased statement changes, including the analysis
+
+979-8-3315-5256-5/26/$31.00 ©2026 IEEE
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:02:45 UTC from IEEE Xplore. Restrictions apply.
+
+2026 International Conference on Computational Robotics, Testing and Engineering Evaluation (ICCRTEE)
+
+performed by transformer techniques like BERT, which are more
+useful for the analysis of the content of legal documents, without
+checking the authenticity of the documents being used for the
+analysis.
+Handwritten signature verification is one of those biometric
+verification problems that has been widely explored. In past
+decades, signature verification was performed using statistical
+models after extracting specific handwritten signature feature sets
+traditionally. More recently, signature verification was performed
+using powerful discriminative automatically learned image
+features via convolutional neural networks. These mod- els
+performed well across handwritten signature verification
+problems; moreover, they demonstrated greater immunity to both
+random and skilled forgeries. However, signature veri- fication
+methods generally operate independently from other document
+semantics. Despite some studies being conducted regarding
+hybrid or multi-modal document verification, the previously
+proposed methods lack a unified framework for verification of
+legal documents. For example, they do not verify the clauses at a
+semantic level. With this piece of work, we introduce a unified
+framework for document verification by considering both
+semantic document verification and signature verification. The
+novel contribution includes a unified frame- work for verifying
+documents by including both semantic and signature verification.
+III. PROBLEM STATEMENT AND REQUIREMENT ANALYSIS A.
+Problem Statement
+This exponential growth of electronic legal documents
+includes but is not limited to contracts, agreements, and
+certificates and compliance records. It has been a result of
+rapid digitization within workflows in the field of law. The
+authenticity and consistency of such documents need to be
+established, as even minor textual changes or forged signatures concerning such critical legal documents may lead to
+serious legal, monetary, and reputational losses. Traditional
+document verification for legality depends considerably on
+manual inspection by a legal expert, which in turn makes the
+entire process time-consuming, labour-intensive, and prone to
+human error, especially in large-scale repository document
+verification.
+Most existing automated methods try to meet this challenge by either detecting textual similarity or performing
+signature verification as a standalone task. For text-based
+methods, keyword matching, and semantic similarity models
+usually do not detect paraphrased or contextually altered legal
+clauses reliably. On the other hand, approaches for signa- ture
+verification, if performed in isolation, cannot consider
+inconsistencies between document content and authenticity of
+signing. When it comes to text, things like keyword matching
+or semantic models often miss the mark—they struggle to
+catch paraphrased or subtly changed legal clauses. Flip to
+signature verification, and you’ve got another problem. If you
+only check the signature without looking at the document’s
+content, you can miss inconsistencies or even clever forgeries
+that slip right through. Consequently, the central problem this
+research tries to solve arises from the fact that a unified,
+
+scalable, and intelligent framework for the verification of legal
+documents by assessing semantic content consistency and
+signature authenticity in combination is missing. Essentially,
+there is a need for an automated approach that would minimize
+reliance on manual verification while ensuring accurate,
+consistent, and depend- able results across diverse legal
+contexts.
+B. Requirement Analysis
+It needs to catch the true meaning behind the text, not just
+match keywords. In legal writing, rephrasing or just moving a
+clause can completely change what something means, so the
+system has to understand context and meaning at a deep level. On
+top of that, signature verification matters a lot. Signatures and
+seals often prove whether a document’s real.
+The system should spot forgeries whether someone tried to
+quickly scribble a fake, carefully copied the signature, or
+simulated it with sophisticated tools. It’ll need deep learning to
+pick up on those tiny details, all while keeping false alarms—both
+false positives and negatives to a minimum. It alsoneeds to handle
+various document format types, such as image scans of PDFs and
+editable text files, among others.
+To do this, it needs to clean up images and use optical character
+recognition (OCR), so it can turn scan-only documents into
+something machines can actually read, while keeping everything
+in place.
+But here's the thing it shouldn't treat checking the text and
+analyzing signatures as totally separate steps. Instead, it should
+blend those results together and make one clear decision about
+whether the text is genuine. From a non-functional perspective, it
+needs to ensure that its design is both scalable and agile enough
+to analyze a potentially large number of documents with rapid
+response times, incorporating stringent security measures such as
+access controls on different user roles.
+Besides that, it needs to ensure design flexibility to cope with
+constantly evolving forgery methods via its modular design
+architecture. Lastly, despite its high level of automation within its
+capabilities, its design needs to ensure that it is interactive to a
+degree to ensure both its accuracy and trustworthiness for
+forensics usage within the legal fraternity.
+IV. EXISTING SYSTEM AND LIMITATIONS
+A. Existing System
+The existent system for the verification of different types of
+legal documents has been designed for the automation of some
+points for document verification. The great majority of existent
+verification methods are either text similarity verification or
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:02:45 UTC from IEEE Xplore. Restrictions apply.
+
+2026 International Conference on Computational Robotics, Testing and Engineering Evaluation (ICCRTEE)
+
+signature verification. The majority of text-based verification
+technologies use existent keyword matching technologies, different statistical measures for calculating similarities, as well as
+semantic embedding, so they can perform verification for two or
+more different types of legal documents and identify the common
+or duplicated text inside the documents. The existent verification
+technologies are developed based on natural lan- guage
+processing technologies, enabling the detection of legal
+document paraphrasing according to contextual relationships
+between clauses.
+At the same time, signature verification systems have the
+aspiration to identify the authenticity of documents with the
+signature details obtained, which are hand-written or presented
+digitally. Existing methods normally identify the currently
+existing state-of-the-art signature verification systems, which
+might incorporate handcrafted representations of the characteristics present within the signature images, but the majority of the
+existing state-of-the-art are based on employing the CNN deep
+learning model to identify the different features present within the
+signature, which might be real or forged.
+Several commercially available and academic studies suggest a set of methodologies or approaches toward partial
+automation in helping legal practitioners in the process of legal
+document analysis. However, these systems, in most cases, show
+similarity scores, classification, or verifications, which can help
+legal practitioners in the process of manual checking. This set of
+methodologies is partial in nature in helping legal practitioners
+in their activities of legal document analysis.
+B. Limitations
+Currently, different technologies as they exist for the verification of documents mostly revolve around ensuring one
+aspect or another of the overall document analysis process is
+somewhat more streamlined or even automated. Indeed, as one
+can observe, most of the different technologies developed thus
+far with regard to the overall concern of document analysis can
+mostly be categorized around one or another form of either
+textual or even signature verification analysis. Most forms of the
+overall notion of similarity revolve around different forms of
+either keyword or even semantic models that are geared towards
+allowing for some forms of common or even clauses within a
+given overall set of documents. Indeed, over the course of the
+past years or so, overall transformer models have been vastly
+advantageous, particularly with the bid towards allowing
+individuals a means of fully being able to understand even
+different forms of legal documents, thus being advanta- geous
+towards allowing for the delineation of any form of paraphrasing
+information. Besides that, different models with regard to
+signature verification, even CNN models themselves, exist and
+have indeed had their overall notion of fruition with a given form
+of established dataset within a manner of benchmarking.These
+limitations display a requirement for a unifying and scalable
+verification framework, which can effectively validate a given
+legal context both in relation to the semantic document content
+and the signatures.
+
+V. PROPOSED METHODOLOGY
+In this paper, an excellent methodology with excellent intelligent and integrated features has been instituted within the
+process of verifying legal documents depending on semantic
+textual similarity and autenticity of signatures. The major aim of
+this methodology is ensuring that with a minimum use of
+inspections, maximum accuracy exists within the process of
+verifying legal documents depending on certain features. Unlike
+other systems in use today, this method accepts both forms of
+verifications as a whole within the subject matter of considering
+semantic similarity and autenticity signatures separately from the
+rest.
+The methodology will start with the acquisition of the
+documents. The documents may be in various forms because they
+may be provided in the form of scanned documents or even PDF
+and text files. Then there will be an element in the methodology
+concerning the preprocessing of documents with the objective of
+information extraction from the legal documents in the forms of
+text and graphics. The information contained in the document will
+be extracted depending on its semantic content by using the
+method of high-level information processing in the form of
+natural language processing. Similarly, the region for the
+signature extraction will be performed with the objective of
+validation using high-level image processing method.
+Among what can be considered as integral issues of what is
+called the proposed methodology is that it is going to present an
+integration or fusion of what is determined from both the textual
+similarity component and signature verification component of
+that methodology so that it encourages that no falses will be
+present in verification, thus encouraging scalability in diverse
+legal spaces, particularly where they are used independently of
+each other.
+VI. SYSTEM ARCHITECTURE
+
+Fig. 1. Architecture of the proposed legal document similarity matching system
+with normalization-based preprocessing.
+
+The proposal for legal document similarity matching is based
+on an architecture characterized by modularity, effi- ciency, and
+safety. In the proposed architecture, as depicted in Fig. 1, the legal
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:02:45 UTC from IEEE Xplore. Restrictions apply.
+
+2026 International Conference on Computational Robotics, Testing and Engineering Evaluation (ICCRTEE)
+
+documents are accepted in any form and are subjected to
+appropriate preprocessing such as OCR. Afterwards, the legal
+documents are analyzed by the semantic analysis and signature
+verification technologies in a parallel manner. In the proposed
+architecture, the legal documents are analyzed in terms of the
+textual similarity with the help of contextual embedding, while
+the legal documents are exam- ined in regard to the authenticity
+with the help of the analysis of the visual features. In the proposed
+architecture, the final output is presented with the help of the
+reporting layer.
+VII. IMPLEMENTATION MODULES
+
+the Preprocessing Module by normalizing the text, thus
+making further stages effective. Normalization ensures
+standardization of text by eliminating any abnormalities in
+the text. Normalization of text is further passed through
+analysis by the Semantic Text Analysis Module in
+conjunction with NLP. This analysis is done by generating
+representations of text in the form of contexts in order to
+evaluate the similarity of text. Signature analysis is carried
+out by the Signature Verification Module in conjunction
+with CNN. This analysis is done in order to identify the
+accuracy of signatures. After successful identification, the
+results of these stages are concluded by the Decision and
+Aggregation Module. Thus, a report is compiled by
+Reporting Module in a compact form.
+VIII. RESULT AND DISCUSSION
+The experimental evaluation actually asserts the fact that the
+legal document similarity matching system approach out- ranks
+the traditional methods with the aid of this proposed framework.
+It has been analyzed taking into account the chal- lenges faced by
+the traditional approach while measuring legal document
+similarity through its reliance on both the similarity between the
+texts and authenticity of the signatures on the document, the
+approach to implement a semantic analysis on the similarity of
+texts coupled with the authenticity analysis on the signatures is
+useful for verifying the legal document itself.
+IX. IMPLEMENTATION MODULES
+
+Fig. 3. Accuracy comparison of legal document verification methods.
+Fig. 2. Implementation modules of the proposed legal document similarity
+matching system.
+
+The system under development would be implemented as
+modules that would be closely related to each other, as these
+would reflect the system architecture.The process of secure
+ingestion of legal documents in specific formats, like PDF
+and DOCX, is performed by the Document Ingestion
+Module. In the end, the input goes through additional
+processing stages. The text normalization process is
+performd by
+
+If you look at the graph under “Implementation Modules,” it tells a
+pretty interesting story. It puts four techniques side by side, showing
+you what really matters: accuracy. The numbers aren’t just random:
+the accuracy jumps from 72% to 94%, and that’s no accident. It’s clear
+There is a strong connection here. The more complex and intelligent
+the models become, the better the outcomes. In other words, when you
+take the time to apply sophisticated methodologies, the legal
+document verification process.
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:02:45 UTC from IEEE Xplore. Restrictions apply.
+
+2026 International Conference on Computational Robotics, Testing and Engineering Evaluation (ICCRTEE)
+
+TF-IDF combined with Cosine Similarity gets you to about 72%
+accuracy, which isn’t bad for something so straightforward. It
+mainly relies on word counting and calculates the similarity
+between the two documents on the basis of their counts.
+However, the reality is that legal documents cannot be defined
+based on word counts only; the technique fails to address the
+issue where comprehension of the meanings behind words
+becomes crucial. The meanings in legal texts can sometimes
+depend upon the manner in which they are framed, as well as the
+actual meanings behind the use of words.
+The Signature Verification module based on CNN provides
+an entirely new perspective on the entire issue by focusing on the
+visual aspect of the signature and not merely its text or metadata.
+Indeed, legal documents are concerned with signatures, and there
+is nothing that could change a forged signature into a legitimate
+one no matter how skillfully it was done. Achieving accuracy of
+88% definitely proves the effectiveness of implementing image
+analysis into authentication systems, since not only does it allow
+detecting forgery, but it protects from tampering too.
+This leads to another milestone—the Proposed Hybrid System.
+Its success rate goes even higher at an impressive 94%. In this
+system, not only one technique operates independently; it
+blends several elements including textual analysis, contextual
+interpretation, and signature authentication into one efficient
+process. This is where things get exciting. Multiple levels are
+involved, such as verifying that the text makes sense, that it is
+suitable in terms of context and finally that the signature is
+legitimate. The effectiveness of the proposed system
+significantly reduces the chances of errors, which becomes very
+important when dealing with legal and other official documents.
+Take a look at the performance chart, and you will see why it
+stands out. There is absolutely no doubt that the hybrid model
+outperforms the previous ones by a significant margin, since
+combining different types of intelligence brings about
+validation that simply cannot be achieved with one type alone.
+X. CONCLUSION AND FUTURE WORK
+In this study, we developed a system to verify the authenticity
+of legal documents. We didn’t just stop at one step; we put
+together several pieces — first, we clean up the documents to
+make their formats consistent, then we dive deeper and analyze
+their meaning, and finally, we verify the signatures. The results
+really highlight how much this integrated approach can help
+both in catching errors and in reducing the usual hassle people
+face with document verification.
+
+To really put the Legal Document Similarity Matching System
+While going through its paces, various legal documents including
+contracts, agreements, certificates, among others, were used.
+However, this was not the only type of document used during the
+process, as the database was carefully designed to be reflective of
+actual cases. This meant that apart from using the genuine legal
+documents, their paraphrases, alterations, and even forgeries were
+also used. The forgeries in some instances went further and
+involved faking signatures in order to make them as realistic as
+possible. It had to be comprehensive because the system is
+supposed to perform flawlessly in any circumstances.
+For the purposes of actually analyzing documents, however, we
+opted for using state-of-the-art Natural Language Processing
+tools, particularly models based on transformers. In all honesty,
+transformer models can do wonders when it comes to interpreting
+legal language nuances. Traditional approaches, where only
+word-by-word similarities would be searched, were completely
+out of the question; transformers can go much further than that,
+being capable of recognizing clause relations, detecting
+paraphrasing, identifying transitions between legal language
+forms, and spotting overlapping and contradictory clauses.
+However, our efforts did not end there. In addition to analyzing
+text, the system we implemented also takes advantage of
+Convolutional Neural Networks. Consider CNNs as highly
+trained vision – they excel at pattern recognition and anomaly
+detection. In the context of this project, a CNN was specially
+developed to help identify signatures. Rather than simply looking
+for similarities in signatures, the neural network will identify
+patterns in the strokes used, their structure, and general
+composition.
+The greatest advantage of our methodology is that everything is
+interconnected. The model itself does not solely analyze text but
+merges NLP for comparing texts with CNNs to verify signatures.
+Such an integration makes the entire process more reliable and
+complete. At the same time, while NLP focuses on identifying
+similarities and differences between texts, CNN concentrates on
+verifying signatures.
+REFERENCES
+[1]
+[2]
+[3]
+[4]
+[5]
+[6]
+[7]
+[8]
+
+Adobe Acrobat. “Validating digital signatures.” Adobe, 2024.
+Allhgholi, M. et al. “DOSTE: Document Similarity Matching consider- ing
+Named Entities.” JAD, 2025.
+Bhattacharya, P., Ghosh, K., Pal, A., Ghosh, S. “Methods for Computing
+Legal Document Similarity.” arXiv, 2020.
+Bi, S. et al. “Learning heterogeneous graph embedding for Chinese legal
+document similarity measurement.” ScienceDirect, 2022.
+Draft Bot Pro. “Accurate Legal AI for Indian Lawyers.” Draftbot- pro.com,
+2019.
+Fan, A. “Legal Document Similarity Matching Based on Ensemble
+Learning.” IEEE, 2024.
+Fast Data Science. “Finding similar documents — Natural Language
+Processing.” Fastdatascience.com, 2025.
+Foxit. “Securing Legal Documents with Digital Signatures: A Guide for
+Law Firms.” Foxit.com, 2025.
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:02:45 UTC from IEEE Xplore. Restrictions apply.
+
+2026 International Conference on Computational Robotics, Testing and Engineering Evaluation (ICCRTEE)
+[9]
+
+IBM Watson Legal. “Contract verification and legal workflow automation.” IBM, 2024.
+[10] KlearStack. “AI Document Verification Solutions for Fraud Prevention.”
+Klearstack.com, 2025.
+[11] Lexis+ AI. “Legal AI for drafting, research, and analysis.” LexisNexis,
+2024.
+[12] Luminance. “Legal document review software.” Luminance.com, 2025.
+[13] Mandal, A. et al. “Measuring Similarity among Legal Court Case
+Documents.” ACM Digital Library, 2017.
+[14] Resistant AI. “Document verification: Ultimate guide.” Resistant.ai, 2025.
+[15] Seal Software. “Contract discovery and analytics.” Seal-software.com,
+2025.
+[16] Sense and Similarity: Automating Legal Text Comparison. SSRN, 2019.
+[17] Signature Verification: What Is It? Artlogo.co, 2022.
+[18] Spellbook. “8 Best Legal AI Tools for Lawyers in 2025.” Spell- book.legal,
+2025.
+[19] Thomson Reuters. “AI for legal document review and drafting.” Legal.thomsonreuters.com, 2025.
+[20] Wagh, R.S., Anand, P.S. “Legal document similarity: a multi-criteria
+decision-making approach.” PMC, 2020.
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:02:45 UTC from IEEE Xplore. Restrictions apply.
+
+

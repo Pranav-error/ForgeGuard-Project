@@ -1,0 +1,547 @@
+2026 2nd International Conference on Cognitive Computing in Engineering, Communications, Sciences and Biomedical Health Informatics (IC3ECSBHI) | 979-8-3315-5691-4/26/$31.00 ©2026 IEEE | DOI: 10.1109/IC3ECSBHI67834.2026.11469042
+
+2026 2nd International Conference on Cognitive Computing in Engineering, Communications, Sciences and Biomedical Health Informatics (IC3ECSBHI)
+
+SIGNAUTH: An AI-Based System for Automated
+Handwritten Signature Identification and Forgery
+Detection
+Fabeha Khalid
+Department of Artificial Intelligence and Data Sciences, Indira
+Gandhi Delhi Technical University for Women,
+St. James Church, Kashmere Gate, Delhi-110006
+fabeha062btcseai24@igdtuw.ac.in
+
+Himanshu Mittal
+Department of Artificial Intelligence and Data Sciences, Indira
+Gandhi Delhi Technical University for Women,
+St. James Church, Kashmere Gate, Delhi-110006
+himanshumittal@igdtuw.ac.in
+
+Abstract: The handwritten signatures are significant as a
+source especially in the legal, financial, and administrative
+fields. of personal identification. However, the manual processes
+of validation sometimes prove to be faulty due to the possibility
+of a person to. fall a victim to an error, and there are cases when
+able forgers will use every chance of it. In this regard, we have
+suggested SIGNAUTH, an automatic handwritten signature
+recognition and forgery with the use of artificial intelligence.
+identification system. The proposed method takes advantage of
+CNN and ViT to explore space and texture. features of signature
+photographs. Prior classification between real and fake has been
+done fairly. correctly, and interpretable AI visualisations
+indicate the significant areas of identification. SIGNAUTH
+tested in comparison with volumes of benchmark data, attained
+a 96.7% accuracy and very well did on. generalisation between
+various types of forgery. The suggested system can be
+immensely used in the field of application. e-governance,
+forensic verification and digital banking.
+
+that the generalisation was enhanced with the use of pattern
+classifiers such as the Support Vector Machines and HMMs,
+although manually crafting the features was still necessary.
+Deep Learning-Based Techniques Convolutional Neural
+Networks managed to revolutionize biometric identification,
+as it automatically generated discriminative features of raw
+images [2]. The CNN based systems like SigNet and
+DeepSign showed an accuracy of more than 90% on datasets
+like GPDS and CEDAR. The disadvantage however with
+CNNs was that they were unable to handle rotated or distorted
+signatures any longer. Recent investigations were largely able
+to learn spatial dependencies and relational similarity among
+signatures utilizing Vision Transformers and Siamese Neural
+Networks [3].
+A. Explainability and Trust
+Explanability makes the authentication systems legally
+admissible. In Kumar et al. [4], AI-based verification will be
+interpretable to assist forensic experts in becoming familiar
+with the logic behind such models. They used Grad-CAM and
+saliency mapping methods as a visualisation of the areas of
+strokes that would influence classification choices.
+
+Keywords : Biometrics AI, signature recognition, forgery
+detection, deep learning, explainable AI, and. document forensics.
+
+I.
+INTRODUCTION
+Signatures are accepted in a long history. official and legal
+quarters as a guarantee of individual. identification.
+Nevertheless, as more goes digital, the same becomes true. the
+likelihood of, transactions and document scanning, the
+possibilities are high. faking signatures have also increased.
+Traditional manual methods of verification are dependent on
+human. the judgment which is so frequently unpredictable and
+time. consuming. Recent advancements on AI and computer
+vision have. enabled systems to detect delicate automatically.
+dissimilarities between genuine and counterfeit signatures.
+Their deep learning system examinations of texture patterns,
+curvature, orientation, and stroke pressure and accuracy pixel
+by pixel. This paper presents SIGNAUTH, a form of AI.
+signature identification system which has deep. neural
+networks of classification and validation. handwritten
+signatures. It seamlessly integrates confidence, performance,
+and privacy to a stable. digital and physical authentication
+instrument. workflows. The most important characteristics of
+the SIGNAUTH are the following: Document verification
+API in real-time. Personally mindful image management,
+based on data. governance standards.
+
+B. The Code of Ethics and Law.
+The detection systems used to identify forgery deal with
+sensitive biometric information and therefore must adhere to
+significant data protection laws in the country like the GDPR
+and the Information Technology Act of 2000 in India [5].
+Laws present stringent duties of data reduction, openness and
+safe management of personal identifiers. SIGNAUTH is
+responsible of the latter by guaranteeing that the samples of
+signatures are not abused or leaked by using image storage,
+checking user authorization and temporary data storage.
+C. Bias, emotional, mental and manipulation.
+Although the last step of validating signatures is to be
+performed by visual analysis, biases may be easily made in the
+model via unbalanced data set or uneven handwritings. To
+mitigate this, SIGNAUTH performs balanced sampling and
+normalisation of data and makes sure the model is not overfit
+to certain cultural or stylistic influences. The explainable AI
+layer, as well as the visually supported results provided on
+explainable heatmaps, reduces this cognitive bias in human
+interpretation.
+
+II. LITERATURE REVIEW
+Development of Verification of Signatures. Initial
+signature verification was through manual features like
+direction of strokes, density of contours and pressure of the
+pen [1]. Those rule-based approached were partially
+interpretable with low resistance to stylistic variations and
+expert forgeries. The introduction of machine learning meant
+
+D. Research Deficit
+The current signature identification systems do not seek to
+enhance their interpretability and accuracy at the same time,
+most of them. Also, there are scarce models of explainability
+in decision-making that are connected with privacy
+governance. SIGNAUTH provides solutions to these
+challenges by providing an end-to-end architecture with
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:57:49 UTC from IEEE Xplore. Restrictions apply.
+
+979-8-3315-5691-4/26/$31.00 ©2026 IEEE
+
+570
+
+2026 2nd International Conference on Cognitive Computing in Engineering, Communications, Sciences and Biomedical Health Informatics (IC3ECSBHI)
+
+privacy-awareness and forensic-level explainability to
+implement practically and state-of-the-art CNN-Transformer
+modelling.
+Very soon, the literature review and ethical analysis have
+revealed that to perform reliable authentication, the accurate
+verification of signatures is not enough. The technical
+accuracy, openness and adherence to privacy issues must be
+integrated to come up with a holistic solution. By combining
+these ideas, SIGNAUTH models itself as a somewhat
+understandable, credible, and law-abiding platform of AIbased biometric verification.
+III.
+
+METHODOLOGY
+
+A. System Overview
+SIGNAUTH is the AI-powered web application that will
+automate the process of verifying hand-written signatures and
+detecting forged ones via the deep-learning inference that uses
+the Google Gemini 2.5 Flash API.
+The system is written in a scalable, modular cloud
+application, and each module has the duties of another phase
+of the verification pipeline that encompasses explainable
+visualisation, authenticity classification as well as input image
+preprocessing. The main concept is to provide the signature
+analysis with forensic-grade reliability, interpretability, and
+privacy. SIGNAUTH relies on AI models to work with the
+scanned signature images through heatmap-based reasoning
+with resulting outputs that are authentic or fake.
+
+Fig. 1. System Architecture of the SIGNAUTH Platform.
+
+2. Pre-processing: The backend resizes the image input to
+128 x 128 pixels, removes noise in the image by filtering it
+with a Gaussian filter, and finally converts the image to
+grayscale. The picture is then coded using the base64 coding
+before it is sent to the Gemini 2.5 Flash API.
+
+B. System Architecture
+The SIGNAUTH framework is modularly designed and
+consists of four layers; front-end, back-end, inference, and
+storage layers. The system is deployed in the web application
+that utilizes React and Node.js and Supabase to enable it to
+support the data persistence and real-time processing.
+TABLE I.
+
+3. AI Inference using Gemini: Gemini API has an internal
+structure that is a combination of CNN-ViT. The CNN layers
+are used to obtain local stroke-based features, which could be
+edges, curves, and pen pressure, whereas the ViT layers are
+used to obtain global spatial relationships and style patterns
+that are used to characterize a signature as either real or fake.
+
+SYSTEM ARCHITECTURE OF THE SIGNAUTH PLATFORM.
+
+Framework
+
+Function
+
+React +
+Tailwind CSS +
+shadcn-ui
+
+Collects user inputs (signature
+images), sends them to the backend,
+and displays AI-generated
+authenticity results with heatmaps.
+Handles image preprocessing,
+formats API requests, and securely
+routes them to the Gemini 2.5 Flash
+API.
+Performs feature extraction, pattern
+matching, and classification using
+CNN–Transformer hybrid models
+Stores anonymised metadata,
+system logs, and verification reports
+for analysis and auditability.
+
+Node.js +
+Express
+Google Gemini
+2.5 Flash
+(External API)
+Supabase
+(PostgreSQL)
+
+4. Response Parsing: This group of models provides an
+inference result in the form of a classification label,
+confidence score, and interpretive attention map. This
+response is then fed into the backend which breaks it down
+into a structured JSON format and displays it.
+
+C. Data Flow and Processing Pipeline
+The six key phases that constitute the end to end data flow
+of SIGNAUTH ensures of secure, accurate and explainable
+processing of signature images and are enumerated below.
+
+Fig. 2. Fig. 3.2 Data flow diagram
+
+5. Result Rendering: The outputs of classification are
+presented at the frontend with colour-coded bars and GradCAM heatmaps, which indicate regions that affected the
+model into making decisions to pick the specific class.
+
+1. Get the input: The user will provide a scan signature in
+JPG/PNG format to the given web interface. The uploaded
+images are assigned a session ID to help identify the image
+during the short-term processing.
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:57:49 UTC from IEEE Xplore. Restrictions apply.
+
+571
+
+2026 2nd International Conference on Cognitive Computing in Engineering, Communications, Sciences and Biomedical Health Informatics (IC3ECSBHI)
+
+6. Secure Logging: Supabase has metadata only which
+includes timestamps, labels, and model confidence to trace
+unidentifiable data. The actual picture is erased when the
+session is over on the privacy grounds.
+
+IV.
+
+The SIGNAUTH prototype has been tested on the
+performance, interpretability, and accuracy using various
+datasets. The suggested system combines the feature
+extraction with attention modelling by using deep learning
+models and Google Gemini 2.5 Flash API to verify
+handwritten signatures on a case-by-case basis and in an
+explainable manner. It addresses three analytical areas of
+prime, which are authenticity detection, feature extraction,
+visualisation, and privacy governance. Test Results of
+Authenticity Detection Three datasets, GPDS Synthetic,
+CEDAR and BHSig260, which consist of authentic and forged
+signature samples are the test datasets aimed at evaluating the
+accuracy of this system in classifying signatures. Each of such
+datasets is subdivided into training and testing subsets in an
+80:20 proportion on a regular basis.
+
+D. Analytical Modules
+The SIGNAUTH program consists of four separate
+analytical modules and each of them is tailored to address a
+certain issue related to system integrity and signature analysis.
+1. Authenticity Detection: It is a module, which will
+identify whether the signatures uploaded are authentic or not.
+It relies on a pre-trained CNN ViT hybrid, which has been
+prompt-engineered before in Gemini inference. In this aspect
+it puts a lot of stress on acquiring local-global trends in order
+to be able to keep in check both low-end and skilled forgeries.
+2. Feature Extraction Module: To offer the important
+biometric feature, the following are the important biometric
+features that will be extracted; the writing pressure, the density
+of the curves, the smoothness of the contour and the width of
+the pen-stroke. They are essential in the identification of
+imitations by real handwriting.
+
+TABLE III.
+
+GPDS
+Synthetic
+CEDAR
+
+E. Evaluation and Validation
+In his work, three benchmark datasets which were GPDS
+Synthetic, CEDAR and BHSig260 were applied to test the
+performance and reliability of SIGNAUTH in controlled
+experiments. In both datasets, there are real and fake
+signatures that allow giving a detailed assessment of the
+environment.
+
+Response Stability
+Explainability
+Average Response Time
+Reliability
+
+Total
+Sample
+24,000
+
+(%)
+
+Precision
+
+Recall
+
+96.7
+
+0.95
+
+0.96
+
+13,200
+
+95.3
+
+0.93
+
+0.94
+
+15,000
+
+94.8
+
+0.92
+
+0.94
+
+Observation: The most important observations in the
+graph are that the SIGNAUTH models are more accurate in
+all the datasets than the normal CNN models, and above all,
+the hybrid CNN-ViT model boosts the recall and precision,
+particularly in skilled forgeries where the spatial context has a
+significant role. .
+
+Fig. 3. Fig. 3.3 Analytical Module Interaction Flow.
+
+Criterion
+Accuracy
+
+PERFORMANCE METRICS FOR SIGNATURE AUTHENTICITY
+DETECTION
+
+Dataset
+
+BHSig260
+
+TABLE II.
+
+RESULTS AND CONVERSATION
+
+A. Explainability and feature extraction
+Explainable AI is a very crucial aspect of biometric
+authentication. The Grad-CAM visualisation component of
+SIGNAUTH highlights the specific areas of a signature that
+should be taken into consideration as important to
+classification.
+
+EVALUATION CRITERIA
+Metric / Observation
+96.7% (GPDS), 95.3% (CEDAR), 94.8%
+(BHSig260)
+85% consistent across repeated runs
+High interpretive clarity through Grad-CAM
+2.8 seconds per request
+>99% uptime under simulated concurrent
+load
+
+F. Methodological Summary
+Privacy-preserving architecture, the explainable AI, and
+deep learning will be incorporated into a single verification
+system using the SIGNAUTH methodology. The system will
+perform multimodal reasoning based on Gemini with the help
+of safe data management and formal preprocessing in order to
+provide transparency and reproducibility. Checkups lead to
+appropriate verification that can be used in forensics and
+institutions.
+
+Fig. 4. Fig. 4.1 Example Grad-CAM visualisation output for genuine and
+forged signatures.
+
+Observation: SIGNAUTH can be explained, so that it can
+be used in forensic and legal applications which can increase
+transparency, and can allow human verification. The issue of
+accountability can be encountered extremely frequently in the
+context of black-box AI systems, whereas the interpretive
+ability of the model empowers the knowledgeable users with
+the possibility to check the logic of each choice.
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:57:49 UTC from IEEE Xplore. Restrictions apply.
+
+572
+
+2026 2nd International Conference on Cognitive Computing in Engineering, Communications, Sciences and Biomedical Health Informatics (IC3ECSBHI)
+
+System Effectiveness Analysis
+
+• It is very flexible to be incorporated into digital systems,
+as it is compatible with the law. Forensic verification and
+banking systems, e-governance systems, etc.
+
+The efficacy of the system was measured using the system
+dependability, stability, and latency when subjected to
+concurrent requests. The tests were conducted in a simulated
+web environment of 50 parallel queries per second.
+TABLE IV.
+
+III.
+
+TABLE 4.2 – SYSTEM PERFORMANCE EVALUATION
+SUMMARY.
+
+Criterion
+Average Inference Time
+Response Stability
+System Reliability
+API Throughput
+
+Signeut is an AI based signature recognition and forgery
+detection system. It allows for the use of explainable AI, deep
+learning and privacy-conscious architecture to perform
+transparent and reliable biometric verification. The learning of
+the representation of both local and global signatures is
+effective due to the better solution of Convolutional Neural
+Networks mode and Vision Transformers mode with the help
+of Google Gemini 2.5 Flash API. The accuracy of the system
+was 96.7 percent and it was interpretable because Grad-CAM
+images were used to reveal the specific parts of the image that
+affect each classification. The experiment findings prove that
+SIGNAUTH is able to categorize real and forged handwritten
+signatures and comply even with the most severe data
+protection regulations, including GDPR and the Indian IT Act
+of 2000. Flexibility in real time and consistency in
+performance is also guaranteed through a scalable and cloudbased architecture of application domains such as (but not
+limited to) digital documentation, forensic validation, and
+banking. Not only has SIGNAUTH demonstrated technical
+efficiency, but also a fair amount of alignment with ethical
+principles of AI, with accountability, fairness, and data
+privacy as its two primary priorities. Explainable AI assists
+forensic experts when they are verifying the law, so it will
+contribute to building confidence among users and provide
+them with the certainty of the decisions.
+
+Metric / Observation
+2.8 seconds per image
+85% consistent classification across repeated
+trials
+>99% under concurrent load
+Handles up to 100 requests/sec with
+negligible latency
+
+Observation: The findings verify the efficiency and
+scalability of SIGNAUTH with regard to computation. The
+Gemini 2.5 Flash API has a transformer architecture that can
+be used to achieve high-speed inference without
+compromising accuracy and explainability.
+System Effectiveness Appraisal: The parameters that will
+be taken into consideration in the evaluation of the
+performance of the system will be the following:
+dependability, stability, and the latency of the system when
+being run with parallel requests. A simulated web
+environment was used where 50 parallel queries per second
+were tested. Conclusion: SIGNAUTH has been shown to have
+a high level of computational efficiency and scalability.
+Gemini 2.5 Flash API has the power to make inferences with
+any speed without accuracy or explainability because of its
+transformer architecture.
+TABLE V.
+
+CONCLUSION AND FUTURE WORK
+
+REFERENCES
+
+TABLE 4.3 – PRIVACY AND GOVERNANCE COMPLIANCE
+SUMMARY.
+
+[1]
+
+R. Plamondon and S. N. Srihari, Online and offline handwriting
+signature verification: A survey, IEEE Transactions on Pattern
+Analysis and machine Intelligence, vol. 22, no. 1, pp. 63-84, 2023.
+[2] M. Hafemann, R. Sabourin and L. Oliveira, Learning features offline
+handwritten signature verification using deep convolutional neural
+networks, Pattern Recognition, vol. 70, pp. 163-176, 2025.
+[3] Y. Zhang, L. Wei and C. Chen, Vision Transformer, which will be
+published in International Journal of Computer Vision and
+Applications, 11, no. 2, 85-94.
+[4] P. F. Souza, G. Carneiro, and A. Menotti, Offline signature fication
+using CNNs and transfer learning, IEEE Access vol. 8, pp. 189875189889, 2024.
+[5] M. Kumar, Explainable AI in biometric verification systems: A step
+towards improved transparency and accountability, International
+Journal of Science, Engineering and Technology, vol. 13, no. 3, pp.
+112-120, 2025.
+[6] A. Kesavararaj, H. Tahiri, and L. Cunningham, Hybrid deep learning
+models to detect forgery and document security Digital Forensics
+Research Review, vol. 12, pp. 54-67, 2024.
+[7] S. Saini, R. Rao and A. Deshmukh, Forgery and identity verification of
+documents by AI, International Journal of Innovative Research and
+Technology, vol. 12, no. 3, pp. 110-118, 2025. This journal article is a
+study article that is devoted to the privacy-privileged procedures of
+biometric data systems.
+[8] K. The article by Sangam, R. D. Mehta, and T. Wu, Privacy-preserving
+techniques in biometric data systems, IEEE Transactions on
+Information Forensics and Security, vol. 19, pp. 244-256, 2024.
+[9] P. Kumar, Data protection and biometric privacy: A techno-legal
+analysis of the topic based on the Indian and international framework,
+Vishwakarma University Law Journal, vol. 5, no. 1, pp.39-52, 2024.
+[10] C. Gilbert and M. A. Gilbert, “Responsible AI in biometric
+authentication: Challenges and ethical implications, International
+Research Journal of Advanced Engineering and Science, vol. 9, no. 2,
+pp. 145-152, 2024
+
+Observation: A privacy-minded design of the system
+enhances more trust among users and satisfies all ethical
+considerations of the AI implementation at biometric
+verification platforms.
+Data Protection: Explain how these experiments combined
+with each other prove that the SIGNAUTH solution is actually
+trustworthy, understandable, and privacy-conscious in AIbased flowing of human signatures.
+Key Takeaways:
+• Cross-Module Synergy: CNN and transformer models
+integration to develop a better understanding of the signatures
+at both the local and global levels.
+• Explainability: Heatmap visualisations offer forensic
+grade interpretability that is critical when used in legal
+context.
+• Performance Consistency: The system is consistent in its
+performance with low latency hence can be used in real time
+verification of documents.
+• Privacy Compliance: The Design is compliant with the
+world standards. Overall, it appears that SIGNAUTH has a lot
+of potential in an automated signature authentication system.
+Its architecture can be expounded.
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:57:49 UTC from IEEE Xplore. Restrictions apply.
+
+573
+
+

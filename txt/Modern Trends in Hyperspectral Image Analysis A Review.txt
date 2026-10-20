@@ -1,0 +1,1112 @@
+Received January 21, 2018, accepted March 4, 2018, date of publication March 12, 2018, date of current version March 28, 2018.
+Digital Object Identifier 10.1109/ACCESS.2018.2812999
+
+Modern Trends in Hyperspectral
+Image Analysis: A Review
+MUHAMMAD JALEED KHAN 1 , HAMID SAEED KHAN2 , ADEEL YOUSAF1 ,
+KHURRAM KHURSHID1 , AND ASAD ABBAS3
+
+1 Department of Electrical Engineering, Institute of Space Technology, Islamabad 44000, Pakistan
+2 Global Business Services, IBM Corporation, Islamabad 46000, Pakistan
+
+3 School of Electrical Engineering and Computing, The University of Newcastle, Callaghan, NSW 2308, Australia
+
+Corresponding author: Muhammad Jaleed Khan (mjk093@gmail.com)
+
+ABSTRACT Over the past three decades, significant developments have been made in hyperspectral imaging
+due to which it has emerged as an effective tool in numerous civil, environmental, and military applications.
+Modern sensor technologies are capable of covering large surfaces of earth with exceptional spatial, spectral,
+and temporal resolutions. Due to these features, hyperspectral imaging has been effectively used in numerous
+remote sensing applications requiring estimation of physical parameters of many complex surfaces and
+identification of visually similar materials having fine spectral signatures. In the recent years, ground
+based hyperspectral imaging has gained immense interest in the research on electronic imaging for food
+inspection, forensic science, medical surgery and diagnosis, and military applications. This review focuses
+on the fundamentals of hyperspectral image analysis and its modern applications such as food quality and
+safety assessment, medical diagnosis and image guided surgery, forensic document examination, defense and
+homeland security, remote sensing applications such as precision agriculture and water resource management
+and material identification and mapping of artworks. Moreover, recent research on the use of hyperspectral
+imaging for examination of forgery detection in questioned documents, aided by deep learning, is also
+presented. This review can be a useful baseline for future research in hyperspectral image analysis.
+INDEX TERMS Agriculture, document images, food quality and safety, hyperspectral imaging, medical
+imaging, remote sensing.
+
+I. INTRODUCTION
+
+This human eye is only able to see in a limited part of electromagnetic spectrum and can distinguish between objects based
+on their different spectral responses in that narrow spectral
+range [1]. However, multispectral imaging sensors have been
+developed that are able to acquire an image in infrared and
+visible segments of electromagnetic spectrum. This allows
+material identification on the basis of their unique spectral
+sig-nature in a wide spectral range. Multispectral imaging
+exploits the property that each material has its own unique
+spectral signatures. Spectrum of a single pixel in a multispectral image provides information about its constituents and
+surface of the material.
+Multispectral imaging technology is being used for environment and land observation remote sensing in satellite and
+airborne systems since late 1960s [2]. Multispectral imaging
+systems acquire data in a small number of spectral bands
+by using parallel sensor arrays. Most of the multispectral
+
+14118
+
+imaging systems use three to six spectral bands with large
+optical band intervals, ranging from visible to near infrared
+regions of electromagnetic spectrum for scene observation.
+However, such low number of spectral bands is the limiting
+factor for discrimination of various materials. Recent developments in hyperspectral sensing during the past two decades
+has made it possible to acquire several hundred spectral bands
+of observational scene in a single acquisition. The increased
+spectral resolution of these hyperspectral images allow for
+detailed examination of land surfaces and different materials
+present in the observational scene, which was previously not
+possible with low spectral resolution of multispectral imaging
+scanners.
+Hyperspectral imaging (HSI) or imaging spectrometry [3]
+is a spectral sensing technique in which an object is photographed using several well defined optical bands in broad
+spectral range. It was originally implemented on satellite
+and airborne platforms for remote sensing applications but
+
+2169-3536 2018 IEEE. Translations and content mining are permitted for academic research only.
+Personal use is also permitted, but republication/redistribution requires IEEE permission.
+See http://www.ieee.org/publications_standards/publications/rights/index.html for more information.
+
+VOLUME 6, 2018
+
+M. J. Khan et al.: Modern Trends in Hyperspectral Image Analysis: Review
+
+during last two decades, HSI has been applied to numerous
+applications including agricultural and water resources control [4], [5], military defense, art conservation and archeology [6], [7], medical diagnosis [8], [9], analyses of crime
+scene details [10], [11], document imaging [12], forensic
+medicine [13], food quality control [14], [15] and mineralogical mapping of earth surface [16].
+This review details the fundamentals of hyperspectral
+imaging, discusses the common hyperspectral remote sensing terminologies and highlights the modern applications
+of hyperspectral imagery in the areas of food quality and
+safety assessment, medical diagnosis, precision agriculture,
+water resource management, forensic document examination,
+artwork authentication and defense and homeland security.
+
+TABLE 1. Current space borne and airborne spectral sensors providing
+data for land mapping.
+
+resolution of the current airborne and space satellite imaging
+sensors.
+A. SPATIAL RESOLUTION
+
+FIGURE 1. (a) A hyperspectral image represented as a 3D cube. A point
+spectrum on the spectral cube is illustrated at the spatial location (x,y).
+(b) An RGB image and (c) a grayscale image rendered from the
+hyperspectral cube.
+
+II. HYPERSPECTRAL IMAGING
+
+Hyperspectral images are characterized by their spatial as
+well as spectral resolution. The spatial resolution measures
+the geometric relationship of the image pixels to each other
+while the spectral resolution determines the variations within
+image pixels as a function of wavelength. A hyperspectral
+image has two spatial dimensions (Sx and Sy ) and one spectral
+dimension (Sλ ). The hyperspectral data is represented in the
+form of a 3D hyperspectral data cube in Figure 1 using
+pseudo-colors in center. A point spectrum on the data cube at
+the spatial location (x,y) and an RGB image and a grayscale
+image rendered from the hyperspectral cube are also shown.
+Each slice of the cube along spectral dimension is called
+a band or channel. Table I shows the spatial and spectral
+VOLUME 6, 2018
+
+Spatial resolution can be defined as the smallest discernible
+detail in an image [17] which can be described as the measure
+of smallest object in an image that can be distinguished as a
+separate entity in the image. In practical situations clarity of
+the image is dictated by it spatial resolution, not the number
+of pixels in an image. Spatial characteristics of an image
+depend on the design of imaging sensor in terms of its field
+of view and its altitude [18]. A finite patch of the ground is
+captured by each detector in a remote imaging sensor. Spatial
+resolution is inversely proportional to the patch size. Smaller
+the size of the patch, higher the details that can be interpreted
+from the observed scene.
+B. SPECTRAL RESOLUTION
+
+Spectral resolution can be defined as the number of spectral bands and range of electromagnetic spectrum measured
+by the sensor. An imaging sensor might respond to a large
+frequency range but still have a low spectral resolution if it
+acquires a small number of spectral bands. On the contrary,
+if a sensor is sensitive to small frequency range but captures
+large number of spectral bands has high spectral resolution,
+due to its ability to distinguish between scene elements having close or similar spectral signatures [19]. Multispectral
+images have a low spectral resolution, thus unable to resolve
+14119
+
+M. J. Khan et al.: Modern Trends in Hyperspectral Image Analysis: Review
+
+finer spectral signatures present in the scene. HSI sensors
+acquire images in numerous contiguous and extremely narrow spectral bands in mid infrared, near infrared and visible
+segments of electromagnetic spectrum. This type of advance
+imaging system shows tremendous potential for material
+identification on the basis of their unique spectral signatures [2]. Spectrum of a single pixel in a hyperspectral image
+can give considerably more information about the surface of
+the material than a normal image.
+C. TEMPORAL RESOLUTION
+
+In hyperspectral remote sensing, the temporal resolution
+depends on the orbital characteristics of the imaging sensor.
+It is generally defined as the time needed by the sensor
+platform to revisit and obtain data from the exact same
+location [20]. Temporal resolution is said to be high if the
+revisiting frequency of the sensor platform for the exact same
+location is high and is said to be low if revisiting frequency is
+low. It is normally defined in days.
+
+FIGURE 2. A generic scheme of HSI mapping of soil, vegetation and water.
+
+D. UNDERSTANDING SPECTRAL SIGNATURES
+
+Materials present on the surface of Earth absorb, transmit and
+reflect electromagnetic radiations from the sun in a unique
+way. Hyperspectral sensors allows us to measure all types of
+electromagnetic energy within a specified range as it interacts with materials, thus allowing us to observe the distinct
+features and changes on earth’s surface. Reflectance is the
+measure of electromagnetic energy bouncing back from a
+material’s surface. It is a ratio of reflected energy to incident
+energy as a function of wavelength [18]. Reflectance is 100%
+if all the light energy of specific wavelength striking the
+object is reflected back to the imaging sensor; on the other
+hand reflectance is 0% if the entire incident light of specific
+wavelength is absorbed by the object. In most practical cases
+reflectance values lie in the range [0,100].
+In a specified range of electromagnetic spectrum,
+the reflectance values of different materials present on the
+earth’s surface such as soil, forest, water and minerals can
+be plotted and compared. Such plots are labeled as spectral
+signatures or spectral response curves’’ [21]. Figure 2 demonstrates a general model of spectral signatures of different
+materials present on the earth’s surface. Remotely sensed
+images can be classified using these spectral signature plots,
+as each material present in an observed scene has its own
+unique spectral signature. The more the spectral resolution
+of an imaging sensor, the more classification information can
+be extracted from spectral signatures. Hyperspectral sensors
+have high spectral resolution than multispectral sensors and
+thus provide the ability to distinguish more subtle differences
+in a scene. Hyperspectral imagery has been utilized by geologists for mapping the land and water resources [16]. It is also
+utilized to map heavy metals and other hazardous wastes in
+historic and active mining areas. The spectral responses of
+green vegetation, dry bare soil, and clean water are compared
+graphically in Figure 3. It is observed that the reflectance
+curve for bare soil has fewer variations as compared to that
+14120
+
+FIGURE 3. Spectral response curves of soil, vegetation and water.
+
+of green vegetation. This is because of the fact that the
+factors that affect soil reflectance vary in a narrow range of
+electromagnetic spectrum. These factors include soil texture,
+presence of minerals such as iron, surface roughness and
+moisture content in soil [21].
+Spectral signatures of green vegetation have basins in the
+visible range of the spectrum that indicates the pigmentation in the tissues of the plant. Chlorophyll is the primary
+photosynthetic pigment in green vegetation [18], it absorbs
+strongly in red (670 nm) and blue (450 nm) regions called
+the chlorophyll absorption spectral bands. When a plant is
+under stress so that the chlorophyll growth is reduced, in such
+cases the amount of reflectance in red (670 nm) regions
+increases [18]. The spectral response of water has distinctive
+characteristics of absorption of light in near infrared and
+beyond. Common factors affecting spectral response of water
+are the suspended sediments and increases in chlorophyll
+levels. In each case spectral response will be shifted accordingly showing the presence of suspended sediments or algae
+in water [22].
+VOLUME 6, 2018
+
+M. J. Khan et al.: Modern Trends in Hyperspectral Image Analysis: Review
+
+III. MODERN APPLICATIONS OF
+HYPERSPECTRAL IMAGING
+
+Hyperspectral imaging (HSI) is increasingly being used for
+a wide variety of commercial, industrial and military applications. In this section, we focus on the applications of HSI
+to food quality and safety, image guided surgery and medical
+diagnosis, remote sensing such as precision agriculture and
+water resource management, forensic examination such as
+document forgery detection and artwork authentication and
+defense and homeland security.
+
+A. FOOD QUALITY AND SAFETY ASSESSMENT
+
+Due to the growing need for high efficiency and low
+production costs of food products, the food industry is facing numerous challenges such as ensuring the quality and
+safety of food products while avoiding liability issues. Food
+quality and safety is assessed by the examination of various
+physical, chemical and biological attributes of food. The
+traditional methods based on visual inspection and chemical and biological inspection of food are destructive, time
+consuming and also environmentally unfriendly in some
+cases.
+Technological advancements in instrumentation engineering and computer technology enabled efficient and faster
+assessment of food. Computer vision and machine learning based methods using color image processing have been
+successfully applied for assessment of external attributes of
+food [23]–[28]. These methods are unable to examine the
+internal characteristics of food because they lack the ability
+to capture broad spectral information. Near Infrared (NIR)
+spectroscopy helped overcome this limitation of machine
+vision based methods due to close relationship between
+food components and NIR spectra [29], [30]. However, NIR
+spectroscopy could not help in examination of heterogeneous materials due to the lack of ability to capture spatial
+information [31], [32].
+Hyperspectral imagery contains rich amount of spectral as
+well as spatial information which makes HSI based methods
+well suited for assessment of food quality and safety [37].
+Hyperspectral image analysis has been used for identification of defects [35], [36] and detection of contaminations [33], [34] in food items.
+Valenzuela et al. [38] employed visual and infrared (VIR)
+hyperspectral imaging to examine the firmness and solid
+content of blueberries. Prediction accuracy of 87% and 79%
+was obtained for firmness and solid content respectively.
+Huang et al. [39] determined mealiness of apple using
+VIR hyperspectral imaging, achieving classification accuracy of 82.5%. Huang et al. [40] employed Grey Level
+Co-occurrence Matrix (GLCM) and Gabor Filter to determine fat content between muscles in pork achieving a classification accuracy of 89%. HSI is also used to determine
+color distribution in salmon fillet [41]. Ivorra et al. [42] used
+NIR hyperspectral imaging to detect expired vacuum packed
+salmon, reaching a classification accuracy of 82.7%. In [43],
+VOLUME 6, 2018
+
+Principal Component Analysis (PCA) and PLS-DA based
+classification model is presented for classification of oat and
+grout kernels in NIR hyperspectral images. The proposed
+method [43] achieved a high classification rate of almost
+100% and thus, showed the efficacy of HSI as an industrial
+tool in food analysis.
+B. MEDICAL DIAGNOSIS
+
+Computed Tomography (CT) and Magnetic Resonance Imaging (MRI) have been traditionally used for clinical analysis.
+Paty et al. [121] compared the potential of MRI and CT for
+detection of multiple sclerosis (MS) during the evaluation
+of over 200 patients. Hovels et al. [122] used both CT and
+MRI diagnosis of lymph node metastases in prostate cancer.
+MRI yielded better results in clinical diagnosis. Over the past
+decades, modern spectral imaging techniques have proved
+their significance in medical imaging by providing added
+potential to medical experts at higher speed and accuracy. The
+optical characteristics of tissues provide valuable diagnostic
+information. Hyperspectral image analysis is being widely
+used for medical diagnosis due to its ability to provide real
+time images of biomarker information and spectral information of tissues. Besides diagnosis, HSI systems are also used
+in image guided surgery.
+Kumar et al. [44] proposed a PCA and Fourier Transform
+Infrared (FTIR) Spectroscopy based imaging system for diagnosis of breast cancer. FTIR was applied on histopathological
+specimens of breast cancer with various histological grades
+and spectral changes near carcinoma were reported. The data
+was analyzed using PCA. Prominent features were found
+in the 5882∼6250nm band which could be used for cancer
+identification. The reflectance spectra of tongue were noninvasively measured and analyzed by Liu et al. [45] for tumor
+detection. Dicker et al. [86] distinguished between malignant and benign dermal tissue in the spectral domain in the
+routine H&E stained samples. In their findings, the spectral
+signatures differences could be seen if the section thickness
+and staining time are controlled. A melanoma lesion and
+interstitial areas are shown in grayscale representation in
+Figure 4.
+
+FIGURE 4. A grayscale representation of a melanoma lesion showing the
+transmission Spectra in the nuclear and interstitial areas.
+
+Mitra et al. [46] scanned the biliary structure using both
+fluorescence and reflectance imaging for classification of
+different tissues and identification of the biliary anatomy.
+Fluorescence imaging provided dynamic information about
+14121
+
+M. J. Khan et al.: Modern Trends in Hyperspectral Image Analysis: Review
+
+FIGURE 5. The structure of biliary tissue. (b) HSI based classification of
+the biliary tissue types.
+
+movement and flow in the surgical ROI whereas the hyperspectral image information helped in identification of the
+bileduct shown in Figure 5. The hyperspectral information
+also allowed for safe exclusion of contaminant fluorescence
+in tissues which is not included in the biliary anatomy.
+In [46], the biliary structure of tissues was scanned using
+fluorescence and reflectance imaging for identification of
+gall bladder diseases. Spectral analysis and image processing techniques were employed for identification of biliary
+anatomy and classification of tissues. Dynamic information
+of motion in the surgical region was provided by fluorescence
+imaging while hyperspectral imagery allowed for safe exclusion of contaminated fluorescence from tissues and provided
+valuable information for the identification of the bileduct.
+Campbell et al. [47] have proposed the use of Laparoscopic Partial Nephrectomy (LPN) for diagnosis of renal
+cortical tumors. Olweny et al. [48] used Digital Light Processing (DLP) based HSI for computer assisted LPN to
+characterize renal oxygenation. The clinical study was performed in eighteen patients. The proposed system was
+able to successfully characterize dynamic changes in renal
+oxygenation during LPN.
+C. PRECISION AGRICULTURE
+
+Many studies have indicated that the world’s crop production
+needs to be doubled by the end 2050 due to the rapidly growing population in the world [49]. However, various studies
+have shown that the crop yields are no longer increasing
+at a rate to fulfill the growing population needs [50], [51].
+Recent studies have also indicated that increasing crop yields
+without using more land for cultivation, is the most effective
+way for ensuring food security [52], [53]. Global poverty
+and undernourishment can directly be reduced by increasing crop production; moreover most of the poor and undernourished population consists of farmers themselves [54].
+Zhang et al. [124] reviewed the state of the art deep learning
+techniques for representative feature extraction and scene
+understanding in remote sensing hyperspectral images,
+Traditionally crop monitoring for disease, water stress,
+nutrients and insect attack was carried out by manual visual
+inspection from the ground. These methods were limited by
+the fact that the visual symptoms often appear at later stages
+of disease, thus making it difficult to restore plant health.
+Advancement in airborne and ground based HSI methods has
+made possible the evaluation of crop stresses, analyzing soil
+and vegetation characteristics in a cost effective manner, thus
+replacing the traditional scouting methods.
+14122
+
+Drought stress is an important factor affecting crop yields.
+Chances of a successful crop can be highly increased by
+timely detection of water related stresses. High water level
+stresses are noticeable in variations in photosynthetic pigments. These changes lead to yellowish tint in crops, due
+to the increase reflectance of red wavelength. Unlike human
+eye, HSI sensors can detect these changes at earlier stages.
+Colombo et al. [55] indicated that changes in leaf equivalent water thickness (EWT) were responsible for changes in
+leaf reflectance in the visible and infrared spectrum. They
+stated that hyperspectral regression indices calculated from
+HSI were powerful tools for estimation of water content
+at leaf as well as at landscape level. Rascher et al. [56]
+used a portable HSI system and photochemical reflectance
+index to estimate water stress in leaves of tropical tress and
+observed the temporal effects of dehydrations on tree leaves.
+Rossini et al. [57] found that HSI is useful in detecting
+drought stress at farm level with corn. They showed that irrigation deficits can be accurately mapped well before drought
+stress affected the canopy structure.
+Deficiencies in nutrients and soil contamination cause
+various symptoms that can be assessed by HSI.
+Schuerger et al. [58] used HSI to observe zinc deficiency
+and toxicity for identification of chlorophyll levels relating to stress symptoms. They indicated that traditional
+direct sampling methods are much more costly than HSI.
+Dunagan et al. [59] analyzed mercury levels in mustard plants
+and found that spectral signatures were notably related to the
+contaminant levels. Osborne et al. [60] showed that biomass,
+yield under stress, nitrogen and phosphorous concentrations
+can be estimated by using HSI. Mahlein et al. [61] studied
+different development stages of diseased sugar beet leaves
+using HSI. Figure 6 shows spectral signatures of healthy as
+well as diseased sugar beet leaves. This study also showed
+that HSI has a great potential for analyzing plant diseases.
+Analysis of soil characteristics can play a vital role in
+increasing crop yields. Ben-Dor et al. [62] al successfully
+mapped vital characteristics of soil in a field scale experiment including moisture, soil organic matter and soil sanity.
+Gomez et al. [63] estimated the organic carbon content in soil
+with accuracy. Growth monitoring of crops has made it possible to forecast production. Liu et al. [87] improved winter
+wheat yield prediction using new spectral parameters. The
+fine classification technology in agriculture has also matured
+greatly. Figure 7 shows the HSI based fine classification of
+vegetable growing regions.
+D. WATER RESOURCE AND FLOOD MANAGEMENT
+
+Water is one of the most important resources available on
+Earth as is vital for survival of humanity. For this reason,
+managing the water resource efficiently, analyzing and monitoring the quality of water has attracted a lot of attention
+from the researchers [64]–[69]. Hyperspectral remote sensing technology has found enormous applications in water
+resource management. Accurate estimates of water resource
+parameters are possible by analyzing spatial, spectral and
+VOLUME 6, 2018
+
+M. J. Khan et al.: Modern Trends in Hyperspectral Image Analysis: Review
+
+FIGURE 8. Distribution of the suspended matter concentration of
+Meiliang Bay of Taihu Lake. (a) LANDSAT TM image of Taihu Lake.
+(b) Estimation result using CHRIS data.
+FIGURE 6. Spectral signatures comparison of healthy and diseased sugar
+beet leaves.
+
+FIGURE 7. HSI based fine classification of vegetable growing regions.
+
+temporal variations in water bodies. Xingtang et al. [88]
+systematically introduced their research on key technologies
+related to robust hyperspectral water resource monitoring
+system in China. This work was used by Li [89] to estimate the suspended matter concentrations of Meiliang Bay
+of Taihu Lake using the CHRIS data as shown in Figure 8.
+The efficacy of flood detection and monitoring system
+is limited by their incapacity to get important information about water conditions from airborne and ground
+observatories in a timely manner. Recent improvements in
+remote sensing technology has improved the early flood
+warning system and vastly reduced the time of detection and reaction to flood events to a few hours [70].
+US geological survey and NASA are incorporating space
+borne observations of rainfall resources, rivers and land
+VOLUME 6, 2018
+
+topography into early warning systems with potential global
+applications [71]. Glaber and Reinartz [72] studied the optimal procedure for detection of flooded areas with remote
+sensing data. They investigated the erosive impact of floods,
+moisture content in flood plain areas, accumulation of sediments. Roux and Dartus [73] explored the flood hydrographs
+and estimated the river discharge from remotely sensed data.
+They optimized their model to minimize the error between
+system response and their proposed model to estimate the
+river discharge. Honkavaara et al. [128] presented various
+challenges regarding data processing faced by hyperspectral
+sensors in adverse meteorological conditions and proposed
+radiometric correction to minimize the effects of radiometric
+variations in varying illumination conditions.
+Hyperspectral remote sensing provides efficient and
+reliable information about water quality parameters which
+contain biochemical, hydro-physical and biological
+attributes [74]–[76]. HSI enable us to measure chlorophyll,
+turbidity and chemical oxygen demand and phosphorous in
+water resources. Chlorophyll content in water is extensively
+studied by hyperspectral remote sensing, which gives an
+estimate of algal level and hence water quality. Studies have
+been carried out for evaluation of ammonia changes for
+wetland [77], classifying different parameters of lakes [78],
+estuaries [79] and analyzing algal blooms [80]. Wetland
+mapping has played a significant role in order to enhance
+the quality of our ecosystem [81]. Hyperspectral imagery has
+helped in detailed understanding of vegetation characteristics
+of ecosystem. Extensive research studies have been carried
+out using remote sensing to explore the significance of
+acquiring timely data for monitoring and mapping aquatic
+vegetation [82], which is said to be an important aspect in
+ecosystem reconstruction and restoration.
+E. FORENSIC DOCUMENT EXAMINATION
+
+Traditionally, forensic document experts and paleographers
+used chemical solution based methods to study the extrinsic and intrinsic components of the important historic
+documents [83]. This is due to the fact that the inks used on
+documents throughout the history were composed of diverse
+substances having distinct chemical and physical properties. All of these substances have their own unique way for
+14123
+
+M. J. Khan et al.: Modern Trends in Hyperspectral Image Analysis: Review
+
+reacting with different substrates depending upon the reaction
+environment. These chemical solution based methods helped
+in document analysis. But unfortunately these techniques
+were time consuming, sensitive to temperature changes and
+destructive in nature i.e. harms to the important documents
+were irreversible.
+To overcome such limitations, HSI has emerged as an
+effective non-destructive tool for improving readability [84],
+ink aging and forensic document analysis [13]. Hyperspectral document imaging works on the principle that each ink
+present in the document has its own unique spectral signature.
+Many mathematical tools that are being used in hyperspectral remote sensing can be used on hyperspectral document
+images for classification, improving legibility of extremely
+deteriorated text, ink aging and fraud detection. Moreover
+HSI is non-destructive, automated and environment insensitive tool for document examination. In hyperspectral document imaging, ink mismatch detection analysis provides
+important information to forensic document examiners to
+determine the authenticity of legal documents. Forgery, backdating and fraud can be detected using ink analysis of
+documents.
+HSI has been used for forensic document analysis in
+the past [106]–[108]. The HSI based techniques have had
+a significant impact on forgery detection as compared to
+the traditional techniques. Different inks were successfully
+classified after obliteration of the text in a document [106].
+Abbas et al. [85] proposed hyperspectral unmixing for
+discrimination between inks from different pens in a
+document. Recently, we have worked on a nondestructive
+automated forgery detection system, which was able to successfully discriminate between different visually similar inks
+taken from the publicly available UWA Writing Ink Hyperspectral Images (WIHSI) Database [85] with different number of inks and different mixing ratios (Combination A∼H).
+Initially, we used Fuzzy C-Means Clustering (FCM) to differentiate two inks present in a multispectral document in
+different mixing ratios [129]. In our latest work, the state of
+the art deep learning technique, Convolutional Neural Network (CNN) has been employed for classification of spectral
+responses of ink pixels for forgery detection in hyperspectral
+document images. Figure 9 shows the final segmentation
+results of our proposed technique. 98% classification accuracy was achieved which shows the high potential of HSI and
+deep learning in document forgery detection.
+F. ARTWORK AUTHENTICATION
+
+The global art market is increasing rapidly over the past
+decades [90]. A 7% year on year increase in total sales
+of art and antiques was recorded in 2013 [91]. Most of
+these high value dealings were made using non-scientific
+expertise in art. Forensic testing was not used to assure
+authenticity of the traded object. However, only a limited
+number of artwork evaluations can be carried out by an
+experienced specialist. Foolproof evaluations can be carried
+out if supported by non-destructive scientific tests [92], [93].
+14124
+
+FIGURE 9. Comparisons of ground truth images of documents with mixed
+inks and our final segmentation results.
+
+Fourier Transform Infrared (FTIR), X-ray fluorescence, and
+Raman spectroscopy have been used previously for artwork
+authentication [94], [95].
+HSI is proposed as a novel and non-destructive artwork
+examination method in the recent literature. HSI limits the
+number of invasive tests needed and provides more information from a sample. Several methods employing pigment
+analysis provided by HSI and classification techniques have
+been proposed in the recent literature [7], [96]–[100] for
+conservation and restoration of artworks such as paintings.
+These methods allow for identification of restored regions in
+paintings and distinguish them from the important regions in
+the original painting. Hyperspectral images captured in the
+infrared range also revealed useful features of painters such
+as preparatory drawings [101]. Two forged paintings and the
+results of IR hyperspectral imaging and SVM classification
+proposed in [105] are illustrated in Figure 10. The broad
+spectral information provided by HSI combined with signal
+processing also allows for identification of the underlying
+material in artworks. Materials which are clearly visible in
+a specific band and obscured in the other bands are reflective within the same band and thus easily detectable by the
+VOLUME 6, 2018
+
+M. J. Khan et al.: Modern Trends in Hyperspectral Image Analysis: Review
+
+FIGURE 11. (a) A scene with crops and vegetation from Barrax HSI
+dataset, (b) Target detection using HSI based MUF2 anomaly
+detection algorithm.
+
+FIGURE 10. Two paintings with forgery. (a) Grid canvas and color coded
+pigments. (b-c) Forged Paintings with classification results.
+
+for landmine detection and segmentation in infrared images.
+Letalick et al. [114] tested the possibility and feasibility of
+using multiple optical sensors and concluded that HSI has
+high potential in detection and recognition of semi-hidden,
+hidden and camouflaged landmines if prior knowledge of the
+spectral signature of the target. However, limited detection
+rate is achieved when landmines are completely hidden or
+camouflaged with vegetation.
+
+HSI system [102]. The appropriate bands in the HSI data of
+historic texts and manuscripts allow for identification of inks
+and pigments for dating of manuscripts [103] and recovery of
+erased and overwritten scripts [104].
+G. DEFENCE AND HOMELAND SECURITY
+
+The usage of HSI has quickly spread to various civilian
+applications and more recently to sectors of defense and
+homeland security [109]. HSI is generally used as a countercountermeasure for detection and recognition of camouflaged
+targets in military applications. HSI can easily detect strategic
+deployments in unpopulated areas such as forests, desserts
+and mountains, where targets such as military vehicles and
+mines are distinct from the background even if camouflaged.
+Anomaly detection methods [110]–[112] that use spectral
+information to differentiate between targets and background
+without any prior knowledge have gained significant popularity over the past few years. Yuen and Bishop [110] proposed
+an HSI based anomaly detection algorithms ‘‘MUF2’’, which
+uses a multiple approach fusion methodology. Experiments
+were performed on images with crops, vegetation and bare
+soil from the Barrax dataset. An image from the Barrax
+dataset and the results of target detection using MUF2 algorithm are shown in Figure 11. An extremely high detection
+rate of 100% was achieved at a false alarm rate of 2 × 10−4 .
+Remote detection of small targets such as mines is a very
+challenging task. MUF2 algorithm [110] was also tested for
+detection of camouflaged land mines as shown in Figure 12.
+Due to the very small area of the target in the images and
+noise in the dataset, 60% detection accuracy was achieved at
+a false alarm rate of 3 × 10−3 . Suganthi and Korah [113] proposed an Artificial Neural Network (ANN) based technique
+VOLUME 6, 2018
+
+FIGURE 12. Land mine detection using HSI based MUF2 algorithm.
+
+Zhao et al. [123] proposed a sparse learning technique
+for hyperspectral anomaly detection, in which they employed
+dictionary based transformation of background features and
+iterative reweighting to exaggerate the differences between
+anomalies and background. Du et al. [125] proposed a hybrid
+sparsity and statistics anomaly detector to overcome the limitations of sparsity models in hyperspectral images containing
+spectral variability with limited endmembers. Discriminative
+metric learning method [126] and local geometric structure
+14125
+
+M. J. Khan et al.: Modern Trends in Hyperspectral Image Analysis: Review
+
+features [127] have also been used for hyperspectral anomaly
+detection in the recent literature.
+Thomas et al. [115] conducted a research on detection of
+grid patterns of landmines to improve the efficacy of landmine detection in LWIR hyperspectral imagery. Anomalies
+are detected using Dual Window based Eigen Separation
+Transform (DWEST) and pattern parameters are extracted.
+A pattern projection image is formed using the extracted
+parameters followed by pattern based reduction of false alarm
+rate. Higher detection probability at lower false alarm rate
+was noted which shows that the use of spatial pattern parameters in anomaly detection improves land mine detection [115].
+Gagnon et al. [116] used hyperspectral image analysis to
+detect buried targets using a LWIR airborne hyperspectral
+camera. The temperature of disturbed soil over the buried
+target was found to be higher than the temperature of undisturbed soil around the target area. Classification techniques
+such as SVM and linear unmixing are used to distinguish
+between the targets and naturally hot areas.
+
+IV. CONCLUSION
+
+Among remote sensing technologies, the role of hyperspectral imagery in the geo-observation, identification and
+detection of materials and estimation of physical parameters cannot be stated enough. Due to this very reason
+there is increasing number of airborne and spaceborne
+hyperspectral platforms based applications being researched.
+Recent advancements in sensor technologies have encouraged researchers to use hyperspectral imagery in many modern applications. Many mathematical tools and algorithms are
+being researched such as data fusion, hyperspectral unmixing, hyperspectral classification, anomaly detection and fast
+computing for efficient utilization of hyperspectral data.
+These mathematical tools can be used on hyperspectral data
+across many different applications.
+In general, this review focuses on the vast extent to which
+hyperspectral imaging has been used to increase and maintain
+the crop yields, managing water resources, assessment of
+food quality and safety, diagnosing diseases, authentication
+of artworks, forensic examination of questioned documents,
+detection of military targets and counterterrorism. Promising
+results have been found in the proposed automatic forgery
+detection system based on HSI and deep learning. Future
+research is being carried out for further improvement as well.
+This review can be a useful baseline for future research in
+hyperspectral image analysis.
+REFERENCES
+
+FIGURE 13. Results of stress detection by HSI based sensing of variations
+in blood oxygenation due to stress of different intensities.
+
+In the 21st century, development of state-of-the-art technologies for counterterrorism is one of the fastest growing
+demands. One of the significant ideas proposed for counterterrorism is detecting improvised explosive devices (IED).
+It is a technical challenge to directly detect explosives packed
+in airtight and light manner. Contrary to the direct detection of
+IEDs, cognitive methods use effective computing to analyze
+the contextual and body language, behavior, gestures, facial
+expressions and activity to assess the intent of a person.
+Mental stress is one of the key indicators of threat which is
+a short term induced neurological imbalance caused by any
+situation which involves a possible threat or danger. During
+neurological stress, the sympathetic nervous system induces
+adrenaline hormones to the blood triggers increase in blood
+flow to muscles and dilation of pupil. These unavoidable
+physiological changes during stress are detected as an indication of stress level using HSI [25]. Assessment of hemoglobin
+oxygenation using spectroscopic tuning is proposed in [26]
+and [27]. Figure 13 shows the oxy-hemoglobin levels of a
+person at different levels of stress.
+14126
+
+[1] E. H. Land and J. J. McCann, ‘‘Lightness and Retinex theory,’’ J. Opt.
+Soc. Amer., vol. 61, no. 1, pp. 1–11, 1971.
+[2] D. Landgrebe, ‘‘Information extraction principles and methods for multispectral and hyperspectral image data,’’ Inf. Process. Remote Sens.,
+vol. 82, pp. 3–37, 1999.
+[3] A. F. H. Goetz, G. Vane, J. E. Solomon, and B. N. Rock, ‘‘Imaging
+spectrometry for earth remote sensing,’’ Science, vol. 228, no. 4704,
+pp. 1147–1153, 1985.
+[4] M. Govender, K. Chetty, and H. Bulcock, ‘‘A review of hyperspectral
+remote sensing and its application in vegetation and water resource
+studies,’’ Water SA, vol. 33, no. 2, pp. 145–151, 2007.
+[5] E. Adam, O. Mutanga, and D. Rugege, ‘‘Multispectral and hyperspectral
+remote sensing for identification and mapping of wetland vegetation:
+A review,’’ Wetlands Ecol. Manage., vol. 18, no. 3, pp. 281–296, 2010.
+[6] C. Fischer and I. Kakoulli, ‘‘Multispectral and hyperspectral imaging
+technologies in conservation: Current research and potential applications,’’ Stud. Conservation, vol. 51, pp. 3–16, Dec. 2006.
+[7] H. Liang, ‘‘Advances in multispectral and hyperspectral imaging for
+archaeology and art conservation,’’ Appl. Phys. A, vol. 106, no. 2,
+pp. 309–323, 2012.
+[8] O. Carrasco, R. B. Gomez, A. Chainani, and W. E. Roper, ‘‘Hyperspectral
+imaging applied to medical diagnoses and food safety,’’ Proc. SPIE,
+vol. 5097, pp. 215–221, Aug. 2003.
+[9] M. A. Afromowitz, J. B. Callis, D. M. Heimbach, L. A. DeSoto, and
+M. K. Norton, ‘‘Multispectral imaging of burn wounds: A new clinical instrument for evaluating burn depth,’’ IEEE Trans. Biomed. Eng.,
+vol. BME-35, no. 10, pp. 842–850, Oct. 1988.
+[10] J. Kuula et al., ‘‘Using VIS/NIR and IR spectral cameras for detecting
+and separating crime scene details,’’ Proc. SPIE, vol. 8359, p. 83590P,
+Jun. 2012.
+[11] R. L. Schuler, P. E. Kish, and C. A. Plese, ‘‘Preliminary observations on
+the ability of hyperspectral imaging to provide detection and visualization
+of bloodstain patterns on black fabrics,’’ J. Forensic Sci., vol. 57, no. 6,
+pp. 1562–1569, 2012.
+[12] R. Padoan, T. A. Steemers, M. Klein, B. Aalderink, and G. De Bruin,
+‘‘Quantitative hyperspectral imaging of historical documents: Technique
+and applications,’’ in Proc. ART, 2008, pp. 25–30.
+VOLUME 6, 2018
+
+M. J. Khan et al.: Modern Trends in Hyperspectral Image Analysis: Review
+
+[13] G. J. Edelman, E. Gaston, T. G. van Leeuwen, P. J. Cullen, and
+M. C. G. Aalders, ‘‘Hyperspectral imaging for non-contact analysis of
+forensic traces,’’ Forensic Sci. Int., vol. 223, nos. 1–3, pp. 28–39, 2012.
+[14] A. A. Gowen, C. O. P’Donnell, P. J. Cullen, G. Downey, and J. M. Frias,
+‘‘Hyperspectral imaging—An emerging process analytical tool for food
+quality and safety control,’’ Trends Food Sci. Technol., vol. 18, no. 12,
+pp. 590–598, 2007.
+[15] Y.-Z. Feng and D.-W. Sun, ‘‘Application of hyperspectral imaging in food
+safety inspection and control: A review,’’ Critical Rev. Food Sci. Nutrition,
+vol. 52, no. 11, pp. 1039–1058, 2012.
+[16] R. N. Clark and G. A. Swayze, ‘‘Mapping minerals, amorphous materials, environmental materials, vegetation, water, ice and snow, and other
+materials: The USGS tricorder algorithm,’’ in Proc. Summaries 5th Annu.
+JPL Airborne Earth Sci. Workshop, vol. 1. 1995, pp. 39–40.
+[17] R. C. Gonzalez, Digital Image Processing. London, U.K.: Pearson, 2009.
+[18] R. Smith. (2001). Introduction to Remote Sensing of the Environment.
+[Online]. Available: http://www.microimages.com
+[19] J. R. Jensen, Introductory Digital Image Processing: A Remote Sensing
+Perspective . London, U.K.: Pearson, 2005.
+[20] J. Thau, ‘‘Temporal resolution,’’ in Encyclopedia of GIS. New York, NY,
+USA: Springer, 2008, pp. 1150–1151. [Online]. Available: http://dx.doi.
+org/10.1007/978-0-387-35973-11376
+[21] T. Lillesand, R. W. Kiefer, and J. Chipman, Remote Sensing and Image
+Interpretation. New York, NY, USA: Wiley, 2014.
+[22] G. A. Shaw and H.-H. K. Burke, ‘‘Spectral imaging for remote sensing,’’
+Lincoln Lab. J., vol. 14, no. 1, pp. 3–28, 2003.
+[23] K. Chao, Y.-R. Chen, H. Early, and B. Park, ‘‘Color image classification systems for poultry viscera inspection,’’ Proc. SPIE, vol. 3544,
+pp. 363–369, Jan. 1999.
+[24] J. Lu, J. Tan, P. Shatadal, and D. E. Gerrard, ‘‘Evaluation of pork color by
+using computer vision,’’ Meat Sci., vol. 56, no. 1, pp. 57–60, 2000.
+[25] J. Tan, ‘‘Meat quality evaluation by computer vision,’’ J. Food Eng.,
+vol. 61, no. 1, pp. 27–35, 2004.
+[26] M. G. O’Sullivan, D. V. Byrne, H. Martens, L. H. Gidskehaug,
+H. J. Andersen, and M. Martens, ‘‘Evaluation of pork colour: Prediction
+of visual sensory quality of meat from instrumental and computer vision
+methods of colour analysis,’’ Meat Sci., vol. 65, no. 2, pp. 909–918, 2003.
+[27] L. Faucitano, P. Huff, F. Teuscher, C. Gariepy, and J. Wegner, ‘‘Application of computer image analysis to measure pork marbling characteristics,’’ Meat Sci., vol. 69, no. 3, pp. 537–543, 2005.
+[28] H. Huang, L. Liu, M. O. Ngadi, and C. Gariépy, ‘‘Prediction of pork
+marbling scores using pattern analysis techniques,’’ Food Control, vol. 31,
+no. 1, pp. 224–229, 2013.
+[29] R. Rødbotten, B. N. Nilsen, and K. I. Hildrum, ‘‘Prediction of beef quality
+attributes from early post mortem near infrared reflectance spectra,’’ Food
+Chem., vol. 69, no. 4, pp. 427–436, 2000.
+[30] M. Prevolnik et al., ‘‘Predicting intramuscular fat content in pork and beef
+by near infrared spectroscopy,’’ J. Near Infr. Spectrosc., vol. 13, no. 2,
+pp. 77–85, 2005.
+[31] N. Barlocco, A. Vadell, F. Ballesteros, G. Galietta, and D. Cozzolino,
+‘‘Predicting intramuscular fat, moisture and warner-bratzler shear force in
+pork muscle using near infrared reflectance spectroscopy,’’ Animal Sci.,
+vol. 82, no. 1, pp. 111–116, 2006.
+[32] N. Prieto, R. Roehe, P. Lavín, G. Batten, and S. Andrés, ‘‘Application of
+near infrared reflectance spectroscopy to predict meat and meat products
+quality: A review,’’ Meat Sci., vol. 83, no. 2, pp. 175–186, 2009.
+[33] H. Yao, Z. Hruska, R. Kincaid, R. L. Brown, D. Bhatnagar, and
+T. E. Cleveland, ‘‘Detecting maize inoculated with toxigenic and atoxigenic fungal strains with fluorescence hyperspectral imagery,’’ Biosyst.
+Eng., vol. 115, no. 2, pp. 125–135, 2013.
+[34] I. Kim, M. S. Kim, Y. R. Chen, and S. G. Kong, ‘‘Detection of skin tumors
+on chicken carcasses using hyperspectral fluorescence imaging,’’ Trans.
+Amer. Soc. Agricultural Eng., vol. 47, no. 5, pp. 1785–1792, 2004.
+[35] J. Xing, C. Bravo, P. T. Jancsók, H. Ramon, and J. de Baerdemaeker,
+‘‘Detecting bruises on ‘golden delicious’ apples using hyperspectral
+imaging with multiple wavebands,’’ Biosyst. Eng., vol. 90, no. 1,
+pp. 27–36, 2005.
+[36] M. Nagata, J. G. Tallada, and T. Kobayashi, ‘‘Bruise detection using
+NIR hyperspectral imaging for strawberry (Fragaria × ananassa Duch.),’’
+Environ. Control Biol., vol. 44, no. 2, pp. 133–142, 2006.
+[37] J. Qiao, M. O. Ngadi, N. Wang, C. Gariépy, and S. O. Prasher, ‘‘Pork
+quality and marbling level assessment using a hyperspectral imaging
+system,’’ J. Food Eng., vol. 83, no. 1, pp. 10–16, 2007.
+VOLUME 6, 2018
+
+[38] G. A. Leiva-Valenzuela, R. Lu, and J. M. Aguilera, ‘‘Prediction of
+firmness and soluble solids content of blueberries using hyperspectral
+reflectance imaging,’’ J. Food Eng., vol. 115, no. 1, pp. 91–98, 2013.
+[39] M. Huang, Q. Zhu, B. Wang, and R. Lu, ‘‘Analysis of hyperspectral scattering images using locally linear embedding algorithm for apple mealiness classification,’’ Comput. Electron. Agriculture, vol. 89, pp. 175–181,
+Nov. 2012.
+[40] H. Huang, L. Liu, M. O. Ngadi, and C. Gariépy, ‘‘Rapid and non-invasive
+quantification of intramuscular fat content of intact pork cuts,’’ Talanta,
+vol. 119, pp. 385–395, Feb. 2014.
+[41] D. Wu, D.-W. Sun, and Y. He, ‘‘Application of long-wave near infrared
+hyperspectral imaging for measurement of color distribution in salmon
+fillet,’’ Innov. Food Sci. Emerg. Technol., vol. 16, pp. 361–372, Oct. 2012.
+[42] E. Ivorra, J. Giron, A. J. Sanchez, S. Verdu, J. M. Barat, and
+R. Grau, ‘‘Detection of expired vacuum-packed smoked salmon based on
+PLS-DA method using hyperspectral images,’’ J. Food Eng., vol. 117,
+no. 3, pp. 342–349, 2013.
+[43] S. Serranti, D. Cesare, F. Marini, and G. Bonifazi, ‘‘Classification of oat
+and groat kernels using NIR hyperspectral imaging,’’ Talanta, vol. 103,
+pp. 276–284, Jan. 2013.
+[44] S. Kumar, C. Desmedt, D. Larsimont, C. Sotiriou, and E. Goormaghtigh,
+‘‘Change in the microenvironment of breast cancer studied by FTIR
+imaging,’’ Analyst, vol. 138, no. 14, pp. 4058–4065, 2013.
+[45] Z. Liu, H. Wang, and Q. Li, ‘‘Tongue tumor detection in medical hyperspectral images,’’ Sensors, vol. 12, no. 1, pp. 162–174, 2012.
+[46] K. Mitra et al., ‘‘Indocyanine-green-loaded microballoons for biliary
+imaging in cholecystectomy,’’ J. Biomed. Opt., vol. 17, no. 11, p. 116025,
+2012.
+[47] S. C. Campbell et al., ‘‘Guideline for management of the clinical T1 renal
+mass,’’ Jour. Urol., vol. 182, no. 4, pp. 1271–1279, 2009.
+[48] E. O. Olweny et al., ‘‘Renal oxygenation during robotic-assisted laparoscopic partial nephrectomy: Characterization using laparoscopic digital
+light processing hyperspectral imaging,’’ J. Endourol., vol. 27, no. 3,
+pp. 265–269, 2013.
+[49] D. Tilman, C. Balzer, J. Hill, and B. L. Befort, ‘‘Global food demand and
+the sustainable intensification of agriculture,’’ Proc. Nat. Acad. Sci. USA,
+vol. 108, no. 50, pp. 20260–20264, 2011.
+[50] K. G. Cassman, ‘‘Ecological intensification of cereal production systems:
+Yield potential, soil quality, and precision agriculture,’’ Proc. Nat. Acad.
+Sci. USA, vol. 96, no. 11, pp. 5952–5959, 1999.
+[51] D. K. Ray, N. Ramankutty, N. D. Mueller, P. C. West, and J. A. Foley,
+‘‘Recent patterns of crop yield growth and stagnation,’’ Nature Commun.,
+vol. 3, Dec. 2012, Art. no. 1293.
+[52] H. C. J. Godfray et al., ‘‘Food security: The challenge of feeding 9 billion
+people,’’ Science, vol. 327, no. 5967, pp. 812–818, 2010.
+[53] J. A. Foley et al., ‘‘Solutions for a cultivated planet,’’ Nature, vol. 478,
+no. 7369, pp. 337–342, 2011.
+[54] P. L. Pingali, ‘‘Green revolution: Impacts, limits, and the path ahead,’’
+Proc. Nat. Acad. Sci. USA, vol. 109, no. 31, pp. 12302–12308, 2012.
+[55] R. Colombo et al., ‘‘Estimation of leaf and canopy water content in poplar
+plantations by means of hyperspectral indices and inverse modeling,’’
+Remote Sens. Environ., vol. 112, no. 4, pp. 1820–1834, 2008.
+[56] U. Rascher, C. J. Nichol, C. Small, and L. Hendricks, ‘‘Monitoring
+spatio-temporal dynamics of photosynthesis with a portable hyperspectral imaging system,’’ Photogramm. Eng. Remote Sens., vol. 73, no. 1,
+pp. 45–56, 2007.
+[57] M. Rossini et al., ‘‘Assessing canopy PRI from airborne imagery to map
+water stress in maize,’’ ISPRS J. Photogramm. Remote Sens., vol. 86,
+pp. 168–177, Dec. 2013.
+[58] A. C. Schuerger et al., ‘‘Comparison of two hyperspectral imaging and
+two laser-induced fluorescence instruments for the detection of zinc
+stress and chlorophyll concentration in bahia grass (Paspalum notatum
+Flugge.),’’ Remote Sens. Environ., vol. 84, no. 4, pp. 572–588, 2003.
+[59] S. C. Dunagan, M. S. Gilmore, and J. C. Varekamp, ‘‘Effects of mercury
+on visible/near-infrared reflectance spectra of mustard spinach plants
+(Brassica rapa P.),’’ Environ. Pollution, vol. 148, no. 1, pp. 301–311, 2007.
+[60] S. L. Osborne, J. S. Schepers, D. D. Francis, and M. R. Schlemmer,
+‘‘Detection of phosphorus and nitrogen deficiencies in corn using spectral
+radiance measurements,’’ Agronomy J., vol. 94, no. 6, pp. 1215–1221,
+2002.
+[61] A.-K. Mahlein, U. Steiner, C. Hillnhütter, H.-W. Dehne, and E.-C. Oerke,
+‘‘Hyperspectral imaging for small-scale analysis of symptoms caused by
+different sugar beet diseases,’’ Plant Methods, vol. 8, no. 1, p. 3, 2012.
+14127
+
+M. J. Khan et al.: Modern Trends in Hyperspectral Image Analysis: Review
+
+[62] E. Ben-Dor, K. Patkin, A. Banin, and A. Karnieli, ‘‘Mapping of several
+soil properties using DAIS-7915 hyperspectral scanner data—A case
+study over clayey soils in Israel,’’ Int. J. Remote Sens., vol. 23, no. 6,
+pp. 1043–1062, 2002.
+[63] C. Gomez, R. A. V. Rossel, and A. B. McBratney, ‘‘Soil organic carbon prediction by hyperspectral remote sensing and field vis-NIR spectroscopy: An Australian case study,’’ Geoderma, vol. 146, nos. 3–4,
+pp. 403–411, 2008.
+[64] F. Zagolski et al., ‘‘Forest canopy chemistry with high spectral resolution
+remote sensing,’’ Int. J. Remote Sens., vol. 17, no. 6, pp. 1107–1128, 1996.
+[65] G. P. Asner, ‘‘Biophysical and biochemical sources of variability in
+canopy reflectance,’’ Remote Sens. Environ., vol. 64, no. 3, pp. 234–253,
+Jun. 1998.
+[66] K. McGwire, T. Minor, and L. Fenstermaker, ‘‘Hyperspectral mixture
+modeling for quantifying sparse vegetation cover in arid environments,’’
+Remote Sens. Environ., vol. 72, no. 3, pp. 360–374, 2000.
+[67] A. Stone, L. Chisholm, and N. Coops, ‘‘Spectral reflectance characteristics of eucalypt foliage damaged by insects,’’ Austral. J. Botany, vol. 49,
+no. 6, pp. 687–698, 2001.
+[68] N. Coops, S. Dury, M.-L. Smith, M. Martin, and S. Ollinger, ‘‘Comparison of green leaf eucalypt spectra using spectral decomposition,’’ Austral.
+J. Botany, vol. 50, no. 5, pp. 567–576, 2002.
+[69] E. Underwood, S. Ustin, and D. DiPietro, ‘‘Mapping nonnative plants
+using hyperspectral imagery,’’ Remote Sens. Environ., vol. 86, no. 2,
+pp. 150–161, 2003.
+[70] F. Ip et al., ‘‘Flood detection and monitoring with the Autonomous Sciencecraft Experiment onboard EO-1,’’ Remote Sens. Environ., vol. 101,
+no. 4, pp. 463–481, 2006.
+[71] G. R. Brakenridge, E. Anderson, and S. V. Nghiem, ‘‘Satellite microwave
+detection and measurement of river floods,’’ in Proc. AGU Spring Meeting
+Abstracts, vol. 1. 2006, p. 5.
+[72] C. Gläßer and P. Reinartz, ‘‘Multitemporal and multispectral remote
+sensing approach for flood detection in the Elbe–Mulde region 2002,’’
+Acta Hydrochimica Hydrobiologica, vol. 33, no. 5, pp. 395–403, 2005.
+[73] H. Roux and D. Dartus, ‘‘Use of parameter optimization to estimate a
+flood wave: Potential applications to remote sensing of rivers,’’ J. Hydrol.,
+vol. 328, nos. 1–2, pp. 258–266, 2006.
+[74] M. Chawira, T. Dube, and W. Gumindoga, ‘‘Remote sensing based water
+quality monitoring in Chivero and Manyame lakes of Zimbabwe,’’ Phys.
+Chem. Earth, A/B/C, vol. 66, pp. 38–44, 2013.
+[75] T. Kutser, B. Paavel, C. Verpoorter, T. Kauer, and E. Vahtmäe, ‘‘Remote
+sensing of water quality in optically complex lakes,’’ in Proc. 22nd Congr.
+Int. Soc. Photogramm. Remote Sens., Melbourne, VIC, Australia, 2012,
+pp. 1–5.
+[76] S. Koponen, ‘‘Remote sensing of water quality: The development and use
+of water processors available in BEAM,’’ Dept. Radio Sci. Eng., Helsinki
+Univ. Technol., Espoo, Finland, Tech. Rep., 2006, pp. 1–58.
+[77] A. R. Tilley, M. Ahmed, J. H. Son, and H. Badrinarayanan, ‘‘Hyperspectral reflectance of emergent macrophytes as an indicator of water column
+ammonia in an oligohaline, subtropical marsh,’’ Ecol. Eng., vol. 21,
+nos. 2–3, pp. 153–163, 2003.
+[78] S. Thiemann and H. Kaufmann, ‘‘Lake water quality monitoring using
+hyperspectral airborne data—A semiempirical multisensor and multitemporal approach for the Mecklenburg Lake District, Germany,’’ Remote
+Sens. Environ., vol. 81, nos. 2–3, pp. 228–237, 2002.
+[79] J.-M. Froidefond, L. Gardel, D. Guiral, M. Parra, and J.-F. Ternon,
+‘‘Spectral remote sensing reflectances of coastal waters in French Guiana
+under the Amazon influence,’’ Remote Sens. Environ., vol. 80, no. 2,
+pp. 225–232, 2002.
+[80] R. P. Stumpf, ‘‘Applications of satellite ocean color sensors for monitoring
+and predicting harmful algal blooms,’’ Human Ecol. Risk Assessment, Int.
+J., vol. 7, no. 5, pp. 1363–1368, 2001.
+[81] K. S. Schmidt and A. K. Skidmore, ‘‘Spectral discrimination of vegetation types in a coastal wetland,’’ Remote Sens. Environ., vol. 85, no. 1,
+pp. 92–108, 2003.
+[82] L. Yuan and L. Zhang, ‘‘Identification of the spectral characteristics of
+submerged plant Vallisneria spiralis,’’ Acta Ecol. Sinica, vol. 26, no. 4,
+pp. 1005–1010, 2006.
+[83] V. Aginsky, ‘‘Forensic examination of ‘slightly soluble’ ink pigments
+using thin-layer chromatography,’’ J. Forensic Sci., vol. 38, no. 5,
+pp. 1131–1133, 1993.
+[84] S. J. Kim, F. Deng, and M. S. Brown, ‘‘Visual enhancement of old
+documents with hyperspectral imaging,’’ Pattern Recognit., vol. 44, no. 7,
+pp. 1461–1469, 2011.
+14128
+
+[85] A. Abbas, K. Khurshid, and F. Shafait, ‘‘Towards automated ink mismatch
+detection in hyperspectral document images,’’ in Proc. 14th IAPR Int.
+Conf. Document Anal. Retr. (ICDAR), Kyoto, Japan, Nov. 2017.
+[86] D. T. Dicker et al., ‘‘Differentiation of normal skin and melanoma using
+high resolution hyperspectral imaging,’’ Cancer Biol. Ther., vol. 5, no. 8,
+pp. 1033–1038, 2016.
+[87] L. Y. Liu, J. H. Wang, W. J. Huang, C. J. Zhao, B. Zhang, and Q. X. Tong,
+‘‘Improving winter wheat yield prediction by novel spectral index,’’
+Trans. CSAE, vol. 20, pp. 172–175, 2004.
+[88] H. Xingtang et al., ‘‘A new architecture for remote-sensing environmental
+monitoring system REMS: Design and implementation,’’ in Proc. IEEE
+Int. Geosci. Remote Sens. Symp. (IGARSS), Sep. 2004, pp. 2115–2118.
+[89] J. S. Li, ‘‘Study on retrieval of inland water quality parameters from
+hyperspectral remote sensing data by analytical approach—Taking Taihu
+Lake as an example,’’ Ph.D. dissertation, Inst. Remote Sens. Appl.,
+Chinese Acad. Sci., Beijing, China, 2007.
+[90] C. McAndrew, ‘‘TEFAF art market report 2015,’’ Eur. Fine Art Found.,
+Helvoirt, The Netherlands, Tech. Rep., 2015.
+[91] C. McAndrew, ‘‘TEFAF art market report 2014: The global art market,
+with a focus on the US and China,’’ Eur. Fine Art Found., Helvoirt,
+The Netherlands, Tech. Rep., 2014.
+[92] S. Hardach. (Oct. 25, 2015). BBC-Culture—The Surprising Secrets
+of Busting Art Forgeries. [Online]. Available: http://www.bbc.com/
+culture/story/20151015-the-surprising-secrets-of-busting-art-forgeries
+[93] N. Eastaugh and J. Nadolny, ‘‘Science for the art market: A buyer’s
+guide,’’ ArtBanc Market Intell., vol. 7, pp. 33–37, Apr. 2007.
+[94] A. Adriaens, ‘‘COST action G8: Non-destructive analysis and testing
+of museum Objects,’’ in Proc. Benefits Non-Destructive Anal. Techn.
+Conservation, 2004, pp. 187–188.
+[95] G. D. Smith, J. F. Hamm, D. A. Kushel, and C. E. Rogge, ‘‘What’s
+wrong with this picture? The technical analysis of a known forgery,’’
+in Collaborative Endeavors the Chemical Analysis of Art and Cultural
+Heritage Materials. Washington, DC, USA: ACM, 2012, pp. 1–21.
+[96] A. Casini, C. Cucci, M. Picollo, L. Stefani, and T. Vitorino, ‘‘Creation of a
+hyperspectral imaging reference database of red lake pigments,’’ COSCH
+e-Bulletin, Tech. Rep., 2015.
+[97] A. Casini, F. Lotti, M. Picollo, L. Stefani, and E. Buzzegoli, ‘‘Image
+spectroscopy mapping technique for noninvasive analysis of paintings,’’
+Stud. Conservation, vol. 44, no. 1, pp. 39–48, 1999.
+[98] M. Kubik, ‘‘Hyperspectral imaging: A new technique for the non-invasive
+study of artworks,’’ Phys. Techn. Study of Art, Archaeol. Cultural Heritage, vol. 2, pp. 199–259, 2007.
+[99] F. Daniel et al., ‘‘Hyperspectral imaging applied to the analysis of Goya
+paintings in the Museum of Zaragoza (Spain),’’ Microchem. J., vol. 126,
+pp. 113–120, May 2016.
+[100] S. Baronti, A. Casini, F. Lotti, and S. Porcinai, ‘‘Multispectral imaging system for the mapping of pigments in works of art by use of
+principal-component analysis,’’ Appl. Opt., vol. 37, no. 8, pp. 1299–1309,
+1998.
+[101] C. Cucci, J. K. Delaney, and M. Picollo, ‘‘Reflectance hyperspectral imaging for investigation of works of art: Old master paintings and illuminated
+manuscripts,’’ Accounts Chem. Res., vol. 49, no. 10, pp. 2070–2079, 2016.
+[102] M. Attas et al., ‘‘Near-infrared spectroscopic imaging in art conservation:
+Investigation of drawing constituents,’’ J. Cultural Heritage vol. 4, no. 2,
+pp. 127–136, 2003.
+[103] K. Melessanaki, V. Papadakis, C. Balas, and D. Anglos, ‘‘Laser induced
+breakdown spectroscopy and hyper-spectral imaging analysis of pigments
+on an illuminated manuscript,’’ Spectrochim. Acta B, Atomic Spectrosc.,
+vol. 56, no. 12, pp. 2337–2346, 2001.
+[104] C. Balas, V. Papadakis, N. Papadakis, A. Papadakis, E. Vazgiouraki, and
+G. Themelis, ‘‘A novel hyper-spectral imaging apparatus for the nondestructive analysis of objects of artistic and historic value,’’ J. Cultural
+Heritage, vol. 4, pp. 330–337, Jan. 2003.
+[105] A. Polaka et al., ‘‘Hyperspectral imaging combined with data classification techniques as an aid for artwork authentication,’’ J. Cultural
+Heritage, vol. 26, pp. 1–11, Jul./Aug. 2017.
+[106] C. S. Silva, M. F. Pimentel, R. S. Honorato, C. Pasquini,
+J. M. Prats-Montalbán, and A. Ferrer, ‘‘Near infrared hyperspectral
+imaging for forensic analysis of document forgery,’’ Analyst, vol. 139,
+no. 20, pp. 5176–5184, 2014.
+[107] Z. Luo, F. Shafait, and A. Mian, ‘‘Localized forgery detection in hyperspectral document images,’’ in Proc. 13th Int. Conf. Document Anal.
+Recognit. (ICDAR), Nancy, France, 2015, pp. 496–500.
+VOLUME 6, 2018
+
+M. J. Khan et al.: Modern Trends in Hyperspectral Image Analysis: Review
+
+[108] Z. Khan, F. Shafait, and A. S. Mian, ‘‘Towards automated hyperspectral
+document image analysis,’’ in Proc. 2nd Int. Workshop Automated Forensic Handwriting Anal., Satellite Workshop Int. Conf. Document Anal.
+Recognit. (ICDAR), Washington, DC, USA, 2013, pp. 41–45.
+[109] A. C. Goldberg, B. Stann, and N. Gupta, ‘‘Multispectral, hyperspectral,
+and three-dimensional imaging research at the U.S. Army research laboratory,’’ in Proc. 6th Int. Conf. Inf. Fusion, Cairns, Qld, Australia, Jul. 2003,
+pp. 499–506.
+[110] P. W. T. Yuen and G. Bishop, ‘‘Hyperspectral multiple approach fusion for
+the long-range detection of low observable objects: MUF2,’’ Proc. SPIE,
+vol. 6396, p. 63960C-1–63960C-12, Oct. 2006.
+[111] D. Manolakis and G. Shaw, ‘‘Detection algorithms for hyperspectral
+imaging applications,’’ IEEE Signal Process. Mag., vol. 19, no. 1,
+pp. 29–43, Jan. 2002.
+[112] D. W. J. Stein, S. G. Beaven, L. E. Hoff, E. M. Winter, A. P. Schaum, and
+A. D. Stocker, ‘‘Anomaly detection from hyperspectral imagery,’’ IEEE
+Signal Process. Mag., vol. 19, no. 1, pp. 58–69, Jan. 2002.
+[113] G. Suganthi and K. Reeba, ‘‘Discrimination of mine-like objects in
+infrared images using artificial neural network,’’ Indian J. Appl. Res.,
+vol. 4, no. 12, pp. 206–208.
+[114] D. Letalick, I. Renhorn, and O. Steinvall, ‘‘Multi-optical mine detection system (MOMS) final report,’’ FOI Swedish Defence Res. Agency,
+Tech. Rep., Dec. 2009.
+[115] A. M. Thomas and J. M. Cathcart, ‘‘Applications of grid pattern matching
+to the detection of buried landmines,’’ IEEE Trans. Geosci. Remote Sens.,
+vol. 48, no. 9, pp. 3465–3470, Sep. 2010.
+[116] M.-A. Gagnon et al., ‘‘Airborne thermal infrared hyperspectral imaging
+of buried objects,’’ Proc. SPIE, vol. 9454, p. 94540K, May 2015.
+[117] Q. Tong, Y. Xue, and L. Zhang, ‘‘Progress in hyperspectral remote sensing
+science and technology in China over the past three decades,’’ IEEE
+J. Sel. Topics Appl. Earth Observ. Remote Sens., vol. 7, no. 1, pp. 70–91,
+Jan. 2014.
+[118] P. Yuen et al., ‘‘Remote detection of stress using hyperspectral
+imaging technique,’’ in Proc. 3rd Int. Conf. Imag. Crime Detection
+Prevention (ICDP), London, U.K., 2009, pp. 1–6.
+[119] K. J. Zuzak, M. D. Schaeberle, I. W. Levin, and E. N. Lewis, ‘‘Visible
+reflectance hyperspectral imaging:? Characterization of a noninvasive, in
+vivo system for determining tissue perfusion,’’ Anal. Chem., vol. 74, no. 9,
+pp. 2021–2028, 2002.
+[120] K. J. Zuzak, M. T. Gladwin, R. O. Cannon, and I. W. Levin, ‘‘Imaging hemoglobin oxygen saturation in sickle cell disease patients using
+noninvasive visible reflectance hyperspectral techniques: Effects of nitric
+oxide,’’ Amer. J. Physiol. Heart Circulatory Physiol., vol. 285, no. 3,
+pp. 1183–1189, 2003.
+[121] D. W. Paty et al., ‘‘MRI in the diagnosis of MSA prospective study with
+comparison of clinical evaluation, evoked potentials, oligoclonal banding,
+and CT,’’ Neurology, vol. 38, no. 2, p. 180, Feb. 1988, doi: 10.1212/
+WNL.38.2.180.
+[122] A. M. Hövels et al., ‘‘The diagnostic accuracy of CT and MRI in the
+staging of pelvic lymph nodes in patients with prostate cancer: A metaanalysis,’’ Clin. Radiol., vol. 63, no. 4, pp. 387–395, 2008. [Online].
+Available: https://doi.org/10.1016/j.crad.2007.05.022
+[123] R. Zhao, B. Du, and L. Zhang, ‘‘Hyperspectral anomaly detection via a
+sparsity score estimation framework,’’ IEEE Trans. Geosci. Remote Sens.,
+vol. 55, no. 6, pp. 3208–3222, Jun. 2017.
+[124] L. Zhang, L. Zhang, and B. Du, ‘‘Deep learning for remote sensing
+data: A technical tutorial on the state of the art,’’ IEEE Geosci. Remote
+Sens. Mag., vol. 4, no. 2, pp. 22–40, Jun. 2016, doi: 10.1109/MGRS.
+2016.2540798.
+[125] B. Du, Y. Zhang, L. Zhang, and D. Tao, ‘‘Beyond the sparsity-based target
+detector: A hybrid sparsity and statistics-based detector for hyperspectral
+images,’’ IEEE Trans. Image Process., vol. 25, no. 11, pp. 5345–5357,
+Nov. 2016, doi: 10.1109/TIP.2016.2601268.
+[126] B. Du and L. Zhang, ‘‘A discriminative metric learning based anomaly
+detection method,’’ IEEE Trans. Geosci. Remote Sens., vol. 52, no. 11,
+pp. 6844–6857, Nov. 2014, doi: 10.1109/TGRS.2014.2303895.
+[127] F. Luo, H. Huang, Y. Duan, J. Liu, and Y. Liao, ‘‘Local geometric structure
+feature for dimensionality reduction of hyperspectral imagery,’’ Remote
+Sens., vol. 9, no. 8, p. 790, 2017, doi: 10.3390/rs9080790.
+[128] E. Honkavaara et al., ‘‘Processing and assessment of spectrometric,
+stereoscopic imagery collected using a lightweight UAV spectral camera
+for precision agriculture,’’ Remote Sens., vol. 5, no. 10, pp. 5006–5039,
+2013.
+VOLUME 6, 2018
+
+[129] M. J. Khan, A. Yousaf, K. Khurshid, A. Abbas, and F. Shafait, ‘‘Automated forgery detection in multispectral images using fuzzy clustering,’’
+in Proc. 13th IAPR Int. Workshop Document Anal. Syst. (DAS), Vienna,
+Austria, 2018.
+
+MUHAMMAD JALEED KHAN received the B.S.
+degree in computer engineering from the University of Engineering and Technology, Peshawar,
+Pakistan, in 2015, and the M.S. degree in electrical engineering with specialization in signal
+and image processing from the Institute of Space
+Technology, Islamabad, Pakistan, in 2017. He is
+currently with the Dr. A. Q. Khan Institute of
+Computer Sciences and Information Technology,
+Rawalpindi, Pakistan, as a Visiting Lecturer. His
+research interests are computer vision, hyperspectral image analysis, and
+deep learning.
+HAMID SAEED KHAN received the B.S. degree
+in software engineering from the University of
+Engineering and Technology, Peshawar, Pakistan,
+in 2008. He is currently a Software Architect
+and the Technical Lead with Global Business
+Services, IBM Corporation, Pakistan. He is an
+Oracle Certified Java Programmer and a Teradata
+Database Certified Professional with a vast professional experience of IT infrastructure, software
+projects/team management, and software development life cycle.
+ADEEL YOUSAF received the B.S. degree in electrical engineering from the University of Engineering and Technology, Taxila, Pakistan, and the M.S.
+degree in electrical engineering with specialization
+in signal and image processing from the Institute of
+Space Technology, Islamabad, Pakistan, in 2017.
+He is currently a Research Associate with the Institute of Space Technology. His research interests
+include computer vision, machine learning, and
+genetic programming.
+
+KHURRAM KHURSHID received the Ph.D.
+degree in computer vision from Paris Descartes
+University, Paris, France, in 2009. He is currently
+an Associate Professor with the Department of
+Electrical Engineering and heading the Signal and
+Image Processing Research Group at the Institute
+of Space Technology, Islamabad, Pakistan. He is
+the pioneer of the Pakistani Pattern Recognition
+Society which is an official branch of IAPR in
+Pakistan. His research interests include hyperspectral image analysis, computer vision, and small satellite design and development. He is the editor of the Journal of Space Technology and the Project
+Director of the IST’s CubeSat Program.
+ASAD ABBAS received the B.Sc. degree in electrical engineering from the University of Engineering, Taxila, in 2012, and the master’s degree in
+electrical engineering with specialization in signal and image processing from the Institute of
+Space Technology, Islamabad, in 2015. He is currently pursuing the Ph.D. degree in computer science with The University of Newcastle, Australia.
+His research interests include pattern recognition,
+computer vision, and deep learning.
+14129
+
+

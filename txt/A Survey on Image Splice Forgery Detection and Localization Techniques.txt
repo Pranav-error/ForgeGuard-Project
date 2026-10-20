@@ -1,0 +1,812 @@
+2022 Third International Conference on Intelligent Computing Instrumentation and Control Technologies (ICICICT) | 978-1-6654-1005-2/22/$31.00 ©2022 IEEE | DOI: 10.1109/ICICICT54557.2022.9917694
+
+2022 Third International Conference on Intelligent Computing, Instrumentation and Control Technologies (ICICICT)
+
+A Survey on Image Splice Forgery Detection
+and Localization Techniques
+1st Karishmah Ram K
+Department of Computer Science and Engineering
+Amrita Vishwa Vidyapeetham,
+Amritapuri, India
+amenp2ari20016@am.students.amrita.edu
+
+Abstract—In this research, image splice detection and localization are explored. A spliced image is a digital image that
+has been copied and recreated on another image. The cropped
+image may undergo resizing, rotation, blurring, etc., before
+being forged. With the advancement of many photo-shop tools
+and software, image manipulation, and splicing have become a
+significant issue of concern. It is being misused nowadays in many
+fields like changing will, court orders, official documents, photo
+morphing, etc. Excellent forgeries are so deceptive that they go
+undetected by the naked eye. Traditional picture tamper detection
+algorithms many times fail to detect innovative image splicing.
+In the past few years, solutions based on deep learning have been
+proposed for tampered image detection and are found to be more
+efficient than other techniques. In this research paper, we review
+relevant research articles on image splicing, both detection, and
+localization, for the period 2003 to 2022.
+Index Terms—Image splice, forgery detection, splice localization, splice detection.
+
+I. I NTRODUCTION
+
+2nd Gopakumar G
+Department of Computer Science and Engineering
+Amrita Vishwa Vidyapeetham,
+Amritapuri, India
+gopakumarg@am.amrita.edu
+
+the source and target images create composite or forged
+images. As we can see here, the girl from the first image is
+fused onto the second one among the trees to create the spliced
+image. This scenario of creating forged images using two or
+more image sources is a clear depiction of image splicing.
+In the recent past, image splicing, both detection and localisation, has flourished especially with advent of deep neural
+networks. In this research work, we summarise important
+research and popular data sets used in image splicing during
+the period 2003 to 2022. We believe that this paper is going to
+give a good starting point for those who are interested in the
+domain of image splicing. There are several methods which
+are currently being used for the same, such as Local Binary
+Pattern and Discrete Cosine Transform CNN based feature
+extraction, by using noise difference from camera capturing
+and many other techniques [22], that are being discussed in
+this paper.
+II. I MAGE F ORGERY D ETECTION T ECHNIQUES
+
+Fig. 1. Image Splice Forgery
+
+Nowadays, with the advancement in technology and editing
+tools, image forgery has become simpler to create while
+detection has become more complex. Taking advantage of
+this, many image forgery based crimes such as morphing will
+change in court etc., are taking place widely and hence it has
+become a necessity to detect such manipulated images.
+Figure 1 above depicts an example of a spliced image. Here,
+
+There are several methods developed for detecting forgery
+in digitally scanned documents. The active and passive approaches are the most common classifications (Fig. 2).
+The active approaches mainly focus on data concealment
+techniques, such as digital watermarking or copyrighting, in
+which previous knowledge is required as critical and necessary
+to the process. At the same time, passive methods do not
+need any knowledge of the original image. In passive blind
+approaches, the detector only has access to the end product.
+This approach only uses the given input image to extract
+information such as texture, features, color, etc. Information
+regarding the original image is not required, hence known as
+a blind approach.
+III. C LASSIFICATION OF IMAGE FORGERY
+There are three types of image manipulation techniques
+that come under the passive approach and are:
+
+Authorized
+licensed use limited to:
+REVA
+UNIVERSITY. Downloaded on
+October 09,2026 at 06:59:09 UTC from IEEE Xplore. Restrictions apply.
+978-1-6654-1005-2/22/$31.00
+©2022
+IEEE
+1242
+
+2022 Third International Conference on Intelligent Computing, Instrumentation and Control Technologies (ICICICT)
+
+Fig. 2. Image Forgery classification Flowchart
+
+Fig. 4. Example of image retouching
+
+A. Copy-Move Forgery:
+One among the most well-known types of image forgery
+is the copy-move forgery. Here a part of an image is copied
+and pasted onto another part of that image itself. An example
+is shown in fig. 3, where the duck from the same image was
+copied and pasted behind it. Many techniques have been found
+for the efficient detection of copy-move image forgery [24].
+
+Several illegal activities are being carried out by misusing
+this technology, such as changing of will, image morphing,
+misusing, etc. Fig. 1 shows how splicing is done on digital
+images. Several techniques have been invented for tackling
+down the same.
+IV. I MAGE S PLICING
+A. Data sets used for image splice detection
+There are many public data sets for image splice forgery
+detection and localisation studies. A summary of the same
+can be found in Table 1, which depicts the most commonly
+used image splice data sets used by researchers worldwide.
+TABLE I
+M OST COMMONLY USED I MAGE S PLICING DATA S ETS
+Data Set
+
+Size
+
+CASIA v1.0 [27]
+CASIA v2.0 [27]
+Columbia [8]
+DSO-1 [18]
+IFS-TC [26]
+
+384 x 256
+240×160 to 900×600
+128 x 128
+2,048 x 1,536
+1024×768
+to
+2848×2144
+
+No. of
+images
+1721
+12,614
+1845
+200
+2200
+
+Format
+JPG
+JPG, TIFF, BMP
+JPEG
+PNG
+PNG
+
+Fig. 3. Copy Move forged image
+
+CASIA v1.0 [27]: The actual set has 800 photos.
+The modified set contains 921 pictures. Before pasting, cropped picture region(s) are treated with scaling,
+cropping, rotating, etc., to create spliced images. After
+creating a spliced picture, no post-processing techniques
+(such as blurring) is used in this data set.
+• CASIA v2.0 [27]: There are 12,323 color photos and two
+image subsets in this collection (authentic and tampered).
+There are 7,200 legitimate photographs in the authentic
+set and 5,123 altered images in the tampered set. In
+addition to splicing, database V2.0 introduces blurring
+while modifying the altered image set [25]. In contrast to
+CASIA V1.0, the photos in CASIA V2.0 are of different
+sizes. CASIA V2.0, unlike V1.0, includes several uncompressed picture examples (BMP and TIFF) and JPEG
+images with various Q factors.
+•
+
+B. Image Retouching:
+Retouching includes enhancing or reducing certain features
+of an image by removing all flaws from a photograph, which
+commonly entails colour and tone correction, the removal of
+blemishes and under-eye circles, deleting parts of an image, as
+well as changes to brightness, contrast, and saturation. In Fig.
+4, we can see how one of the coconut trees has been removed
+and saturation has been increased compared to the adjacent
+image.
+C. Image splicing:
+It is a forgery technique in which the forger copies or cuts
+a part of a picture and pastes it onto another image. Here two
+image sources are hence required to create the forged image.
+
+Authorized
+licensed use limited to:
+REVA
+UNIVERSITY. Downloaded on
+October 09,2026 at 06:59:09 UTC from IEEE Xplore. Restrictions apply.
+978-1-6654-1005-2/22/$31.00
+©2022
+IEEE
+1243
+
+2022 Third International Conference on Intelligent Computing, Instrumentation and Control Technologies (ICICICT)
+
+Columbia Image Splicing Detection Evaluation Data
+set [8]: It contains 933 genuine and 912 spliced 128 x
+128-pixel picture chunks. The natural and spliced photos
+have almost the same amount of pixels. Crop-and-paste
+along object boundaries vs. horizontal (or vertical) strips
+have been used to replicate the process of producing
+spliced pictures. Picture objects and strips might come
+from the same or two different image sources. Objects
+might be of the same or distinct sorts, textured or smooth
+and are spliced together.
+• DSO-1 [18]: There are 100 genuine photos and 100
+forged photographs in this collection. Both interior and
+exterior photos are included in the collection. The fictitious photos are created by inserting one or more people
+into the original photograph. Various operations, such
+as color and lighting changes, are carried out to create
+believable fabricated pictures.
+• IFS-TC [26]: This data set was first utilized in an IFSTC-sponsored international competition. It contains 1150
+forgeries and 1050 genuine photos.
+
+•
+
+B. Image Splice Forgery Detection Techniques
+Most traditional splice forgery detection techniques are not
+efficient enough to detect image tampering. However, modern
+deep learning techniques that use CNN-induced methods are
+more efficient and effective [18]. Due to the complexity in
+detection spliced images, several researchers came up with
+different approaches [6]. Some only detect spliced forgery
+regions, while others can detect and localize spliced regions.
+Some techniques even detect blurred images after splicing
+[19].
+One standard method to detect image splice forgery is using
+LBP and DCT approach [1]. Here, the local binary pattern
+corresponding to an image is initially computed using its
+YCbCr chrominance, and from that, it is transformed to its
+frequency domain by applying DCT. Then it is sent for further
+splice detection. Another standard method referred to was that
+of detecting spliced images via camera noise detection [2].
+Another technique referred to was that of reliability fusion
+maps, which is efficient for localization of even tiny patches
+of image pixels [3]. ELA (Error Level Analysis) is yet another
+effective method for splice detection [4] [5], which, when
+combined with other localization algorithms [23], can provide
+more effective outputs. In the recent past, deep convolution
+neural network has set the best results in all benchmark
+data sets. CNN based papers were the most cited due to it’s
+effective feature extraction capability and classification [21].
+In the following subsection, we review starting from feature
+based techniques to the more recent deep neural network based
+methods.
+1) Feature Based Techniques: Feature extraction is one of
+the early method used in detecting image splicing. Over the
+years, many techniques have been proposed for image splice
+detection using feature-based techniques. One of the early
+features used in image splice detection is the Local Binary
+
+Pattern (LBP) [1], Error Level Analysis (ELA) [4] [5], Discrete
+Cosine Transform (DCT), Markov Transform model, etc.
+Feature-based techniques are used to enhance the features
+of an image; feature extraction becomes more effortless, and
+so does the classification. This stage is known as the preprocessing stage. This pre-processing stage is optional in most
+cases, as shown in the Fig. 5. However, effective use of this
+stage can give better results. Some of them are given in table
+II.
+In [1], an image splice detection method using LBP along
+with DCT is proposed. The LBP code of each block is
+found after the chromatic image component is divided into
+overlapping blocks, and it is then transformed into its DCT
+domain. Later the SVM classifier is being used here for
+classification. We can observe that using this technique, the
+authors have reached an accuracy of 97.5 on the CASIA V2.0
+dataset.
+In [4], a technique combining both Error Level Analysis and
+Convolution Neural Network is proposed. First, the data set
+is divided into forged and original images, after which VGG
+16 is used to train because VGG is excellent for training with
+small data sets. Although an excellent deep learning model
+is used for splice detection, we can observe from the results
+that architecture that uses a combination of two or more preprocessing stages is getting better results.
+In [5], they have proposed a technique based on ELA
+and LBP for detecting spliced images. Instead of one, two
+feature extractors are used on the input image, i.e., ELA
+and LBP. Then, these features are fused and fed into the
+classifier, and these features are classified into authentic and
+tampered images. Finally, they accurately locate the tampered
+area through the improved ELA method. The authors suggest
+at the end that if this combination of ELA and LBP is
+implemented on CNN, there are higher chances of getting even
+better accuracy.
+
+Fig. 5. Commonly used image forgery detection method
+
+2) CNN based methods: Techniques based on convolution
+neural networks are rapidly improving in terms of performance
+[16]. Over the years of comparison of results, we can observe
+that the results are improving rapidly with the advancement
+of technology [28]. So is the case with Convolution Neural
+Networks. Initially, CNN was used as a substitute for classifiers such as SVM, but nowadays, CNN is being effectively
+used for localization of the spliced area accurately [20] [28]. It
+has been achieved by inducing more complex models such as
+
+Authorized
+licensed use limited to:
+REVA
+UNIVERSITY. Downloaded on
+October 09,2026 at 06:59:09 UTC from IEEE Xplore. Restrictions apply.
+978-1-6654-1005-2/22/$31.00
+©2022
+IEEE
+1244
+
+2022 Third International Conference on Intelligent Computing, Instrumentation and Control Technologies (ICICICT)
+
+TABLE II
+F EATURE BASED TECHNIQUES COMPARISON
+
+Reference
+Paper
+Alahmadi,
+A. A. et al.
+[1]
+Sudiatmika,
+I. B. K. et
+al. [4]
+Zhang, Y.-J.
+et al. [5]
+
+Feature based techniques comparison
+Year
+Method
+Data set
+2013
+
+2019
+
+2021
+
+a lack of universality of specified characteristics. In the meantime, they are solely concerned with manipulation localization
+and do not consider manipulation classification.
+
+Perfomance
+
+LBP,DCT
+,SVM
+classifier
+ELA,CNN
+
+CASIA 2
+
+Accuracy97.5
+
+CASIA 2
+
+Accuracy88.46
+
+ELA,
+LBP
+,Bagged Trees
+classifier
+
+MICC-2000
+
+Accuracy97.30
+
+RRU-Net, ManTra-Net, etc. Strategies of specific CNN-based
+splice detection models that have achieved high accuracy are
+described in this section.
+In [6], an end-to-end network model is proposed for both
+detection as well as localization of spliced images without
+any other pre or postprocessing. ManTra-Net is a complete
+convolution network that can handle photos of any size and
+various forgery kinds, including splicing, copy-move, removal,
+enhancement, and even unknown forging forms. ManTraNet
+comprises two sub-networks: Image manipulation trace feature
+extractor, which is used to detect image manipulations, and
+local anomaly detection network, which is used to train a
+decision function mapping from a local feature’s reference to
+its forgery label.
+Because of their limited computational speed and memory
+availability, existing deep learning models can only accept tiny
+pictures as input, necessitating pre-resizing. Resizing has little
+effect on discriminative characteristics in high-level vision
+difficulties; therefore, this is not a concern. In image forensics,
+on the other hand, scaling tends to remove valuable highfrequency features, which has a significant influence on speed.
+Patch-wise processing can prevent resizing at the expense
+of whole-image analysis. For accurate picture forensics, [14]
+was proposed. The performance of a constrained R-CNN
+architecture is shown in the table below, executes manipulation
+techniques classification and changed region segmentation at
+the same time. The learnable manipulation feature extractor
+starts by taking data and extracting a unified feature representation. Second, for future manipulation classification and
+coarse localization, the attention region proposal network successfully discriminates changed areas. By merging low-level
+and high-level information, the skip structure refines the global
+manipulation features. Finally, localization data instructs the
+model to acquire more acceptable local characteristics and
+segment the tampered area.
+In [7], the model consists of A CNN-based approach for picture forgery detection. It enables the processing of integrated
+data obtained from the whole image at full resolution . As
+a consequence, the authors propose a three-part framework:
+patch-wise feature extraction, image-wise feature aggregation,
+and global judgement. Although deep learning models perform
+well in detecting picture alteration, most of them suffer from
+
+TABLE III
+C ONVOLUTION N EURAL N ETWORK BASED TECHNIQUES C OMPARISON
+
+Reference
+Paper
+Wu, Y. et al.
+[6]
+
+Convolution Neural Network based techniques
+Year
+Method
+Data set
+Perfomance
+2019
+
+ManTra-Net
+
+Yang, C. et
+al. [14]
+
+2019
+
+Constrained
+R-CNN
+
+Marra, F. et
+al. [7]
+
+2020
+
+CNN
+
+Rao Y. et al.
+[29]
+
+2020
+
+CNN
+
+Pandey A.
+et al. [28]
+
+2022
+
+CNN, Image
+transformation
+
+COVERAGE,
+CASIA,
+NIST,
+Columbia
+NIST16,
+Columbia,
+COVER,
+CASIA [15]
+Vision/UCID,
+Dresden/FAU,
+DSO-1
+,Korus,
+NC2017,
+MFC2018
+CASIA
+v2.0, DSO1
+CASIA
+v2.0
+
+Accuracy- 85
+
+F1 Score 0.927, AUC 0.992
+AUC - 0.93
+
+Accuracy97.50
+Accuracy- 93
+
+3) Forgeries based on inconsistency in noise levels of
+image: Image splicing can also be detected using the noise
+inconsistencies within the input image. This technique is based
+on the variation in noise consistencies of different images
+depending upon the place, time, and model with which it
+has been taken. The table shows that detection accuracy has
+increased over the years with the efficient utilization of noise
+in images for detection of forgery.
+In [9], the image is split into non-overlapping blocks, which
+are then clustered to create fresh and modified chunks. To get
+at the final result, the found suspicious zones are subdivided
+again to refine noise estimation and then classified. The author
+segmented the image into sections with considerably different
+noise variances to enhance the results even further to estimate
+local noise variances. A simple k-means clustering technique
+enhanced the outcome, followed by post-processing processes
+on the foundation areas. In [10] a method that is automated
+Spliced forgery detection in raw photos has been suggested.
+They looked at the relative consistency of noise parameters. To
+identify the spliced pictures, image discrepancies from quadtree decomposition. In [8], a method based on the premise that
+the level of noise in the original and the image to be spliced
+varies. The picture is first divided into superpixels and then
+extracted into ordinary forms. Three color channel differences
+are recovered from each superpixel, and the residual noise
+level is evaluated. Finally, the superpixels are classified as
+tampered or original by clustering them into two classes using
+the Farthest Distributed Centroids Clustering algorithm.
+4) Statistical properties inherent in the source image:
+Image splice detection can also be found using the statistical
+properties inherent in the source image. It is entirely dependent
+
+Authorized
+licensed use limited to:
+REVA
+UNIVERSITY. Downloaded on
+October 09,2026 at 06:59:09 UTC from IEEE Xplore. Restrictions apply.
+978-1-6654-1005-2/22/$31.00
+©2022
+IEEE
+1245
+
+2022 Third International Conference on Intelligent Computing, Instrumentation and Control Technologies (ICICICT)
+
+TABLE IV
+N OISE BASED TECHNIQUES C OMPARISON
+
+Reference
+Paper
+Pan, X. et
+al. [9]
+
+Year
+
+Julliand, T.
+et al. [10]
+
+2015
+
+Chandra
+Sekhar, P.
+et al. [8]
+
+2019
+
+2012
+
+Noise based techniques
+Method
+Data set
+DCT,
+Inconsistency
+in image noise
+levels
+relative consistency of noise
+parameters
+Colour
+channel
+extraction
+,
+noise
+level
+estimation
+,FDCC
+for
+classification
+
+Perfomance
+
+KODAK
+
+Block Detection Accuracy
+- 70
+
+own
+data
+(real data)
+
+Accuracy - 84
+
+Columbia
+
+F1 score-71.9
+
+on the time when the picture has been taken; like camera
+model- is it same or different, camera response function,
+etc. In [2] a new technique was proposed since depending
+on image splice detection based on watermarking alone was
+not successful. Here doctored images are found using the
+camera response normality function. If the response functions
+are incompatible with each other, the picture is doctored. A
+support vector machine is used to classify the normalcy of the
+response functions.
+In [11], in contrast to previous approaches, this technique
+is based on a human visual system (HVS) model in where
+the feature extraction process is guided by visual saliency and
+fixation. The authors propose using visual saliency and fixation
+to drive the feature extraction technique in order to distinguish
+a spliced image. A noteworthy component of this idea is
+the great link among the splicing borders and the first few
+fixation sites detected by a visual attention model using edge
+sharpness, which contributes in obtaining improved accuracy.
+
+TABLE V
+S OURCE IMAGE PROPERTIES BASED TECHNIQUES COMPARISON
+Source image properties based techniques comparison
+Reference
+Year
+Method
+Data set
+Perfomance
+Paper
+Lin, Z. et al.
+2005
+Camera
+DoRF
+SVM range :
+[2]
+response
+0.53 to 1.77
+function, SVM
+Qu, Z. et al.
+2009
+HVS
+Columbia
+Accuracy[11]
+96.33
+
+5) Illumination color Estimation: Detecting image splicing
+using illumination color estimation is yet another technique
+commonly used. This technique is implemented by using
+the physical environment of the image taken. Image splicing
+can be easily identified using Illumination color Estimation
+[18], where there will be changes in the illumination of the
+background, say sunset or sunrise, and color changes, if any.
+Hence if the images are taken from the same lighting condition
+and colors, the detection accuracy may reduce. In this type of
+
+method, too, accuracy increases as color detection efficiency
+increases, such as pixel and edge-based illuminance color
+estimation. In [13] we can see that the chrominance and luminance of the input image is determined, and illumination is
+calculated from luminance using the Illumination-Reflectance
+model. Finally, the feature vector is found using LBP for
+classification.
+In [18], we can find a new approach was induced for
+detecting photographic splicing that combines the excellent
+representation capability of Illuminant Maps and convolution
+neural networks as a way of learning the essential signals
+of a counterfeit straight from accessible training data. The
+authors have obtained an accuracy of 96 for the same. In [12]
+the spliced pictures are discovered on image areas utilising
+pixel and edge-based illuminant colour estimation. The shape
+and colour characteristics are retrieved from these illuminant
+estimators, then fed into SVM for classification.
+TABLE VI
+I LLUMINATION COLOUR ESTIMATION BASED TECHNIQUES COMPARISON
+Illumination colour estimation based techniques comparison
+Reference
+Year
+Method
+Data set
+Perfomance
+Paper
+Youseph. et
+2015
+illuminant esCASIA 2
+Accuracy- 74
+al. [13]
+timators,SVM
+Pomari, T.,
+2018
+Illuminant
+DSO
+Accuracy- 96
+et al. [18]
+Maps, CNN
+Niyishaka.
+2020
+Luminance,
+CASIA
+Accuracyet al. [12]
+LBP,Linear
+v2.0
+94.59
+Discriminant
+Analysis
+(Classifier)
+
+V. CONCLUSION
+Although there were several techniques implemented for the
+successful detection of image splicing, there was a lacking
+of an effective review paper stating and comparing the best
+techniques in use. Hence this paper was bought up to fill up
+that gap in the research field of image splice detection as well
+as localization. In this paper some of the important research
+works in image splice detection during the period of 2003 to
+2022 were reviewed. Several techniques by which image splice
+detection as well as localization are found were also discussed
+and compared. After going through several literature reviews,
+it was noted that there are several traditional methods, such as
+watermarking, camera response, illuminance based techniques,
+lighting based methods, RGB/YCbCr color component, etc.,
+used in the detection of spliced images. However, we can
+observe that techniques that use CNN within it surpasses all
+other techniques in terms of cost and accuracy. So a CNNinduced method, when used successfully by imposing onto
+other traditional algorithms, can result in an excellent image
+splice detection and localization, which shall be of great help
+in the future.
+R EFERENCES
+[1] Alahmadi, A. A., Hussain, M., Aboalsamh, H., Muhammad, G. Bebis,
+G. Splicing image forgery detection based on dct and local binary
+
+Authorized
+licensed use limited to:
+REVA
+UNIVERSITY. Downloaded on
+October 09,2026 at 06:59:09 UTC from IEEE Xplore. Restrictions apply.
+978-1-6654-1005-2/22/$31.00
+©2022
+IEEE
+1246
+
+2022 Third International Conference on Intelligent Computing, Instrumentation and Control Technologies (ICICICT)
+
+pattern. In 2013 IEEE Global Conference on Signal and Information
+Processing, 253–256 (IEEE, 2013).
+[2] Lin, Z., Wang, R., Tang, X. Shum, H.-Y. Detecting doctored images
+using camera response normality and consistency. In 2005 IEEE Computer Society Conference on Computer Vision and Pattern Recognition
+(CVPR’05), vol. 1, 1087–1092 (IEEE, 2005).
+[3] Yao, H., Xu, M., Qiao, T., Wu, Y. Zheng, N. Image forgery detection
+and localization via a reliability fusion map. Sensors 20, 6668 (2020).
+[4] Sudiatmika, I. B. K., Rahman, F. et al. Image forgery detection using
+error level analysis and deep learning. Telkomnika 17, 653–659 (2019).
+[5] Zhang, Y.-J., Shi, T.-T. Lu, Z.-M. Image splicing detection scheme
+based on error level analysis and local binary pattern (2021).
+[6] Wu, Y., AbdAlmageed, W. Natarajan, P. Mantra-net: Manipulation
+tracing network for detection and localization of image forgeries with
+anomalous features. In Proceedings of the IEEE/CVF Conference on
+Computer Vision and Pattern Recognition, 9543–9552 (2019).
+[7] Marra, F., Gragnaniello, D., Verdoliva, L. Poggi, G. A full-image
+full-resolution end-to-end-trainable cnn framework for image forgery
+detection. IEEE Access 8, 133488–133502 (2020).
+[8] Chandra Sekhar, P. Shankar, T. Splicing localization based on noise
+level inconsistencies in residuals of color channel differences. IJRTE 8,
+764–769 (2019).
+[9] Pan, X., Zhang, X. Lyu, S. Exposing image forgery with blind noise
+estimation. In Proceedings of the thirteenth ACM multimedia workshop
+on Multimedia and security, 15–20 (2011).
+[10] Julliand, T., Nozick, V. Talbot, H. Automated image splicing detection
+from noise estimation in raw images. In 6th International Conference
+on Imaging for Crime Prevention and Detection (ICDP-15), 1–6 (IET,
+2015).
+[11] Qu, Z., Qiu, G. Huang, J. Detect digital image splicing with visual cues.
+In International workshop on information hiding, 247–261 (Springer,
+2009).
+[12] Niyishaka, P. Bhagvati, C. Image splicing detection technique based on
+illumination-reflectance model and lbp. Multimedia Tools and Applications 80, 2161–2175 (2021).
+[13] Youseph, S. N. Cherian, R. R. Pixel and edge based illuminant color
+estimation for image forgery detection. Procedia Computer Science 46,
+1635–1642 (2015).
+[14] Yang, C., Li, H., Lin, F., Jiang, B. Zhao, H. Constrained r-cnn: A
+general image manipulation detection model. In 2020 IEEE International
+Conference on Multimedia and Expo (ICME), 1–6 (IEEE, 2020)
+[15] J. Dong and W. Wang, “CASIA image tampering detection evaluation
+databases,” in Proceedings of the Signal and Information Processing, pp.
+422–426, Beijing, China, 2015.
+[16] X. Wang, H. Wang, S. Niu, and J. Zhang, “Detection and Localization of
+Image Forgeries Using Improved Mask Regional Convolutional Neural
+Network,” Mathematical Biosciences and Engineering, vol. 16, pp.
+4581–4593, 2019.
+[17] Zheng, L., Zhang, Y., Thing, V.L.: A survey on image tampering and its
+detection in real-world photos. J. Vis. Commun. Image Represent. 58,
+380–399 (2019)
+[18] Pomari, T., Ruppert, G., Rezende, E., Rocha, A., Carvalho, T.: Image
+splicing detection through illumination inconsistencies and deep learning. In: 25th IEEE International Conference on Image Processing (ICIP),
+pp. 3788-3792 (2018)
+[19] H. P, Lekha S. Nair, S.M, A., Unni, R., H, V. Priya, and Prabaharan Poornachandran, “Digital Image Forgery Detection on Artificially
+Blurred Images”, in International Conference on Emerging Trends in
+Communication, Control, Signal Processing Computing Applications
+(C2SPCA), 2013 , Bangalore, India, 2013.
+[20] K. Nithin.D and Dr. Bhagavathi Sivakumar P., “Learning of Generic
+Vision Features Using Deep CNN”, in 2015 Fifth International Conference on Advances in Computing and Communications (ICACC), Kochi,
+2015.
+[21] N. Aloysius and M. Geetha, “A review on deep convolutional neural
+networks”, in 2017 International Conference on Communication and
+Signal Processing (ICCSP), Chennai, India, 2017
+[22] Sruthi S Menon, Mary Saana N J, and G. Deepa, “Image Forgery Detection using Hash Functions”, International Journal of Recent Technology
+and Engineering (IJRTE) , vol. 8, no. 1, 2019.
+[23] M. K. and Dr. Padmavathi S., “Wild animal detection and recognition
+from aerial videos using computer vision technique”, International
+Journal of Emerging Trends in Engineering Research, vol. 7, no. 5,
+pp. 21-24, 2019.
+
+[24] S. S. Narayanan and G. Gopakumar, ”Recursive Block Based Keypoint Matching For Copy Move Image Forgery Detection,” 2020
+11th International Conference on Computing, Communication and Networking Technologies (ICCCNT), 2020, pp. 1-6, doi: 10.1109/ICCCNT49239.2020.9225658.
+[25] Bravo-Solorio S, Nandi AK.( 2011). Automated detection and localisation of duplicated regions affected by reflection, rotation and scaling in
+image forensics. Signal Processing, 91(8),1759–70.
+[26] Cozzolino D, Gragnaniello D, Verdoliva L (2014) Image forgery localization through the fusion of camerabased, feature-based and pixelbased techniques. In: proceedings of international conference on image
+processing (ICIP), pp 5302-5306.
+[27] Dong J, Wang W, Tan T (2013) Casia image tampering detection
+evaluation database. In: proceedings of China Summit International
+Conference on signal and information processing (ChinaSIP), pp 422426.
+[28] Pandey A, Mitra A. Detecting and Localizing Copy-Move and ImageSplicing Forgery. arXiv preprint arXiv:2202.04069. 2022 Feb 8.
+[29] Rao Y, Ni J, Zhao H. Deep learning local descriptor for image splicing
+detection and localization. IEEE Access. 2020 Jan 31;8:25611-25.
+[30] Y. Hsu and S. Chang, ”Camera Response Functions for Image Forensics:
+An Automatic Algorithm for Splicing Detection,” in IEEE Transactions
+on Information Forensics and Security, vol. 5, no. 4, pp. 816-825, Dec.
+2010, doi: 10.1109/TIFS.2010.2077628.
+
+Authorized
+licensed use limited to:
+REVA
+UNIVERSITY. Downloaded on
+October 09,2026 at 06:59:09 UTC from IEEE Xplore. Restrictions apply.
+978-1-6654-1005-2/22/$31.00
+©2022
+IEEE
+1247
+
+

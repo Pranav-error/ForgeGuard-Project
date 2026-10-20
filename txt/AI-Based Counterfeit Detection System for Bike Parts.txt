@@ -1,0 +1,396 @@
+2026 International Conference on Trends in Quantum Computing and Emerging Business Technologies (TQCEBT)
+Pune, India. April 9 - 11, 2026
+
+2026 International Conference on Trends in Quantum Computing and Emerging Business Technologies (TQCEBT) | 979-8-3315-6126-0/26/$31.00 ©2026 IEEE | DOI: 10.1109/TQCEBT67648.2026.11681713
+
+AI-Based Counterfeit Detection System for Bike
+Parts
+Rubeshwaran M∗ , Saravanan R∗ , Veerachandru D∗ , Maheswari A∗ and Dr. Rehkha K.K.†
+Dr. M.G.R. Educational and Research Institute, Chennai, India
+∗ Department of Data Science
+† Department of Computer Science and Engineering
+Emails: rubeshmanogar61@gmail.com, saravanancj46@gmail.com,
+veerac078@gmail.com, maheswari.it@drmgrdu.ac.in,
+rekha.cse@drmgrdu.ac.in
+improvement of counterfeit manufacturing processes in recent
+years, it is becoming increasingly difﬁcult to visually identify a
+counterfeit motorcycle spare part. Unfortunately, relying solely
+on a manual, time-consuming method for verifying parts can
+be inconsistent and not readily accessible to a majority of the
+average motorcycle consumer.
+
+Abstract—Counterfeiting in the motorcycle industry creates
+major threats to safety and ﬁnancial instability for motorcyclists.
+For independent mechanics and local consumers, it is very difﬁcult to distinguish between authentic and counterfeit motorbike
+parts without assistance from a professional. In this paper we
+describe a framework for a veriﬁcation system based on artiﬁcial
+intelligence (AI) using Qwen-3-4B-VL Vision-Language Model
+(VLM). To develop our veriﬁcation system’s ability to identify
+counterfeit motorcycle parts accurately, we built a specialized
+dataset using 1,656 high resolution images of important parts
+of safety equipment (like helmets) and also engine parts (like
+spark plugs and air ﬁlters). Also to keep these images reliable,
+we created a ’VLM-in-the-loop’ curation pipeline using LLaMA4-Scout-17B for structure labeling and to validate each image
+source. After the completion of indexed training on a dual
+NVIDIA Tesla T4 conﬁguration, VLM achieved a maximum of
+92.3% accuracy and provided both an interpretive reasoning
+document of how it arrived at each conclusion which traditional
+Convolutional Neural Networks (CNNs) do not provide. Lastly,
+we illustrate how reliable authentic/counterfeit detection from
+a consumer-grade computer running an NVIDIA RTX 3050
+can be accomplished at an unprocessed latency of 1.42 seconds,
+providing mass fraud detection capabilities to retail consumers.
+Index Terms—Counterfeit Detection, Bike Spare Parts, VisionLanguage Model, Deep Learning, Image Classiﬁcation, Artiﬁcial
+Intelligence, Web Deployment.
+
+The advancement of Artiﬁcial Intelligence (AI) technology,
+especially in the areas of computer vision and deep learning
+[6], now allows for the creation of automated image-based
+veriﬁcation systems to detect counterfeit motorcycle parts. For
+example, vision-based models can identify subtle changes in
+the visual appearance of parts that may be very difﬁcult for a
+human to detect. Additionally, in more recent design iterations
+of Vision-Language models (VLMs), it is now possible to
+classify images using both visual and descriptive information
+from the same image and achieve a higher classiﬁcation
+accuracy than is possible by using either method alone [5],
+[10]. Therefore, combining visual features of an image with
+contextual information derived from the visual features will
+improve the accuracy of VLM-based classiﬁers.
+This research proposes the development of an Al-based
+counterfeit detection system for motorcycle spare parts using
+a VLM-based image classiﬁcation model. For training, we
+collected a structured dataset that consists of genuine and
+counterfeit bike component images. The system provides
+image preprocessing, feature extraction, image classiﬁcation
+using deep learning, and outputs the prediction results in a
+web interface. The primary goal of this system is to develop
+an automated, scalable, accurate, and dependable solution for
+authenticating counterfeit bike parts in real-time. By providing
+a solution for manufacturers, service centers, dealers, and
+consumers, this project will help reduce the prevalence of
+counterfeit spare parts in the marketplace.
+
+I. I NTRODUCTION
+The Motorcycle Spare Parts market is developing rapidly as
+a result of an increase in demand for spare parts and replacement parts. As a side effect of this rapid growth, counterfeit
+spare parts for motorcycles are now widely available in the
+marketplace. Counterfeit Spare Parts are identical or substantially identical to the originals but are manufactured without
+the authorization of the original company; such parts look like
+original parts but have no real quality, durability, or safety
+standards. Therefore, using such counterfeit parts can lead to
+serious mechanical failure, diminishing vehicle performance,
+reduction in proﬁt and, ultimately, road accidents.
+Traditional methods to identify counterfeit motorcycle spare
+parts rely heavily on an inspection performed manually by a
+trained mechanic or an authorized dealer. Inspection methods include examining the quality of packaging, holographic
+labels, serial numbers, the weight of the parts, as well as
+minor design discrepancies. However, due to the continuous
+
+979-8-3315-6126-0/26/$31.00 ©2026 IEEE
+
+Automating the process of detecting counterfeit bike parts
+minimizes the impact of human error and enhances the efﬁciency of verifying the authenticity of products. Hence, this
+approach improves vehicle safety, safeguards consumers, as
+well as preserves brand integrity throughout the automotive
+spare part supply chain.
+
+1
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:59:52 UTC from IEEE Xplore. Restrictions apply.
+
+classifying items based on multiple forms of media. Compared
+to traditional models, VLMs provide a level of differentiation
+between authentic and counterfeit products that is superior and
+improve the ability of the model to generalize.
+
+II. L ITERATURE S URVEY
+Counterfeit product detection is an important area of study
+and has gained signiﬁcant momentum as the world continues
+to experience a surge of fake products/brands throughout
+multiple industry sectors. Researchers have taken a variety of
+machine learning and deep learning approaches to detecting
+counterfeit products by examining the visual appearance of
+both the product and its packaging and the serial number
+associated with each product.
+
+E. Research Gap
+Most existing systems primarily focus on general consumer
+goods or high-end products. A limited number of research
+studies speciﬁcally target counterfeit detection within the twowheeler segment of the automotive industry. Furthermore,
+most existing systems are based on either traditional image
+processing methods or CNN-based classiﬁcation [7], [9],
+without taking into account the importance of contextual
+understanding of images. Hence, a new advanced solution is
+required that combines visual intelligence with multimodality.
+
+A. Traditional Image Processing Techniques
+Early counterfeit detection systems utilized traditional image processing methods including edge detection, texture analysis, and color histogram comparisons. Such methods include
+(but are not limited to) the Histogram of Oriented Gradients
+(HOG), Local Binary Patterns (LBP), and the Scale-Invariant
+Feature Transform (SIFT). These features are subsequently
+used to identify the authenticity of the products using various
+machine learning algorithms such as Support Vector Machines
+(SVM) and k-Nearest Neighbors (k-NN) [6].
+
+III. R ESEARCH M ETHODOLOGY AND DATA S OURCE
+A. Data Curation and Labeling using Algorithms
+The availability of standardized, expert-veriﬁed datasets has
+proven to be a signiﬁcant barrier to the detection of counterfeit
+products. To overcome this limitation, we created a custom
+dataset of 1,656 high-resolution images of three different
+categories of products that have industrial signiﬁcance; these
+are helmets, spark plugs, and air ﬁlters. These products are
+very important for assessing the safety and reliability of
+products. We used the Groq API and LLaMA-4-Scout-17B
+[12] in a VLM-in-the-loop architecture to create an automatic
+quality control pipeline to eliminate the potential for human
+errors associated with manual labeling and improve the overall
+reliability of the dataset. This will help provide the model with
+additional reference data through the incorporation of domain
+knowledge, which may include verifying whether a helmet
+meets ISI/DOT safety standards or whether the electrode
+spacing of a spark plug is symmetrical. Regularizing the
+datasets provided high-precision ground truth labels.
+
+B. Machine Learning-Based Classiﬁcation
+As supervised machine learning advanced, researchers
+started to use traditional classiﬁers from the machine learning
+suite such as Logistic Regression, Random Forests, and Naı̈ve
+Bayes. Although these types of machine learning classiﬁers
+increased the accuracy of classiﬁcation compared to simple
+rules-based systems, they heavily relied on feature engineering. Classiﬁcation performance signiﬁcantly dropped when
+processing products with complex design models or products
+with subtle differences from genuine goods.
+C. Image-Based Counterfeit Detection using Deep Learning
+The development of Convolutional Neural Networks
+(CNNs) have made a signiﬁcant impact on image classiﬁcation
+tasks [1]. State-of-the-art deep learning models including VGGNet, ResNet [2], and MobileNet have demonstrated outstanding capacity to learn the hierarchical visual features of raw
+image data automatically. To date, a number of studies have
+used CNN architectures for product authentication and fakeproduct classiﬁcation. These CNN models have signiﬁcantly
+reduced the need for manual feature extraction while improving accuracy in real-world applications. However, CNN-based
+solutions are primarily focused on visual features and do not
+include contextual or descriptive data about the products being
+classiﬁed.
+
+IV. P ROPOSED S YSTEM
+In order to resolve the downsides of manual inspection,
+as well as the limitations of conventional CNN-based classiﬁcation systems, we have created a modular AI framework
+utilizing the Qwen-3-4B-VL Vision-Language Model (VLM)
+[11]. This design bridges the performance gap between highcomputation training environments and resource-limited edge
+deployment locations.
+A. System Description
+Our framework implements a complete pipeline system containing a user-facing interface, an automation layer for image
+preprocessing, a reasoning engine based on VLM technology,
+and a ﬁnal classiﬁcation function. Our framework differs
+from conventional classiﬁcation pipelines because, in addition
+to producing binary outputs, our system assesses structural
+details and provides reasoning for each determination made.
+The logical ﬂow and high-level interaction between these
+components are illustrated in the overall system architecture
+shown in Fig. 1.
+
+D. Vision-Language Models (VLMS)
+With the recent emergence of multimodal learning techniques, Vision-Language Models (VLMs) have emerged that
+capture both the image understanding element and the textual
+context in which the image is represented [5]. VLMs leverage the relationship between visual features and descriptive
+properties of objects in order to improve the robustness of
+classiﬁcation. VLMs are high-performing for creating captions, answering questions through visual questions [10], and
+
+2
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:59:52 UTC from IEEE Xplore. Restrictions apply.
+
+V. M ODULES D ESCRIPTION
+The proposed AI counterfeit detection system has been
+organized into several specialized functional modules, each
+module operating on a key stage of the authenticating pipeline:
+• The Image Input Module is the ﬁrst (and therefore,
+primary) system entry point and allows users to upload
+images of components in standard formats (i.e., JPG,
+JPEG, or jpeg).
+• The Dataset Management Module will allow for organization of the 1,656 images created from the “VLM-inthe-loop” pipeline, and allow for management of the highﬁdelity labels generated from LLaMA-4-Scout-17B [12]
+regarding structural integrity and safety certiﬁcations.
+• The Image Preprocessing Module prepares the raw
+uploads to assist with ensuring there is model consistency
+(i.e., dimensional adjustments, pixel value normalization,
+and noise suppression ﬁlters).
+• The Vision-Language Feature Extraction Module extracts deep semantic and visual features by utilizing
+the Qwen-3-4B-VL architecture [11], and is speciﬁcally
+tuned for identifying subtle “red ﬂags,” such as typeface
+inconsistencies on decals, and subtle electrode misalignments.
+• The Classiﬁcation Module is the last module to process
+the extracted feature embeddings and to generate the predicted authenticity class and conﬁdence score associated
+with that prediction.
+
+Fig. 1: Overall System Architecture of AI-Based Counterfeit
+Detection System.
+
+B. Dataset Preparation & Curation
+To construct an accurate counterfeit detection system
+for motorcycle componentry, where high-quality expertcorroborated datasets are scarce, we established a proprietary corpus of 1,656 images focusing on safety-critical parts
+(helmets, spark plugs, and air ﬁlters). To maintain dataset
+integrity, we utilized a “VLM-in-the-loop” curation strategy.
+The Groq API was employed with LLaMA-4-Scout-17B [12]
+to automate the structural review of the raw data and validate
+identifying features such as ISI/DOT safety decal compliance
+and the symmetry of engine electrodes. The dataset was
+partitioned as follows:
+
+A. Model Training Parameters
+The model was trained using a supervised learning method.
+The Adam optimizer with a learning rate of 2e-4 was utilized
+for training. Due to the complexity of the VLM and because
+of the speciﬁc hardware limitations we had, we set a batch size
+of 16 for training so that we could maintain a stable gradient
+descent while allowing the VLM to capture visually detailed
+images.
+
+Training Set: 70% (1,159 images)
+Validation Set: 15% (248 images)
+• Test Set: 15% (249 images)
+•
+•
+
+VI. R ESULT AND D ISCUSSION
+The ﬁne-tuned model’s peak accuracy was 92.3%, which is
+shown in Figure 4. The training loss curve stabilized by the
+3rd epoch, therefore we chose a training limit of 4 epochs
+to prevent overﬁtting. The controlled learning rate schedule,
+shown in Figure 5, provides evidence that our training process
+was stable. Although traditional algorithms provide results
+much faster than VLM, i.e., ResNet and YOLO, they only
+provide a classiﬁcation label for each object. On the other
+hand, the VLM method provides ”Visual Evidence” of why our
+model believes an object is counterfeit. Figure 6 provides as
+step-by-step visual representation of the model parsing through
+the various structural features during analysis of a given
+image. Figure 7 illustrates successful outputs of classiﬁcation.
+Detailed feature analysis is illustrated in Figure 8, where
+features such as defects (i.e. incorrect font on DOT decal,
+misalignment of spark plug electrode) are explicitly identiﬁed.
+A 5-fold cross-validation study was performed, which resulted
+in an average deviation of only 0.75%, this indicates that the
+
+C. Infrastructure and Hyperparameters
+Our training utilized a dual NVIDIA Tesla T4 conﬁguration
+on Kaggle, providing a total of 32 GB of VRAM. We
+applied Quantized Low-Rank Adaptation (QLoRA) [13] and
+limited training to four epochs, as validation loss stabilized
+signiﬁcantly after the second epoch. We utilized a small batch
+size with 8 gradient accumulation steps to ensure the model
+focused on subtle visual “red ﬂags” essential in identifying
+counterfeit products.
+D. Edge-Optimized Deployment
+The model was optimized for deployment via 4-bit GGUF
+quantization [14], reducing the memory footprint to 2.8GB.
+This hardware conﬁguration maintains a fast inference time
+of 1.42 seconds on an NVIDIA RTX 3050, enabling highreasoning counterfeit detection at the edge.
+
+3
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:59:52 UTC from IEEE Xplore. Restrictions apply.
+
+model is robust enough to be used in real-world settings with
+high variability between parts.
+TABLE I: Model Performance Comparison
+Model
+CNN-Based (ResNet)
+YOLOv8-Cls
+Proposed Qwen-3-4B-VL
+
+Accuracy
+83.1%
+87.4%
+92.3%
+
+Reasoning Output
+No
+No
+Yes
+
+Latency
+0.20s
+0.15s
+1.42s
+
+Fig. 5: Counterfeit Detection Result Output.
+
+Fig. 2: Training loss curve for model training.
+
+Fig. 6: Detailed Feature Analysis.
+
+the system is operational via an NVIDIA RTX 3050 (4GB
+VRAM) using LM Studio. The model was converted to a 4bit GGUF format [14] so that the onboard memory usage has
+been reduced to 2.8GB. The hardware conﬁguration provides
+an excellent performance level with an inference time of 1.42
+seconds. As a result, edge-based high-reasoning counterfeit
+detection technology has made it possible for safety inspectors
+and retail owners around the world to have access to this
+technology.
+
+Fig. 3: Learning rate schedule for model training.
+
+VIII. C ONCLUSION AND F UTURE I MPROVEMENT
+Conclusion: The approach developed in this study has
+applied an AI-based vision language model for identifying
+counterfeit bicycle replacement parts with a high degree of
+accuracy when compared to conventional machine learning
+methods [7].
+Future Improvements: Future development will expand
+this work signiﬁcantly by broadening the focus area for
+further identifying counterfeit bicycle replacement parts by
+adding categories of replacement parts: developing a mobile
+application; and interfacing with manufacturers’ information
+systems for more comprehensive veriﬁcation of all parts.
+
+Fig. 4: Image Analysis Process.
+VII. P RACTICAL I MPLEMENTATION
+A. Edge AI and Commercial Application
+The purpose of this research was to demonstrate the viability
+of using this technology at local bike shops. At present,
+
+4
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:59:52 UTC from IEEE Xplore. Restrictions apply.
+
+R EFERENCES
+[1] A. Krizhevsky, I. Sutskever, and G. E. Hinton, “ImageNet classiﬁcation
+with deep convolutional neural networks,” in Proc. Adv. Neural Inf.
+Process. Syst. (NIPS), 2012.
+[2] K. He, X. Zhang, S. Ren, and J. Sun, “Deep residual learning for
+image recognition,” in Proc. IEEE Conf. Comput. Vis. Pattern Recognit.
+(CVPR), 2016.
+[3] A. Dosovitskiy et al., “An image is worth 16x16 words: Transformers
+for image recognition at scale,” in Int. Conf. Learn. Representations
+(ICLR), 2021.
+[4] J. Devlin, M.-W. Chang, K. Lee, and K. Toutanova, “BERT: Pre-training
+of deep bidirectional transformers for language understanding,” in Proc.
+NAACL-HLT, 2019.
+[5] A. Radford et al., “Learning transferable visual models from natural
+language supervision,” in Int. Conf. Mach. Learn. (ICML), 2021.
+[6] I. Goodfellow, Y. Bengio, and A. Courville, Deep Learning, MIT Press,
+2016.
+[7] S. Tan and J. Lim, “Counterfeit product detection using deep learning
+techniques,” IEEE Access, vol. 8, pp. 123456–123468, 2020.
+[8] R. Girshick, “Fast R-CNN,” in Proc. IEEE Int. Conf. Comput. Vis.
+(ICCV), 2015.
+[9] H. Chen, Y. Li, and X. Su, “Automated product authenticity veriﬁcation
+using convolutional neural networks,” IEEE Trans. Ind. Informatics,
+vol. 15, no. 6, 2019.
+[10] C. Jia et al., “Scaling up visual and Vision-Language representation
+learning with noisy text supervision,” in Int. Conf. Mach. Learn. (ICML),
+2021.
+[11] Qwen Team, “Qwen3 Technical Report: Scaling Vision-Language Understanding,” arXiv preprint arXiv:2501.12345, 2025.
+[12] Meta AI, “Llama 4: Open and Efﬁcient Foundation Models,” Meta
+Research, 2026.
+[13] T. Dettmers, A. Pagnoni, A. Holtzman, and L. Zettlemoyer, “QLoRA:
+Efﬁcient Finetuning of Quantized LLMs,” in Proc. Adv. Neural Inf.
+Process. Syst. (NeurIPS), 2024.
+[14] G. Gerganov, “GGUF: A New Format for Local Large Language Model
+Inference,” GitHub Repository, 2024. [Online]. Available: https://github.
+com/ggerganov/llama.cpp
+[15] G. Jocher, A. Chaurasia, and J. Qiu, “YOLO by Ultralytics,” 2023.
+[Online]. Available: https://github.com/ultralytics/ultralytics
+
+5
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:59:52 UTC from IEEE Xplore. Restrictions apply.
+
+

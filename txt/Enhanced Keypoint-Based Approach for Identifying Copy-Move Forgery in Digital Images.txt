@@ -1,0 +1,725 @@
+2024 7th International Conference on Contemporary Computing and Informatics (IC3I)
+
+2024 7th International Conference on Contemporary Computing and Informatics (IC3I) | 979-8-3503-5006-7/24/$31.00 ©2024 IEEE | DOI: 10.1109/IC3I61595.2024.10829331
+
+Enhanced Keypoint-Based Approach for Identifying
+Copy-Move Forgery in Digital Images
+Girish Singh Bisht
+Department of Computer Science &
+Engineering
+Tula's Institute
+Dehradun , India 248001
+singhgiri2037@gmail.com
+
+Arpit Jain
+Department of Computer Science &
+Engineering
+Koneru Lakshamaiah Education Foundation
+Vadessahwaram, A.P., India
+dr.jainarpit@gmail.com
+
+Vandna bansla
+Shivalik Engineering College
+Dehradun , India 248001
+vbansala1@gmail.com
+
+Khemraj Sharma
+Department of Business Administration,
+Doctoral Program in Management Sciences
+Nanhua University, Dalin,
+Chiayi, 62248, Taiwan ( R.O.C.)
+khemraj8517@gmail.com
+
+Rudramani Bhutia
+Department of Computer Science &
+Engineering
+Koneru Lakshmaiah Education Foundation,
+A.P., India
+rudra.kuna@gmail.com
+
+Vikas Kumar
+School Engineering and Computing
+Dev Bhoomi Uttrakhand University
+Dehradun, Uttrakhand, India
+saini.vikaskumar86@gmail.com
+
+forward others' photos[2]. Digital information is likely to be
+available to every user because of this.
+
+Abstract - Copy-move forgeries often exploit homogeneous
+regions in images with large-scale attacks to either highlight or
+conceal target objects. These manipulations are simple to
+execute but challenging to notice. Forgery detection techniques
+like Copy-Move Forgery Detection (CMFD) cannot detect these
+forged documents because they are unable to identify a
+sufficient number of effective keypoints in homogeneous areas,
+leading to inaccurate and inefficient results. SURF stands for
+Speeded-Up Robust Features and is used in this paper along
+with A-KAZE and Scale-Invariant Feature Transforms.
+According to our experiment, A-KAZE offers superior detection
+performance under diverse attacks, especially when it comes to
+large-scale attacks targeting homogeneous regions. A-KAZE is
+found to be more accurate than SIFT, SURF, and A-KAZE when
+applied to the NB-CASIA dataset, achieving detection
+accuracies of 89.2%, 93.9% and 98.98%.)
+
+It is convenient for novices and experts to use simplistic
+image-editing Software, which allows them to make authentic
+alterations. Among these tweaks, some are made for
+entertainment, while others are done maliciously [3], [4].
+Digital images are uncertain because of this fact. These digital
+images become even more problematic when they are used for
+specific purposes such as news broadcasts, research journals,
+and courtrooms.
+Forgeries involving copy-move are also known as copypaste forgeries or cloning forgeries. They involve copying and
+pasting segments within an image [5], [6]. It is common for
+forgers to conceal or emphasize an element in an image. In
+order to create convincingly forged documents, imageprocessing operations like JPEG compression, noise addition,
+rotation, and scaling may be used during copying and moving.
+Due to the ease with which copy-move operations can now be
+conducted, Software for image editing has become
+increasingly important and active with CMFD [7], [8]. The
+two most commonly used methods for detecting copy-moves
+are block-based detection and interest keypoint detection [9],
+[10].
+
+Keywords— Data Analysis, Forgery Detection, Image
+Processing, Image attack detection
+
+I.
+
+INTRODUCTION
+
+With today's sophisticated image editing software, faking
+digital images has never been easier. Data sharing has become
+increasingly important thanks to digital data, especially
+images. The accessibility of budget-friendly digital cameras
+has simplified image capture. The impact of social networking
+platforms is substantial, with individuals frequently sharing
+and forwarding images. It turns every user into a potential
+source of digital content.
+
+Forgeries using copy-move techniques involve copying
+and pasting specific parts of an image into another. Due to the
+fact that clones can exist anywhere, it is impossible to find all
+forged parts. Furthermore, the copy area is from the same
+image with compatible features (such as color and noise). Due
+to this, detecting differences in features is difficult. Therefore,
+the detection of copy-move forgeries remains challenging
+[11], [7] (CMFD). CMFD has two general objectives:
+
+Furthermore, the prevalence of user-friendly image editing
+software empowers both beginners and experts to craft
+plausible modifications. These alterations might range from
+harmless modifications for amusement to more insidious
+image manipulations aimed at deception [1]. This reality
+introduces doubt into the credibility of digital images.
+Especially in the case of news dissemination, research
+publications, and legal proceedings, these digital images
+become critical. In the last few years, digital data that can be
+viewed as images has played a significant role in providing
+information. Image capture became easier with the availability
+of low-cost digital camera devices. People's lives have been
+affected significantly by social networks, as evidenced by
+statistics. Nowadays, people upload their photos online and
+
+Copy-move forgeries have been detected through a variety
+of methods, most of which are block-based [12], [13], [14], A
+deep learning-based method, and a feature point-based
+method [15], [16], [17]. A geometric and post-processing
+attack operation makes it impossible to detect copy-move
+regions using block-based algorithms. In many other fields,
+deep learning-based methods have proven successful, but not
+in CMFD, where extensive training data is required.
+
+1101
+979-8-3503-5006-7/24/$31.00 ©2024 IEEE
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:02:45 UTC from IEEE Xplore. Restrictions apply.
+
+2024 7th International Conference on Contemporary Computing and Informatics (IC3I)
+
+In order to cluster similar regions on images, oversegmentation is performed on them. Labelled keypoints are
+then processed to extract SURF and PCT features. According
+to [27], SURF features and PCET can be used to identify
+keypoints in images and detect regions with tapering.
+Geometrically transformed images can be detected, but largerscale changes are more challenging. For improved detection
+accuracy, several operations are applied to image keypoints.
+Using keypoints and segmentation [28] addressed images with
+a variety of textures. PCET and SURF keypoint are used
+together. The method cannot detect forged images with scale;
+it also requires much time to perform some steps. As part of
+the SIFT feature, sensitivity-based clustering is also integrated
+[29]. There are two approaches used in [30], ELA and colour
+filter arrays, as well as modified and unmodified images,
+which are required for both methods. Incorporating two
+different analytical methods, they are able to detect both copymoves and splices. In [31-34], Two steps were involved in
+calculating image features: first, using the SIFT keypoint
+detector, and then using the Fourier-Miller transform. In the
+case of fewer in-lines than a threshold, an FMT algorithm is
+applied to the entire image.
+
+Fig. 1. From left to right: original image (a), copy–move forged image (b),
+and binary ground truth overlying copy–move area (c)
+
+II.
+
+LITERATURE SURVEY
+
+A keypoint set is detected, described, and matched for
+tampering detection. Keypoint sets are described based on a
+variety of features. SIFT (Scale Invariant Features Transform)
+eliminates geometric distortion, illumination distortions, etc
+[15]. Further, [9] presented a Jlinkage algorithm that employs
+a robust clustering of geometry transformations in order to
+enhance the model [18]. In [19], it is proposed that speeded
+robust features (SURF) be used as the basis for a CMFD
+scheme, and a K-D tree be used to identify similar SURF
+descriptors [20]. There is no explicit indication of the
+boundaries of the duplicated regions, but lines indicate the
+duplicated regions. When it comes to creating feature sets for
+large images, keypoint-based methods are much more
+efficient. As a result, the keypoint-based method builds and
+matches the FV based on the keypoint sets that have been
+detected. There is a considerable improvement in the speed of
+SURF feature detection. Their speed is two to three times
+faster than SIFT's. BFs and integral images are the cause of
+this. As soon as identical keypoint descriptors are identified,
+BF is used to remove mismatches based on predetermined
+thresholding parameters.
+
+III.
+
+PROPOSED METHODOLOGY
+
+In our paper, we propose detecting copy-move forgeries
+using keypoints. In addition to reducing false positives, it
+improves the complexity of time and space.
+A. SURF
+There is no need to worry about lighting changes, affine
+transformations, scaling, or rotation of the SURF. We use
+Hessian matrix determinants to determine SURF's scale and
+location. A scaled representation of the Hessian matrix
+; can be seen in Equation (1).
+;
+
+,
+,
+
+=
+
+,
+,
+
+1
+
+It is not uncommon to treat
+,
+as a similarity
+measure for convolutions of two Gaussian second-order
+derivatives:
+/
+and
+, .
+In order to reduce computation time, the box filter
+simulates Gaussian second-order derivatives,
+, ,
+, , and
+, , which improves the calculation
+speed of convolution and reduces its complexity. Equation (2)
+shows how to approximate Hessian's determinant:
+
+In the subsequent study, [21] a robust clustering phase was
+introduced to the CMFD approach. In [22], for CMFD, It was
+demonstrated how to integrate both image blocks and interest
+points in an adaptive over-segmentation approach. According
+to [23], SIFT-symmetry, symmetry-based matching, and
+SIFT-based CMFD are combined to create a robust CMFD
+method. [21] describes the process of detecting maximally
+stable color regions and representing them as Zernike
+moments. The multiplicity of the same file is then handled
+using a modified matching algorithm that takes into account n
+best match features. In [24], three forensic detectors were
+devised based on the anomalies in keypoint distribution,
+revealing if keypoints had been removed globally or locally.
+We then apply the detectors to a practical image forensics
+scenario where we need to detect copy-move forgeries using
+SIFT-based methods. In [25], Harris corners were detected by
+a two-stage detection method based on ordered gradient
+histograms and hue histogram descriptors extracted from
+multi-support regions. In [26], As a result of the combination
+of KAZE with SIFT, an increased number of interest points is
+generated.
+
+det
+
+=
+
+− 0.9
+
+2
+
+In the construction of image pyramid scales, integral and
+box filters are used. With a neighbourhood of interest points,
+we determine non-maximum suppression 3$3$3 interest
+points. Using our method, we eliminate candidate points with
+an approximate Hessian matrix smaller than %&'() , which
+measures how fast Hessian responses are.
+Before obtaining rotation-invariant descriptors, it is
+necessary to determine the main direction of rotation. A
+response centring at a diameter of 6 meters determines the
+pointed direction. In order to obtain the Haar wavelet
+response, the circular region is filtered using a Haar wavelet
+filter. Wavelet responses centred at a point with an angle of 1/2
+are drawn as fan-shaped areas. Using Haar wavelets, fanshaped regions can be calculated. This vector is selected as the
+main direction among all the others.
+
+1102
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:02:45 UTC from IEEE Xplore. Restrictions apply.
+
+2024 7th International Conference on Contemporary Computing and Informatics (IC3I)
+
+space * 8, 9, , which is the convolution of the Gaussian
+function 2: 8, 9,
+with the input image ; 8, ; .
+
+B. Accelerated-KAZE (AKAZE
+CMF detection using the AKAZE algorithm can be used
+to detect key points within uniform areas, especially when
+detecting key points within uniform areas. In this procedure,
+the image's data is adaptively blurred using nonlinear scale
+space, so noise is reduced without interrupting the image's
+data. When non-linear diffusion is used, luminance is
+modelled by increasing the scale levels. Flow functions are
+diverging in a partially differential equation that controls
+diffusion. A nonlinear partial differential equation with
+nonlinear scale-space is responsible for the diffusion of
+luminance in an image. Here is an equation for nonlinear
+diffusion:
+
+With
+
+= 2: 8, 9,
+
+* 8, 9,
+
+∗ ; 8, 9
+
+6
+
+1
+B
+B
+B
+7
+? @ A CD / 4
+2>
+This image is composed of W and V coordinates.
+; 8, 9 , represents the standard deviation of the Gaussian
+function 2: 8, 9, .
+2: 8, 9,
+
+=
+
+Differential Gaussian (DoG) techniques are used to
+determine the image's key points based on the equation given:
+8, 9,
+
+CMF detection using the AKAZE algorithm can be used
+to detect key points within uniform areas, especially when
+detecting key points within uniform areas. In this procedure,
+the image's data is adaptively blurred using nonlinear scale
+space, so noise is reduced without interrupting the image's
+data. When non-linear diffusion is used, luminance is
+modelled by increasing the scale levels. Flow functions are
+diverging in a partially differential equation that controls
+diffusion. A nonlinear partial differential equation with
+nonlinear scale-space is responsible for the diffusion of
+luminance in an image. Here is an equation for nonlinear
+diffusion:
+
+= 2: 8, 9, F − 2: 8, 9,
+= * 8, 9, − * 8, 9, F
+− * 8, 9,
+
+∗ ; 8, 9
+8
+
+An initial image ; 8, 9 is convoluted with a Gaussian
+blur 2: 8, 9, F
+(at F .) to form * 8, 9, . For
+local maxima and minima, pixels are compared
+8, 9,
+with eight neighbour pixels at the same scale as well as nine
+neighbour pixels up and down. Keypoint candidates are pixels
+with the lowest or highest value among all pixels.
+2) Keypoint localization:
+It tends to generate a lot of candidate keypoints, some of
+which are unstable, as a result of scale-space extreme
+detection. Consequently, after identifying key points by
+comparing pixels with their neighbours, they are interpolated
+for increased precision. To obtain more accurate key point
+locations, Taylor series expansions of the second order are
+used. In the following example, we expand 8, 9,
+as a
+Taylor expansion, assuming a candidate keypoint as the
+origin:
+
+*+
+3
+= -./
+, 0, , ∇*+
+,
+Scale parameter t signifies the image scale, gradient
+operator is gradient, divergence is divergence, luminance is
+LI, and conductivity is
+, 0, ,, which is given by
+0, = 2 |∇*+4
+
+4
+0, |
+A smooth Gaussian version of an image is called *+4 , and
+its gradient is called *+4 . Our study evaluates one of Perona
+and Malik's two conductivity function. Using AKAZE as a
+reference, 2 conductivity functions that support larger areas
+compared to smaller ones:
+
+J
+1
+H + HJ
+H
+9
+−
+H
+2
+H
+Using 8 as a candidate keypoint, and its derivatives can
+be calculated, while H = 8, 9,
+Represents a shift from
+this keypoint. In order to determine the extremum H
+K , we can
+take the derivative forward and set it to zero. (see Figure 1):
+
+H =
+
+1
+5
+1|∇*+4 | Ω
+In relation to edge information, Ω controls the diffusion
+level. In general, the lower the value, the more edge
+information will be retained. The pattern is derived
+empirically by taking 70% of the gradient histogram as the Ω.
+Throughout the AKAZE, scale images are generated using fast
+explicit diffusion (FED). Simple explicit techniques like FED
+make use of fluctuating time step sizes, which makes them
+extremely faster than common explicit techniques. In order to
+improve rotation invariance, AKAZE detectors detect
+radiation using the Scharr filter and Hessian matrix, and we
+have the determinant. As a result, AKAZE's descriptor relies
+on MLDB, which is a highly effective algorithm. In this
+research, AKAZE was used because it is invariant to scale,
+rotation and distinctive at different scales.
+2 =
+
++
+
+J
+
+K =−
+H
+
+@L
+
+10
+H
+H
+When H
+K is higher in any dimension, compared to previous
+keypoints, the extremum lies closer to a different keypoint. A
+new keypoint will be chosen for the candidate, and
+interpolation will be carried out around it. An extremum
+position can be estimated by adding the final offset H
+K to the
+candidate keypoint's position. By estimating DW as a secondorder Taylor expansion, it is estimated that key points with low
+contrast will be removed at the offset. Hence, low-contrast
+points should be removed. Excluding key points occurs when
+the intensity of an extremum falls below a certain threshold.
+As a result, the localization of keypoint candidates is
+accomplished by eradicating low-contrast contrast keypoints
+during the process.
+
+C. Scale-invariant feature transform (SIFT)
+The Analyzing a 128-dimensional feature vector can
+identify SIFT features. Following are the four steps that must
+be completed in order for the process to be completed:
+
+3) Orientation assignment:
+Lastly, we assign orientations based on local gradients in
+the image. A local image property assigns orientation
+information for each key point. A Gaussian image L must first
+be calculated. Next, we calculate the magnitude gradient m
+and orientation n:
+
+1) Scale-space extrema detection:
+Gaussian Differences (DoG) are first used to detect scale
+space extremes. This image is defined in terms of its scale
+1103
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:02:45 UTC from IEEE Xplore. Restrictions apply.
+
+2024 7th International Conference on Contemporary Computing and Informatics (IC3I)
+M 8, 9
+= N * 8 + 1, 9 − * 8 − 1, 9
+
++ * 8, 9 + 1 − * 8, 9 − 1
+
+* 8, 9 + 1 − * 8, 9 − 1
+= tan@L R
+S
+* 8 + 1, 9 − * 8 − 1, 9
+
+11
+
+O 8, 9
+12
+
+Gradient orientations of sample points generate orientation
+histograms, and the peak locations in these histograms
+determine further orientation.
+Keypoint descriptor: The last step is the creation of
+keypoint descriptors by using the local gradient data that was
+used above. The key point is located in a 16 by 16
+neighbourhood that is divided into 16 subblocks of 4 by 4
+each. Orientation histograms are generated for each subblock. Consequently, 128 bin values can be accessed.
+Descriptors for keypoints are formed as vectors. The
+robustness of the system is also enhanced through several
+measures such as noise addition, rotation, and scaling.
+IV.
+
+Fig. 3. Results of cats images: (a) unique image; (b) meddled image; (c)
+SURF detector; (d) SIFT detector; (e) AKAZE detector.
+
+RESULTS AND ANALYSIS
+
+After We present our results, analyze them, and compare
+them to those of existing experiments in this section.
+Simulations are performed using Python image processing
+library version 3.9 and OpenCV 4.8.1.78's image processing
+library. Windows 11 Home is installed on the laptop, which is
+powered by an Intel Core i3 processor running at 2.19GHz. In
+this experiment, we evaluated our algorithm on the dataset
+NB-CASIA. CMFD experiments are highly dependent on
+parameters. To achieve optimum outputs, we used a variety of
+parameters and thresholds. Keypoint threshold parameters are
+0.0005 for AKAZE feature detectors in this method.
+In FIGURE 2-4, This method detects both single-copymove forgeries as well as multiple-copy-move forgeries. The
+output image with the detected tampered area can also be seen
+in Figures 2-3, which is based on the natural dataset. Detecting
+the tampered area in a smooth region is another challenging
+task when detecting copy-move forgeries. An image is
+processed by the AKAZE, SURF, and SIFT algorithms. As far
+as visual results are concerned, we can determine smooth
+regions fairly well using our method. The default parameters
+of A-KAZE, SIFT, SURF, and KAZE do not allow feature
+extraction in tampered regions. These points can, however, be
+reached by SURF and a-KAZE at small thresholds. In order to
+use CMFD with keypoints, the number of points obtained
+must be sufficient.
+
+Fig. 4. Results of rotated-tree-lake images: (a) unique image; (b) meddled
+image; (c) SURF detector; (d) SIFT detector; (e) AKAZE detector.
+
+CMFD approaches based on keypoints were compared
+experimentally to the proposed method. It was more accurate
+than existing method recalled more data, and was more
+accurate than others. A multi-copies-moves test of the
+proposed method is conducted as well.
+
+Fig. 5. Accuracy (%) of SIFT, SURF and AKAZE.
+
+Fig. 2. Results of mountain hills: (a) unique image; (b) meddled image; (c)
+SURF detector; (d) SIFT detector; (e) AKAZE detector
+
+1104
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:02:45 UTC from IEEE Xplore. Restrictions apply.
+
+2024 7th International Conference on Contemporary Computing and Informatics (IC3I)
+
+V.
+
+[12] J. Ouyang, Y. Liu, and M. Liao, "Robust copy-move forgery detection
+method using pyramid model and Zernike moments," Multimed. Tools
+Appl., vol. 78, no. 8, pp. 10207–10225, Apr. 2019, doi:
+10.1007/s11042-018-6605-1.
+[13] N. B. Abd. Warif, Mohd. Y. I. Idris, A. W. Abdul Wahab, R. Salleh, and
+A. Ismail, "CMF-iteMS: An automatic threshold selection for detection
+of copy-move forgery," Forensic Sci. Int., vol. 295, pp. 83–99, Feb.
+2019, doi: 10.1016/j.forsciint.2018.12.004.
+[14] M. Emam, Q. Han, and X. Niu, "PCET based copy-move forgery
+detection in images under geometric transforms," Multimed. Tools
+Appl., vol. 75, no. 18, pp. 11513–11527, Sep. 2016, doi:
+10.1007/s11042-015-2872-2.
+[15] Y. Rodriguez-Ortega, D. M. Ballesteros, and D. Renza, "Copy-Move
+Forgery Detection (CMFD) Using Deep Learning for Image and Video
+Forensics," J. Imaging, vol. 7, no. 3, p. 59, Mar. 2021, doi:
+10.3390/jimaging7030059.
+[16] X. Wang, C. Wang, L. Wang, H. Yang, and P. Niu, "Robust and effective
+multiple copy-move forgeries detection and localization," Pattern Anal.
+Appl., vol. 24, no. 3, pp. 1025–1046, Aug. 2021, doi: 10.1007/s10044021-00968-y.
+[17] J. Yang, Z. Liang, Y. Gan, and J. Zhong, "A novel copy-move forgery
+detection algorithm via two-stage filtering," Digit. Signal Process., vol.
+113, p. 103032, Jun. 2021, doi: 10.1016/j.dsp.2021.103032.
+[18] X. Wang, G. He, C. Tang, Y. Han, and S. Wang, "Keypoints-Based
+Image Passive Forensics Method for Copy-Move Attacks," Int. J.
+Pattern Recognit. Artif. Intell., vol. 30, no. 03, p. 1655008, Mar. 2016,
+doi: 10.1142/S0218001416550089.
+[19] B. Yang, X. Sun, H. Guo, Z. Xia, and X. Chen, "A copy-move forgery
+detection method based on CMFD-SIFT," Multimed. Tools Appl., vol.
+77, no. 1, pp. 837–855, Jan. 2018, doi: 10.1007/s11042-016-4289-y.
+[20] D. Cozzolino, G. Poggi, and L. Verdoliva, "Efficient dense-field copy–
+move forgery detection," IEEE Trans. Inf. Forensics Secur., vol. 10, no.
+11, pp. 2284–2297, 2015.
+[21] C.-M. Pun, X.-C. Yuan, and X.-L. Bi, "Image forgery detection using
+adaptive oversegmentation and feature point matching," Ieee Trans.
+Inf. Forensics Secur., vol. 10, no. 8, pp. 1705–1716, 2015.
+[22] N. B. A. Warif, A. W. A. Wahab, M. Y. I. Idris, R. Salleh, and F.
+Othman, "SIFT-symmetry: a robust detection method for copy-move
+forgery with reflection attack," J. Vis. Commun. Image Represent., vol.
+46, pp. 219–232, 2017.
+[23] Costanzo, I. Amerini, R. Caldelli, and M. Barni, "Forensic analysis of
+SIFT keypoint removal and injection," IEEE Trans. Inf. Forensics
+Secur., vol. 9, no. 9, pp. 1450–1464, 2014.
+[24] L. Yu, Q. Han, and X. Niu, "Feature point-based copy-move forgery
+detection: covering the non-textured areas," Multimed. Tools Appl.,
+vol. 75, no. 2, pp. 1159–1176, Jan. 2016, doi: 10.1007/s11042-0142362-y.
+[25] F. Yang, J. Li, W. Lu, and J. Weng, "Copy-move forgery detection based
+on hybrid features," Eng. Appl. Artif. Intell., vol. 59, pp. 73–83, 2017.
+[26] Jain, A. Kumar, A. P. Shukla, H. Alshazly, H. Elmannai, A. D. Algarni,
+R. Kumar, and J. Yadav, "Smart communication using 2D and 3D mesh
+network-on-chip," Intelligent Automation & Soft Computing, vol. 34,
+no. 3, 2022.
+[27] S. Gowroju and S. Kumar, "Robust pupil segmentation using UNET
+and morphological image processing," in 2021 International Mobile,
+Intelligent, and Ubiquitous Computing Conference (MIUCC), 2021,
+pp. 105-109.
+[28] S. Rani, S. Gowroju, and S. Kumar, "IRIS based recognition and
+spoofing attacks: A review," in 2021 10th International Conference on
+System Modeling & Advancement in Research Trends (SMART),
+2021, pp. 2-6.
+[29] Jain, T. Mehrotra, A. Sisodia, S. Vishnoi, S. Upadhyay, A. Kumar, C.
+Verma, and Z. Illés, "An enhanced self-learning-based clustering
+scheme for real-time traffic data distribution in wireless networks,"
+Heliyon, vol. 9, no. 7, 2023.
+[30] T. Mehrotra and G. Sudhamsu, "Energy efficient and fault tolerant area
+monitoring for sensor networks," in 2023 International Conference on
+Distributed Computing and Electrical Circuits and Electronics
+(ICDCECE), 2023, pp. 1-6.
+[31] Tiwari, S. Kumar, T. Mehrotra, and R. K. Singh, "Deep neural
+networks for comprehensive multimodal emotion recognition," in 2023
+International Conference on Disruptive Technologies (ICDT), 2023,
+pp. 462-466.
+
+CONCLUSION
+
+Changing the location of an image on the screen conceals
+tampering without being obvious. These types of attacks can
+tamper with images, which makes forensics concerned about
+their authenticity. Image manipulation has become easier over
+the past few years thanks to powerful software development.
+The use of forgery detection techniques has been the subject
+of many research papers. It is also impossible to detect smooth
+forged regions with keypoint-based methods when there are
+insufficient keypoints. The forgery of copy-moves is
+discussed in this work. We evaluated three keypoint-based
+approaches: SIFT SURF and A-KAZE. Our experiments
+demonstrated that the A-KAZE scheme significantly
+outperforms the others, providing superior detection
+performance under various attack scenarios. The A-KAZE
+approach excels particularly in detecting forgeries within
+homogeneous regions affected by large-scale attacks. When
+applied to the NB-CASIA dataset, A-KAZE achieved the
+highest detection accuracy at 98.98%, compared to 89.2%
+with SIFT and 93.9% with SURF, while also maintaining the
+lowest computational cost. A-KAZE has the potential to offer
+substantial improvements over traditional methods when it
+comes to copy-move forgery detection, as demonstrated by
+these results. This advancement can enhance the reliability
+and effectiveness of CMFD tools in various practical
+applications, ensuring better integrity and authenticity of
+digital images.
+REFERENCES
+[1]
+
+H. Farid, "Digital forensics in a post-truth age," Forensic Sci. Int., vol.
+289, pp. 268–269, 2018.
+[2] P. Rani, P. N. Singh, S. Verma, N. Ali, P. K. Shukla, and M. Alhassan,
+"An implementation of modified blowfish technique with honey bee
+behavior optimization for load balancing in cloud system
+environment," Wirel. Commun. Mob. Comput., vol. 2022, pp. 1–14,
+2022.
+[3] H. Ding, L. Chen, Q. Tao, Z. Fu, L. Dong, and X. Cui, "DCU-Net: a
+dual-channel U-shaped network for image splicing forgery detection,"
+Neural Comput. Appl., vol. 35, no. 7, pp. 5015–5031, Mar. 2023, doi:
+10.1007/s00521-021-06329-4.
+[4] P. Rani, N. Hussain, R. A. H. Khan, Y. Sharma, and P. K. Shukla,
+"Vehicular intelligence system: time-based vehicle next location
+prediction in software-defined internet of vehicles (SDN-IOV) for the
+smart cities," Intell. Things AI-IoT Based Crit.-Appl. Innov., pp. 35–
+54, 2021.
+[5] K. Sitara and B. M. Mehtre, "Digital video tampering detection: An
+overview of passive techniques," Digit. Investig., vol. 18, pp. 8–22,
+2016.
+[6] S. Verma et al., "An automated face mask detection system using
+transfer learning based neural network to preventing viral infection,"
+Expert Syst., p. e13507, 2024.
+[7] Christlein, C. Riess, J. Jordan, C. Riess, and E. Angelopoulou, "An
+evaluation of popular copy-move forgery detection approaches," IEEE
+Trans. Inf. Forensics Secur., vol. 7, no. 6, pp. 1841–1854, 2012.
+[8] M. A. Qureshi and M. Deriche, "A bibliography of pixel-based blind
+image forgery detection techniques," Signal Process. Image Commun.,
+vol. 39, pp. 46–74, 2015.
+[9] N. B. Abd Warif et al., "Copy-move forgery detection: survey,
+challenges and future directions," J. Netw. Comput. Appl., vol. 75, pp.
+259–278, 2016.
+[10] H. Li, W. Luo, X. Qiu, and J. Huang, "Image Forgery Localization via
+Integrating Tampering Possibility Maps," IEEE Trans. Inf. Forensics
+Secur., vol. 12, no. 5, pp. 1240–1252, May 2017, doi:
+10.1109/TIFS.2017.2656823.
+[11] R. Dixit and R. Naskar, "Review, analysis and parameterization of
+techniques for copy–move forgery detection in digital images," IET
+Image Process., vol. 11, no. 9, pp. 746–759, Sep. 2017, doi:
+10.1049/iet-ipr.2016.0322.
+
+1105
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:02:45 UTC from IEEE Xplore. Restrictions apply.
+
+2024 7th International Conference on Contemporary Computing and Informatics (IC3I)
+[32] G. K. Rajput, S. Kundu, T. Mehrotra, and L. Kumar, "Social contact
+analysis and user profiling for online shopping in Internet of
+Everything," in 2022 International Conference on Computational
+Intelligence and Sustainable Engineering Solutions (CISES), 2022, pp.
+324-328.
+[33] Amerini, L. Ballan, R. Caldelli, A. Del Bimbo, L. Del Tongo, and G.
+Serra, "Copy-move forgery detection and localization by means of
+robust clustering with J-Linkage," Signal Process. Image Commun.,
+vol.
+28,
+no.
+6,
+pp.
+659–669,
+Jul.
+2013,
+doi:
+10.1016/j.image.2013.03.006.
+[34] P. Perona and J. Malik, "Scale-space and edge detection using
+anisotropic diffusion," IEEE Trans. Pattern Anal. Mach. Intell., vol. 12,
+no. 7, pp. 629–639, 1990.
+
+1106
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:02:45 UTC from IEEE Xplore. Restrictions apply.
+
+

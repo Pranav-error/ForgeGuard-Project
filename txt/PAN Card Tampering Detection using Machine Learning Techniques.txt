@@ -1,0 +1,746 @@
+2024 Second International Conference on Inventive Computing and Informatics (ICICI)
+
+2024 Second International Conference on Inventive Computing and Informatics (ICICI) | 979-8-3503-7329-5/24/$31.00 ©2024 IEEE | DOI: 10.1109/ICICI62254.2024.00059
+
+PAN Card Tampering Detection using Machine
+Learning Techniques
+H Abdurrahman Lalsudhesh
+Department of Information
+Technology
+Sri Sivasubramaniya Nadar College of
+Engineering Chennai, India
+abdurrahman2010513@ssn.edu.in
+
+R Keerthana
+Department of Information
+Technology
+Sri Sivasubramaniya Nadar College of
+Engineering Chennai, India
+keerthana2010277@ssn.edu.in
+
+Dr. N. Radha
+Department of Information
+Technology
+Sri Sivasubramaniya Nadar College of
+Engineering Chennai, India
+radhan@ssn.edu.in
+
+Dr. R. Swathika
+Department of Information
+Technology
+Sri Sivasubramaniya Nadar College of
+Engineering Chennai, India
+
+Abstract— In an era dominated by digital transactions and an
+increasing reliance on electronic identity verification, the need
+for robust security measures has become important. As people
+and
+organizations
+increasingly
+undertake
+financial
+transactions, deal with sensitive data, and perform numerous
+online activities, the vulnerability to cybersecurity risks and
+identity fraud has become a serious concern. The machine
+learning-based PAN card tampering detection system offers an
+innovative solution to address the growing issue of identity fraud
+and document manipulation, particularly within the financial
+and government sectors. The dataset consists of 40 real and 40
+fake PAN cards and also 20 real and 9 fake Aadhar cards. The
+system uses CNNs, a specific type of deep learning model
+intended for image processing, to mitigate this problem. The
+performance of CNN is also compared against various pretrained models like ResNet50, VGG16, Xception and
+MobileNetV2. After thorough analysis, this study concluded
+that CNN is the best performing model with an accuracy of
+100%, loss 0.14% and average execution time of 0.24%. It
+meticulouslyanalyzes any discrepancies and variations such as
+alterations intext, wrong numerical data and tampering with the
+photos. The incorporation of CNN into this novel system not
+only resolves the existing vulnerabilities related to PAN cards but
+also lays the groundwork for an identity verification
+environment that is both more secure and reliable in the context
+of financial and governmental transactions.
+
+based PAN card tampering detection system is a significant
+step forward in identity verification. This system, with the aid
+of CNNs, provides a strong solution to the existing gaps in
+identity verification. Such an approach provides efficient
+security for the PAN cards. CNN is a specialized neural
+network designed to process images using exceptional
+accuracy. A significance of such networks is their ability to
+autonomously detect the features at large scale. This feature
+removes the requirement for manual feature engineering.This
+is an increased level of efficiency and enables the CNNs to
+detect patterns and features from data regardless of location,
+orientation, size, or translation.
+
+swathikar@ssn.edu.in
+
+CNNs follow a specific architecture, having several key
+components that will replace the human brain's capacity in
+recognizing patterns and features in images. Convolutional
+layers, pooling layers, fully connected layers, and ReLU
+activation functions are some of these constituents.
+Convolutional layers generate the image input by use of
+filters or kernels. Such layers enable the network to detect
+specific patterns or images such as lines, curves, or shapes.
+The model becomes non-linear when the ReLU activation
+function is used. The model can now learn more intricate
+patterns thanks to it. The input's spatial dimension is reduced
+using pooling layers. This helps to lower the model's
+computing cost and hence avoid overfitting. Finally, fully
+connected layers allow the network to use the observed
+features to forecast the input.
+
+Keywords— PAN (Permanent Account Number) Card, Aadhar
+card, CNN (Convolutional Neural Network), forgery, identity
+fraud, security.
+
+The integration of CNNs into the PAN card tampering
+detection system provides a better position to critically
+analyze the PAN card and Aadhar card images. Byidentifying
+subtle signs of tampering or forgery, it significantly enhances
+the security and reliability of identity verification procedures.
+Such innovative implementation of the CNNs not only
+upgrades the current vulnerabilities of the PAN cards but also
+paves the way for a more secure and trustworthy ecosystem
+in identity verification for financial and governmental
+transactions. Furthermore, recognizing theimperative role of
+seamless identity verification in various sectors, the system
+extends its capabilities by providing software for Know Your
+Customer (KYC) processes. This system enhances the
+efficiency and security of identity verification across sectors,
+offering a streamlined and standardized approach to KYC
+procedures.
+
+Ⅰ. INTRODUCTION
+One critical aspect of this security landscape is the
+safeguarding of identity documents such as PAN (Permanent
+Account Number) cards and Aadhar cards against tampering
+and fraudulent activities. Conventional approaches to
+document verification are proving insufficient in combating
+the constantly evolving tactics employed by fraudsters. The
+inadequacy of reactive strategies urges the need for a
+proactive and technologically sophisticated solution tailored
+to address the nuanced challenges of document security,
+especially concerning PAN cards. The absence of such a
+comprehensive system exacerbates the inherent risks
+associated with tampering, necessitating the development of
+a dynamic framework͘In India, the significance of the PAN
+card as a pivotal element in financial transactions, banking
+verifications, corporate processes, and government services
+is indisputable. This necessitates the development of a
+comprehensive and dynamic system that not only creates a
+diverse dataset for training and validation but also optimizes
+preprocessing for accurate tampering identification. Hence,
+CNN will be employed by this system. The machine learning-
+
+979-8-3503-7329-5/24/$31.00 ©2024 IEEE
+DOI 10.1109/ICICI62254.2024.00059
+
+There are 5 sections in this research study. Section Ⅱ
+describes the literature survey of the existing methods and
+comparing their objectives, proposed systems, implemented
+methodologies and limitations. Section Ⅲ describes the
+proposed system and the steps to implement the system.
+Section Ⅳ discusses about
+
+316
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:02:45 UTC from IEEE Xplore. Restrictions apply.
+
+the different algorithms used for testing the system, which are
+CNN, Xception, ResNet50, VGG16 and MobileNetV2. The
+final section, Section Ⅴ discusses about the experimental
+results and an analysis of the best performing model among
+the five. The last section concludes this research study.
+
+individually in the German dataset [16]. CNNs outperform
+other DL methods and Autoencoders provide a solution for
+dynamic fraud patterns [17]. In [11], researchers discussed
+about detecting copy-move forgery using CMFD approaches
+like block based and key point-based methods. SIFT and
+SURF are some of the techniques used in CMFD where SIFT
+is robust against scaling and SURF has faster matching
+speeds.In [12], the study discussed about the usage of LBP
+(Local Binary pattern) to approach a texture-based analysis
+of document forgery as LBP descriptors are computed from
+image patches around text regions to capture texture
+discontinuities indicative of manipulation. It achieved a
+forgery detection rate of 7.38% and a low false positive ratio
+of 0.05%.
+
+II. RELATED WORKS
+This research study highlights the challenges associated with
+identity fraud and document tampering, emphasizing the
+vulnerabilities inherent in traditional methods of document
+verification. Notably, the utilization of machine learning,
+specifically CNN has gained prominence in addressing
+similar challenges in various domains.
+The work in [1] highlights the critical role of feature selection
+in fraud detection techniques of credit card using genetic
+algorithms to optimize feature selection and SMOTE to
+address the issue of data imbalance. It also does not address
+techniques to adapt to evolving patterns. Fuzzy membership
+functions are proposed as a solution to the data imbalance
+issue in [2] and the privacy concerns around the use of credit
+card transaction data are not discussed in detail. The research
+in [3] allows several parties to cooperatively train machine
+learning models without disclosing their private information
+to one another. It also addresses the data privacy concerns by
+utilizing encryption techniques such as SMPC and
+homomorphic encryption. Privacy preservation is not
+discussed about in [1] and [2]. In [4], the study utilizes
+decision tree classifiers as one of the primary methods and
+addresses privacy and security concerns by suggesting
+strategies such as data anonymization and secure data
+handling.
+
+In [13], researchers have proposed a new method to
+distinguish documents produced by laser printers and inkjet
+printers using SVM by separating individual characters and
+determining the origin ofthe document based on the aggregate
+vote from decisions on individual characters. The accuracy
+reached 90% for inkjet printers and most laser printers and
+copiers and was robust for JPEG compression. In [14], have
+proposed a copy-move forgery detection technique utilizing
+AKAZE features and RANSAC for eliminating false matches
+and the robustness outperformed SIFT and SURF based on
+manipulators like white gaussian noise, rotation and JPEG
+compression. In [15], have presented how to detect duplicated
+regions in natural images using DWT which can only detect
+translationduplicate forgery and KPCA which can detect both
+translation-flip and translation-rotation duplications and also
+achieves the highest true positive rates with false positives.
+
+In [5], researchers focused on fraud detection in credit cards
+using Local outlier factor and Isolation Forest algorithms and
+the result of this research indicates an accuracy of 99.6% but
+with a low precision of 28-33% due to imbalance between
+valid and fraudulent transactions. In [6], to handle the credit
+card dataset imbalance issue, Matthew’s correlation
+coefficient is identified as a strong measure for this issue and
+the SMOTE method helps in improving the performance of
+the classifiers. In [7], blockchain networks can be used to
+enhance security when it comes to credit card transactions
+and employs SHA 256 to secure data at each stage and uses
+Random Forest (RF)to optimize model accuracy. The study
+in [8] employs ANN for fraud detection in credit cards as it
+outperforms other models like SVM and KNN in terms of
+performance metricslike accuracy, precision and recall.
+In [9], the study shows the usefulness of RF in image fraud
+detection as it overcomes the risk of overfitting and achieves
+an accuracy of 90% in classifying fake cards. The drawbacks
+of SVM, cluster analysis, and Naive Bayes classifiers are also
+addressed. In [10], after comparing the performance of
+various models to detect credit card fraud, SVM, KNN and
+CNN excelled individually using the European dataset,
+ensemble methods combining KNN, SVM, and Random
+Forest yield improved MCC and AUC using the Australian
+dataset and SVM, Random Forest, and CNN excelled
+Fig 1. Architecture diagram of the proposed system
+
+317
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:02:45 UTC from IEEE Xplore. Restrictions apply.
+
+through techniques like flipping or rotation. The key steps in
+feature extraction are image preprocessing, resizing,
+grayscale conversion and noise reduction. Text recognition
+extracts data like cardholder’s name and PAN number, while
+numerical data extraction focusses on birth dates. Region
+analysis spots tampering signs, edge detection highlights card
+edges and image fusion combines modalities for better
+detection. These features form a feature vector to distinguish
+genuine from tampered cards efficiently. Essential features
+are extracted from these preprocessed images to create a rich
+dataset that encapsulates the distinctive characteristics
+associated with tampering. Techniques such as image
+normalization, cropping, thresholding and edge detection are
+applied to ensure the model's effectiveness in identifying
+subtle tampering cues.
+
+Figure 1 shows the entire architecture of the proposed system
+which has been implemented. In the initial stage of the
+process, image preprocessing happens and then followed by
+feature extraction. The result is then passed to various models
+like CNN, VGG16, Xception, MobileNetV2 and ResNet50
+and each model gives its own result by classifying the image
+as Real or Fake. The next section talks about the proposed
+system and the methodology to implement the system.
+III. PROPOSED WORK
+The PAN card verification process is a comprehensive
+system designed to ensure the authenticity and integrity of
+uploaded PAN card images for KYC validation. A web
+application will be developed and provided to user agencies.
+These agencies will then authenticate the genuineness of the
+submitted PAN cards by verifying them through the
+application. Below is a summary outlining the key steps of
+the procedure:
+
+3)
+Developing optimized model for PAN card
+tampering detection: A tailored CNN model is developed,
+leveraging the extracted features from the preprocessed
+images. The model is rigorously fed the dataset and trained
+meticulously and is equipped to handle real-life scenarios. It
+is constantly optimized and fine-tuned, which is yet another
+critical aspect of the optimization process. This entails
+modifying the pre-trained model's parameters to more closely
+match the unique properties of PAN card photos and the types of
+tampering it may undergo. This fine-tuning enhances the
+model's sensitivity to tampering cues while maintaining a
+balance to avoid false positives. Overall, the development and
+optimization of the CNN model involves a strategic
+combination of advanced neural network architecture,
+transfer learning, fine-tuning, and careful consideration of
+sensitivity and specificity.
+
+1)
+Collecting diverse PAN card images, annotating for
+tampering types: A diverse dataset of PAN card images and
+Aadhar card images are acquired to ensure a representative
+sample which include variations in lighting conditions,
+backgrounds, and quality to mimic real-world scenarios. It
+contains 40 Real PAN card images which were generated
+using the latest PAN card template available in government
+websites and 40 fake PAN card images which were generated
+by tweaking the features of the same template using Canva
+online image editor tool. In addition, 20 real Aadhar card
+images and 9 fake Aadhar card images which were generated
+through the same process were used to analyze the efficiency
+of the model upon running on different datasets. The current
+work involves using 40 real cards and an equal number of
+fake ones. Enhancing the dataset’s size and introducing
+diverse discrePANcies can increase reliability. Also, the web
+application does not store user data. Therefore, the need for
+security measures is not considered for this application.
+However, securing the PAN card generation process is the
+scope of this future work.
+
+4)
+Developing a system for KYC verification model
+integration with clear documentation: An intricately
+designed application is created to facilitate the seamless
+integration of the developed tampering detection model into
+existing KYC verification processes. This application serves
+as a bridge between the tampering detection model and
+various platforms or applications where KYC verifications
+take place. The documentation generated for the system is a
+key component of this process. It provides comprehensive
+guidance for developers and stakeholders, offering a detailed
+understanding of the system's capabilities, input
+requirements, and expected output. The documentation not
+only serves as a technical reference but also includes practical
+examples and use cases to assist developers in effectively
+implementing the tampering detection functionality within
+their KYC workflows.
+
+2)
+Preprocessing images, extracting key features for
+tampering detection: The collected PAN card images and
+Aadhar card images undergo thorough preprocessing to
+standardize their format, resolution, and orientation. CNN
+preprocessing involves steps like resizing images to a
+uniform size, normalizing pixel values, and augmenting data
+
+5)
+Evaluating model metrics and deploying as a
+website for integration: The created model is put through a
+rigorous evaluation process where its performance is
+measured against a validation dataset using measures
+including precision, recall, AUC-ROC, specificity, and F1
+score. Upon achieving satisfactory results, the model is
+deployed as a website, making it accessible for integration
+into diverse platforms and applications. Continuous
+monitoring is established to ensure optimal functionality and
+responsiveness.
+
+318
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:02:45 UTC from IEEE Xplore. Restrictions apply.
+
+6)
+Iterating model based on feedback and monitoring
+for emerging techniques: The deployed model is subject to an
+iterative process based on user feedback and evolving
+requirements. Regular updates and improvements are made
+to address any identified shortcomings or adapt to emerging
+tampering techniques. Continuous monitoring for emerging
+trends and advancements in tampering methods ensures the
+model remains resilient and adaptive over time. This iterative
+approach ensures the sustained effectiveness and relevance of
+the tampering detection system in a dynamically changing
+landscape. Hyperparameters settings that control how a
+model learns, including factors like the learning rate, neural
+network layers, or decision tree depth have to be fine-tuned
+to get optimum performance. The next section talks about the
+algorithms used in the system and their descriptions.
+
+Figure 2 shows the architecture of the CNN model which has
+been implemented. Preprocessing the images happens in the
+initial stage of the process where the uploaded image is being
+cropped, resized and modified into a grayscale image. Then
+the preprocessed image is passed for feature extraction where
+various features like Name, Signature, Photo, PAN number
+and QR code are extracted. These features are passed to the
+CNN model for classification and the model gives the result
+as a Real or Fake image based on the classification done by
+the model.
+The PAN card dataset was tested on four other ML models in
+addition to CNN to check the efficiency of the dataset.
+1) VGG16: This is the CNN model that uses 13 convolution
+and 3 fully connected layers. It is known for its simplicity and
+effectiveness. The image size is (150, 150, 3). This model
+consists of 4 layers. The first layer is the base model which is
+the VGG16 model with 14,714,688 parameters. The second
+layer is the flattening layer which converts the 4x4x512
+feature maps from the base model into a 1D array. The third
+layer is the first dense layer with 512 neurons that uses the
+ReLU function as the activation function with 41,94,816
+parameters. The fourth layer is the second dense layer with 1
+neuron that uses the Sigmoid activation function with 513
+parameters.
+
+Ⅳ. ALGORITHM USED
+CNN, a deep learning algorithm specifically designed for
+image processing and recognition tasks, will be the one
+employed for this system. Convolutional, pooling, and fully
+connected layers are some of the layers that make it up. The
+image size is (150, 150, 3). There are seven layers which
+consist of 2 convolution layers, 2 max pooling layers, 1
+flattening layer and 2 dense layers. There are a total of 32
+filters with kernel size (3, 3) using ReLU as the activation
+function. The max pooling layer has a size of (2, 2). The first
+dense layer has 128 neurons and the second layer has 30
+neurons.
+
+2) ResNet50: This is a type of CNN model which uses
+residual blocks in its architecture that introduce skip
+connections that have been observed to reduce the vanishing
+gradient problem. Residual blocks consist of multiple
+convolutional layers, typically with filters of 3x3. The image
+size is (150, 150, 3). There are a total of 4 layers. The first
+layer is the base model, the ResNet50 with 23, 587, 712
+parameters. The second layer is the flattening layer which
+converts the 5x5x2048 feature maps from the base model into
+a 1D array. The third layer is the first dense layer that has 512
+neurons with the ReLU activation function and the second
+fourth layer is the second dense layer with 1 neuron that uses
+sigmoid function as the activation function.
+3) MobileNetV2: It is a CNN model that uses the concepts of
+residual blocks that helps preserve information flow while
+using a minimal number of parameters and computations.
+The image size is (150, 150, 3). There are a total of 4 layers.
+The first layer is the base model, the MobileNetV2 with
+2,257,984 parameters. The second layer is the
+AveragePooling2D. The third layer is the first dense layer
+that has 512 neurons with the ReLU activation function and
+the second fourth layer is the second dense layer with 1
+neuron that uses sigmoid function as the activation function.
+4) Xception: The spatial and channel-wise convolutions are
+divided into two distinct processes by Xception using a
+depth-wise separable convolution algorithm. The image size
+is (150, 150, 3). There are four layers in this model, the base
+model layer, the AveragePooling2D layer, the first dense
+layer which has 512 neurons and uses ReLU as the activation
+function and the second dense layer which has 1 neuron that
+uses Sigmoid activation function. The final section talksabout
+the experimental results and the comparison of
+
+Fig 2 Architecture diagram of the proposed system for CNN
+
+319
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:02:45 UTC from IEEE Xplore. Restrictions apply.
+
+performance of all models and the performance of the best
+performing model.
+
+accuracy and 0.14% loss percentage, the CNN model
+performs remarkably well in correctly identifying data items.
+
+Ⅴ. EXPERIMENTAL RESULTS
+
+Furthermore, its 0.24 second average execution time
+demonstrates effective processing power, which is essential
+for real-time applications where speed is of the essence. CNN
+outperforms other models in terms of accuracy and execution
+time, even though other models like VGG16 and ResNet50
+also show good accuracy rates. CNN has been shown to be
+the most consistent and reliable model among those studied,
+making it the model of choice for jobs requiring accuracy and
+quick inference.
+
+In this study, two different datasets, PAN card and Aadhar
+card were used to analyze the efficiency of the system. While
+the model has an accuracy of 100% for PAN card dataset, the
+CNN model only predicts whether the Aadhar card is
+authentic or fraudulent with an accuracy of 89% while
+determining the authenticity of the Aadhar card images. It had
+a runtime of about 0.24 seconds and with the loss of 0.1405
+seconds. This was due to the diversity of the PAN card dataset
+in comparison with the Aadhar card dataset as the larger
+volume of diverse images which included changes in name,
+size of photograph and placement of PAN number yielded in
+more comprehensive results compared to the Aadhar card
+dataset which limited the scope of experimentation.
+Table 1: Comparing results of different models on an image
+
+MODELS
+
+Accuracy Loss %
+
+Avg Execution
+Time (in sec)
+
+CNN
+
+100
+
+0.14
+
+0.24
+
+VGG16
+
+100
+
+0.03
+
+0.4
+
+ResNet50
+
+93.5
+
+0.17
+
+0.41
+
+MobileNetV2
+
+92.5
+
+0.16
+
+0.26
+
+Xception
+
+70.9
+
+0.5
+
+0.31
+
+Fig 3. Plot accuracy loss of CNN
+
+The performance of the various other models was evaluated
+on the same PAN card dataset. From the table 1, it is clearly
+visible that the VGG16 model achieved the highest accuracy
+of 100% with a runtime of 0.40 seconds. Comparing it to the
+original tampering detection system of the CNN model, there
+was only a marginal difference of 0.2%. The ResNet50 model
+followed with an accuracy of 93.5% and a slightly longer
+runtime of 0.41 seconds, showing a marginal difference of
+0.35% with the base CNN model. The MobileNetV2 model
+performed with 92.5% accuracy and a faster runtime of 0.26
+seconds, with a marginal difference of 0.4% compared to the
+original CNN model. However, the Xception model lagged
+with an accuracy of 70.9% and a runtime of 0.31 seconds,
+showing a marginal difference of 0.25% compared to the
+original CNN's performance.
+
+Fig 4. Confusion matrix of CNN
+
+Figure 3 depicts the accuracy of the CNN model and the error
+loss happened in each iteration of the epochs. This depicts
+that the accuracy went up to 100% and the error loss came
+down to 0.14% upon completion of the 15 iterations. Figure
+4 depicts the classes which the CNN model has classified for
+the testing data set. The CNN model has classified 20 images
+as True Positive, 9 images as True Negative and 1 image as
+False Positive and 0 images as False Negative.
+
+Overall, the VGG16 displayed the best accuracy and
+comparable performance with minimal marginal difference,
+followed by ResNet50 and MobileNetV2, while Xception
+showed lower accuracy and slightly longer runtime when
+compared to the other models. CNN are powerful for
+preventing image tampering detection because they excel at
+learning intricate patterns and features within the images,
+making them highly effective at detecting even subtle
+alterations or manipulations in the images. Based on the
+suggested system's performance evaluation, outlines the
+superiority of performance of CNN compared to other
+techniques. The proposed CNN parameters are the best
+option out of all the models that were taken into
+consideration. As evidenced by its astounding 100%
+
+Fig 5 Plot accuracy loss of Xception
+
+Figure 5 depicts the accuracy of the Xception model and the
+error loss happened in each iteration of the epochs. This
+depicts that the accuracy went up to 70.9% and the error loss
+came down to 0.5% upon completion of the 15 iterations.
+Figure 6 depicts the classes which the Xception model has
+classified for the testing data set. The Xception model has
+
+320
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:02:45 UTC from IEEE Xplore. Restrictions apply.
+
+classified 0 images as True Positive, 11 images as True
+Negative and 0 images as False Positive and 20 images as
+False Negative.
+
+Fig 10. Confusion matrix of MobileNetV2
+
+Figure 9 depicts the accuracy of the MobileNetV2 model and
+the error loss happened in each iteration of the epochs. This
+depicts that the accuracy went up to 92.5% and the error loss
+came down to 0.16% upon completion of the 15 iterations.
+Figure 10 depicts the classes which the MobileNetV2 model
+has classified for the testing data set. The MobileNetV2
+model has classified 0 images as True Positive, 61 images as
+True Negative and 0 images as False Positive and 19 images
+as False Negative.
+
+Fig 6. Confusion matrix of Xception
+
+Figure 7 depicts the accuracy of the VGG16 model, and the
+error loss happened in each iteration of the epochs. This
+depicts that the accuracy went up to 100% and the error loss
+came down to 0.03% upon completion of the 15 iterations.
+Figure 8 depicts the classes which the VGG16 model has
+classified for the testing data set. The VGG16 model has
+classified 0 images as True Positive, 10 images as True
+Negative and 0 images as False Positive and 19 images as
+False Negative.
+
+Fig 11. Plot accuracy loss of ResNet50
+Fig 7. Plot accuracy loss of VGG16
+
+Fig 12. Confusion matrix of ResNet50
+
+Figure 11 depicts the accuracy of the Xception model, and the
+error loss happened in each iteration of the epochs. This
+depicts that the accuracy went up to 93.5% and the error loss
+came down to 0.17% upon completion of the 15 iterations.
+Figure 12 depicts the classes which the Xception model has
+classified for the testing data set. The Xception model has
+classified 0 images as True Positive, 11 images as True
+Negative and 0 images as False Positive and 20 images as
+False Negative.
+
+Fig 8. Confusion matrix of VGG16
+
+VI. CONCLUSION
+In conclusion, the Fake Card Detection system with the
+integration of CNN provides a proactive approach to fight
+against identity theft and financial fraud. The model,
+
+Fig 9. Plot accuracy loss of MobileNetV2
+
+321
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:02:45 UTC from IEEE Xplore. Restrictions apply.
+
+on computational intelligence and knowledge economy (ICCIKE), pp.
+334-339. IEEE, 2019.
+[11] Soni, B., Das, P. K., & Thounaojam, D. M. (2018). CMFD: a detailed
+review of block based and key feature based techniques in image copymove forgery detection. IET Image Processing, 12(2), 167-178.
+[12] Cruz, Francisco, Nicolas Sidere, Mickaël Coustaty, Vincent Poulain
+d'Andecy, and Jean-Marc Ogier. "Local binary patterns for document
+forgery detection." In 2017 14th IAPR International Conference on
+Document Analysis and Recognition (ICDAR), vol. 1, pp. 1223-1228.
+IEEE, 2017.
+[13] Shang, Shize, Nasir Memon, and Xiangwei Kong. "Detecting
+documents forged by printing and copying." EURASIP Journal on
+Advances in Signal Processing 2014 (2014): 1-13.
+[14] Ulutas, Guzin, and Gul Muzaffer. "A new copy move forgery detection
+method resistant to object removal with uniform background forgery."
+Mathematical problems in engineering 2016 (2016).
+[15] Bashar, M., K. Noda, N. Ohnishi, and K. Mori. "Exploring duplicated
+regions in natural images." IEEE Transactions on Image Processing
+(2010).
+[16] N. Radha and R. Swathika, "A Polyhouse: Plant Monitoring and
+Diseases Detection using CNN," 2021 International Conference on
+Artificial Intelligence and Smart Systems (ICAIS), Coimbatore, India,
+2021, pp. 966-971, doi: 10.1109/ICAIS50930.2021.9395847.
+[17] R. Swathika, S. Srinidhi., N. Radha and K. Sowmya., "Disease
+Identification in paddy leaves using CNN based Deep Learning," 2021
+Third International Conference on Intelligent Communication
+Technologies and Virtual Mobile Networks (ICICV), Tirunelveli,
+India, 2021, pp. 1004-1008, doi: 10.1109/ICICV50876.2021.9388557.
+
+empowered by the training and testing using both PAN card
+and Aadhar card datasets underwent rigorous training, testing
+and analysis using the models VGG16, ResNet50,
+MobileNetV2 and Xception and proved its robustness and
+accuracy with which it determines if the given image is fake
+or not along with a very precise determination of the
+tampering percentage. Through the training and the
+classification phases, the model can identify the slight
+changes made in the cards and find the differences between
+the genuine and fake cards, thereby improving its capacity in
+securing the financial transactions and verification of
+identities. From the ensemble of models used, CNN has been
+the best choice and has shown excellent results in terms of
+accuracy, robustness, runtime and computational efficiency.
+Besides, a versatile inability to adapt to different sizes and
+complexities of images makes it suitable for real-time
+applications, where manipulation techniques in the
+documents are common and vary with the quality of the
+document used. In addition, the combination of both the PAN
+and Aadhar card datasets extends the system's reach by
+providing cross-validation and additional insights towards
+individual identity verification. This combination not only
+increases the system's accuracy intamper detection but also
+increases its resilience against sophisticated fraud techniques
+that may involve manipulation across multiple identification
+documents. The proposed PAN card tampering detection
+system helps to identity fraud and financial crimes. The
+integration of cutting-edge technology along with accuracy
+and precision increases the trust that the users have in the
+proposed system. As technology continues to evolve, this
+system serves as a milestone in proactive measures to ensure
+individual privacy, security, and financial welfare in a highly
+digital world.
+REFERENCES
+[1]
+
+Ileberi, Emmanuel, Yanxia Sun, and Zenghui Wang. "A machine
+learning based credit card fraud detection using the GA algorithm for
+feature selection." Journal of Big Data 9, no. 1 (2022): 24.
+[2] Abdulghani, Ahmed Qasim, Osman Nuri Ucan, and Khattab M. Ali
+Alheeti. "Credit Card Fraud Detection System using Machine Learning
+Algorithms and Fuzzy Membership." In 2021 International Conference
+of Modern Trends in Information and Communication Technology
+Industry (MTICTI), pp. 1-6. IEEE, 2021.
+[3] Filippov, V., L. Mukhanov, and B. Shchukin. "Credit card fraud
+detection system." In 2008 7th IEEE International Conference on
+Cybernetic Intelligent Systems, pp. 1-6. IEEE, 2008.
+[4] Fayyomi, Aisha Mohammad, Derar Eleyan, and Amina Eleyan. "A
+survey paper on credit card fraud detection techniques." Int. J. Sci.
+Technol. Res 10, no. 09 (2021).
+[5] Maniraj, S. P., Aditya Saini, Shadab Ahmed, and Swarna Sarkar.
+"Credit card fraud detection using machine learning and data science."
+International Journal of Engineering Research 8, no. 9 (2019): 110-115.
+[6] Dornadula, Vaishnavi Nath, and Sa Geetha. "Credit card fraud
+detection using machine learning algorithms." Procedia computer
+science 165 (2019): 631-641.
+[7] Balagolla, E. M. S. W., W. P. C. Fernando, R. M. N. S. Rathnayake,
+M. J. M. R. P. Wijesekera, A. N. Senarathne, and K. Y. Abeywardhana.
+"Credit card fraud prevention using blockchain." In 2021 6th
+international conference for Convergence in Technology (I2CT), pp. 18. IEEE, 2021.
+[8] Asha, R. B., and Suresh Kumar KR. "Credit card fraud detection using
+an artificial neural network." Global Transitions Proceedings 2.1
+(2021): 35-41.
+[9] Kumar, M. Suresh, V. Soundarya, S. Kavitha, E. S. Keerthika, and E.
+Aswini. "Credit card fraud detection using random forest algorithm."
+In 2019 3rd International Conference on Computing and
+Communications Technologies (ICCCT), pp. 149-153. IEEE, 2019.
+[10] Raghavan, PradheePAN, and Neamat El Gayar. "Fraud detection using
+machine learning and deep learning." In 2019 international conference
+
+322
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:02:45 UTC from IEEE Xplore. Restrictions apply.
+
+

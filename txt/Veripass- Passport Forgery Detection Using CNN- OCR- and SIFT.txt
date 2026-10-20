@@ -1,0 +1,597 @@
+2024 2nd World Conference on Communication & Computing (WCONF)
+Raipur, India. Jul 12-14, 2024
+
+2024 2nd World Conference on Communication &amp; Computing (WCONF) | 979-8-3503-9532-7/24/$31.00 ©2024 IEEE | DOI: 10.1109/WCONF61366.2024.10692007
+
+Veripass- Passport forgery detection using CNN,
+OCR, and SIFT
+Dr. Mamta Kurvey
+
+Dr. Sachin Malave
+
+Dhruv Mehta
+
+Department of Computer Engineering
+A.P.Shah Institute of Technology
+Thane, India
+mpkurvey@apsit.edu.in
+
+Department of Computer Engineering
+A.P.Shah Institute of Technology
+Thane, India
+shmalave@apsit.edu.in
+
+Department of Computer Engineering
+A.P.Shah Institute of Technology
+Thane, India
+dhruv200229@gmail.com
+
+Eeshan Joshi
+
+Parth Mishra
+
+Jay Mohitepatil
+
+Department of Computer Engineering
+A.P.Shah Institute of Technology
+Thane, India
+ejoshi.ej@gmail.com
+
+Department of Computer Engineering
+A.P.Shah Institute of Technology
+Thane, India
+paarthmishra1@gmail.com
+
+Department of Computer Engineering
+A.P.Shah Institute of Technology
+Thane, India
+jaymopa@gmail.com
+
+A. Passport Forgery Challenges and Concerns:
+
+Abstract—The increasing occurrence of passport forgery
+presents a challenge to national security and the protocols used
+to verify identities. This research introduces a system for automated passport veriﬁcation that combines Bilateral Convolutional
+Neural Networks (CNN) Optical Character Recog- nition (OCR)
+and Scale Invariant Feature Transform (SIFT). By examining
+the limitations of manual passport inspection methods and the
+growing complexity of forgery techniques this research sheds light
+on the need for advanced countermeasures. The proposed system
+revolutionizes the veriﬁcation process, from document submission
+to approval resulting in improved efﬁciency and accuracy. With
+the use of Bilateral CNN for precise image preprocessing,
+OCR for text validation, and SIFT for image authentication
+this system provides a strong defense against passport forgery.
+This research addresses the requirement for automated forgery
+detection contributing to the advancement of passport veriﬁcation systems. It emphasizes how crucial it is to maintain the
+integrity and security of identity veriﬁcation processes in response
+to changing security threats. Index Terms—Passport forgery,
+Automated veriﬁcation system, Bilateral Convolutional Neural
+Networks (CNN), Optical Char- acter Recognition (OCR), Scale
+Invariant Feature Transform (SIFT)
+Index Terms—Passport forgery, Automated veriﬁcation system,
+Bilateral Convolutional Neural Networks (CNN), Optical Character Recognition (OCR), Scale Invariant Feature Transform
+(SIFT)
+
+Passport forgery refers to the replication or modiﬁcation
+of passport documents enabling individuals to falsify their
+identities illegally cross borders or engage in activities. The
+conventional methods of verifying passports heavily rely on inspection, which is susceptible, to human errors and increasedingly sophisticated forgery techniques.
+B. Limitations of Manual Passport Inspection:
+The process of examining passport documents is time consumming and prone to errors particularly when dealing with
+a the volume of travelers.
+C. Advancements, in Forgery Techniques:
+Forgery experts continuously develop new methods to replycate authentic passports making it difﬁcult for manual insection processes to keep up with these evolving forgery
+techniques.
+D. Necessity of Passport Forgery Detection:
+The detection of passport forgery is crucial, to address the
+dangers, it poses. It is imperative to develop an automated
+passport veriﬁcation system that surpasses inspec- tion. This
+system should utilize state-of-the-art technologies to efﬁciently
+identify documents accurately.
+
+I. I NTRODUCTION
+The Forgery of passports presents a concern for the security
+of nations and the reliability of identity veriﬁcation procedures.
+As forgery techniques become traditional systems for verifying
+Passports struggle to ensure the legitimacy of travel documents. This study aims to tackle these obstacles by suggesting
+a system for detecting passport forgery. It utilizes Bilateral
+Convolutional Neural Networks (CNN): Optical Character
+Recognition (OCR) and Scale Invariant Feature Transform
+(SIFT) to enhance the effectiveness of identifying passports.
+
+979-8-3503-9532-7/24/$31.00 ©2024 IEEE
+
+E. Traditional System Workﬂow
+The standard process of the system is as follows: The
+ﬁrst step is the document summarization, in this process,
+individuals have to provide their details, along with the necessary documents, to apply for a passport. This ensures that
+all the important information is readily available for further
+processing. the second step is background checks, this is to
+ensure the safety and security of the passport issuance process,
+the authorities need to perform background checks. By doing
+this, they can identify any potential security concerns that
+
+1
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:00:41 UTC from IEEE Xplore. Restrictions apply.
+
+forgery detection[7].M.J. Kwon ,H.K.Lee introduced CAT-Net,
+a network for the detection and localization of image splicing.
+This is directly relevant to passport forgery, where splicing is
+a common manipulation technique[8]. Jin’s research on, like,
+image matching across wide baselines is relevant to matching
+genuine passport images, a crucial task in passport forgery
+detection[9]. Fakheri a framework for image retrieval using
+machine learning. This framework can be applied to retrieve
+reference passport images comparison during forgery detection[10]. Verdoliva’s work on media forensics and deepfakes
+provides a broader perspective on image manipulation, which
+is valuable in understanding the broader context of passport
+forgery detection[11]. Yousﬁ and Fridrich’s research on CNNs
+in JPEG steganalysis is essential in comprehending the challenges and potential solutions for detecting steganographic
+manipulations in passport images[12]. Mohan Goud Kath’s
+research on Django, a totally robust web framework, provides stable development environment for the Scale-Invariant
+Feature Transform (SIFT) model in passport forgery detection. It offers a structured and scalable architecture, simpliﬁes database management, and streamlines the integration
+of SIFT-based image processing [13]. Camacho and Wang’s
+comprehensive review offers an overview of deep learning
+methods for image forensics, including their relevance to
+passport forgery detection.[14].Subramani, N., Matton’ paper
+delves into the signiﬁcance of automated document comprehension through deep learning, emphasizing challenges and
+the role of neural network models. It notes the scarcity of
+accessible datasets, relying on recent advancements in deep
+neural networks. The paper serves as a valuable resource for
+researchers exploring document comprehension methodologies[15]. Hamdi A, Linhares Pontes E, Sidere N paper explores
+how OCR technology affects the recognition and linking of
+named entities, in documents that have been OCRed. It offers
+an examination of the errors that can occur during OCR,
+such as character mistakes and problems with segmentation
+highlighting how these errors can impact the efﬁciency of
+indexing documents. The conclusion of the paper recommends
+implementing strategies for correcting OCR errors after the
+process emphasizing the signiﬁcance of named entities, in
+libraries [16].
+
+might be linked to the applicant. To establish the authenticity
+of the individual, biometric data collection is carried out. This
+includes capturing their ﬁngerprints and having them provide
+a passport-sized photograph. This de- tails play a crucial
+role in verifying their identity. When individuals cross the
+borders, it is the responsibility of the immigration ofﬁcers to
+conduct manual inspections of their passports. The information
+and photographs provided by the individuals are thoroughly
+reviewed to ensure their identity. Once the veriﬁcation process
+is completed, the next step involves stamping the passport.
+This signiﬁes that the individual has been granted permission
+to either enter or exit the country. It’s a signiﬁcant milestone
+in the passport issuance process. While the traditional system
+has been, well, somewhat effective, the integration of the
+Bilateral CNN, OCR, and, uh, SIFT in our proposed passport
+forgery detection system aims to signiﬁcantly, like, enhance
+the efﬁciency and accuracy of the veriﬁcation process. The
+following sections will examine each component in-depth and
+show how their combination offers a complete answer to the
+problems caused by counterfeit passports.
+II. L ITERATURE S URVEY:
+In recent years, deep learning has gained prominence in
+image forgery detection. Syed sadaf Ali, Ngoch-son-vu introduced a novel approach that employs deep learning for image
+forgery detection by recompressing images. This technique can
+be adapted to identify manipulated passport images and stuff
+as passport forgeries often involves image manipulation[1]. P
+Zhou, X Han presented a method for learning rich features for
+image manipulation detection. While not passport-speciﬁc, this
+research is relevant for understanding the feature extraction
+and manipulation detection, which are vital components of
+passport forgery detection[2]. Our project uses Scale Inverse
+Feature Transform (SIFT) technology for feature matching.
+Jian Wul ,Ziming Cuil conducted a comparative study of SIFT
+and its variants. This research is fundamental to understanding
+the efﬁcacy of SIFT, a key feature extraction technique in
+the context of passport forgery detection[3]. Chirag I. Patel
+and Atul Patel’ paper explores the difﬁculties in text recovery
+from photos using optical character recognition (OCR), with
+a particular emphasis on Tesseract. It offers information on
+the history, uses, and particular difﬁculties faced by OCR.
+The study highlights the differences between Tesseract and
+Transym OCR and underlines how accurate Tesseract is at
+reading text from license plates. Overall, the study highlights
+Tesseract’s special qualities and uses in OCR[4]. Pan and
+Lyu’s work on detecting image region duplication, using
+SIFT features is pertinent to passport forgery detection. It
+addresses a speciﬁc manipulation technique often employed in
+passport forgery[5]. M Barni , M Nowroozi introduced a CNNbased approach for detecting generic contrast adjustment, with
+JPEG post-processing. This is directly applicable to detecting
+common manipulations in passport images, such as contrast
+adjustments[6]. L Bondi and S Tubaro discussed tampering
+detection and localization, which is relevant for localizing
+tampered regions in passport images, an essential aspect of
+
+III. P ROPOSED S YSTEM :
+In the given Fig 1, The architectural diagram illustrates
+the ﬂow of operations within a comprehensive passport authentication system. At the forefront is the ”User Interface,”
+which provides a seamless avenue for users to submit their
+details via the ”User Input” component. These inputs are
+then transmitted to the ”Server-side Application,” which is
+empowered by the robust Django Framework. Within the
+”Server-side Application,” data is meticulously managed and
+stored in the ”SQLite Database,” ensuring very efﬁcient and
+secure storage of user information. The heart of the system
+lies in the ”Veriﬁcation Services,” which comprises multiple
+components such as ”Image Processing,” ”Optical Character
+Recognition (OCR),” ”Text Veriﬁcation,” and ”Image Veriﬁ-
+
+2
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:00:41 UTC from IEEE Xplore. Restrictions apply.
+
+stage. We use the feature called the Scale-Invariant Feature
+Transform (SIFT). With SIFT, we compare the facial features
+in the passport photograph with the image stored in the
+database. If the image matches, image veriﬁcation is done.
+But what if the images don’t match? That means we’ve got
+ourselves a passport suspect. It adeptly identiﬁes the passport
+as forged. Our system, for verifying passports emphasizes
+practices making sure to follow privacy regulations and handle
+data securely. We are committed to upholding the standards
+and treating individuals’ information with respect and conﬁdentiality. Our approach includes improvements enabling us
+to stay off emerging forgery techniques and incorporate user
+feedback to enhance our system continuously. In summary, our
+system is known for its strength, adaptability, and signiﬁcant
+impact on improving security in passport veriﬁcation processes
+setting benchmarks, in passport authentication.
+IV. M ETHODOLOGY:
+Image preprocessing is a step that involves applying techniques to raw images in order to improve their quality reduce
+noise and make them ready, for further analysis. For passport
+veriﬁcation purposes;
+
+Fig. 1. Architecture of proposed system
+
+A. Preparing the Image:
+cation.” Image processing techniques enhance the quality of
+passport images, which are then subjected to OCR to extract
+textual information. Subsequently, text veriﬁcation processes
+to compare the extracted text against the database are carried
+out for authenticity, while image veriﬁcation techniques like,
+the Scale-Invariant Feature Transform (SIFT) ensure the validity of passport photos. Upon completion of these veriﬁcation
+stages, the server-side application orchestrates the authentication process and communicates the results back to the user
+interface for seamless display to the end-user. This holistic
+approach ensures robust passport authentication, safeguarding
+against potential fraud or misuse.
+In our comprehensive passport veriﬁcation system, individuals willingly submit their details, including names, addresses, and photographs, to the designated authority. This is
+how the information is meticulously stored using the Django
+framework by leveraging an SQLite database for efﬁcient and
+secure data management. When the need for veriﬁcation arises,
+the authority initiates the process by inputting the passport
+front image into our system. This image then goes through
+a crucial preprocessing step where we use bilateral CNN.
+We enhance or optimize the image through smoothing and
+sharpening. The next process is Optical Character Recognition
+(OCR). It is a powerful tool. It meticulously does the job
+of extracting text characters from the passport image. We
+cross-reference the extracted text with the stored passport
+information text in the database. It’s like playing a detective
+game, ﬁnding discrepancies and all. If things don’t match
+up, indicating forgery potential, the system is all like ”Hey!
+This passport is suspect! Investigate now!” Assuming successful text veriﬁcation we move on to the image veriﬁcation
+
+Fig. 2. Difference between a normal and a bilateraled image
+
+In the above Fig 2, Utilizing Bilateral CNN; Convolutional
+Neural Networks (CNNs) are employed along with ﬁltering
+to enhance the quality of the passport front image. Bilateral
+ﬁltering helps in smoothing the image while preserving its
+edges. By utilizing CNNs we can signiﬁcantly improve the
+clarity and representation of features in the image.
+B. Combining OCR Text and SIFT Feature Extraction:
+Optical Character Recognition (OCR): OCR is a technology
+that enables us to extract text from images. In this step,
+we utilize OCR algorithms to extract information like names
+and identiﬁcation numbers from the passport image. OCR
+essentially provides us with a version of the text within the
+image.
+Scale Invariant Feature Transform (SIFT) Feature Extraction: SIFT is a computer vision technique that allows us to
+extract features from images. It identiﬁes points and descriptors that remain robust regardless of changes, in scale or
+
+3
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:00:41 UTC from IEEE Xplore. Restrictions apply.
+
+genuine. However if there are inconsistencies that exceed the
+predetermined thresholds the passport is marked for scrutiny
+suggesting a case of forgery.
+
+orientation. In our case of passport veriﬁcation SIFT helps
+us extract features from each passport image.
+Fusion: The text extracted by OCR and the features obtained
+through SIFT are combined or fused. This combination results
+in a depiction of the visual details linked to each passport. The
+objective is to merge the advantages of OCR (text recognition)
+and SIFT (visual features) to enhance the veriﬁcation process
+with reliability.
+
+V. RESULTS AND DISCUSSIONS :
+In the process of password veriﬁcation, a multi-step approach is employed, combining Convolutional Neural Network (CNN) bilateral image processing, Optical Character
+Recognition (OCR) detection with string matching and ScaleInvariant Feature Transform (SIFT) feature detection. Each
+step contributed to the overall veriﬁcation process.
+
+C. Mapping Text to Image Regions:
+Text Regions Associated with OCR; The text extracted
+through OCR is connected to areas within the passport image.
+This process involves dividing the image into regions based on
+the identiﬁed text. Each region is then linked to information
+such as a person’s name, identiﬁcation number, or other
+signiﬁcant details.
+Establishing Systematic Mapping; A systematic mapping is
+created to establish an association between the OCR-mapped
+text regions and their corresponding textual information. This
+mapping ensures veriﬁcation by connecting regions in the
+image with the extracted text.
+
+A. CNN Bilateral Image Processing:
+The initial step of the password veriﬁcation process involved
+subjecting the input image to a sophisticated bilateral image
+processing using a trained Convolutional Neural Network
+(CNN). This advanced technique extracted and enhanced
+distinctive features present in the image, optimizing it for
+subsequent analysis. Through the application of deep learning
+algorithms, CNN effectively identiﬁed and highlighted relevant
+patterns, textures and structural elements within the image,
+thereby laying the foundation for accurate and reliable veriﬁcation outcomes. The importance of bilateral ﬁlter- ing is that
+we can’t only preserve the image quality but also improve it
+while reducing the image size. Fig 5 was originally 1 MB in
+size. To enhance it normally we would have increased its size
+and space complexity. CNN bilateral ﬁltering greatly helped
+in achieving this.
+
+D. SIFT Feature Matching:
+During preprocessing SIFT features are extracted from the
+passport images. Form a reference feature set. These features
+act as a baseline for comparison during the veriﬁcation process. In the Fig 3, a normal unﬁltered image is matched with
+
+Fig. 3. SIFT feature matching using the unﬁlter image and the bilateral image
+yielding 7057 matched points
+
+a bilateraled image to yield 7057 matched features.
+When presented with a passport image for veriﬁcation SIFT
+is utilized again to extract features. The matching of these
+features against the reference feature set involves assessing
+their similarity.
+
+Fig. 4. Original unedited image
+
+B. OCR Detection and String Matching:
+Following bilateral image processing, the processed image
+underwent meticulous Optical Character Recognition (OCR)
+detection. This intricate process involved the conversion of
+visual characters within the image into machine-readable text.
+Subsequently, the recognized text was meticulously matched
+against the expected password string for veriﬁcation. By
+leveraging advanced OCR algorithms and sophisticated stringmatching techniques, the system effectively scrutinized the
+extracted text ensuring precise alignment with the predeﬁned
+password criteria. Similar technologies like OCR exist, name
+
+E. Veriﬁcation and Authentication:
+Utilizing Integrated Information; Veriﬁcation utilizes both
+mapped text. Aligned SIFT features in combination. It combines details obtained through OCR with characteristics obtained through SIFT.
+Setting Thresholds; Predeﬁned thresholds, for matching
+accuracy are established. If both the written and visual elements align, within these limits the passport is considered
+
+4
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:00:41 UTC from IEEE Xplore. Restrictions apply.
+
+TABLE I
+C OMPARISON BETWEEN OCR, ICR, AND HTR
+OCR
+High accuracy, swift
+extraction for passport images.
+Versatile and adaptable
+to different fonts,
+languages, and
+document formats and
+robust.
+
+ICR
+lower accuracy
+with handwriting,
+processing speed
+varies on the quality
+of the image.
+Limited adaptability
+to handwriting styles
+and struggles with
+noise.
+
+HTR
+may struggle with
+machine-printed fonts,
+processing varies
+similarly.
+Limited adaptability
+to machine-printed
+fonts and struggles
+with handwritting
+styles.
+
+Fig. 5. The input image underwent bilateral image processing using a trained
+CNN. Distinctive features were extracted to enhance the image for subsequent
+analysis.
+
+ICR and HTR, but our project emphasized accuracy and hence
+we chose OCR over the two. Among these, OCR stands out
+due to its versatility and accuracy. It is widely preferred for
+recognizing printed text from scanned documents, images ,
+or printed material. OCR is the best when it comes to efﬁciently processing large volumes of printed documents. It can
+effortlessly handle various fonts, sizes, and styles. This makes
+OCR is an exceptional option for dealing with heterogeneous
+document types. Whether it’s a formal document, a trendy
+magazine, or an ancient manuscript, OCR is up for the task.
+On the other hand, HTR specializes in understanding hand–
+written text. It is a niche technology with a narrower scope.
+While OCR triumphs over diverse text types, HTR focuses
+exclusively on handwritten content.
+Similarly, ICR targets hand-printed characters in structured
+forms. Its application is restricted to processing structured
+documents with speciﬁc character formats. While this limitstation exists, ICR proves to be highly valuable in scenarios
+requiring accurate recognition of structured forms. OCR stands
+out for its high accuracy rates in extracting text from diverse
+document types and conditions, its versatility in adapting
+to different fonts and languages commonly encountered in
+the pass- ports, and its robustness in handling challenging
+scenarios such as low-quality images. In contrast, ICR is
+speciﬁcally designed for machine-printed text and may struggle with handwriting variations and noise in images, while
+HTR specializes in recognizing handwritten text and may face
+challenges with variations in handwriting styles and image
+quality. While OCR offers seamless integration with existing
+systems and work- ﬂows. ICR and HTR may require additional
+preprocessing or specialized integration for their respective
+domains.
+
+Fig. 6. Feature matching using SIFT technology
+
+system uses SIFT technology for feature matching, another
+alternative available to us is SURF technology. In the ﬁeld
+of computer vision and image processing, the SIFT (ScaleInvariant Feature Transform) and SURF (Speeded-Up Robust
+Features) algorithms play a signiﬁcant role. Both algorithms
+aim to detect and describe features in images. However,
+they differ in their approach and computational efﬁciency.
+The SIFT algorithm detects key points in images using the
+identiﬁcation of local maxima and minima of the difference of
+Gaussian (DoG) function in scale-space. The selection of key
+points depends on their stability across different scales and
+orientations. SIFT generates feature descriptors by utilizing
+gradient magnitude and orientation histograms in the local
+image patches that surround the key points. These descriptors
+are designed to be invariant to changes in scale, rotation,
+and illumination. Although SIFT is robust and effective in its
+functionality, it tends to be computationally more intensive
+due to its reliance on Gaussian convolution and gradient
+calculations at multiple scales. Similar to SIFT, the SURF
+algorithm detects key points using a similar approach. It
+employs the determinant of the Hessian matrix for scale
+and orientation selection. To achieve computational efﬁciency,
+SURF approximates the Gaussian second-order derivatives
+through the utilization of box ﬁlters. Feature descriptors in
+SURF are computed by utilizing Haar wavelet responses
+within ﬁxed-size square regions centered on the key points.
+These descriptors are designed to be computationally efﬁcient
+while maintaining robustness to scale and rotation changes.
+SURF unlike SIFT, is speciﬁcally designed for speed and
+
+C. SIFT Feature Detection:
+In the above Fig. 6, after matching the same given image
+with itself, the image matched a total of 5126 points or features, a total of 0 features remained unmatched, this shows that
+the image is completely authentic and identical. Our proposed
+
+5
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:00:41 UTC from IEEE Xplore. Restrictions apply.
+
+efﬁciency. By approximating Gaussian derivatives with box
+ﬁlters and utilizing integral images for rapid convolution,
+SURF achieves faster computation as compared to SIFT.
+Particularly for our system, accuracy is the goal, so SIFT was
+preferred instead of SURF, though SURF has its advantages,
+a simple comparison between the two is given below.
+
+[6] M. Barni, A. Costanzo, E. Nowroozi, and B. Tondi, “CNN-Based
+Detection of Generic Contrast Adjustment with JPEG Post-Processing”
+Published: IEEE, 2018.
+[7] L. Bondi, S. Lameri, D. Güera, P. Bestagini, E. J. Delp, and S. Tubaro,
+“Tampering Detection and Localization Through Clustering of CameraBased CNN Features”. Published: 2017 IEEE Conference on Computer
+Vision and Pattern Recognition Workshops.
+[8] M.-J. Kwon, I.-J. Yu, S.-H. Nam, and H.-K. Lee, “CAT-Net: Compression Artifact Tracing Network for Detection and Localization of Image
+Splicing” Published: 2021 IEEE Winter Conference on Applications of
+Computer Vision (WACV).
+[9] Yuhe Jin · Dmytro Mishkin · Anastasiia Mishchuk · Jiri Matas · Pascal
+Fua · Kwang Moo Yi · Eduard Trulls, “Image Matching Across Wide
+Baselines: From Paper to Practice” Published in International Journal of
+Computer Vision 2021.
+[10] “Framework for image retrieval using machine learning and statistical similarity matching techniques” Majid Fakheri1, Tohid Sedghi1,
+Mahrokh G. Shayesteh1,2, Mehdi Chehel Amirani1 1 Department
+of Electrical Engineering, Urmia University, Urmia, Iran 2 Wireless
+Research Laboratory, ACRI, Electrical Engineering Department, Sharif
+University, Tehran, Iran.
+[11] L. Verdoliva, “Media Forensics and DeepFakes: An Overview” Published: IEEE Journal of Selected Topics in Signal Processing, Aug. 2020
+.
+[12] Y. Yousﬁ and J. Fridrich, “An Intriguing Struggle of CNNs in JPEG Steganalysis and the OneHot Solution” Published: IEEE Signal Processing
+Letters, 2020.
+[13] “An Optimised Allotment and Tracking Using Django and Opencv”
+Mohan Goud Kathi* , Jakeer Hussain Shaik Vignan’s Foundation for
+Science, Technology and Research, Vadlamudi, Guntur 522213, A.P.,
+India.
+[14] Castillo Camacho I, Wang K., “A Comprehensive Review of DeepLearning-Based Methods for Image Forensics” Published: J Imaging,
+2021.
+[15] Subramani, N., Matton, A., Greaves, M., Lam, A. (2020). A Survey of
+Deep Learning Approaches for OCR and Document Understanding.
+[16] Hamdi A, Linhares Pontes E, Sidere N, Coustaty M, Doucet A. In-depth
+analysis of the impact of OCR errors on named entity recognition and
+linking. Natural Language Engineering.
+
+TABLE II
+C OMPARISON BETWEEN SIFT AND SURF
+Algorithm
+SIFT
+SURF
+
+Scale Rotation
+Best Results
+Subpar Results
+
+Time
+Slower
+Faster
+
+Memory needed
+Larger
+Smaller
+
+Matching
+Best
+Subpar
+
+VI. CONCLUSION
+This research tackles the problem of passport forgery by
+proposing a system that automates the veriﬁcation process. By
+combining Bilateral Convolutional Neural Networks (CNN)
+Optical Character Recognition (OCR) and Scale Invariant
+Feature Transform (SIFT) the system provides a solution to
+improve the efﬁciency and accuracy of passport authentication.
+The research discusses the limitations of inspection methods
+and highlights the increasing sophistication of forgery techniques emphasizing the need for advanced measures of identity
+veriﬁcation. The proposed system transforms the veriﬁcation
+process resulting in enhanced security and reliability. Practical
+implications of this research include strengthening security
+measures improving border control procedures and reducing
+risks associated with passport forgery and fraudulent activities.
+In the proposed system we opted for SIFT over SURF due
+to SIFT’s performance in extracting features especially when
+dealing with variations in scale and orientation. Similarly,
+we chose OCR, over Intelligent Character Recognition (ICR)
+and Handwritten Text Recognition (HTR) because OCR is
+versatile, accurate, and robust when it comes to extracting
+text from types of documents under conditions. These choices
+play a crucial role, in guaranteeing the effectiveness and the
+efﬁciency of our system for detecting forged passports. They
+greatly contribute to the improvement of passport veriﬁcation
+systems and help safeguard identity veriﬁcation processes
+against evolving security threats.
+
++
+
+R EFERENCES
+[1] Syed Sadaf Ali, Iyyakutti Iyappan Ganapathi, Ngoc-Son Vu, Syed
+Danish Ali, Neetesh Saxena, and Naoufel Werghi, “Image Forgery
+Detection Using Deep Learning by Recompressing Images.” Published:
+MDPI, 28 January 2022.
+[2] P. Zhou, X. Han, V. I. Morariu, and L. S. Davis, “Learning Rich Features
+for Image Manipulation Detection” 2018 IEEE/CVF Conference on
+Computer Vision and Pattern Recognition.
+[3] ”A Comparative Study of SIFT and its Variants” Jian Wu1 , Zhiming
+Cui1 , Victor S. Sheng2 , Pengpeng Zhao1 , Dongliang Su1 , Shengrong Gong1 1 The Institute of Intelligent Information Processing and
+Application, Soochow University, Suzhou 215006, China.
+[4] Chirag I. Patel and Atul Patel, “Optical Character Recognition by OpenSource OCR Tool Tesseract: A Case Study” Published: International
+Journal of Computer Applications 2012.
+[5] “Detecting image region duplication using sift features” Xunyu Pan and
+Siwei Lyu Computer Science Department College of Computing and
+Information University at Albany, SUNY Albany, NY 12222, USA.
+
+6
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 07:00:41 UTC from IEEE Xplore. Restrictions apply.
+
+

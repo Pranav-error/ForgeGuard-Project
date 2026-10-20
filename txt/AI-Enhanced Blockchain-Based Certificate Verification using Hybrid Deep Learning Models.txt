@@ -1,0 +1,1214 @@
+Proceedings of the International Conference on Electronics and Renewable Systems (ICEARS-2026)
+IEEE Xplore Part Number: CFP26AV8-ART; ISBN: 979-8-3315-4881-0
+
+2026 International Conference on Electronics and Renewable Systems (ICEARS) | 979-8-3315-4881-0/26/$31.00 ©2026 IEEE | DOI: 10.1109/ICEARS67481.2026.11416784
+
+AI-Enhanced Blockchain-Based Certificate
+Verification using Hybrid Deep Learning Models
+Nilamadhab Mishra
+Associate Professor, dept. of CSE,
+School of Computing, Mohan Babu
+University, Tirupati, A.P, India
+nilamadhab76@gmail.com
+Mallipedi Gayathri
+dept. of CSE,School of Computing,
+Mohan Babu University,
+Tirupati, A.P, India
+mallipedigayathrimbu@gmail.com
+
+Bovilla Venkata Sreedhar Reddy
+dept. of CSE,School of Computing,
+Mohan Babu University,
+Tirupati, A.P, India
+sreedharreddy2005@gmail.com
+Bodanapu Sukesh Kumar
+dept. of CSE,School of Computing,
+Mohan Babu University,
+Tirupati, A.P, India
+sukeshmark32@gmail.com
+
+Abstract—In Advancement of digital world, the increase in
+the pace of issuing the digital certificates has also escalated the
+threat of fake educational qualifications, including in
+blockchain-based systems of verification, where the
+immutability cannot be enough to eliminate the registration of
+forged documents. In order to overcome this drawback, this
+research suggests an AI-enhanced blockchain-based certificate
+verification architecture that combines a hybrid deep learning
+model and the ElimuChain architecture. The proposed
+structure uses CNN-BiLSTM model that is able to identify
+visual and semantic inconsistencies in the certificates before
+anchoring them to the blockchain thus avoiding the possibility
+of forged certificates being stored permanently. The checked
+certificates are then hashed, hosted on the IPFS and
+permanently recorded on the blockchain through the smart
+contracts. Experimental assessment on a combined dataset of
+true and fake certificates proves that the proposed model has an
+accuracy of 98.3, precision of 97.9, recall of 98.6 and an F1-score
+of 98.2, which is better than standalone CNN and Transformerbased baselines. Trust, security, and reliability of nationwide
+systems of certificate verification are greatly increased based on
+the integration of AI-driven pre-validation.
+Keywords—Blockchain, Educational Certificate Verification,
+Hybrid Deep Learning, CNN–BiLSTM, Certificate Forgery
+Detection, Smart Contracts, IPFS, Artificial Intelligence,
+Decentralized Applications, Trust Management.
+
+I.
+
+Bulagondla Jaswanth
+dept. of CSE,School of Computing,
+Mohan Babu University,
+Tirupati, A.P, India
+bulagondlajaswanth93@gmail.com
+
+INTRODUCTION
+
+Educational certificates are important in verification of
+academic performance and professionalism of individuals. As
+the dependence on credentials to obtain a job, higher
+education, and a professional license grows, the integrity of
+certificates is turning into a burning issue on the global level.
+Even after the utilization of digital record management
+software, the issue of certificate forging has been ongoing,
+which has been facilitated by the sophisticated image editing
+software and the use of advanced document manipulation
+software [1], [2]. According to the recent research, the forged
+academic credentials still jeopardize the trust in the education
+systems, the labor markets, and the institutions, especially the
+cross-border ones [3]. The idea of using blockchain
+technology as a way of issuing and verifying certificates has
+gained a possibility of being a viable solution to the problem
+because of its decentralization, immutability, and resilience to
+tampering features [4], [5]. Certificates systems based on
+blockchain allow the verifiers to verify credentials without the
+help of centralized authorities, thus minimizing fraud, delays
+in verification, and administrative overheads [6].
+Nevertheless, the majority of solutions that currently exist in
+
+the field of blockchain mainly assure post-issuance integrity
+with the understanding that the certificates posted to the
+blockchain are automatically authentic [7].
+In recent works, an essential weakness of blockchainbased certificate verification systems has been pointed out:
+blockchain is not able to identify forged or manipulated
+certificates prior to registration [8], [9]. When a forged
+certificate has been hashed and stored on-chain, it becomes
+immutable, and thus makes fraudulent data permanent. The
+resulting issue is the so-called garbage-in, garbage-out issue,
+which is a massive constraint of the efficiency of blockchainbased verification systems in practical applications [10].
+Concurrently, artificial intelligence and especially deep
+learning have shown high performance in forgery of
+documents through the analysis of visual features, text
+structure and semantic anomalies [11], [12]. Hybrid deep
+learning models Hybrid deep learning models combining
+convolutional neural networks (CNNs) with sequential
+learners have been demonstrated to be more effective in
+document authentication tasks [13]. Nevertheless, currently
+used AI-based systems to detect forgery are autonomous and
+do not have trusted, auditable, and decentralized storage
+solutions. Although this has been improved recently, there are
+still three major challenges remaining: Unidirectional nonhacks Lack of pre-issuance forgery detection in blockchainbased certificate systems. Non-existence of smart systems to
+ensure that forged certificates are anchored on-chain
+permanently. Weakly coupled AI-based trust validation and
+decentralized and nationalized certificate validation systems
+[14], [15]. These dilemmas lower the reliability of the systems
+and limit mass usage of blockchain-based educational
+credential validation.
+This research will solve these limitations by presenting a
+proposal of an AI-enhanced blockchain certificate verification
+system that expands Elim Chain system with a hybrid CNNBiLSTM deep learning model to detect forged certificates
+before registration in the blockchain. The suggested
+framework will implement a smart pre-validation layer, which
+scans the certificate images to identify the visual and semantic
+anomalies prior to the creation of cryptographic hashes to
+store in IPFS and anchor them in blockchains. The key
+contributions of this study can be summarized as follows: An
+AI-enabled certificate verification system that can work with
+hybrid deep learning and blockchain-based credential
+management on a seamless basis. CNN-BiLSTM forgery
+detecting model with a high success rate in detecting
+manipulated certificates prior to the on-chain storage. A
+
+979-8-3315-4881-0/26/$31.00 ©2026 IEEE
+
+1415
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:59:52 UTC from IEEE Xplore. Restrictions apply.
+
+Proceedings of the International Conference on Electronics and Renewable Systems (ICEARS-2026)
+IEEE Xplore Part Number: CFP26AV8-ART; ISBN: 979-8-3315-4881-0
+
+secure and scalable verification pipeline, which includes AI
+validation, IPFS-based off-chain storage, and blockchain
+immutability). Much experimental analysis has shown
+increased detection precision and higher reliability than
+blockchain-only and standalone AI-based designs. The
+proposed system will greatly improve the reliability, security,
+and feasibility of large-scale educational certificates
+verification due to artificial intelligence combined with
+decentralized trust infrastructure [22].
+II.
+
+RELATED WORK
+
+A. Certificate issuance and verification with the help of
+blockchain.
+It has been suggested extensively that blockchain can be
+used to offer tamper-resistant anchoring of the provided
+credentials, as well as, to streamline the third-party
+verification. They can be systems on university levels or
+national systems; a majority of the stores store certificate
+fingerprints (hashes) on-chain and full documents off-chain
+(e.g., IPFS) to minimize costs and enhance scalability.
+ElimuChain is an example of a nation-level design, which
+includes RBAC, government/regulatory enrollment, on-chain
+revocation and IPFS storage to facilitate multi-level education
+ecosystems [16].More privacy-sensitive versions have also
+been designed recently (such as ZK-enabled academic
+verification systems) to prevent the disclosure of sensitive
+properties and still enable verification to be checked [17, 24].
+B. AI-based detection of document / certificate forgery.
+Individually, deep learning models have been shown to be
+useful at detecting manipulated document images by training
+to identify small differences in textures, fonts, signatures and
+layout. More efficient cues (multimodal forgery cues) (CNN
++ sequential modules (BiLSTM or Transformer layers)) are
+presented by classic CNN architectures and enhanced hybrids.
+Hybrid CNN BiLSTM systems have also demonstrated stateof-the-art performance on adjacent detection problems (e.g.,
+fake-news, document authentication), and exhibit greater
+resilience to varied kinds of manipulations and also layout
+changes [18]. Recently applied literature on the subject of
+academic document forgery detection boasts of a high
+accuracy rate with the utilization of domain-specific pipelines
+that integrate visual processing and low-resource
+hashing/checking steps [19].
+C. AI and blockchain integration (new trend).
+It is increasingly being understood that blockchain is
+insufficient to ensure that forged documents are anchored in a
+manner that is impossible to alter, and therefore, solutions to
+the problem propose the introduction of pre-issuance AI
+validation to eliminate garbage-in/garbage-out issues. Early
+integrated systems have already shown viability (AI prevalidation + blockchain anchoring), and other directions have
+been applying blockchain with verifiable ML primitives (e.g.
+ZK proofs of model inference or models outputs) to bring
+auditability and privacy to ML-driven checks [20, 23].
+D. Privacy, scalability and distributed model training.
+Credential systems Privacy-preserving protocols (i.e,
+zero-knowledge proofs (ZKP), federated learning (FL)) are
+becoming more commonly adopted: ZKPs can be used,
+without revealing the content, to verify that a piece of data is
+genuine, and FL can be used to train a common model across
+institutions without a central repository of sensitive data.
+
+Recent prototypes and surveys indicate that privacy leaks can
+be addressed by ZKP and layer-2 integrations and that FL can
+be applied to distributed fraud detection systems to learn
+cross-institution forgery signatures without releasing raw
+certificates [21,22, 25].
+E. Gaps in research
+Pre-issuance forgery detection is uncommon to blockchain
+processes.
+The vast majority of blockchain certificate systems (even
+many operational prototypes) presuppose that uploaded
+documents are authentic and only provide immutability after
+they have been issued. This introduces a necessary weakness:
+when a forgery is hashed and stored in blockchain, the forgery
+will be forever (garbage-in immutable garbage). ElimuChain
+captures the infrastructure of systems to use in national
+implementation but fails to integrate AI validated in advance
+with the issuance pipe.
+Hybrid visual models plus sequential are not well
+exploited in certificate authentication. Pure-CNN detectors:
+Visual artifacts Sequence models: Text/layout semantics
+Hybrid systems (e.g. CNN BiLSTM) may concurrently
+capture spatial representations and sequential textual/layout
+representations, however, little published research can be
+found to apply such hybrids specifically to the detection of
+educational certificate forgery on scale. The existing forgery
+detection articles addressed single institutions or neighboring
+areas (e.g. academic documents or fake-news), which means
+that hybrids can be customized and thoroughly tested on
+multi-format certificate archives. Here, there is a deficiency of
+verifiable AI + blockchain pipelines that do not infringe
+privacy.
+New initiatives are investigating using ZK to validate the
+output of ML or construct ZK-enabled verification systems,
+but the connection between certificate issuance processes and
+ZK is early. Systems that can generate verifiable proofs
+indicative of an ML check passing (without leaking certificate
+contents) prior to on-chain anchoring would be much more
+trusted and simultaneously remain privately oriented, a
+combination that is difficult to achieve with the literature. The
+field of cross-institutional learning without the exchange of
+raw data has not been fully investigated in detecting forgeries.
+Patterns of forgery may differ among institutions, nations and
+templates of certificates. Privacy/regulatory A centralized ML
+training is frequently not possible. Principally, federated
+learning solutions to distributed forgery detection have not
+been thoroughly tested, where certificate datasets are
+heterogeneous, class imbalance, adversarial manipulation, and
+institutional drift are realistic.
+There are operational issues (latency, compute, regulatory
+workflow) that are open. National roll-outs need to strike the
+right balance between the compute and latency added by AI
+checks and user experience and cost (e.g. mobile/edge vs.
+cloud inference). Published assessment of the combination of
+end-to-end metrics, namely, detection effectiveness, false
+positive effect on honest issuance, latency of verification, onchain savings of costs by avoiding fraudulent anchoring, and
+governance procedures of disputed cases, is limited.
+Table 1 Comparison of Related Certificate Verification Systems.
+System
+
+MultiLevel
+Support
+
+979-8-3315-4881-0/26/$31.00 ©2026 IEEE
+
+RBAC
+
+On-Chain
+Revocatio
+n
+
+AI PreValidatio
+n
+
+ZK
+Privacy
+/ FL
+
+1416
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:59:52 UTC from IEEE Xplore. Restrictions apply.
+
+Proceedings of the International Conference on Electronics and Renewable Systems (ICEARS-2026)
+IEEE Xplore Part Number: CFP26AV8-ART; ISBN: 979-8-3315-4881-0
+
+Gräther et
+al. (2022)
+Xie et al.
+(2023)
+Abreu et al.
+(2023)
+ZKBAR-V
+(2025)
+DL Forgery
+Detection
+(2023)
+ElimuChai
+n (2025)
+Proposed
+
+✗
+
+✗
+
+✗
+
+✗
+
+✗
+
+✗
+
+✗
+
+✓
+
+✗
+
+✗
+
+✓
+
+✓
+
+✗
+
+✗
+
+✗
+
+✗
+
+✗
+
+✗
+
+✗
+
+✓
+
+✗
+
+✗
+
+✗
+
+✓
+
+✗
+
+✓
+
+✓
+
+✓
+
+✗
+
+✗
+
+✓
+
+✓
+
+✓
+
+✓
+
+✓
+
+Recent blockchain-based certificate verification systems
+have notably enhanced trust and transparency through
+decentralization and irreversibility; still, their functionality is
+still minimal, as it is summarized in Table 1. Early models are
+mainly based on credentials anchored on blockchains without
+mention of governance or revocation. Later researchers added
+role-based access control and on-chain revocation to improve
+institutional accountability, however, they are limited to postissuance integrity checks. Privacy-concerned schemes that
+work with zero-knowledge proofs provide selective disclosure
+of credentials, but do not provide smart validation.
+Simultaneously, deep learning-based forgery detection
+models show a high level of performance in forging
+certificates, but they are not combined with blockchain
+infrastructures, which means that they are used in isolation.
+ElimuChain system goes a step further to offer the state of the
+art by enabling management at the multi-level certificate
+management with RBAC and on-chain revocation [16].
+However, it still fails to stop forged certificates being
+registered forever. Table 1 has indicated that the proposed AIenhanced system has the unique characteristics of combining
+hybrid deep learning-based pre-validation with blockchain
+verification, privacy preservation, and collaborative learning,
+which removes the essential gaps in the current response.
+III.
+
+METHODOLOGY
+
+Fig. 1 shows the architecture of the proposed framework,
+which is a continuation of the ElimuChain infrastructure with
+the addition of an intelligent pre-validation layer using hybrid
+deep learning. The design is made in such a way that authentic
+certificates are permanently imprinted on the blockchain to
+overcome the inherent weakness of the blockchain systems to
+identify forged inputs before registration. The system is
+composed of five key elements, namely (i) authorized
+certificate issuers, (ii) AI-based forgery detector, (iii)
+decentralized off-chain storage based on IPFS, (iv) blockchain
+network with smart contracts, and (v) certificate verifiers.
+These elements are communicating with each other by means
+of a decentralized application (DApp) that coordinates issuing
+certificates, validating and storing them and verifying them in
+a secure and scalable way.
+
+A. Submission and Preprocessing of Certificate.
+Schools that are approved by regulatory bodies make
+submissions of digital certificates via the decentralized
+application (DApp). All the certificates are submitted in PDF
+or image format with the metadata, including the name of the
+candidate, the ID of the institution, the type of award, and the
+date when the award was issued. Before analysis, certificates
+are preprocessed in order to standardize the inputs to the deep
+learning model. This involves normalization of the resolution,
+conversion to grayscale, removance of noise and extraction of
+regions of interest covering important sections of the
+certificate like logos, seals, signatures and blocks of text. This
+preprocessing is needed to make it resistant to differences
+among certificate templates among institutions and education
+levels.
+B. Hybrid Deep
+Detection.
+
+Learning-based
+
+AI-Based
+
+Forgery
+
+A hybrid CNN BiLSTM will be used to identify forged
+certificates prior to blockchain registration. The convolutional
+neural network element is used to characterize high-level
+spatial and visual details on certificate images, including
+minute traces left by artifacting methods, like copy-move,
+splicing, or resampling. These characteristics are font
+inconsistencies, alignment, textures, and embedded graphical
+objects.
+The feature maps that have been extracted are then
+mapped back into sequential form and conjected into
+bidirectional long short-term memory (BiLSTM) network.
+BiLSTM provides contextual and semantic dependencies
+among certificate areas and thus the model detects structural
+abnormalities that cannot be detected using visual analysis.
+The last classification stage gives a binary result as to whether
+the certificate is genuine or a counterfeit. Certificates that are
+certified as authentic are only sent to blockchain registration
+phase, and thus, frauds are not entrenched.
+Training Architecture Model and Architecture.
+The CNN -BiLSTM network was created in a way that
+achieves a compromise between detection performance and
+computational cost. The CNN backbone is made up of four
+layers of convolutional filters of size 3× 3, ReLU activation
+and max-pooling, to obtain hierarchical spatial attributes. The
+feature maps were compressed into sequential embeddings
+and sent to a layer of BiLSTM with 128 hidden units in each
+direction to learn the contextual dependencies between
+certificate areas. The Adam optimizer was used to train the
+model with an initial learning rate of 1x10-4 which was chosen
+empirically to provide a stable convergence. The binary crossentropy loss was used because the problems of forgery
+detection are binary. Overfitting was avoided by dropping
+(rate = 0.5). The 40 epochs of training were run using early
+stopping, which was determined on validation loss. These
+hyperparameters are selected based on initial experiments
+which showed the best trade-off results between recall and
+stability in training.
+C. Secure Storage by IPFS and Hash Generation.
+
+Fig. 1 System Architecture of the Proposed Dynamic AES + Multi-Branch
+Blockchain Framework.
+
+In the case of certificates, which pass through AI
+validation, a cryptographic hash is calculated with the help of
+the SHA-256 algorithm. The real certificate file is off-chain
+stored through the InterPlanetary File System (IPFS) which is
+content-addressable, highly scaled, high-availability storage
+that is decentralized. The digital fingerprint of the certificate
+
+979-8-3315-4881-0/26/$31.00 ©2026 IEEE
+
+1417
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:59:52 UTC from IEEE Xplore. Restrictions apply.
+
+Proceedings of the International Conference on Electronics and Renewable Systems (ICEARS-2026)
+IEEE Xplore Part Number: CFP26AV8-ART; ISBN: 979-8-3315-4881-0
+
+is made up of the resulting IPFS content identifier (CID), and
+valuable metadata. This method saves a lot of overhead onchain storage and still maintains the integrity of data because
+a change in values on the certificate would lead to an
+imbalanced hash on the verification process.
+Off-Chain storage security assumptions and threats model
+Although IPFS offers content-addressable, decentralized
+storage, there are certain threat vectors that are introduced by
+its usage and have to be dealt with. The risks are the
+unauthorized access to the content, the denial-of-service
+attacks on the IPFS gateways, and the inability of the content
+to be available because of the lack of pinning. The framework
+proposed helps to eliminate these dangers by storing
+encrypted certificate files off-chain, and integrity verification
+by on-chain cryptographic hashes. Although an opponent gets
+access to content stored in IPFS, it is impossible to alter such
+content due to modification attack, as any alteration of the
+content modifies its identifier (CID), mismatching with the
+hash stored in the blockchain during verification. In order to
+reduce availability attacks, the deployment model
+presupposes the existence of institutional pinning services and
+redundant IPFS nodes. Notably, it is the combination of IPFS
+and cryptographic attachments to blockchain that is trusted,
+and the off-chain compromise has no chance of being
+converted to an on-chain trust violation.
+
+The proposed methodology will secure that only certified
+and legitimate certificates are stored permanently since hybrid
+forgery detection can be used with decentralized storage and
+blockchain-based verification. This integrated AI-blockchain
+pipeline can be used to a large extent to boost trust, security
+and scale in country-wide educational certificates verification
+systems.
+G. Mathematical of the Proposed Dynamic AES + MultiBranch Blockchain
+Assume that a digital educational certificate is denoted by
+C, and the labelled dataset that is used to train the forgery
+detection model is denoted by Eq.1
+𝐷 = {(𝑐𝑖 , 𝑦𝑖 )}𝑁
+𝑖=1
+
+Where 𝑦𝑖 ∈ {0,1} means a counterfeit or a genuine
+certificate respectively. The goal of the suggested system
+would be to make sure that only valid certificates are
+permanently stored on the blockchain with fake certificates
+being rejected before registration. In order to do that, a hybrid
+deep learning classifier 𝑓𝜃 (∙) (parameterized by 𝜃) is used as
+a form of pre-validation procedure.
+Given a certificate C that is submitted, the convolutional
+neural network component retrieves spatial feature maps as
+expressed as Eq.2
+F= 𝐶𝑁𝑁(𝐶) ∈ ℝℎ×𝑤×𝑑
+
+D. Blockchain Anchoring and Smart Contract Execution.
+The certificate hash and metadata thus produced are put on
+the blockchain through smart contracts which are deployed on
+a public-permissioned blockchain network. In smart contracts,
+role-based access controls are implemented so that only
+authorized institutions issue certificates, and the regulators are
+not deprived of control over the process. In every certificate
+record, there are issuance and ownership and revocation of the
+certificate. On-chain revocation is also facilitated, where an
+institution or an authority can void the certificates when
+necessary because of misbehavior or administrative mistakes.
+The certificate hash is also irrevocable once published, and it
+offers authentication that is not tampered with.
+
+𝐸𝑞. 1
+
+Eq.2
+
+h, w. and d represent the height, width, and depth of the
+feature representation. Such characteristics detect visual
+inconsistencies that are added by forgery activities splicing,
+copy- move, or resampling. The feature maps are then reformed in a sequential representation 𝑋 = 𝑥1 , 𝑥2 , … , 𝑥𝑇 that
+the network tries to model contextual dependencies with a
+bidirectional long short-term memory network to generate
+hidden states Eq.3
+ℎ𝑡 = 𝐵𝑖𝐿𝑆𝑇𝑀(𝑥𝑡 , ℎ𝑡−1 )𝐸𝑞. 3
+The probability of the end classification is calculated as
+Eq.4
+
+E. Certificate Verification Process.
+The third party bodies which initiate verification include
+employers or educational institutions. Verifiers post the
+certificate submitted by a candidate or give the identifier of
+the certificate. The system recomputes the hash of the
+submitted document and makes a comparison with the hash
+that is stored in the blockchain.
+When the certificate matches successfully, then the
+certificate is authentic and when it does not match it is a sign
+of tampering or forgery. Verification queries are nontransactional, thus there are no blockchain transaction charges,
+making them cost effective and fast to execute.
+F. Privatizing and Co-opetitive Extensions.
+In order to achieve a higher privacy level, the framework
+may be extended by zero-knowledge proof mechanisms,
+whereby the candidates can demonstrate the validity of their
+certificates without disclosing any personal sensitive
+information. Also, one can utilize federated learning to engage
+the institutions in jointly training the forgery detection model
+without exposing raw certificate data to enhance
+generalization without compromising the confidentiality.
+
+𝑝 = 𝜎(𝑊ℎ 𝑇 + 𝑏)
+
+𝐸𝑞. 4
+
+W and b are parameters that are trainable and σ(∙) is the
+sigmoid activation function. A certificate is considered to be
+authentic when 𝑝 ≥ 𝑇, 𝑇 is a predefined threshold of
+decision; otherwise it is considered forged. The decision
+function is defined as formally as: Eq.5
+1, 𝑃 ≥ 𝑇
+𝑓𝜃 (𝐶) = {
+0, 𝑃 < 𝑇
+
+Eq.5
+
+It is a decision rule, which guarantees that a certificate is
+sent to the blockchain anchoring stage, in case and only in case
+𝑓𝜃 (𝐶) = 1. As a result, the likelihood of a forged certificate
+being stored in the blockchain is limited to 1 -R, with R being
+the recall of the forgery detection model. Considering the
+large recall during experimental analysis, the risk of fake
+certificates being added to the immutable registry is greatly
+reduced compared to blockchain-only verification schemes in
+which this risk is very close to one. In the case of certificates
+regarded as authentic, a cryptographic hash is calculated with
+the help of the SHA-256 function h=H(C). The chance of two
+different certificates 𝐶= 𝐶′ sharing the same hash is based
+on the collision-resistance property of SHA-256, which is:
+
+979-8-3315-4881-0/26/$31.00 ©2026 IEEE
+
+1418
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:59:52 UTC from IEEE Xplore. Restrictions apply.
+
+Proceedings of the International Conference on Electronics and Renewable Systems (ICEARS-2026)
+IEEE Xplore Part Number: CFP26AV8-ART; ISBN: 979-8-3315-4881-0
+
+𝑃𝑟(𝐻(𝐶) = 𝐻(𝐶′)) ≤ 2−256
+
+𝐸𝑞. 6
+
+that is computationally insignificant. The hash h is the only
+value used to identify the certificate and are stored on the
+blockchain with the corresponding certificate file being stored
+off-chain using the Inter-Planetary File System. In the
+verification stage, a verifier sends a certificate 𝐶′, and the
+system computes its hash 𝐻(𝐶′). The certificate is regarded to
+be valid when and only when
+𝐻(𝐶′) = ℎ
+
+𝐸𝑞. 7
+
+where h is the hash stored in blockchain. Altering the
+content of the certificate leads to 𝐻(𝐶′) ≠ ℎ and thus postissuance tampering can be detected reliably. The stored hash
+is irreversible since the records kept by blockchain cannot be
+changed by consensus to maintain long-term integrity.
+Computationally, the AI-based forgery detection has the
+added complexity of the inference cost of the CNNBiLSTM
+model, which is borne only once when issuing a certificate.
+Conversely, verification only requires the computation of hash
+and blockchain look-up; these two operations run in constant
+or linear time depending on certificate size. This architecture
+is constructed to ensure that the improved security
+consideration does not affect the scalability or the real time
+verification performance. The mathematical model shows that
+the suggested framework integrates probabilistic AI-based
+authenticity evaluation with deterministic cryptographic
+verification. This integration ensures that validated certificates
+are permanently anchored, any latter change can be detected
+with overwhelming probability and verification is also costeffective and reliable enough to be deployed on large scale.
+IV. RESULTS AND DISCUSSION
+A. Experimental Design and Measures of Evaluation.
+The experiment on the implementation of the proposed AIenhanced blockchain-organized certificate verification
+framework was assessed based on the dataset of authentic and
+forged educational certificates that were gathered in various
+institutions and certificate templates. The dataset has different
+types of forgery that include copy-move manipulation, text
+manipulation, logo manipulation, and signature manipulation,
+which are realistic attacker situations. Hybrid CNNBiLSTM
+model was trained and evaluated on 80:20 train test split and
+evaluated with standard classification measures such as
+accuracy, precision, recall, F1-score, and AUC. Besides that,
+the system-level performance indicators like verification
+latency and blockchain transaction cost were measured to
+determine the practical feasibility.
+Table 2 Dataset Composition and Forgery Types
+Certificate Type
+
+Authentic
+
+Forged
+
+Secondary School
+
+620
+
+180
+
+Diploma / VET
+
+540
+
+160
+
+Undergraduate
+Postgraduate
+Total
+
+780
+460
+2400
+
+220
+140
+700
+
+Forgery Techniques
+Text
+alteration,
+logo
+replacement
+Copy–move,
+signature
+tampering
+Font manipulation, splicing
+Seal cloning, resampling
+Multiple
+
+the description of the experimental setting and dataset
+composition is provided, Table 2 is to be placed. This table
+provides an overview of the data features such as the amount
+of genuine and counterfeit certificates, type of certificates, and
+type of forgeries. Having such a table at the top of the Results
+section offers the readers the much-needed context prior to
+their interpretation of performance metrics.
+
+Generalization of Institution Within-Subject Evaluation
+In order to measure the generalizability, cross-dataset
+validation was done by training the CNN–BiLSTM model on
+certificates on a subset of institutions and testing it on
+certificates issued by unseen institutions with different
+templates and formatting styles. This configuration replicates
+real world deployment environment whereby there are
+substantial differences in certificate arrangements across
+education boards and universities.
+The model was found to have an average test accuracy of
+96.9 and a recall of 97.4 in cross-institution testing indicating
+high institutional drift robustness. The degradation of
+performance compared to in-distribution testing was not very
+large, which suggests that the hybrid architecture can capture
+the invariant structural and semantic characteristics instead of
+being selective of template artifacts. This validates the
+appropriateness of the proposed system to nationwide or
+multi-institution implementations.
+B. Detection Performance under Forgery
+The CNNBilSTM model proposed has good forgery
+detection skills with an accuracy of 98.3, precision of 97.9,
+recall of 98.6, and F1-score of 98.2. The fact that the model
+has a high recall means that it is very effective at detecting
+forged certificates, which is paramount in ensuring that
+fraudulent documents do not get anchored to the blockchain.
+The hybrid model is invariably more effective than standalone
+CNN and Transformer-based baselines, especially in recall
+and F1-score. This progress can be made possible through the
+fact that BiLSTM component can be used to infer sequential
+and contextual dependencies among different certificate
+regions, to supplement the spatial features extraction of CNN.
+Table 3 Forgery Detection Performance of the Proposed CNN–BiLSTM
+Model
+Metric
+Accuracy
+Precision
+Recall
+F1-score
+AUC
+
+Value (%)
+98.3
+97.9
+98.6
+98.2
+0.987
+
+After the description of the metrics of evaluations, Table 3
+must be located to show the quantitative results of the
+proposed CNN-BiLSTM model in accuracy, precision, recall,
+F1-score, and AUC. This table is the main numerical data on
+the efficiency of the AI-based pre-validation layer. It is
+positioned in such a way that the readers can immediately
+relate the metrics that were reported to the methodology
+explained above.
+C. Effect of AI Pre-Validation on the Integrity of Blockchain.
+One of the impacts of the proposed framework is the
+combination of AI-based pre-validation before blockchain
+registration. Under traditional blockchain-only certificate
+systems, falsified certificates that are subjected to either a
+manual or superficial validation can be permanently recorded,
+and the garbage-in-garbage-out problem occurs. As compared
+to this, the proposed system greatly minimizes this risk. The
+probability of a forged certificate being inserted into the
+blockchain is under 1.4, considering the attained recall of 98.6,
+which is a great improvement over the current strategies. This
+finding can be verified by stating that AI-based pre-validation
+performance is effective in enhancing blockchain integrity
+without affecting the notion of decentralization.
+
+979-8-3315-4881-0/26/$31.00 ©2026 IEEE
+
+1419
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:59:52 UTC from IEEE Xplore. Restrictions apply.
+
+Proceedings of the International Conference on Electronics and Renewable Systems (ICEARS-2026)
+IEEE Xplore Part Number: CFP26AV8-ART; ISBN: 979-8-3315-4881-0
+
+D. Accuracy of Verification and Detection of Tamper.
+The authentication is based on cryptographic hash
+comparison of the sent certificate and the one saved in the
+blockchain. Experimental findings indicate that 100% of postissuance tampering has been detected since alteration of the
+content of the certificate will generate an error in the hash.
+This proves that the storage provided by the IPFS with the
+blockchain anchoring offers high tamper-evidence assurances.
+Additionally, verification is a non-transactional activity and
+hence it has a low computational and financial cost that allows
+its use on large scale but real time implementation.
+
+models with p-value <0.01 in terms of recall and F1-score.
+This validates that the hybrid architecture offers a statistically
+significant benefit especially in reducing false negatives
+which is important in ensuring that forged certificates are not
+permanently embedded on the blockchain. Those results
+support the idea that the savings that are provided in Table 4
+are not just numerically better, but statistically more reliable,
+and thus the validity of the suggested AI-enhanced
+verification system.
+
+E. Latency and Analysis of Computational Overhead.
+The use of AIs to detect forgery incurs computational
+expenses at the certificate issuance stage. Nevertheless, such
+overhead is only realized once per certificate and is acceptable
+when issuing certificates by institutions. On the contrary,
+certificate verification is light, only a hash computations and
+blockchain query operations are necessary. Experimental
+results show that the verification latency does not increase
+significantly relative to the original system of ElimuChain,
+which proves that the additional AI layer is not the source of
+the worsening of the user experience of verifiers, e.g.
+employers or institutions of higher learning.
+F. Comparative Discussion to Existing Systems.
+
+Fig. 2 Comparison with Baseline Forgery Detection Models
+
+The proposed framework is a more complete security
+solution in comparison with the current systems of
+blockchain-based certificate verification. The majority of the
+previous systems guarantee the integrity of post-issuance but
+do not provide means to determine the authenticity of a
+certificate prior to blockchain registration. The individual AI
+based forgery detection systems are effective, but fail to offer
+permanent storage or decentralized verification. The proposed
+framework combines the two paradigms by merging the
+capabilities of hybrid deep learning with blockchain and IPFS.
+This combined solution does not only increase the accuracy of
+forgery detection, but also increases both the level of trust,
+transparency and scalability at the system level.
+Table 4 Comparison with Baseline Forgery Detection Models
+Model
+CNN
+Transformer
+CNN–BiLSTM
+
+Accuracy
+(%)
+95.8
+96.6
+98.3
+
+Precision
+(%)
+94.9
+95.7
+97.9
+
+Recall
+(%)
+96.1
+97.0
+98.6
+
+F1-score
+(%)
+95.5
+96.3
+98.2
+
+Having mentioned baseline models like standalone CNN
+and Transformer-based models, one should insert Table 4 to
+make a direct comparison. The hybrid model is better in this
+table, especially the recall and F1-score, which argues that
+contextual modeling enhances the detection of forgeries. The
+continuity of this comparison with the literature survey is also
+the inclusion of the failures of previous methods.
+
+The proposed CNN-BiLSTM model is better than baseline
+CNN and Transformer-based models in all performance
+metrics, as shown in Fig. 2. Although the autonomous CNN
+reaches the level of reasonable accuracy by capturing visual
+artifacts, it is not able to model sequential and contextual
+relationships that exist in certificate layouts. Transformerbased model enhances recall with the use of attention, but its
+performance is still low due to the lack of explicit spatial
+feature extraction. Conversely the hybrid CNNBiLSTM
+architecture is efficient in integrating both spatial learning of
+features as well as contextual sequence modelling which
+yields high accuracy, precision and recall. Interestingly, the
+proposed model shows the best recall, which is vital in
+blockchain-based certificate verification systems because
+false negativity leads to the direct increase of the risk of forged
+certificates being stored in history. Such findings verify that
+hybrid deep learning models are more appropriate to detect
+powerful certificate forgery compared to single architectures.
+Classification Behaviour Analysis
+
+G. Statistical Significance Analysis
+To confirm that the performance gains of the proposed
+CNN -BiLSTM model over the baseline methods are not as a
+result of chance variation, statistical significance testing was
+carried out. The paired McNemar test was used on the
+classification of the CNN, Transformer and CNN-BiLSTM
+models on the same set of tests. Moreover, paired t-tests were
+also conducted on the F1-score and recall values which were
+obtained in the five independent runs with varied random
+seeds. The findings suggest that CNN-BiLSTM model is
+significantly better than the standalone CNN and Transformer
+
+Fig. 3 Confusion matrix of the proposed CNN–BiLSTM forgery detection
+model.
+
+979-8-3315-4881-0/26/$31.00 ©2026 IEEE
+
+1420
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:59:52 UTC from IEEE Xplore. Restrictions apply.
+
+Proceedings of the International Conference on Electronics and Renewable Systems (ICEARS-2026)
+IEEE Xplore Part Number: CFP26AV8-ART; ISBN: 979-8-3315-4881-0
+
+The classification behaviour is introduced, it is
+recommended to insert Fig. 3 that will depict the confusion
+matrix of the proposed model. This figure is the visual
+illustration of the proportion of true positive and false
+negative, which justifies the statement that the model is
+efficient in minimizing the risk of including forged certificates
+in the scheme. The position of the figure enables the readers
+to make the numerical findings in Table II to be intuitively
+validated.
+Threshold Sensitivity and Discriminative Capability
+
+applications and the suggested AI-based system. The location
+strengthens the main input of the research.
+H. Practical Deployment and Scalability.
+The results of the experiment prove that the suggested
+framework is suited to the countrywide implementation. The
+blockchain layer is not affected by the update or retraining of
+the AI model, whereas IPFS offers scalable storage of
+certificate files with the modular architecture. Moreover,
+privacy-saving methods like zero-knowledge proofs and
+federated learning can be added to the framework to facilitate
+collaboration between institutions and adhere to regulations.
+These attributes enable the proposed system to be flexible to
+various educational ecosystems and emerging technological
+changes in the future (Table 5). On the whole, the findings
+support the fact that combining AI-based forgery detection
+with the use of blockchain-based certificate verification is
+effective at improving the level of security and reliability of
+the system. The suggested structure is efficient in avoiding the
+storage of forged certificates permanently and providing
+verification that is not easy to alter, besides performing
+efficiently. The results confirm the efficiency of the AIenhanced ElimuChain extension as the powerful means of safe
+and reliable educational certificate management.
+Table 5 Scalability Analysis
+
+Fig. 4 ROC curve of the proposed CNN–BiLSTM model (AUC = 0.987).
+
+Fig. 4 may be placed to show the ROC curve and AUC
+analysis. Such a plot validates the fact that the model can
+differentiate between forged and authentic certificates with
+different decision thresholds. The ROC curve is a complement
+to the confusion matrix as it depicts stability and performance
+of generalization.
+
+Fig. 5 Reduction of forged certificates anchored on the blockchain with AI
+pre-validation.
+
+The incorporation of AI-based pre-validation, as depicted
+in Fig. 5 decreases the ratio of counterfeits in the blockchain
+to less than 2 percent, which is much lower than 100 percent
+in blockchain-only systems, which is normally known as the
+garbage-in-garbage-out problem. Discussing how AI prevalidation will help to eliminate the garbage-in-garbage-out
+issue, it is better to include Fig. 5 that demonstrates the
+decrease in the number of forged certificates added to the
+blockchain. This number can be a bar chart of blockchain-only
+
+Number of Certificates
+1,000
+5,000
+10,000
+50,000
+
+Avg. Verification Latency (ms)
+405
+412
+428
+455
+
+Speaking of the scalability and computational overhead,
+Fig. 6 would be put in place to demonstrate the trends of
+verification latency as the certificates number grows. This plot
+is encouraging to the readers because it confirms them that AI
+overhead is limited to the issuance phase and that the system
+is efficient at scale.
+
+Fig. 6 Verification latency versus number of certificates.
+
+V. CONCLUSION
+In this research, the Proposed framework of AI-enhanced
+blockchain-certificate verification that builds on the
+ElimuChain framework by introducing a hybrid deep learning
+method of forgery detection during pre-issuance. Although
+blockchain is immutable and decentralized in trust, it does not
+necessarily check the authenticity of certificates prior to
+storage. In order to overcome this shortcoming,
+CNNBiLSTM-based pre-validation layer was proposed to
+
+979-8-3315-4881-0/26/$31.00 ©2026 IEEE
+
+1421
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:59:52 UTC from IEEE Xplore. Restrictions apply.
+
+Proceedings of the International Conference on Electronics and Renewable Systems (ICEARS-2026)
+IEEE Xplore Part Number: CFP26AV8-ART; ISBN: 979-8-3315-4881-0
+
+detect forged certificates before anchoring into blockchains.
+The results of the experiment indicate that the suggested
+model has an accuracy of 98.3 percent, a recall of 98.6 percent,
+and an AUC of 0.987, which is effective in lowering the
+chances of fraudulent certificates being added in the
+immutable ledger. IPFS off-chain storage and role-based
+governance using smart contracts maintain scalability,
+transparency and efficiency in verification and the additional
+AI layer creates only a small overhead at the issuance stage.
+Future directions will involve improvement of privacy and
+collaboration through the use of zero-knowledge proofs to
+allow selective disclosure on verification and federated
+learning to allow cross-institutional model training without
+raw certificate information. The future work will examine
+cross-chain interoperability of international credential
+verification and lightweight edge-based inference to enhance
+the scalability. The extensions will enhance the framework
+applicability in large-scale interoperable, privacy-conscious
+and globally educational ecosystems.
+REFERENCES
+[1]
+
+W. Gräther, S. Kolvenbach, R. Ruland, J. Schütte, C. Torres, and F.
+Wendland, “Blockchain for Education: Lifelong Learning Passport,”
+dl.eusset.eu, 2022, Available: https://dl.eusset.eu/items/b02679a37e9b-4b22-8249-009737a0d52d
+[2] M. Alharby, A. Aldweesh and A. v. Moorsel, "Blockchain-based Smart
+Contracts: A Systematic Mapping Study of Academic Research
+(2018)," 2022 International Conference on Cloud Computing, Big Data
+and Blockchain (ICCBB), Fuzhou, China, 2022, pp. 1-6, doi:
+10.1109/ICCBB.2018.8756390.
+[3] Andrian Minchev, Miroslav Karabalaiev, Ani Zlateva, and A.
+Georgieva, “DIGITAL TRANSFORMATION IN EDUCATION:
+EVALUATING NEEDS AND ACCEPTANCE OF SECURE
+DIGITAL CERTIFICATES,” INTED proceedings, vol. 1, pp. 5128–
+5132, Mar. 2025, doi: https://doi.org/10.21125/inted.2025.1281.
+[4] A. Rustemi, F. Dalipi, V. Atanasovski, and A. Risteski, “A Systematic
+Literature Review on Blockchain-Based Systems for Academic
+Certificate Verification,” IEEE Access, vol. 11, pp. 64679–64696,
+2023, doi: https://doi.org/10.1109/ACCESS.2023.3289598.
+[5] F. Casino, T. K. Dasaklis, and C. Patsakis, “A Systematic Literature
+Review of blockchain-based applications: Current status,
+Classification and Open Issues,” Telematics and Informatics, vol. 36,
+no.
+36,
+pp.
+55–81,
+Mar.
+2019,
+doi:
+https://doi.org/10.1016/j.tele.2018.11.006.
+[6] D. Wankhede et al., “The Decentralized Smart Contract Certificate
+System Utilizing Ethereum Blockchain Technology,” Procedia
+Computer Science, vol. 230, pp. 923–934, Jan. 2023, doi:
+https://doi.org/10.1016/j.procs.2023.12.035.
+[7] Dr. Sandhya. Shinde, Isha Myanewa R, Surdatt Nimbal, and Harsh
+Randhir, “Blockchain Based Academic Credential Verification
+System,” International Journal of Engineering Research &
+Technology,
+vol.
+14,
+no.
+1,
+Jan.
+2025,
+doi:
+https://doi.org/10.17577/IJERTV14IS010041.
+[8] S. M. Nair, V. Ramesh, and A. K. Tyagi, “Issues and Challenges
+(Privacy, Security, and Trust) in Blockchain-Based Applications,”
+Advances in data mining and database management book series, pp.
+196–209, Sep. 2020, doi: https://doi.org/10.4018/978-1-7998-32959.ch012.
+[9] S. Al Sakib, M. Rakib, M. M. Hossain, M. Shamsul Islam, B. R. Khan
+and M. S. Reza, "Blockchain Based Certificate Verification for
+Employee Hiring & Admission System," 2023 26th International
+Conference on Computer and Information Technology (ICCIT), Cox's
+Bazar,
+Bangladesh,
+2023,
+pp.
+1-6,
+doi:
+10.1109/ICCIT60459.2023.10441170.
+[10] W. Powell, M. Foth, S. Cao, and V. Natanelov, “Garbage In Garbage
+Out: The Precarious Link between IoT and Blockchain in Food Supply
+Chains,” Journal of Industrial Information Integration, p. 100261, Aug.
+2021, doi: https://doi.org/10.1016/j.jii.2021.100261.
+[11] Fatemeh Zare Mehrjardi, Ali Mohammad Latif, Mohsen Sardari
+Zarchi, and Razieh Sheikhpour, “A survey on deep learning-based
+image forgery detection,” Pattern Recognition, vol. 144, pp. 109778–
+109778, Dec. 2023, doi: https://doi.org/10.1016/j.patcog.2023.109778.
+
+[12] Anjith George and Sébastien Marcel “EdgeDoc: Hybrid CNNTransformer Model for Accurate Forgery Detection and Localization
+in
+ID
+Documents,” Arxiv.org,
+2025.
+https://arxiv.org/html/2508.16284v1 (accessed Dec. 21, 2025).
+[13] M. A. Rahim et al., “An Enhanced Hybrid Model Based on CNN and
+BiLSTM for Identifying Individuals via Handwriting Analysis,”
+Computer Modeling in Engineering & Sciences, vol. 140, no. 2, pp.
+1689–1710,
+Jan.
+2024,
+doi:
+https://doi.org/10.32604/cmes.2024.048714.
+[14] F. Naguji et al., "GreenLand: A Secure Land Registration Scheme for
+Blockchain and AI-Enabled Agriculture Industry 5.0," in IEEE Access,
+vol.
+12,
+pp.
+120994-121009,
+2024,
+doi:
+10.1109/ACCESS.2024.3451627.
+[15] ]H. Yu, G. Wang, A. Dong, Y. Han, Y. Wang, and J. Yu, “Blockchainenabled privacy protection scheme for IoT digital identity
+management,” High-Confidence Computing, p. 100320, Mar. 2025,
+doi: https://doi.org/10.1016/j.hcc.2025.100320.
+[16] S. H. Said, R. S. Sinde, E. M. Kosia and M. A. Dida, "A
+Comprehensive Blockchain-Based System for Educational
+Qualifications Management and Verification to Counter Forgery," in
+IEEE Access, vol. 13, pp. 31562-31589, 2025, doi:
+10.1109/ACCESS.2025.3542545
+[17] J. Alamrio, J. Ayoade, and M. A. Uddin, “A Zero-Knowledge ProofEnabled Blockchain-Based Academic Record Verification System,”
+Sensors, vol. 25, no. 11, pp. 3450–3450, May 2025, doi:
+https://doi.org/10.3390/s25113450.
+[18] H. Xia, Y. Wang, J. Z. Zhang, L. J. Zheng, M. M. Kamal, and V. Arya,
+“COVID-19 fake news detection: A hybrid CNN-BiLSTM-AM
+model,” Technological Forecasting and Social Change, vol. 195, p.
+122746,
+Oct.
+2023,
+doi:
+https://doi.org/10.1016/j.techfore.2023.122746.
+[19] Boonkrong, S. Design of an academic document forgery detection
+system. Int. j. inf. tecnol. 17, 5175–5187 (2025).
+https://doi.org/10.1007/s41870-024-02006-6
+[20] T. South et al., “Verifiable evaluations of machine learning models
+using zkSNARKs,” arXiv.org, 2024. https://arxiv.org/abs/2402.02675
+[21] Z. Xing et al., "Zero-Knowledge Proof-Based Verifiable Decentralized
+Machine Learning in Communication Network: A Comprehensive
+Survey," in IEEE Communications Surveys & Tutorials, doi:
+10.1109/COMST.2025.3561657.
+[22] E. J. Nyato, E. Kimito, J. Yang, D. Lee, and D. Lee, “Blockchainintegrated zero-knowledge proof system for privacy-preserving nearmiss reporting in construction projects,” Automation in Construction,
+vol.
+168,
+pp.
+105825–105825,
+Oct.
+2024,
+doi:
+https://doi.org/10.1016/j.autcon.2024.105825.
+[23] S. Usharani, Gayathri, R. S, D. S. Kishore and S. Depuru, "IoT based
+Animal Trespass Identification and Prevention System for Smart
+Agriculture," 2023 7th International Conference on Intelligent
+Computing and Control Systems (ICICCS), Madurai, India, 2023, pp.
+983-990, doi: 10.1109/ICICCS56967.2023.10142814.
+[24] S. Depuru and M. S. Kumar, "Enhancements in Brain Tumor Detection
+and Classification Using Deep Learning on MRI Data," 2025 2nd
+International Conference on Computing and Data Science (ICCDS),
+Chennai,
+India,
+2025,
+pp.
+1-6,
+doi:
+10.1109/ICCDS64403.2025.11209429.
+[25] S. Depuru and M. S. Kumar, “AMIN-CNN: Enhancing Brain Tumor
+Segmentation through Modality-Aware Normalization and Deep
+Learning”, j.electron.electromedical.eng.med.inform, vol. 7, no. 3, pp.
+835-849, Jul. 2025.
+
+979-8-3315-4881-0/26/$31.00 ©2026 IEEE
+
+1422
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:59:52 UTC from IEEE Xplore. Restrictions apply.
+
+

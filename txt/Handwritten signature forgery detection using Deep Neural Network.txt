@@ -1,0 +1,683 @@
+2023 International Conference in Advances in Power, Signal, and Information Technology
+
+Handwritten signature forgery detection using
+Deep Neural Network
+Manish Bag1, Rajashree Dash2 *, Deepak Pattnayak3, Amisa Mohanty4, Isha Dash5
+1,2,3,4,5
+
+2023 International Conference in Advances in Power, Signal, and Information Technology (APSIT) | 979-8-3503-3936-9/23/$31.00 ©2023 IEEE | DOI: 10.1109/APSIT58554.2023.10201777
+
+Computer Science & Engineering Department,
+Siksha ‘ O‘ Anusandhan (Deemed to be University), Bhubaneswar, India
+
+numerous since any two signatures may look very similar
+with little to no differences written by the same person.
+Traditional methods of signature verification rely on human
+experts or simple features extracted from the signature
+images. However, these methods are prone to errors and
+limitations. Despite the enormous research efforts, offline
+signature verification is still difficult, especially when
+attempting to differentiate between competent forgeries and
+authentic signatures because the visual differences between
+the two can sometimes be less noticeable than between two
+authentic ones [1]. The advancement of technologies in
+today’s generation has also led to an amplified amount of
+fraudulent activities. One such type of fraud is a handwritten
+signature forgery, where in a fraud tries to imitate a person’s
+signature to gain access to bank accounts and /or carry out
+various criminal activities. To mitigate such deceptive
+activities, and to prevent fraudulent authorization, there has
+been an increase in the demand for effective and precise
+signature forgery detection system (SFDS) that distinguishes
+between forged and genuine handwritten signatures.
+In the literature, a number of SFDS models based on
+machine learning and deep learning have been laid out [110]. In [2] the author has proposed a method for offline
+signature recognition and forgery detection using a CNN
+model. The authors proposed a Crest-Trough algorithm with
+Harris-Surf for the forgery detection. Pre-processing
+techniques that include noise removal, scaling of the images,
+centralization and rotation of the signature images are used
+in the study. The proposed CNN model architecture is based
+upon 5 layers that use a back-propagation method for
+training the model. The model is tested on the CEDAR
+dataset that consists of 1320 images for each genuine and
+forged signature. Finally evaluation metrics such as False
+Acceptance Rate (FAR) and False Rejection Rate (FRR) is
+used judge to performance of the described CNN model.
+A region based DNN using Mutual Signature DenseNet
+(MSDN) is explored in [3]. In order to learn the feature
+representation of handwritten signatures, it comprises of two
+CNN branches that share the same structure and parameters.
+In their proposed method the similarity between two
+signatures obtained by analysing multiple local regions by
+using the MSDN feature extractor is then fed forward to a
+Siamese Neural Network for training. The CEDAR dataset
+of handwritten signatures along with GPDS dataset is used
+for training the Neural Network. The model in then
+compared with different CNN architectures such as VGG16, AlexNet, ResNet-18 and finally performance metrics
+
+Abstract— A common biometric for establishing a person's
+identity in document forensics is verification of handwritten
+signatures. Signature plays an important role in banking,
+financial, commercial and so on. However, issues associated
+with signatures are numerous since any two signatures may
+look very similar with little to no differences written by the
+same person. Despite the enormous research efforts, offline
+signature verification is still difficult, especially when
+attempting to differentiate between competent forgeries and
+authentic signatures because the visual differences between the
+two can sometimes be less noticeable than between two
+authentic ones. Due to the expanding usage of digital signatures
+and electronic documents, there has been an increase in the
+demand for effective and precise signature forgery detection
+systems (SFDS). In order to effectively combat handwritten
+signature forgery, this study intends to create an automated
+system utilizing a deep neural network (DNN) especially a
+simple and efficient Convolutional Neural Network (CNN) that
+can determine if a given signature is real or faked. The model
+will take signature image as input and extract important
+features through different layers of CNN that will helpful in
+distinguishing genuine and forged signatures. The model
+performance is also accessed with different image resizing
+techniques and optimizers used in training of CNN. The
+model's performance in terms of a set of assessment metrics,
+such as accuracy, precision, recall, and F1-score are provided
+in this paper after extensive tests are conducted across a huge
+dataset of handwritten signatures including both genuine and
+various types of forged signatures. Additionally, the model's
+performance is also contrasted with a cutting-edge deep
+learning model. The simulation results conclusively
+demonstrate the appropriateness of the suggested methodology
+for automatically detecting forgery in handwritten signature
+images.
+Keywords— Forgery detection, Classification, Deeplearning,
+CNN
+
+I. INTRODUCTION
+A signature is the way a person writes their own name in a
+special and consistent manner. It is a unique and personal
+expression of one’s identity. A common biometric for
+establishing a person's identity in document forensics is
+verification of handwritten signatures. Signature serves as a
+form of biometric authentication or verification of the
+person’s identity or consent on various kinds of documents
+that require such confirmation. For example, a signature can
+be used to authorize a payment on a bank cheque, to agree to
+the terms and conditions of a contract, to indicate the sender
+or recipient of a letter, or to provide or request information
+on a form. However, issues associated with signatures are
+
+979-8-3503-3936-9/23/$31.00©2023 IEEE
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:57:49 UTC from IEEE Xplore. Restrictions apply.
+
+136
+
+efficient one always attracts researcher in this field. In order
+to effectively combat handwritten signature forgery, this
+study intends to create an automated system utilizing a
+simple custom CNN that can determine if a given signature
+is real or faked. The model will take signature image as
+input and extract important features through different layers
+of CNN that will help in analyse and distinguish between
+genuine and forged signatures. The model performance is
+also accessed with different image resizing techniques and
+optimizers used in training of CNN. The model's
+performance in terms of a set of assessment metrics, such as
+accuracy, precision, recall, and F1-score are provided in this
+study after extensive tests are conducted across a huge
+dataset of handwritten signatures including both genuine and
+various types of forged signatures. Additionally, the model's
+performance is contrasted with a pre-trained VGG16 and a
+trainable VGG16. The simulation results conclusively
+demonstrate the appropriateness of the suggested
+methodology for automatically detecting forgery in
+handwritten signature images. The main contribution of the
+work is delineated as follows:
+
+such as FAR and FRR along with accuracy metrics are taken
+into account for model evaluation.
+In [4] the authors have proposed the use of a Siamese
+Neural Networks to assist in resolving the offline
+handwritten signature verification problem in a writerindependent context. They include the image binarization in
+the pre-processing step to convert the original image to a
+single channel grey scale image. Then Morphological
+erosion is used to increase the signature strokes, with an
+image resizing of 128 x 128 pixels. Augmentation and
+synthetic signature generation is also performed.
+Performance of the model is then compared with other pretrained networks such as LeNet and SigNet with accuracy
+and error rate metrics.
+A simple CNN with three convolution and maxpooling
+layer arranged in alternate fashion with one flatten and dense
+layer is proposed in [5] for signature forgery detection. The
+model is tested on a dataset including 6000 images prepared
+by the author with one person making originals and two
+others making the forgeries. As all images are in RGB
+format, so they are converted to grey scale image in preprocessing stage. The greyscale images of the handwritten
+signatures are then converted to Bitmap format to rasterize
+the signature dataset. Accuracy and loss percentage metrics
+is used for model assessment.
+In [6] another CNN model derived from the per-trained
+ResNet-50 as its base model, and adding additional layers on
+top is proposed as a SFDS. The model has used various
+autoencoders for feature extraction. The model is tested with
+a dataset including 2660 english signatures collected from
+kaggle dataset.
+In [7] authors have used a CNN model for detecting
+signature forgery. The CNN model was trained and tested
+for various different dataset split ratios. Loss and accuracy
+was used to judge the performance of the model.
+In [8] the authors have used attendance sheets to
+generate handwritten signature dataset. OMR (Optical Mark
+Recognition) tools were used to scan the attendance sheets,
+the OMR tools perform operations like correcting the
+orientation and identify its class by its unique barcode
+present in the attendance sheet. To distinguish between
+signatures and non-signature, a feed forward neural network
+was utilized. A deep CNN classifier was then proposed to
+check the legitimacy of the signatures. Various hyperparameter tuning was also performed to increase the
+accuracy of the model. Optimizer like ADAM and SGD
+were also compared. A confusion matrix was used to
+evaluate the performance of the neural network model.
+A comparison of a custom CNN, VGG16, a Siamese
+Neural Network(SNN) and a SNN with SigNet architecture
+is presented in [9] for signature forgery detection. By testing
+the model on CEDAR dataset, the custom SNN shows better
+accuracy compared to the other models.
+A 14 layer CNN using 6 convolutions, 5 maxpooling, 1
+flatten and 2 dense layers is proposed in [10] to verify
+authenticity of handwritten signatures. The model is tested
+on a dataset including 300 images with equal proportion of
+real and forged ones related to signatures of 30 people. The
+images are re-scaled to a standard image size of 512 x 512
+pixels. The model performance is also accesses with three
+different split ratios, out of which the 80:20 ratio has shown
+the best accuracy in training and validation set.
+Though numerous CNN architectures are proposed in
+literature, but the goal of developing a simple and more
+
+•
+•
+
+•
+
+A custom 7 layer CNN based SFDS is
+developed.
+The CNN’s performance with 3 optimizers and
+3 different training testing split ratios is
+analyzed.
+The performance of custom CNN is compared
+with the pre-trained and trainable VGG-16
+model.
+
+The next section details the proposed CNN based
+signature forgery detection model followed by the findings
+of the model in section 3 and conclusion in section 4.
+II. PROPOSED CNN BASED SFDS
+Signature forgery is a serious problem that can cause
+financial and legal damages to individuals and
+organizations. In this study, we propose a simple custom
+CNN model for signature forgery detection that can
+automatically learn discriminative features from the
+signature images and classify them as genuine or forged one,
+assuming it as a binary classification problem.
+Fig. 1 depicts the layout of the developed 7-layer CNN
+based SFDS model including 3 convolution layers with
+associated maxpooling and batch normalization, one dropout
+layer, one flatten layer and two fully connected dense layers.
+The several convolutional, pooling, and fully connected
+layers included in the network helps to capture the subtle
+variations and characteristics of different signatures. The
+input layer, the convolution layer, the pooling layer, the
+flatten layer, the fully linked dense layer and the output layer
+are the six fundamental layers that make up the network.
+The signature images passing through the input layer are
+converted to matrix of pixels. The input layer’s size is 227 x
+227 x 3 pixels. In the first convolution layer, 32filters with
+kernel size of 3x3 has been used. The second convolution
+layers consist of 64 filters with 3x3 as the kernel size. The
+third convolution layers uses 128 filters with the same kernel
+size as the previous layer. All the three convolutional layers
+use rectified linear (ReLu) as the activation function. The
+first two convolution layers use MaxPooling while the third
+convolution layer uses GlobalAveragePooling followed by a
+fully connected dense layer with sigmoid activation
+function. Batch normalization is also performed after the
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:57:49 UTC from IEEE Xplore. Restrictions apply.
+
+137
+
+in six different resolutions and filtered in pre-processing
+stage is depicted in Fig. 3 Following pre-processing, the
+dataset was tested as shown in Table 1 by dividing it into
+training and test sets with different splitting ratios. The CNN
+model was experimanted with three popular optimizers such
+as ADAM, RMSprop and SGD and three different split
+ratios for 100 epochs. Each epoch used a batch size of 30.
+Learning rate for RMSprop and SGD optimizer was set to
+0.001. Analysing the values of Table 1, it is evident that the
+SGD optimizer with the validation split set to 0.2 (80:20
+split ratio) clearly provides better accuracy and loss value in
+training, validation and testing compared to other two
+optimizers and split ratio. The accuracy and loss obtained
+per each epoch during training of the CNN model using
+SGD optimizer with 80:20 split ratios is depicted in Fig. 4
+The model demonstrates an accuracy of 0.977 for training,
+0.987 for validation and 0.980 for testing while utilizing the
+SGD optimizer.
+Further fixing the optimizer and split ratio, the
+performance of the model observed with six different image
+resolutions is presented in Table 2. The 100 x 100 pixel
+image size results in the best training accuracy and is the
+fastest to compile and validate. The image size of 227x227
+shows a minor reduction is the training accuracy but has
+comparable validation and testing accuracy with the smaller
+100 x 100 image, and is the second fastest to compile. While
+other resolutions show no major improvement or sometimes
+lesser than that of 100 x 100 image and 227 x 227 image,
+they also take a longer time for training the model. That
+makes 100 x 100 and 227 x 227 image sizes the best fit
+image resolutions for the said CNN model. However from
+Fig. 2, it is observed that 100 x 100 image shows drastic
+reduction is image quality when plotted. Therefore 227 x
+227 image size was set for further testing as it has better
+image clarity than that of 100 x 100 image while being the
+second fastest to compile the model training, with an overall
+better performance with respect to training, validation and
+testing accuracy.
+Finally the model is also compared with VGG-16 a
+cutting-edge deep learning model. The main features of the
+suggested simple CNN’s architecture with VGG-16 are
+shown in Table 3. The VGG-16 model has a total of 16
+layers, that include one input layer, thirteen convolution
+layers, one flatten and one fully connected dense layer. It
+was trained upon the ‘imagenet’ dataset consisting millions
+of images with thousands of classes. Input image size needs
+to set at 250 x 250 pixels for the VGG-16 network. Initially
+the performance of the pre-trained VGG-16 for signature
+forgery detection is accessed.
+
+first dense layer. Next a flatten layer is used to convert the
+resultant output from the previous layer to a single
+dimension. The flatten layer is then followed by a dropout
+layer with 20% dropout mechanism to overcome the overfitting problem. Finally, one dense layer with the softmax
+activation function is used as the output layer.
+Fig. 2 shows the overall principle of how the CNN based
+SFDS works. In the data acquisition stage, handwritten
+signatures were collected from the publicly available
+CEDAR dataset https://cedar.buffalo.edu/NIJ/data. This
+dataset includes a total of 2640 grey scale handwritten
+signatures out of which 1320 are genuine and 1320 are
+forged signatures. Further a sample of 60 images of each
+genuine and forged signature prepared by us is also added in
+the dataset making a total of 2760 images. To achieve
+uniformity among the images, which varied in size from
+200px to 800px, we used the resize function of OpenCV (a
+powerful
+library
+for
+image
+processing)
+with
+INTER_LINEAR as the interpolation parameter that
+performs a linear interpolation of the pixel values while
+resizing the signature images. Then a Gaussian blur filter is
+applied to perform the noise removal from the images. The
+filter is applied using fastNlMeansDenoising function of the
+OpenCV image processing library with tuned values for
+Gaussian blur as the function parameters. After the preprocessing stage the dataset was split into training and
+testing sets with the specified splitting ratio. Then the
+proposed CNN model is created and then trained using
+different optimizers and ‘binary_crossentropy’ loss function,
+for addressing the binary classification task. Finally the
+derived model is accessed using accuracy and loss metrics to
+see how well the model has performed.
+III. EXPERIMAENTAL RESULT DISCUSSION
+The proposed 7-layer CNN based SFDS was implemented
+using Python on a computer system configured with AMD
+Ryzen 5 3600 CPU at 4.2Ghz, Nvidia RTX 2060 6GB
+GPU(Graphics Processing Unit) and 16GB of 3200mhz
+RAM. Python version 3.9.5 was used in the study. The
+OpenCV image processing library was used to resize and
+apply filtering to the dataset. Tensorflow version 2.10 was
+used to create the sequential CNN model. Matplotlib was
+used to plot performance graphs for training and validation
+accuracy and loss. The SK.learn library provided us with
+functions to split the dataset, to show various metrics such as
+f1-score, recall and precision and to visualize the confusion
+matrix.
+In this study, the performance of the proposed CNN
+based SFDS is observed with 6 different image resize. A
+randomly chosen handwritten signature image being resized
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:57:49 UTC from IEEE Xplore. Restrictions apply.
+
+138
+
+Fig.1 Architecture of the proposed CNN for SFDS
+
+Fig. 2 CNN based SFDS framework
+
+Fig. 3 Resized (in six different resolutions) and filtered pre-processed signature image along with the original one
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:57:49 UTC from IEEE Xplore. Restrictions apply.
+
+139
+
+Table 1. Performance of the proposed CNN under different optimizers
+SPLIT
+RATIO
+
+70:30
+80:20
+85:15
+
+Training Accuracy /
+Loss
+
+Validation Accuracy /
+Loss
+
+Test Accuracy /
+Loss
+
+ADAM
+
+RMSprop
+
+SGD
+
+ADAM
+
+RMSprop
+
+SGD
+
+ADAM
+
+RMSprop
+
+SGD
+
+0.997 /
+0.003
+0.998 /
+0.003
+0.999 /
+0.001
+
+0.990 /
+0.024
+0.995 /
+0.011
+0.506 /
+0.693
+
+0.977 /
+0.052
+0.979 /
+0.053
+0.977 /
+0.051
+
+0.889 /
+0.294
+0.459 /
+26.199
+0.459 /
+25.723
+
+0.47 /
+20.996
+0.45 /
+31.65
+0.459 /
+27.622
+
+0.981 /
+0.039
+0.988 /
+0.035
+0.987 /
+0.038
+
+0.886 /
+0.337
+0.509 /
+23.787
+0.507 /
+23.456
+
+0.526 /
+19.443
+0.509 /
+28.713
+0.507 /
+25.185
+
+0.972 /
+0.049
+0.981 /
+0.044
+0.980 /
+0.047
+
+Fig. 4 Epochs vs. Training and Validation Accuracy / Loss
+Table 2. Performance of the proposed CNN model with respect to various image sizes
+IMAGE SIZE (in
+pixels)
+100 x 100
+227 x 227
+250 x 250
+250 x 100
+350 x 100
+400 x 150
+
+TRAINING ACC.
+
+VALIDATION ACC.
+
+TESTING ACC.
+
+0.981
+0.979
+0.975
+0.972
+0.977
+0.974
+
+0.988
+0.988
+0.984
+0.981
+0.988
+0.981
+
+0.985
+0.981
+0.985
+0.981
+0.983
+0.978
+
+Then the VGG-16 model is trained using SGD optimizer
+with learning rate 0.001 with the 80% of CEDAR dataset and
+its performance is contrasted with the pre-trained VGG-16 and
+the proposed simple CNN based SFDS model. Table 4 shows
+the accuracy comparison of pre-trained and trainable VGG-16
+models with the suggested one. Finally the performance of the
+three CNN models in term of accuracy, precision, recall and
+F1-score for the test set is depicted in Fig. 5.
+The pre-trained VGG-16 clearly shows poor performance
+for the said classification task of handwritten signature forgery
+
+detection, taking a much longer time compared to the given 7layer CNN model. When the layers of the VGG-16 model are
+unfrozen and it is made trainable, it shows better performance
+than the pre-trained VGG-16, but poor performance compared
+to the proposed CNN. The custom CNN based SFDS is able
+to achieve an accuracy of 0.981, precision of 1, recall of 0.967
+and F1-score of 0.983, which is comparatively better than the
+other two models. This is due to the VGG-16 model not
+utilizing any batch normalisation filter in its convolution
+layers, while having no dropout layer and only using a single
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:57:49 UTC from IEEE Xplore. Restrictions apply.
+
+140
+
+dense layer. The proposed 7-layer CNN model while having
+drastically less number of parameters in the network and
+having a significant size difference performs marginally better
+than the VGG-16 model.
+IV. CONCLUSION
+In this study, performance of three DNN based SFDS
+models such as the proposed simple 7 layer CNN, pre-trained
+VGG-16, trainable VGG-16 are observed for detecting forged
+and genuine cases from signature images. By training the
+model over the popular CEDAR dataset and analysing its
+results over validation and test set, it is evident that the
+suggested CNN based SFDS model having a simple
+architecture with fewer layers able to detect the forgery
+images from the image pool with a greater accuracy compared
+to the other two models. Further observing the model
+performance with three optimizers and three split ratios, it is
+clear that the SGD optimizer with split ration of 80:20 is best
+suitable for the proposed CNN model yielding the best
+training, validation and testing accuracy. Despite the
+remarkable accuracy generated by the proposed model, further
+improvements can be made by using data augmentation to
+generate a huge synthetic dataset to enhance the training of the
+model. In future, different hyper parameters can be tuned and
+adjusted by optimization techniques for further refinement of
+the CNN model.
+
+Fig. 5 Performance comparison of the three CNN based
+SFDS models
+REFERENCES
+1. M. Subramaniam, E. Teja, & A. Mathew, Signature forgery
+detection using machine learning. Int. Res. J. Modernization Eng.
+Technol. Sci., 4(2), pp. 479-483, 2022.
+2. J. Poddar, V. Parikh, & S. K. Bharti, Offline signature
+recognition and forgery detection using deep learning. Procedia
+Computer Science, 170, pp. 610-617, 2020.
+3. L. Liu, L. Huang, F., Yin, & Y. Chen, Y. Offline signature
+verification using a region based deep metric learning
+network. Pattern Recognition, 118, 108009, 2021.
+4. V. Ruiz, I. Linares, A. Sanchez, & J. F. Velez, Off-line
+handwritten signature verification using compositional synthetic
+generation
+of
+signatures
+and
+Siamese
+Neural
+Networks. Neurocomputing, 374, pp. 30-41, 2020.
+5. S. J. Gideon, A. Kandulna, A. A. Kujur, A. Diana, A., & K.
+Raimond, K. Handwritten signature forgery detection using
+convolutional neural networks. Procedia computer science, 143,
+pp. 978-987, 2018.
+6. S. Jain, M. Khanna, & A. Singh, Comparison among different
+CNN Architectures for Signature Forgery Detection using
+Siamese Neural Network. In 2021 International Conference on
+Computing, Communication, and Intelligent Systems (ICCCIS),
+pp. 481-486, 2021.
+7. A. K, Kavitha, M., Keerthanah, K., B., Bhavya, & J., Janani.
+Signature forgery detection using convolutional neural network.
+International Research Journal of Engineering and Technology
+(IRJET), 9(05), pp. 734-736, 2022.
+8. J. A. Lopes, B. Baptista, N. Lavado, & M. Mendes, Offline
+Handwritten Signature Verification Using Deep Neural
+Networks, Energies, 15(20), pp. 1-15, 2022.
+9. E., Teja, A. Mathew, & M., Pragathi, Comparison of signature
+forgery detection architectures, International Journal for Research
+in Applied Science & Engineering Technology (IJRASET),
+10(06), pp. 4124-4134, 2022.
+10. E. Alajrami, B. A. Ashqar, B. S. Abu-Nasser, A. J. Khalil, M.M.
+Musleh, A.. M., Barhoom, & S. S. Abu-Naser, Handwritten
+signature verification using deep learning, International Journal
+of Academic multidisciplinary Research, 3(12), pp. 39-44, 2019.
+
+Table 3. Architecture comparison of the proposed CNN
+model with VGG-16
+Configuration
+
+Convolution Layers
+Dense Layers
+Flatten Layers
+Dropout Layers
+No. of Pooling
+Input Image Size
+Trainable Parameters
+Non Trainable
+Parameters
+Total Parameters
+Model Size
+
+VGG-16
+
+Proposed
+7-Layer
+CNN
+Model
+3
+2
+1
+1
+3
+227 x 227
+110,466
+448
+
+13
+1
+1
+0
+5
+250 x 250
+50,178
+14,714,688
+
+110,914
+475KB
+
+14,764,866
+533MB
+
+Table 4. Accuracy comparison of the proposed CNN model
+with VGG-16
+Accuracy
+Training
+
+Pretrained
+VGG-16
+0.802
+
+Trainable
+VGG-16
+0.997
+
+7-Layer
+CNN
+0.979
+
+Validation
+
+0.769
+
+0.959
+
+0.988
+
+Testing
+
+0.817
+
+0.962
+
+0.981
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:57:49 UTC from IEEE Xplore. Restrictions apply.
+
+141
+
+

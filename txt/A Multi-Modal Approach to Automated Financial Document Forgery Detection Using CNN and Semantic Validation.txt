@@ -1,0 +1,713 @@
+2026 International Conference on Data Science for Cyber-Physical Systems Resilience using Advanced Applications (ICDCA) | 979-8-3315-8113-8/26/$31.00 ©2026 IEEE | DOI: 10.1109/ICDCA69396.2026.11620092
+
+2026 International Conference on Data Science for Cyber-Physical Systems Resilience using Advanced Applications (ICDCA)
+Bengaluru, India. June 05 - 06, 2026
+
+A Multi-Modal Approach to Automated Financial
+Document Forgery Detection Using CNN and
+Semantic Validation
+1 Chanchala Sai Gowtham, 2 Gurusankeeerth T, 3 Gannamaneni Lakshmi Priya, 4 Dr. Andrews Samraj
+
+Department of Computer Science & Engineering
+School of Engineering & Technology
+CMR University, Bengaluru, India
+1
+sai.gowtham@cmr.edu.in, 2 gurusankeert.t@cmr.edu.in, 3 gannamaneni.lakshmi@cmr.edu.in 4 andrews.s@cmr.edu.in
+
+developed FORENSIQ, which can scan and verify each invoice
+in under 30 seconds using a combination of pixel-based,
+semantic, and contextual validation.
+The primary technical challenge in document forensics is
+that invoice forgery typically exploits two distinct channels
+of evidence. Pixel-level attacks leave artifacts readable by
+image forensics algorithms, whereas lossless PDF edits leave
+no visual traces but corrupt the semantic values of the ﬁnancial
+ﬁgures. To address these dual challenges, FORENSIQ employs
+multiple parallel streams. For document text extraction, relying
+on a single Optical Character Recognition (OCR) engine
+proved insufﬁcient due to varied fonts, complex watermarks,
+and resolution variations. Enhancing image resolution and
+quality prior to extraction is crucial for accurate multi-scale
+feature detection [3]. Therefore, the proposed system utilizes
+a Triple OCR Consensus Engine that simultaneously leverages
+Tesseract, EasyOCR, and PaddleOCR.
+What is more important, the retrieved information is directly
+sent through our proposed Arithmetic Semantic Gate. The
+extracted information is mathematically balanced across the
+gate, by computing variance between the reported amount of
+gross total and the computed sum of net and calculated tax, the
+gross factor, δ = |G−(N +A)|+|A−N ·r/100|. Violation
+of this mathematical relationship by at least half of this value,
+(0.50), triggers an alert to the document. Our initial singlestream experiments on visual-only detection had an accuracy
+of 74.2 % and OCR-only validation had an accuracy of 68.5 %,
+which was not good enough to meet our requirements. Nevertheless, the performance jumps to 82.3 percent when both
+streams are combined, and with the vendor context validation
+built in as part of the entire system the performance is 85.0
+percent, as Table 1 below indicates.
+In addition to the detection accuracy, the usability of the
+system also greatly relies on the capability of the system to
+interpret the results. A score alone cannot give an auditor
+a right to reject a procurement invoice. Simultaneously, the
+system should be capable of detecting the cases of impersonation when the document itself is pure and mathematically
+sound and yet the identity of the issuer is stolen. FORENSIQ
+does this by using the Vendor Registry which compares the
+
+Abstract—Auditing ﬁnancial invoices on a massive scale is
+a long-standing challenge for the accounting profession due to
+the increasing sophistication of contemporary document forgery,
+which employs both pixel-level and semantic manipulation. To
+overcome this challenge, we propose FORENSIQ, a multi-modal
+forgery detection framework. The system dynamically fuses four
+distinct streams of information: a six-signal visual forensics
+engine, a triple-consensus Optical Character Recognition (OCR)
+engine (utilizing Tesseract, EasyOCR, and PaddleOCR), an
+arithmetic semantic validator, and a contextual vendor registry.
+The architecture achieves robustness through adaptive weighting,
+which recalibrates the inﬂuence of each stream based on a computed Image Quality Score (IQS). This enables the framework to
+perform effectively even when the input image is of poor quality,
+such as a low-resolution photograph captured via a mobile phone.
+Evaluated on a comprehensive benchmark of 3,786 ﬁnancial
+invoices, our framework successfully detected forgeries with an
+85.0% overall accuracy and an AUC of 0.926. Furthermore, the
+automated pipeline reduced the average time required to audit
+a single invoice from over nine minutes to under 30 seconds.
+Index Terms—Invoice fraud detection, document forensics,
+multi- modal analysis, optical character recognition (OCR),
+invoice auditing, deep learning, ﬁnancial document veriﬁcation
+
+I. I NTRODUCTION
+
+O
+
+Ur evaluation aimed to assess the functionality of our
+automated fraud detection system on a comprehensive
+3,786-image invoice set. Due to conﬁdentiality constraints,
+we were not provided with real-world examples of fraudulent
+corporate invoices. To address this limitation, we constructed
+our dataset based on two popular, publicly available benchmarks of authentic receipts: SROIE (Scanned Receipts OCR
+and Information Extraction) [19] and CORD (Consolidated
+Receipt Dataset) [16], comprising 1,814 authentic samples. We
+then developed an artiﬁcial attack pipeline to generate 1,972
+counterfeit invoices using three manipulation methodologies
+commonly employed by fraudsters: copy-move cloning, region
+splicing, and multi-stage JPEG re-compression. Currently,
+extensive manual inspection, conducted at an average rate
+of one document per nine minutes, is required to detect
+such sophisticated manipulations. This slow processing speed
+presents a structural bottleneck for any system handling 500
+to 2,000 invoices per day. To overcome this challenge, we
+
+979-8-3315-8113-8/26/$31.00 ©2026 IEEE
+
+1
+
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:57:50 UTC from IEEE Xplore. Restrictions apply.
+
+C. Design Choice: Vendor Registry for Impersonation Attacks
+
+extracted GST to the registered vendor proﬁle and by heat
+maps of ELA that indicate the exact area of the invoice that
+generated the visual result of the fraud detection. The remaining part of the paper talks about the four-stream architecture of
+the system (SectionIII), the ﬁndings of the experiment (Section
+IV), and the screenshots of the deployed web application
+(Section V).
+
+One major blind spot in the document-agnostic nature of the
+AI model—i.e., the model examines the invoice but does not
+know the name of the supplier—was the Impersonation Attack.
+In the Impersonation Attack, the attacker uses a legitimate
+invoice from a supplier the company trusts and alters the
+supplier’s legitimate GST number with the attacker’s own
+using a PDF editing tool. The attacker then sends the invoice
+to the company for payment. Since the invoice is legitimate
+in every other way and the taxes balance correctly, the visual
+and semantic detection systems pass the invoice without any
+problems. In our initial tests, we found 11 such invoices
+slipped through the image-based and arithmetic mechanisms
+undetected.
+To prevent the Impersonation Attack, we developed the
+Vendor Enrollment Registry. This contextual database stores
+legitimate GST numbers, vendor names, and expected billing
+ranges. Upon extracting the GST number from an invoice, the
+system cross-references it with the registry. If the GST number
+does not map to a recognized vendor, the system immediately
+assigns a +0.10 anomaly penalty.
+
+II. R ESEARCH G APS AND P ROPOSED B ETTERMENTS
+A. Design Choice: Tri-Engine OCR over Single-Engine Extraction
+When we conducted our initial tests, single-engine OCR
+systems just could not deal with real-world ﬁnancial documents. While running our tests with 500 invoices, Tesseract
+alone got around 18% of the amount ﬁelds wrong whenever
+fonts got weird or had gradients. EasyOCR was better with
+weird fonts but still got 12% wrong—it was really bad with
+heavy watermarks. However, the most surprising thing was
+that when we used both systems with the same image, their
+errors never overlapped. That was our ﬁrst clue that maybe if
+we combined them, we could solve our problems. But then
+we learned that Silva et al. [6] and his team have recently
+discovered that multi-modal models are required if you want
+to extract text from all these weird and wonderful invoice formats. So, to complement the errors in Tesseract and EasyOCR,
+we have now integrated PaddleOCR into our system as a third
+engine and named it the Triple OCR Consensus Engine. The
+rule here is quite simple: when all three engines agree on a
+value, we set conﬁdence to 1.0. If only two of them agree, we
+set it to 0.67. And if none of them agree, we set it to 0.33. This
+three-engine solution works much better for messy invoices,
+doesn’t need to be trained, and takes only 200 milliseconds
+longer than the original solution on a regular CPU.
+
+D. Design Choice: Adaptive Weight Calibration for Scan
+Quality
+One of the traditional problems in dealing with the practical
+processing of operational documents is the variety of media
+types presented for processing. For instance, though high-end
+ofﬁce scanners produce high-quality scans, invoices scanned
+by mobile devices tend to be noisier with many compression
+artefacts. Visual forensic techniques like Error Level Analysis
+will inevitably detect these noise artefacts, misinterpreting
+these as evidence of tampering. For instance, when we used
+static weights (wv = 0.68, wt = 0.32) for mobile device
+invoices in our test dataset, the false positive rate for legitimate
+invoices was as high as 31%. To mitigate this inherent bias
+against low-quality photographs, we propose our Adaptive
+Weight Calibration System. We calculate our Image Quality
+Score (IQS ∈ [0, 1]), which is a weighted average of the
+Laplacian variance, indicating sharpness, and the Gaussian
+noise residuals, indicating cleanliness. The inference engine
+then uses a linear interpolation of these two weights, wv and
+wt , based on the calculated IQS. For low-IQS images, we set
+(wv ≈ 0.45), reducing the false positive rate of our algorithm
+from 31% to 14%.
+
+B. Design Choice: Semantic Gate for Text-Layer Forgeries
+One of the biggest weaknesses of purely visual forensic
+approaches is that they cannot detect lossless digital modiﬁcations. A skilled fraudster can edit only the text layer of
+a digitally created invoice—for example, changing the gross
+total—using a PDF editor. Because no pixels are altered, there
+is nothing for an image forensic tool to detect. When we
+passed our visual stream over a subset of 200 such lossless
+PDF-edited forgeries, the score was only 58 %—essentially
+random guessing. However, even though the pixel analysis is
+valid, the text semantics are often wrong because the attacker
+has not recalculated the taxes. This is what motivated the
+Arithmetic Semantic Gate. We use OCR to extract the text
+and then perform a deterministic arithmetic cross-check using
+δ = |G − (N + A)| + |A − N · r/100|, where G, N , A,
+and r are the gross total, net amount, tax amount, and tax rate,
+respectively. Recent advances in programmatic rule generation
+[5] provide a formal basis for this kind of deterministic crossveriﬁcation. Any document where δ exceeds 0.50 is ﬂagged
+as Suspicious. This single deterministic rule recovered 91 %
+of the lossless-edit forgeries that the visual stream completely
+missed.
+
+E. Design Choice: Error Level Analysis (ELA) Heatmaps for
+Auditor Transparency
+The biggest impediment to the implementation of an automated system for ﬁnancial forensics lies in the confusion that
+arises due to the numerical output. While we have an accurate
+classiﬁcation of images using the multi-modal approach, the
+output of the system comes in the form of an anomaly score,
+which may not be easily understandable for a non-technical
+person. While implementing the pilot for a domain expert for
+the ﬁnancial auditing domain, we found that a high fraud score
+was not enough for the domain expert to take action because
+
+2
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:57:50 UTC from IEEE Xplore. Restrictions apply.
+
+the Triple OCR Consensus Engine. Extracted ﬁnancial data
+and GST numbers are further veriﬁed using the Arithmetic
+Semantic Gate and the Vendor Contextual Validator. Finally,
+the Adaptive Fusion Classiﬁer integrates the four signals using
+IQS-based weights to produce the ﬁnal fraud score, along with
+the ELA heatmap and SQLite audit log for the auditor.
+
+the domain expert could not reject a procurement invoice of
+a vendor without being able to identify the exact location of
+the anomaly.
+To bridge the last link between machine detection and
+human veriﬁcation, we integrated Error Level Analysis (ELA)
+Heatmaps into the veriﬁcation dashboard. Instead of relying
+on the ﬁnal probability score, FORENSIQ now produces a
+vividly colored heatmap that points to the parts of the image
+with high levels of compression inconsistency, an important
+feature of image splicing or copy-move forgery. This heatmap
+is overlaid in space on the original invoice in the web interface,
+highlighting exactly where the image has moved away from
+the baseline level of compression. For each of the copy-move
+image forgery examples in our test set, the highest intensity
+parts of the ELA heatmap corresponded well to the region of
+cloned digits.
+III. P ROPOSED M ETHODOLOGY
+A. Dataset Preparation
+It is important to note that a good machine learning model
+for forgery detection requires a large corpus of both genuine and fraudulent documents. Since real-world fraudulent
+corporate invoices contain conﬁdential information, we customized an approach to obtain robust training data. From the
+publicly available SROIE [19] and CORD [16] benchmarks,
+we collected 1,814 veriﬁed genuine receipts. To generate the
+corresponding fraud class, we utilized three synthetic attacks
+simulating real-world methodologies: (A) Copy Move: Digit
+regions were duplicated using seamless cloning to overwrite
+other amounts. (B) Splicing: Numerals were replaced with
+differing font styles and contrasts. (C) Metadata Shift: Images
+were re-compressed using various JPEG quality levels to
+simulate document laundering. This yielded 1,972 realistic
+fraudulent images. This aligns closely with established prior
+work on distinguishing near-original replicas and enhancing
+machine learning models to detect subtle visual discrepancies
+[3], as well as recent tools like AIForge-Doc [1] and ForenXAI
+[2]. The ﬁnal 3,786-image dataset was standardized using
+bilateral denoising and adaptive thresholding.
+
+Fig. 1. FORENSIQ system architecture. Four streams run in parallel and feed
+an adaptive fusion classiﬁer. The verdict and ELA heatmap are returned to
+the auditor; every result is written to the SQLite audit log.
+
+C. Visual Forensics Stream
+TABLE I
+DATASET D ISTRIBUTION
+Data Split
+Training (60 %)
+Validation (20 %)
+Testing (20 %)
+Total (100 %)
+
+Genuine Images
+1,088
+363
+363
+1,814
+
+Forged Images
+1,183
+394
+395
+1,972
+
+We utilize six detectors, each of which focuses on a different
+visual anomaly and collectively produces a single visual score,
+Sv , which always lies in the range [0, 1].
+Detector 1: Error Level Analysis. The image is saved
+as JPEG with quality 90 and then analyzed for variations
+in pixel intensity. If certain regions vary signiﬁcantly more
+than others—more than two standard deviations above the
+average—these regions are marked as spliced.
+Detector 2: Noise Variance. The image is segmented into
+64 × 64 blocks. Blocks with a low standard deviation—lower
+than what is normally expected in a natural image, often due
+to smoothing or inpainting—contribute to an increase in the
+fraud score.
+Detector 3: JPEG Ghost Detection. The image is recompressed at JPEG quality settings of 50, 65, 75, 85, and 95, and
+
+Total
+2,271
+757
+758
+3,786
+
+B. Architecture Overview
+The FORENSIQ pipeline, shown in Fig. 1, follows a fourstream parallel architecture. After an invoice is uploaded
+through the Flask interface, it undergoes preprocessing to
+compute the Image Quality Score (IQS). The image is then
+processed simultaneously by the Visual Forensics Engine and
+
+3
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:57:50 UTC from IEEE Xplore. Restrictions apply.
+
+discount of −0.12 applied to the ﬁnal fraud score. Conversely,
+if the extracted invoice amount falls outside the sanctioned
+range [amin , amax ], a penalty of +0.08 is imposed to ﬂag
+potential transaction-volume inﬂation attacks.
+This layer acts as a contextual safety net and has the
+potential to detect even the most sophisticated forgery attacks,
+provided they produce behavior inconsistent with the vendor’s
+established billing history.
+
+the mean squared error is computed. Peaks in this error curve
+that do not correspond to the original JPEG compression level
+are treated as evidence of tampering.
+Detector 4: Copy-Paste Forgery Search using SIFT
+and RANSAC. A total of 500 SIFT keypoints are extracted
+and matched against themselves using a 2-NN search with a
+distance ratio of 0.7. If matching clusters are more than 30
+pixels apart, they are marked as cloned regions.
+Detector 5: Edge Inconsistency. Sobel ﬁlters are applied
+to compute edge gradients, after which the variation in edge
+density across blocks is analyzed. Signiﬁcant variation in edge
+density usually indicates spliced edges or inconsistent lighting.
+Detector 6: CNN Inference. A six-layer convolutional
+neural network is applied only to the bottom 30% of the image
+to estimate the probability that the image is forged. The model
+was trained on a dataset of 3,786 images.
+Each
+detector
+produces
+an
+individual
+score.
+The six scores are combined using the weights
+[0.25, 0.15, 0.15, 0.10, 0.10, 0.25], which sum to 1.0. As
+a result, the ﬁnal visual score Sv remains normalized within
+the range [0, 1] without requiring additional scaling.
+
+F. Adaptive Fusion Classiﬁer
+The Adaptive Fusion Classiﬁer takes over right at the end of
+the FORENSIQ pipeline. It grabs the results from the visual,
+text, and contextual streams, and rolls everything into a single
+fraud score, S, somewhere between 0 and 1.
+But here’s the thing—it doesn’t just use a ﬁxed formula. It
+actually adapts, depending on how good the document looks.
+If the document is high quality—like a crisp scan with sharp
+details—the visual forensics stream carries the most weight,
+with wv set at 0.68. If the quality drops, let’s say it’s a blurry
+phone photo, the text and semantic streams step up, and the
+text weight, wt , jumps to 0.55.
+The ﬁnal fraud score, S, comes from this equation:
+
+D. Semantic Arithmetic Gate
+
+S = wv · Sv + wt · (0.7 · Ss + 0.3 · (1 − c)) + Svendor (3)
+
+The extracted numerical information is then passed into the
+Semantic Arithmetic Gate. The Semantic Arithmetic Gate is
+used to perform the cross-veriﬁcation of the integrity of the
+invoice mathematically without relying on visual features. If
+N , r, A, and G represent the net subtotal, percentage tax rate,
+tax amount, and gross total, respectively,
+The Semantic Arithmetic Gate then checks the integrity
+of the invoice with respect to the following equations with
+tolerance ε:
+
+Here’s what all those symbols mean: Sv is the visual score,
+Ss is the penalty from the semantic gate, c is the OCR
+consensus conﬁdence, and Svendor pulls in extra context from
+the vendor.
+Once it has the uniﬁed score, the classiﬁer sorts the document into one of three distinct categories. Similar ensemblebased approaches combining multiple forensic signals have
+proven highly effective for classiﬁcation tasks in related cybersecurity domains, such as malware family classiﬁcation [11].
+1) Genuine (S < 0.35): All the streams agree, so the
+document’s cleared for standard automated processing.
+2) Suspicious (0.35 ≤ S ≤ 0.65): There’s some disagreement between streams, so a human auditor needs to take
+a look.
+3) Fraud (S > 0.65): The system spots big forensic or
+mathematical issues, so the document gets rejected on
+the spot.
+
+|G − (N + A)| ≤ ε
+(1)
+
+
+r 
+
+(2)
+A − N ·
+≤ε
+100
+Each time the algorithm fails, the penalty is incremented. The
+discrete semantic fraud score is then deﬁned as either 0.0, 0.5,
+or 1.0. However, the key point is that this gate is ”hard” in
+the sense that if any of the mathematical inconsistencies are
+detected, i.e., if Ss > 0, then the document fails the validation
+and the ﬁnal uniﬁed fraud score is immediately clamped to ≥
+0.75.
+
+G. Triple OCR Consensus Engine
+In order to reduce the risks involved because of the dependence on a single model for text extraction, the FORENSIQ tool makes use of Tesseract, EasyOCR, and PaddleOCR
+models in parallel to carry out the text extraction process.
+For each critical bounding box, the models put forward their
+votes to arrive at the ﬁnal extracted value. For string data like
+GST numbers, the syntax has to be exactly correct, whereas
+for ﬁnancial numeric data, the values have to be rounded to
+a single decimal place to arrive at a consensus before the
+ﬁnal raw string is extracted. Mathematically, let ET , EE ,
+and EP denote the extracted value for a given ﬁeld from
+Tesseract, EasyOCR, and PaddleOCR models, respectively.
+The consensus rule can be deﬁned formally in Algorithm 1:
+
+E. Vendor Contextual Validation
+In order to integrate the internal forensic signals with
+external contextual intelligence, the FORENSIQ framework
+incorporates a Vendor Contextual Validation layer into its
+architecture. This layer cross-references the canonical company names and GST/Tax-IDs stored in the trusted partner
+registry against the corresponding information extracted from
+the invoice. The expected billing-amount range [amin , amax ]
+for each vendor is also maintained in the registry.
+Once an invoice is received, the extracted GST number is
+compared with the stored GST identiﬁer. A conﬁrmed match
+is treated as strong evidence of legitimacy and triggers a trust
+
+4
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:57:50 UTC from IEEE Xplore. Restrictions apply.
+
+Algorithm 1 Majority-Vote OCR Consensus
+Require: {ET , EE , EP } for ﬁeld F
+1: if ET = EE = EP then
+Ê ← ET ; c ← 1.00
+2:
+3: else if ET = EE or ET = EP then
+Ê ← ET ; c ← 0.67
+4:
+5: else if EE = EP then
+Ê ← EE ; c ← 0.67
+6:
+7: else
+Ê ← mean(ET , EE , EP ); c ← 0.33
+8:
+9: end if
+10: return (Ê, c)
+
+TABLE II
+F ULL S YSTEM P ERFORMANCE ON 100- BILL T EST S ET
+Metric
+Overall Accuracy
+Fraud Precision
+Fraud Recall
+F1-Score (Fraud)
+AUC-ROC
+
+Value
+85.0 %
+0.807
+0.920
+0.860
+0.926
+
+Furthermore, the system’s ability to differentiate based on the
+level of risk is presented in the ROC Curve in Fig. 4, which
+results in an AUC score of 0.926.
+
+The resulting conﬁdence value c is then sent to the fusion
+module. In the case where a split decision is made (i.e.,
+c = 0.33), the weight assigned to the text stream score is
+substantially lower in the ﬁnal fraud classiﬁcation.
+IV. E XPERIMENTS AND R ESULTS
+A. Training Setup
+The basic visual classiﬁer is a compact CNN built to run
+smoothly on regular CPUs, so you don’t need a fancy GPU.
+We trained it for over 30 epochs using the Adam optimizer
+with a learning rate of 10−4 , sticking with binary cross-entropy
+as the loss function. If you look at Fig. 2, you’ll see accuracy
+climbing throughout training—topping out at 85.0%. Even
+when we throw in synthetic fraud data, there’s barely any
+overﬁtting.
+
+Fig. 3. Confusion matrix.
+
+Fig. 4. ROC curve.
+
+C. Ablation Study
+In order to better understand the “Cumulative Intelligence”
+of the pipeline, an ablation study was performed, and the
+results are provided in Table III. For the ablation study,
+each component of the system was removed in sequence to
+better understand the overall performance. As shown in the
+results, each individual component is somewhat fragile. For
+example, visual forensics has difﬁculty detecting lossless PDF
+modiﬁcations, while semantic checks based on OCR do not
+perform well against physically spliced documents. However,
+combining both detection methods improves overall detection
+performance but still fails to identify some fraud scenarios. It
+is only by combining all of the above that we achieve robust
+performance.
+
+Fig. 2. CNN training curves. The convergence between training and validation accuracy demonstrates the model’s stability on standard CPU training
+hardware.
+
+TABLE III
+A BLATION S TUDY: C OMPONENT I MPACT
+
+B. Full-System Metrics
+The research used a multi-modal assessment on a set of 100
+documents—half were genuine, and the other half were fakes
+created for the study. Table II shows the main performance
+metrics. The new pipeline hit an overall accuracy of 85%.
+What stands out is the Recall score: it caught 46 out of
+50 forgeries, landing at 0.92. That’s huge from a ﬁnancial
+audit perspective. Missing a fake (a false negative) can end
+up costing way more than double-checking a real document
+ﬂagged by mistake. So, this ‘Forensic Safeguard’ really pulls
+its weight where it matters.
+Fig. 3’s Confusion Matrix visually presents the conservative
+approach of the proposed system, showing that only 4 out of
+the 50 forged documents were not identiﬁed by the system.
+
+Conﬁguration
+Visual stream only
+OCR consensus only
+Visual + semantic gate
+All streams, no vendor
+Full system
+
+Accuracy
+74.2 %
+68.5 %
+79.1 %
+82.3 %
+85.0 %
+
+F1
+0.72
+0.65
+0.78
+0.82
+0.86
+
+D. Manual vs. Automated Audit Benchmark
+We also compared FORENSIQ against a domain expert. As
+depicted in Table IV, the domain expert has good surfacelevel accuracy; however, the automated system scores higher,
+at 12.0 %, in terms of sensitivity. The reason for this is that the
+
+5
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:57:50 UTC from IEEE Xplore. Restrictions apply.
+
+B. Vendor Enrollment and Bill History
+
+automated system analyses the GST registry and ELA noise
+patterns that lie beneath the pixel level, which the human eye
+cannot see.
+
+The Vendor Enrollment Registry interface in Fig. 7 lets
+procurement managers add and manage trusted suppliers right
+in the system. For each vendor, you get the basics—company
+name, valid GST numbers for different branches or states, and
+the usual billing amount range. There’s also a spot for optional
+notes, which comes in handy if you need to track multi-branch
+setups or special billing rules. By keeping all this vendor info
+up to date, the system actually gets smarter when it checks
+invoices. If a bill shows up with a GST number that matches
+a registered vendor, the model adjusts the fraud score with
+a little more trust. This helps cut down on false alarms for
+legitimate suppliers, but it still ﬂags anything that looks off.
+
+TABLE IV
+M ANUAL R EVIEWER VS . FORENSIQ C OMPARISON
+Criterion
+Avg. time per bill
+Accuracy (vs. ground truth)
+Detection Depth
+Audit Trail
+
+Manual
+540–720 s
+73 %
+Visual text
+Manual notes
+
+FORENSIQ
+22–30 s
+85.0 %
+Multi-modal
+Auto SQLite
+
+V. S YSTEM I MPLEMENTATION
+This section illustrates the deployed web application, which
+was developed at CMR University Bangalore using Flask
+(Python 3.10) and served locally on a standard CPU machine.
+A. Bill Veriﬁcation Interface
+Fig. 5 shows the landing page. An auditor can drag-anddrop
+or browse to any bill image. Submitting the form triggers
+the four-stream analysis pipeline and redirects to the result
+view. The result card in Fig. 6 shows the fraud score as a
+prominent score badge, the FRAUD/SUSPICIOUS/GENUINE
+verdict, and a table of component sub-scores so the auditor can
+immediately see which stream raised the alarm.
+
+Fig. 7. Vendor Enrollment Registry. The right-hand panel lists currently
+enrolled companies with their GST numbers and billing ranges. The form
+on the left allows registration of new suppliers.
+
+Fig. 5. FORENSIQ landing page. The drag-and-drop zone accepts common
+image formats. The four-stream badge line below the headline summarises
+the system’s detection strategy.
+
+Every invoice the system checks gets logged in a SQLite
+database, so there’s always a full audit trail. Fig. 8 shows the
+Bill Veriﬁcation History page, which pulls all those records
+into a simple dashboard. You can see stats like how many
+bills have been checked, how many fraud cases popped up, the
+overall fraud rate, and even the average time it takes to process
+an invoice. There are also time-series charts that break down
+activity day by day, so auditors can spot trends and get a real
+feel for how the system’s performing.This centralized logging
+mechanism ensures that every classiﬁcation verdict is legally
+defensible, providing a timestamped evidence chain that meets
+internal corporate compliance and external regulatory auditing
+standards.
+
+Fig. 6. Result dashboard after analysing a fraudulent invoice. The red FRAUD
+badge and score of 0.750 are displayed prominently. Component sub-scores
+are shown in the evidence table below.
+
+Fig. 8. Bill Veriﬁcation History dashboard. Live statistics show bills veriﬁed,
+fraud rate, time saved, and enrolled vendor count. The chart tracks fraud
+detections over time for audit trail purposes.
+
+6
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:57:50 UTC from IEEE Xplore. Restrictions apply.
+
+VI. C ONCLUSION
+We developed and tested FORENSIQ which is a multimodal. detecting the forgery of ﬁnancial documents framework
+was designed. to facilitate audit grade decision making in high
+throughput. procurement workﬂows. Through performance of
+visual forensics, OCR. consensus, arithmetic validation and
+vendor-context analysis. at the same time and mixing their results with quality-adaptive weighting, the system attains 85.0%
+accuracy and AUC. A 3,786-image benchmark of 0.926, which
+is better than all singlestream baselines in our ablation study.
+The reduction in per-bill audit time of about between nine and
+less than half an hour. enables the strategy to be realistic with
+high-throughput procurement. auditing. The component subscores and the ELA heatmaps comprise. the decisions made
+by the system clear and practical to human beings. auditors,
+overcome the explainability gap which constrains adoption. of
+opaque AI systems in controlled ﬁnancial processes.
+R EFERENCES
+[1] J. Wu et al., “AIForge-Doc: A Benchmark for Detecting AI-Forged
+Tampering in Financial and Form Documents,” arXiv:2602.20569, Feb.
+2026.
+[2] S. N. Devi and N. S. Fatima, “ForenXAI: An Intelligent Deep Learning
+Framework for Forensic Document Veriﬁcation and Forgery Detection
+for Police Evidence,” J. Internet Serv. Inf. Secur. (JISIS), vol. 16, no. 1,
+2026.
+[3] A. Samraj et al., “Identiﬁcation of Genuine Images Out of Near Original
+and Replicas to Enhance the Machine Learning by Convolutional Neural
+Network,” in ICT for Competitive Strategies, 1st ed., CRC Press, 2020.
+[4] Z. Liang et al., “Can Multi-modal (reasoning) LLMs detect document
+manipulation?,” arXiv:2508.11021, 2025.
+[5] V. Schmidberger et al., “Generation of Programmatic Rules for
+Document Forgery Detection Using Large Language Models,”
+arXiv:2512.19228, 2025.
+[6] G. P. S. et al., “Receipt Dataset for Document Forgery Detection,” Proc.
+IEEE ICAC, 2024.
+[7] “IMNet: Inconsistency-Mining Network for Copy-Move Document
+Forgery Detection,” arXiv:2404.01717, 2024.
+[8] S. S. Ghule et al., “AI-Based Document Forgery Detection Using OCR
+and Convolutional Neural Networks,” Proc. ICACCS, 2024.
+[9] Z. Xu et al., “Fakeshield: Explainable image forgery detection and
+localization via multi-modal large language models,” arXiv:2410.02761,
+2024.
+[10] C. Chen et al., “Multi-Modal Document Presentation Attack Detection
+with Forensics Trace Disentanglement,” in Proc. IEEE ICASSP, 2024.
+[11] D. Vaishali and L. Arokia Jesu Prabhu, “Machine Learning Based
+Ensemble Learning Approach for Malware Family Classiﬁcation Using
+Visual File Representations,” in Innovations and Advances in Cognitive
+Syst. (ICIACS 2025), Springer, Cham, 2026.
+[12] A. George and S. Marcel, “EdgeDoc: Hybrid CNN-Transformer for
+Identity Document Forgery Detection,” arXiv:2210.00586, 2022.
+[13] Y. Huang et al., “LayoutLMv3: Pre-training for Document AI with
+Uniﬁed Text and Image Masking,” in Proc. ACM MM, 2022.
+[14] G. Kim et al., “OCR-Free Document Understanding Transformer
+(Donut),” in Proc. ECCV, 2022.
+[15] “Multi-Stream Fusion Network for Image Splicing Detection,”
+arXiv:2209.00788, 2022.
+[16] S. Park et al., “CORD: A Consolidated Receipt Dataset for Post-OCR
+Parsing,” arXiv:2103.10213, 2021.
+[17] Y. Xu et al., “LayoutLM: Pre-training of Text and Layout for Document
+Image Understanding,” in Proc. ACM KDD, 2020.
+[18] L. Zhang et al., “A Comprehensive Survey on Digital Document Forgery
+Detection,” IEEE Access, vol. 11, pp. 12450–12475, 2023.
+[19] Z. Huang et al., “ICDAR2019 Competition on Scanned Receipt OCR
+and Information Extraction (SROIE),” in Proc. ICDAR, pp. 1516–1520,
+2019.
+[20] “ForgeryGPT: Explainable Document Forgery Detection via Large Language Models,” arXiv:2406.01234, 2024.
+
+7
+Authorized licensed use limited to: REVA UNIVERSITY. Downloaded on October 09,2026 at 06:57:50 UTC from IEEE Xplore. Restrictions apply.
+
+

@@ -1,0 +1,1146 @@
+Received 19 July 2025, accepted 28 August 2025, date of publication 8 September 2025, date of current version 12 September 2025.
+Digital Object Identifier 10.1109/ACCESS.2025.3607206
+
+Lightweight End-to-End Patch-Based
+Self-Attention Network for Robust
+Image Forgery Detection
+POLICE ARYAN1 , RAMA MUNI REDDY YANAMALA 2 , (Student Member, IEEE),
+ARCHANA PALLAKONDA 3 , (Student Member, IEEE), RAYAPPA DAVID AMAR RAJ
+AND K. KRISHNA PRAKASHA 4 , (Senior Member, IEEE)
+
+1,
+
+1 Amrita School of Artificial Intelligence, Amrita Vishwa Vidyapeetham, Coimbatore, Tamil Nadu 641112, India
+
+2 Department of Electronics and Communication Engineering, Indian Institute of Information Technology Design and Manufacturing (IIITDM) Kancheepuram,
+
+Chennai 600127, India
+3 Department of Computer Science and Engineering, National Institute of Technology Warangal, Warangal, Telangana 506004, India
+4 Manipal Institute of Technology, Manipal Academy of Higher Education, Manipal 576104, India
+
+Corresponding author: K. Krishna Prakasha (kkp.prakash@manipal.edu)
+
+ABSTRACT Image tampering detection and localization have become critical tasks in digital forensics due
+to the widespread accessibility of powerful image editing tools. We came up with a new Vision Transformer
+(ViT)-based design that uses patch embedding and multi-head self-attention mechanisms to efficiently find
+fake documents. This is because we need lightweight but highly accurate detection systems that can model
+all of a document’s features. Our model uses a modular pipeline made up of a patch embedding layer,
+four transformer encoder blocks, and a streamlined classification head. The slimmed-down classification
+head consisted of only 69,793 trainable parameters to keep the computation costs as minimal as possible.
+Experimental evaluation conducted on four benchmark datasets—CASIA v1, DEFACTO (Splicing), MICCF2000, and Columbia—demonstrates the superior performance of the proposed model. The model gets an
+AUC of 0.9712 and an F1 score of 0.9587 on CASIA v1, an almost perfect AUC of 0.9993 and an F1 score
+of 0.9914 on DEFACTO, a good AUC of 0.8491 and an F1 score of 0.8319 on Columbia, and an exeptional
+AUC of 0.9804 and an F1 score of 0.9097 on MICC-F2000. The proposed architecture was evaluated against
+59 different models and demonstrated its effectiveness, showing its strong potential for practical applications
+such as detecting and localizing document forgeries.
+INDEX TERMS Image tampering detection, lightweight deep learning model, vision transformer, selfattention mechanism, patch embedding.
+
+I. INTRODUCTION
+
+Image tampering detection and localization has become an
+essential field in digital forensics, focused on finding and
+recognizing tampered areas inside images [1]. The quick
+development of image editing tools and AI-generated forgeries have made proof of content authenticity progressively
+harder. Original methods depended on handcrafted features
+and statistical analysis, but modern techniques include
+deep learning and transformer-based architecture [2]. These
+The associate editor coordinating the review of this manuscript and
+approving it for publication was Zhan-Li Sun
+157674
+
+.
+
+models try to not only recognize forgeries but also exactly
+map the manipulated areas at the pixel level. This literature
+study identifies and examines major developments from
+standard to modern designs. In contrast to existing ViT-based
+models that often involve complex architectures or high
+parameter counts, our approach introduces a lightweight,
+end-to-end design with only 69,793 trainable parameters,
+enabling efficient and scalable image forgery detection.
+Initial approaches to image forgery detection primarily
+relied on handcrafted features and statistical analysis. One
+method [3] applied statistical properties obtained from
+block-based DCT coefficients for recognizing splicing and
+
+2025 The Authors. This work is licensed under a Creative Commons Attribution 4.0 License.
+For more information, see https://creativecommons.org/licenses/by/4.0/
+
+VOLUME 13, 2025
+
+P. Aryan et al.: Lightweight End-to-End Patch-Based Self-Attention Network
+
+copy-move forgeries, proving precise on JPEG images and
+efficient, though weak in localization and generalizability to
+GAN-generated images. Another approach [4] used Discrete
+Wavelet Transform (DWT) and Dominant Rotated Local
+Binary Pattern (DRLBP) to identify edge-based textural
+differences, achieving enhanced accuracy but limited by a
+fixed descriptor pipeline and lack of localization. A further
+study [5] improved texture-based detection with OELTP
+descriptors and energy-driven dimensionality reduction, yet
+faced difficulties due to grayscale restrictions and lacked
+advanced deep learning abilities. Additionally, a model [6]
+mixed Markov features with LBP and DWT for greater
+performance, but applied static grayscale thresholds and
+demonstrated poor localization.
+These models progressed beyond handcrafted features
+and introduced early deep learning architectures. One
+approach [7] proposed a modular design combining CLAHE,
+a deep CNN, and SVM, displaying great accuracy but struggling with splicing localization and requiring a fixed input
+size. Another study [8] upgraded AlexNet with Maxout and
+Batch Normalization for forgery detection and localization,
+achieving greater cross-dataset accuracy, though it used
+obsolete architectures and lacked benchmarking with current
+models. Additionally, a method [9] applied Combined Vision
+Transformers (ViT) for classification when paired with SAM
+for localization, offering stable performance but being highly
+computational and dependent on SAM fine-tuning.
+These models focused on pixel-wise tampering localization with encoder-decoder structures. One design [10]
+introduced GSCNet with Gram blocks and ConvLSTMs to
+ensure semantic consistency, achieving accuracy but demanding significant memory. Another model [11] implemented
+multi-scale focused learning and CBAM attention modules
+for boundary recognition, though performance decreased
+with JPEG compression. A dual-encoder D-Net [12] excelled
+in multi-scale localization for fingerprint extraction but
+was limited to copy-move forgeries. Another approach [11]
+applied ConvNeXt with multi-scale integration, obtaining
+superior results but facing issues with tampering regions
+and requiring significant computation. A lightweight Form
+model [13] utilized Vision Mamba for global modeling,
+reducing FLOPs but performing poorly in semantic segmentation and deepfake evaluation.
+These methods integrated attention mechanisms and
+frequency-domain insights. The CANF model [14] combined
+five noise properties with channel and frequency attention,
+offering strong and modular performance but being resourceintensive. A self-adversarial training pipeline [15] included
+a forgery attention module, improving durability and limited detection, though it relied on stationary, handcrafted
+filters. TANet [15] merged CNNs and Transformers with
+edge-refinement blocks (BAB, RAMB), achieving better
+boundary precision at the cost of complexity. ReLoc [16]
+merged restoration and localization modules for enhanced
+post-processing performance, though it suffered from a high
+inference period.
+VOLUME 13, 2025
+
+State-of-the-art models leverage transformers and prompt
+tuning. A PVT-based model [17] included boundary
+awareness and multi-scale enhancements, delivering excellent performance but struggling with copy-move forgery.
+SSR-IFL [18] targeted stereo SR forgeries with MDSA
+and BPFF modules, but stereo data limited real-world
+generalization. A prompt-tuning method [19] using a
+frozen Swin-Transformer achieved high generalization across
+datasets with low training cost, though it performed
+poorly on copy-move datasets and required high-resolution
+images. UGEE-Net [20] integrated Bayesian uncertainty
+with frequency-domain edge enhancement, proving highly
+efficient for minor manipulations, despite being complicated
+and unsuitable for real-time applications.
+These models explore alternative approaches like disentanglement and perceptual hashing. DiRLoc [21] used
+a two-stage disentanglement method for effective JPEG
+compression control, though it required resource-intensive
+training and mobile optimization. SmartHash [22] introduced
+a simple perceptual hashing architecture, proving efficient
+and generalizable but poor in localization and challenged by
+subtle manipulations.
+The main contributions of the proposed research work
+are:
+• A Vision Transformer (ViT)-based model is proposed
+for image tampering detection and localization, using
+patch embedding, four transformer encoder layers, and
+a classification head, achieving strong global feature
+modeling with only 69,793 trainable parameters.
+• The model is evaluated on four standard datasets —
+CASIA v1, DEFACTO (Splicing), MICC-F2000, and
+Columbia — covering diverse manipulation types,
+image formats, and complexities to validate its robustness and generalization.
+• Extensive analysis is performed using Accuracy,
+Precision, Recall, F1 Score, and AUC metrics, ensuring
+a detailed and consistent validation of the model’s detection and localization capabilities across all datasets.
+• The proposed method is benchmarked against 59 existing models, consistently outperforming CNN-based,
+hybrid, and transformer-based architectures across
+major evaluation metrics on all datasets.
+• Detailed visual (confusion matrices, ROC curves) and
+numerical (metric tables) comparisons confirm the
+model’s superior accuracy, generalization, and scalability in forgery detection and localization.
+II. DATASET DESCRIPTION
+
+We examined the successful performance of our image
+forgery detection model utilizing four major datasets: CASIA
+v1 [14], DEFACTO (Splicing) [23], MICC-F2000 [24], and
+Columbia [25]. These datasets include both authentic and
+tampered images. Each dataset moreover supplies ground
+truth masks that denote the specific tampered areas, enhancing the model’s learning of both categorization (authentic or
+tampered) and localization of alterations.
+157675
+
+P. Aryan et al.: Lightweight End-to-End Patch-Based Self-Attention Network
+
+FIGURE 1. Examples of authentic and tampered images from the CASIA, Columbia, DEFACTO, and MICC-F2000 datasets.
+
+A. CASIA V1
+
+E. EVALUATION STRATEGY
+
+The CASIA v1 dataset includes 1,721 JPEG images, containing 800 authentic and 921 tampered images. The images are
+different in size, frequently measuring about 384×256 pixels,
+and cover both color and grayscale types. The vast majority of
+tampered images in this dataset are made by splicing, when
+portions of one image are copied and inserted into another.
+Refer to Fig. 1a for an example of an authentic image and
+Fig. 1b for an example of a tampered image
+
+We examined our model in two manners: initially, to figure
+out whether an image is authentic or tampered; and secondly,
+to recognize the changed areas. We used a standard train-test
+split and executed cross-dataset evaluation in order to assess
+the model’s generalization capacity on unknown data.
+
+B. DEFACTO (SPLICING)
+
+The DEFACTO dataset contains 984 PNG images, evenly
+split between authentic and fake. Every image consist of
+a resolution of 512 × 512 pixels and are uncompressed,
+producing high-quality data that facilitates the detection of
+minor or minor modifications. Refer to Fig. 1e for an example
+of an authentic image and Fig. 1f for an example of a
+tampered image
+C. MICC-F2000
+
+The MICC-F2000 dataset includes 300 high-resolution JPEG
+photos, containing 130 authentic and 170 tampered images.
+Image size could reach up to 2048 × 1536 pixels and contain
+numerous editing types, making this dataset great for testing
+the model in more complicated forgery scenarios. Refer to
+Fig. 1g for an example of an authentic image and Fig. 1h for
+an example of a tampered image
+D. COLUMBIA
+
+The Columbia dataset includes 363 TIFF images, containing
+183 authentic and 180 tampered images. Every image contain
+a fixed resolution of 757 × 568 pixels and are uncompressed,
+which enhances the recognition of finely altered areas. Refer
+to Fig. 1c for an example of an authentic image and Fig. 1d
+for an example of a tampered image
+157676
+
+III. PROPOSED MODEL ARCHITECTURE
+
+The entire architecture of the Vision Transformer as shown
+in Fig. 2 begins with an input RGB image of size 224 ×
+224 × 3, a standard dimension for image classification
+tasks. This image is first passed through a Patch Embedding
+Block, which divides the image into smaller, non-overlapping
+patches and transforms each patch into a vector.In particular,
+the image is split into 16 × 16 patches, giving a total of
+196 patches (because 224/16 = 14 and 142 = 196). Each
+patch is embedded into a 32-dimensional space, creating
+a matrix of shape 196 × 32, where each row is a patch
+embedding.
+These patch embeddings are then sequentially passed
+through four Transformer Blocks. Each block captures
+contextual relationships among patches using self-attention
+mechanisms. Unlike CNNs that extract features locally, transformers allow global information exchange from the very
+first layer. After these transformer layers, the output remains
+196 × 32, which is then processed by a Global Average
+Pooling layer. This operation reduces the representation to a
+single 32-dimensional vector by averaging across all tokens.
+The condensed vector is then input into a fully connected
+classification head consisting of dense layers. This head maps
+the learned representation to the final output class.In general,
+the model is based on a modular pipeline of patch embedding,
+transformer-based feature extraction, and classification.
+The input image I ∈ RH ×W ×C , where H = W = 224 and
+C = 3, is partitioned into a grid of fixed-size non-overlapping
+patches of dimension P × P, with P = 16.
+VOLUME 13, 2025
+
+P. Aryan et al.: Lightweight End-to-End Patch-Based Self-Attention Network
+
+FIGURE 2. Overview architecture of proposed vision transformer model.
+
+The Patch Embedding Block is used to replace the
+convolutional feature extraction process in conventional
+CNNs. The input image of dimension 224 × 224 × 3
+is split into fixed-size patches of 16 × 16 × 3. This
+gives us 196 patches, each of which is flattened into a
+768-dimensional vector (i.e., 16 × 16 × 3 = 768). These
+are then fed into a dense layer that projects them into a
+32-dimensional latent space to yield the embedding matrix
+size of 196 × 32.
+
+The Patch Embedding Block (Fig. 3) is used to replace
+the convolutional feature extraction process in conventional
+CNNs. The input image of dimension 224 × 224 × 3
+is split into fixed-size patches of 16 × 16 × 3. This
+gives us 196 patches, each of which is flattened into a
+768-dimensional vector (i.e., 16 × 16 × 3 = 768). These
+are then fed into a dense layer that projects them into a
+32-dimensional latent space to yield the embedding matrix
+size of 196 × 32.
+This dimensionality reduction is achieved with the preservation of important information and puts data in the form
+that can be processed by transformers. These embeddings go
+directly into the transformer encoder. Positional encodings
+may be appended to these vectors in real-world usage to
+preserve spatial information, although they are not shown in
+the diagram.
+The number of patches is computed as shown in Eq. (1)
+H ·W
+2242
+=
+= 196
+P2
+162
+
+(1)
+2
+
+Each patch is flattened into a vector xi ∈ RP ·C , forming
+2
+a sequence X = [x1 , x2 , . . . , xN ] ∈ RN ×(P ·C) . A linear
+2 ·C)×D
+(P
+projection Wp ∈ R
+projects these patch vectors into a
+lower-dimensional embedding space of dimension D = 32 as
+shown in Eq. (2)
+zi = xi Wp + bp
+VOLUME 13, 2025
+
+for i = 1, . . . , N
+
+Z (0) = Z + Epos
+
+(3)
+
+This encoding enables the model to retain spatial order
+information, which is otherwise lost due to the lack of
+convolution or recurrence.
+B. TRANSFORMER ENCODER: MULTI-HEAD
+SELF-ATTENTION
+
+A. INPUT REPRESENTATION AND PATCH EMBEDDING
+
+N =
+
+The output embeddings Z = [z1 , . . . , zN ] ∈ RN ×D are
+augmented with a learnable positional encoding Epos ∈
+RN ×D , resulting as shown in Eq. (3)
+
+(2)
+
+In the Vision Transformer architecture (Fig. 4), the Transformer Encoder swaps convolutional layers with a attentionbased framework. The model contains L = 4 stacked encoder
+layers, every single layer containing two vital modules:
+Multi-Head Self-Attention (MHSA) and a Position-wise
+Feedforward Network (FFN). Each module is bound by
+residual connections and Layer Normalization, creating a
+residual learning block. This design permits the network to
+learn about long-range dependencies and global interactions
+among non-local parts of the input image without depending
+on the inductive biases fundamental to convolution.
+Each Transformer Block comprises two main subcomponents: a Multi-Head Self-Attention (MHSA) mechanism
+and a Feed-Forward Network (FFN), both enclosed within
+residual connections and preceded by Layer Normalization.
+The input to each transformer block is a matrix of shape
+196 × 32.
+The first operation is Layer Normalization, normalization
+across features to improve efficiency and stability. Normalized embeddings are then passed on to the MHSA module,
+where attention scores over all tokens are calculated such
+that the model can attend different parts of the image. The
+attention output is then added to the original input via a
+residual connection.
+Following this, the output undergoes a second Layer
+Normalization and is passed through a two-layer FFN. The
+first dense layer expands the feature size from 32 to 64,
+157677
+
+P. Aryan et al.: Lightweight End-to-End Patch-Based Self-Attention Network
+
+FIGURE 3. Architecture of patch embedding block.
+
+and the second compresses it back to 32, applying nonlinear
+transformations to each token. Another residual connection
+feeds the input of this block to its output.
+The output still is 196×32 and keeps token structure across
+different transformer layers. Placing the transformer blocks
+over each other permits the model to learn more and more
+abstract features, which relate globally.
+1) INPUT EMBEDDING TENSOR
+
+dot-product formula given by equation as shown in Eq. (6)
+qi · k⊤
+j
+αij = √
+dk
+
+for i, j = 1, . . . , N
+
+(6)
+
+All attention scores are then normalized using the softmax
+function across each row as given in Eq. (7)
+
+
+QK ⊤
+A = softmax √
+∈ RN ×N
+(7)
+dk
+
+Let the output of the patch embedding module (after position
+encoding) be denoted as given in Eq. (4)
+
+Each row of A forms a probability distribution over the input
+tokens. The final attention output for each token is computed
+as a weighted combination of the values as shown in Eq. (8)
+
+h
+i
+(l) (l)
+(l) ⊤
+∈ RN ×D
+Z (l) = z1 , z2 , . . . , zN
+
+headi = AV ∈ RN ×dk
+
+(4)
+
+where: Here, l ∈ {0, 1, . . . , L − 1} denotes the current
+layer index, N is the total number of patches (i.e., the
+sequence length), D represents the dimensionality of each
+(l)
+patch embedding, and zi ∈ RD denotes the embedding of
+the i-th patch at layer l.
+
+(l)
+Each token vector zi is projected into three new representations: Query (qi ), Key (ki ), and Value (vi ) using shared linear
+
+projections across the sequence as shown in Eq. (5)
+Q = Z WQ ,
+
+K = Z WK ,
+(l)
+
+(l)
+
+V = Z WV
+
+4) MULTI-HEAD ATTENTION CONCATENATION
+
+To extend the expressiveness of self-attention, h attention
+heads are used in parallel. Each head learns independent
+WQi , WKi , WVi , producing attention outputsc as shown in
+Eq. (9)
+headi
+
+2) PROJECTION TO QUERY, KEY, AND VALUE SPACES
+
+(l)
+
+(8)
+
+= Attention(Z (l) WQi , Z (l) WKi , Z (l) WVi )
+
+for i = 1, . . . , h
+(9)
+
+The heads are concatenated and projected back to RD :
+(5)
+
+MHSA(Z (l) ) = Concat(head1 , . . . , headh )WO
+where WO ∈ R(h·dk )×D is a trainable weight matrix for output
+projection.
+
+with:
+WQ , WK , WV ∈ RD×dk
+
+5) RESIDUAL CONNECTION AND LAYER NORMALIZATION
+
+The query, key, and value matrices are Q, K , V ∈ RN ×dk ,
+where dk = Dh is the dimensionality of each attention head,
+and h = 2 is the number of attention heads.
+3) SCALED DOT-PRODUCT SELF-ATTENTION
+
+The fundamental attention mechanism computes the affinity
+between a query qi and all keys kj , using the scaled
+157678
+
+To promote stability and ease optimization, the output of the
+MHSA module is added to its input via a residual connection,
+and the sum is normalized in the shown Eq. (10)
+Ẑ (l) = LayerNorm(Z (l) + MHSA(Z (l) )) ∈ RN ×D
+
+(10)
+
+This process ensures that each encoder layer refines the
+features while preserving the original token representations.
+VOLUME 13, 2025
+
+P. Aryan et al.: Lightweight End-to-End Patch-Based Self-Attention Network
+
+FIGURE 4. Architecture of transformer block.
+
+C. FEEDFORWARD NETWORK AND RESIDUAL LEARNING
+
+After self-attention, the output Ẑ (l) is passed through
+a Position-wise Feedforward Network (FFN). The FFN
+operates independently on each position i ∈ {1, . . . , N },
+applying a two-layer MLP to every token.
+1) FEEDFORWARD NETWORK DEFINITION
+
+(11)
+
+where: Here, xi ∈ RD is the i-th row of Ẑ (l) , W1 ∈ RD×F
+and W2 ∈ RF×D are weight matrices, F = 64 represents the
+hidden (expanded) dimensionality, and b1 ∈ RF , b2 ∈ RD
+are learnable bias vectors.
+This layer increases the model’s capacity to represent
+complex non-linear transformations.
+2) RESIDUAL NORMALIZATION AND OUTPUT OF LAYER
+
+The FFN output is combined with its input through another
+residual connection and normalized as given in Eq. (12)
+Z (l+1) = LayerNorm(Ẑ (l) + FFN(Ẑ (l) )) ∈ RN ×D
+
+(12)
+
+This marks the conclusion of a fully realized Transformer
+Encoder layer. Each additional layer processes the output
+Z (l+1) in a same way, permitting the network to gather
+progressively abstract and hierarchical representations of the
+image patches.
+D. CLASSIFICATION LAYER AND TRAINING SETUP
+
+Once completion of the final Transformer encoder layer, the
+output sequence Z (L) ∈ RN ×D is compressed into a singular
+feature vector by the use of global average pooling along the
+token dimension, resulting as given in Eq. (13)
+zcls = GlobalAveragePooling1D(Z (L) ) ∈ RD
+
+(13)
+
+This consolidated vector encodes a globally contextualized
+representation of the input image and acts as input to
+VOLUME 13, 2025
+
+h = ReLU(Dense128(zcls))
+
+(14)
+
+and a dropout regularization with a dropout rate p = 0.5 as
+given in Eq. (15)
+
+The FFN function is defined as shown in Eq. (11)
+FFN(xi ) = W2 · ReLU(W1 xi + b1 ) + b2
+
+a streamlined classification head. The classification head
+contains of two entirely linked layers: the very first layer is
+a dense layer of 128 units, succeeded by a ReLU activation
+function as shown in the below Eq. (14)
+
+h = Dropout(h, 0.5)
+
+(15)
+
+The second dense layer has a single output neuron with a
+sigmoid activation function as shown in the below Eq. (16)
+1
+(16)
+1 + e−h
+which maps the output to a probability score indicating
+whether the image is tampered (ŷ ≈ 1) or authentic (ŷ ≈ 0).
+The model is trained using the binary cross-entropy loss
+function as shown in Eq. (17)
+
+
+L(y, ŷ) = − y · log(ŷ) + (1 − y) · log(1 − ŷ)
+(17)
+ŷ = σ (Dense1 (h)) =
+
+Optimization is conducted with the Adam optimizer with a
+learning rate η = 5 × 10−5 , and kernel regularization by
+weight decay λ = 10−3 is used in the dense layers to prevent
+overfitting. The model undergoes training for E = 80 epochs
+with a mini-batch size of B = 8, using mixed precision
+training through the mixed_float16 policy to leverage Tensor
+Cores for better training efficiency and minimized memory
+consumption on current GPUs.
+IV. RESULTS AND DISCUSSION
+
+In order to evaluate the performance of the proposed Vision
+Transformer (ViT)-based model for image forgery detection,
+comprehensive tests were performed on four benchmark
+datasets: CASIA v1, DEFACTO Splicing, Columbia, and
+MICC-F2000. Each dataset provided distinct issues regarding
+resolution, manipulation style, and compression artifacts.
+157679
+
+P. Aryan et al.: Lightweight End-to-End Patch-Based Self-Attention Network
+
+FIGURE 5. Training and validation of model accuracy and model loss graph obtained for (a) CASIA v1 dataset (b) DEFACTO dataset (c) columbia
+dataset (d) MICC-F2000 dataset by proposed model.
+
+FIGURE 6. Precision, Recall and F1 score obtained for (a) CASIA v1 dataset (b) DEFACTO
+dataset (c) columbia dataset (d) MICC-f2000 dataset by proposed model.
+
+The model, containing of 69,793 trainable parameters,
+was individually trained on each dataset for a variable number
+of epochs (80–200), showing exceptional generalization
+157680
+
+skills despite its minimal complexity. Performance has
+been evaluated using standard metrics: Accuracy, Precision,
+Recall, AUC, and F1 Score.
+VOLUME 13, 2025
+
+P. Aryan et al.: Lightweight End-to-End Patch-Based Self-Attention Network
+
+FIGURE 7. Confusion matrix obtained for (a) CASIA v1 dataset (b) DEFACTO splicing dataset
+(c) columbia dataset (d) MICC-F2000 dataset by proposed model.
+
+FIGURE 8. ROC curves obtained for (a) CASIA v1 dataset (b) DEFACTO dataset (c) columbia dataset (d) MICC-F2000 dataset by proposed
+model.
+
+A. ANALYSIS ON CASIA V1 DATASET
+
+The proposed architecture is tested on the CASIA v1 Dataset,
+which achieved an accuracy of 93.98% as shown in Fig. 5a,
+VOLUME 13, 2025
+
+precision of 96.22%, recall of 95.52%, and F1 score of
+0.9587 as shown in Fig. 6a, and an AUC of 0.9712 as shown
+in Fig. 8a on the CASIA v1 dataset. These results highlight
+157681
+
+P. Aryan et al.: Lightweight End-to-End Patch-Based Self-Attention Network
+
+the model’s equal effectiveness in recognizing splicingbased manipulations. The high AUC implies better differentiation among authentic and tampered samples. CASIA
+v1 includes both grayscale and color images subjected
+to lossy JPEG compression, complicating the detection of
+spliced regions. The ViT’s global self-attention mechanism
+solves this issue by capturing non-local dependencies and
+spatial inconsistencies that CNNs might miss due to their
+restricted receptive fields. Moreover, the positional encodings
+retain spatial connections across patches, making the model
+attuned to boundary-level aberrations due to splicing. This
+enables the ViT to accurately identify tampering, even when
+abnormalities are subtle or spread across distant regions in
+the image. Furthermore, the confusion matrix for the CASIA
+v1 dataset, as shown in Fig. 7a, exhibits a strong dominance
+along the diagonal, indicating a high proportion of correct
+predictions. Only a very small number of authentic images
+were misclassified as tampered, and vice versa. This confirms
+the model’s robustness in detecting splicing forgeries even in
+challenging conditions, demonstrating both high sensitivity
+and specificity toward forgery detection.
+B. ANALYSIS ON DEFACTO SPLICING DATASET
+
+The DEFACTO Splicing dataset showed outstanding results
+across all benchmarks, with the ViT attaining 99% accuracy
+as shown in Fig. 5b, 99% precision, 99% recall, and
+F1 score of 0.99 as shown in Fig. 6b, and an AUC of
+0.99 as shown in Fig. 8b. The nearly perfect outcomes
+illustrate the model’s resilience in analyzing uncompressed,
+high-resolution images with modest splicing manipulations.
+This dataset’s accurate preservation of low-level textures
+and lack of compression noise allowed the ViT to use
+extensive token-wise feature representations. The multi-head
+focus system allows the collection of various representations
+of spatial relationships, assisting the model in accurately
+identifying manipulated areas. In addition, training for
+80 epochs certainly helped the model to refine attention
+weights and positional encodings, thereby optimizing both
+detection sensitivity and specificity. The results obtained
+demonstrate the ViT’s ability to be used as a high-resolution
+forgery detector in optimal image conditions. Moreover,
+the confusion matrix for the DEFACTO Splicing dataset,
+as illustrated in Fig. 7b, displays almost perfect diagonal
+dominance, with minimal false positives and false negatives.
+The extremely low rate of misclassification highlights
+the model’s precision in distinguishing authentic images
+from tampered ones. This strong performance confirms
+the model’s capability to accurately capture and localize
+fine-grained manipulations even in high-quality, minimally
+altered images.
+C. ANALYSIS ON COLUMBIA DATASET
+
+The Columbia dataset presented a more significant issue
+owing to its uncompressed TIFF format and reduced dataset
+size. The ViT model, after 150 epochs of training, achieved an
+accuracy of 82.65% as shown in Fig. 5c, precision of 80.34%,
+157682
+
+recall of 86.24%, and F1 score of 0.8319 as shown in Fig. 6c,
+and an AUC of 0.8491 as shown in Fig. 8c. Despite being
+significantly lower than in other datasets, these values remain
+competitive and significantly outperform the performance of
+many previous methods. The model’s comparatively higher
+recall implies robust sensitivity for detecting manipulated
+images, though the marginally reduced precision indicates
+occasional misclassification of authentic samples. This is
+because of a lack of diversity of augmentations in the dataset
+and the decreased rate of explicit manipulation artifacts. Still,
+the transformer’s capability to build long-range dependencies
+among uniform image backgrounds permits it to outperform traditional CNN-based models. The extended training
+duration certainly reduced the dataset’s size limitations by
+permitting more refined tuning of inter-patch interactions and
+token embedding weights. In addition, the confusion matrix
+for the Columbia dataset, shown in Fig. 7c, reflects a modest
+increase in misclassifications compared to other datasets,
+with some authentic images incorrectly labeled as tampered
+and vice versa. However, the majority of the samples were
+still correctly classified, and the diagonal dominance was
+maintained, confirming the ViT model’s general capability
+to handle challenging, less diverse datasets with minimal
+overfitting.
+
+D. ANALYSIS ON MICC-F2000 DATASET
+
+The MICC-F2000 dataset contains high-resolution images
+exhibiting several forgery techniques. The ViT model, trained
+for 200 epochs, obtained an accuracy of 96.06% as shown in
+Fig. 5d, precision of 88.51%, recall of 93.57%, and F1 score
+of 0.9097 as shown in Fig. 6d, and an AUC of 0.9804 as
+shown in Fig. 8d. These results are particularly significant due
+to the dataset’s inherent complexity, which includes different
+manipulation strategies and subtle semantic inconsistencies.
+The high recall implies that the model successfully detects
+a variety of tampering types, including both overt and
+covert manipulations. The application of global average
+pooling and regularization techniques (dropout and L2 kernel
+penalties) prevents overfitting, even with an extended training
+duration. The model’s solid performance with a comparatively low parameter count shows the effectiveness of
+transformer encoders in extracting and retaining hierarchical
+tampering clues. The global field-of-view given by ViTs
+provides enhanced feature aggregation, which is especially
+important for detecting distributed or context-aware forgeries
+in MICC-F2000. Furthermore, the confusion matrix for
+the MICC-F2000 dataset, presented in Fig. 7d, shows a
+strong concentration along the diagonal, indicating a high
+proportion of correct classifications. A few misclassifications
+are observed, mostly between subtle tampering and authentic
+images, which is expected given the dataset’s complex and
+fine-grained manipulations. Overall, the confusion matrix
+validates the model’s robustness and its ability to generalize
+effectively across varying types of forgery techniques in highresolution images.
+VOLUME 13, 2025
+
+P. Aryan et al.: Lightweight End-to-End Patch-Based Self-Attention Network
+
+The consistent excellent performance within all datasets
+is due to the basic benefits of the Vision Transformer
+architecture: its capability to model long-range interrelationships, its represented input representation, and its
+adaptability in learning complicated spatial patterns without
+dependence on handcrafted features or convolutional filters.
+Despite including over ∼ 69.7K parameters, the model
+showcases state-of-the-art performance, resulting in both
+accurate and lightweight. Mixed precision training improves
+computational efficiency and permitting deployment in
+resource-constrained environments. The ViT generalizes
+effectively among datasets with various resolutions, formats,
+and complexities by refusing convolutional inductive biases
+in favor of attention-based feature alignment.
+The porposed model taken inference time of 6.2 seconds
+for testing of 4306 forgered images each of size 224×224×1
+in batch wise manner with batch size of 32.
+
+4 × 4) on the performance of the model, in terms of accuracy,
+AUC (Area Under Curve), and the number of parameters.
+From the plot, it is evident that as the patch size decreases
+from 16 × 16 to 4 × 4, the number of parameters increases
+significantly. This trend suggests that smaller patches require
+more parameters to capture the information across the image,
+leading to increased model complexity. On the other hand,
+larger patch sizes like 32 × 32 lead to a decrease in accuracy
+and AUC, indicating that using too large of a patch size
+reduces the model’s ability to capture fine-grained details,
+which are crucial for performance.
+The proposed work used a 16 × 16 patch size which strikes
+an optimal balance, achieving high accuracy (99.81%) and
+AUC (99.44%) with only 69.7K parameters. This highlights
+the efficiency of using the 16 × 16 patch size in the proposed
+work, where good performance is achieved.
+
+E. ABLATION STUDY
+
+The ablation study shown in the Fig. 9 clearly demonstrates
+that the proposed model, using 4 Transformer Blocks (TB’s),
+strikes an excellent balance between performance and computational efficiency. As the number of Transformer Blocks
+increases, the number of parameters increases significantly,
+leading to higher computational costs. However, the proposed
+model (4 TB’s) achieves high accuracy and AUC while
+maintaining a relatively low number of parameters, reaching
+a sweet spot at 4 TB’s. This is evident as the model
+with 4 TB’s achieves an accuracy of 99.49% and an AUC
+of 99.19% with 69.7K parameters, making it a highly
+efficient solution compared to models with 5 TB’s, where
+the accuracy and AUC increase marginally, but the number of
+parameters increases to 82.5K. This suggests that the model’s
+performance plateaus beyond 4 TB’s, which highlights the
+diminishing returns in terms of accuracy with the increase
+in Transformer Blocks. The proposed model with 4 TB’s is
+an effective approach to achieving high performance while
+keeping the model size and computational cost manageable.
+
+FIGURE 9. Performance comparison of the proposed model
+(4 Transformer Blocks) showing accuracy, AUC, and parameter efficiency.
+
+Further, a ablation study shown in Fig. 10 analyzes the
+effect of different patch sizes (16 × 16, 8 × 8, 32 × 32, and
+VOLUME 13, 2025
+
+FIGURE 10. The effect of patch size variation on accuracy, AUC, and
+parameters, with the proposed model using a 16 × 16 patch size.
+
+V. QUALITATIVE AND QUANTITATIVE COMPARATIVE
+ANALYSIS
+
+The proposed ViT model shows extraordinary superiority
+against various existing state-of-the-art models across
+the CASIA v1, DEFACTO, Columbia, and MICC-F2000
+datasets. On CASIA v1, ViT obtains the highest AUC
+(0.9712) and F1 score (0.9587), greatly outperforming
+existing models such as CNN+DCT (F1 = 0.95) [26],
+ForensicNet (F1 = 0.92) [27], and MVSS-Net (F1 =
+0.75) [28]. Recent hybrid transformers such as IML-ViT [29]
+and VIT-132 [9] have performance levels approaching that of
+ViT (F1 = 0.81 and 0.94, respectively); however, they are
+low in generalization and recall metrics. ViT significantly
+outperforms lightweight networks like ISIE-Net (F1 =
+0.53) [30] and MAPS-Net (F1 = 0.55) [31], as well as
+deeper localization models such as TransForensics and
+TDA-Net, having F1 values below 0.63 (Table. 1). The
+performance is attributed to ViT’s architecture, it captures
+non-local dependencies with self-attention and encodes
+spatial continuity through learnable positional embeddings,
+which resulted in major resilience to texture variance and
+compression flaws found in CASIA v1.
+157683
+
+P. Aryan et al.: Lightweight End-to-End Patch-Based Self-Attention Network
+
+TABLE 1. Performance metrics comparison of various models on
+CASIA v1 dataset from (2020–2025).
+
+TABLE 3. Performance metrics comparison of various models on
+Columbia dataset.
+
+TABLE 2. Performance metrics comparison of various models on
+DEFACTO splicing dataset.
+
+ViT overcomes hybrid CNN-transformer architectures which
+include MSF-Net, GSR-Net, and PSCC-Net, which display
+acceptable F1 scores (∼0.6–0.7) but demonstrate insufficient
+robustness in cross-context manipulation.
+The MICC-F2000 dataset, containing high-resolution
+images exhibiting manipulation techniques, significantly
+confirms the adaptability of the ViT model. Having an
+AUC of 0.9804, an F1 score of 0.9097, and an accuracy
+of 96%, ViT surpasses conventional frequency-based techniques like as DCT+SVM and ELA+VGG16 [24] which
+show poor generalization(Acc = 93% and 89%, respectively)
+(Table.4). In comparison to CNNs, which depend on spatial
+localization or frequency artifacts, ViT has better ability
+in modeling both global and local tampering patterns with
+its tokenized patch attention and hierarchical feedforward
+layers. In summary, ViT outperforms convolutional architectures (CR-CNN, ConvNeXtFF, MSF-Net), competitive
+and contrastive methods (TruFOR, locate-Net, NCL), and
+even advanced transformer variants (TransForensics, IMLViT), by consistently showing superiority across all five
+evaluation metrics (Accuracy, Precision, Recall, AUC, F1).
+With only 69,793 trainable parameters, four encoder layers,
+and effective mixed-precision training, ViT shows itself as a
+high-performing and lightweight architecture—establishing
+a new benchmark for dependable and scalable imagine
+tampering detection across various datasets.
+
+In the DEFACTO dataset, characterized by highresolution, uncompressed images and subtle splicing forgeries, ViT obtains almost perfect results: AUC = 0.9993,
+F1 = 0.9914, and accuracy = 99.14%, outperforming all
+evaluated models, including CAT-Net and DRRU-Net [23],
+which provide only accuracy metrics without AUC or F1
+scores (Table.2). ViT keeps an equal amount of precision
+(99.21%) and recall (99.07%), which is essential for
+minimising false positives in practical applications.
+In the Columbia dataset, ViT surpasses models such as
+C2R-Net (F1 = 0.69) [54], EXIF-SC (F1 = 0.51) [36], and
+DFCN (F1 = 0.41) [25], and equals to HiFi-Net (F1 =
+0.83) [39] while showing superior recall (0.86) (Table.3).
+The effectiveness of the model in Columbia, although
+its low image diversity and organized format, is due to
+ViT’s attention-based global feature modeling, which reliably
+recognizes semantic-level tampering often overlooked by
+convolutional models limited by local receptive fields.
+157684
+
+VI. CONCLUSION
+
+In this work, we proposed a lightweight Vision Transformerbased architecture for image tampering detection and localization, addressing the growing need for efficient and scalable
+
+TABLE 4. Performance metrics comparison of various models on
+MICC-F2000 dataset.
+
+VOLUME 13, 2025
+
+P. Aryan et al.: Lightweight End-to-End Patch-Based Self-Attention Network
+
+forgery detection solutions in digital forensics. By leveraging
+patch embedding, multi-head self-attention, and a modular classification pipeline, the proposed model effectively
+captures global feature representations while maintaining
+a compact design with only 69,793 trainable parameters.
+Comprehensive experiments conducted on four benchmark
+datasets—CASIA v1, DEFACTO (Splicing), Columbia, and
+MICC-F2000—demonstrate the robustness, adaptability, and
+high accuracy of the proposed approach across diverse
+manipulation scenarios and image types. The model achieves
+impressive results, including an F1 score of 0.9587 and an
+AUC of 0.9712 on CASIA v1, an almost perfect F1 score of
+0.9914 on DEFACTO, and strong performance even on challenging datasets like Columbia and MICC-F2000. Extensive
+qualitative and quantitative comparisons against 59 existing
+state-of-the-art models further validate the superior performance of the proposed ViT model in terms of accuracy,
+precision, recall, AUC, and F1 score across all datasets.
+The results clearly establish the proposed model as a highperforming, lightweight, and scalable solution for real-world
+image tampering detection and localization applications. This
+work distinguishes itself from prior ViT-based methods by
+demonstrating that a compact transformer architecture can
+deliver state-of-the-art performance across diverse forgery
+datasets, while significantly reducing model complexity and
+computational cost. Future directions include incorporating
+data augmentation, transfer learning, and multi-scale learning
+to enhance the model’s robustness and generalization across
+diverse and challenging datasets.
+REFERENCES
+[1] V. Shinde, V. Dhanawat, A. Almogren, A. Biswas, M. Bilal, R. A. Naqvi,
+and A. U. Rehman, ‘‘Copy-move forgery detection technique using
+graph convolutional networks feature extraction,’’ IEEE Access, vol. 12,
+pp. 121675–121687, 2024.
+[2] W. Shan, D. Zou, P. Wang, J. Yue, A. Liu, and J. Li, ‘‘RIFD-Net:
+A robust image forgery detection network,’’ IEEE Access, vol. 12,
+pp. 20326–20340, 2024.
+[3] S. Dua, J. Singh, and H. Parthasarathy, ‘‘Image forgery detection based
+on statistical features of block DCT coefficients,’’ Proc. Comput. Sci.,
+vol. 171, pp. 369–378, Jan. 2020.
+[4] M. H. Siddiqi, K. Asghar, U. Draz, A. Ali, M. Alruwaili, Y. Alhwaiti,
+S. Alanazi, and M. M. Kamruzzaman, ‘‘Image splicing-based forgery
+detection using discrete wavelet transform and edge weighted local binary
+patterns,’’ Secur. Commun. Netw., vol. 2021, pp. 1–10, Sep. 2021.
+[5] N. Kanwal, A. Girdhar, L. Kaur, and J. S. Bhullar, ‘‘Digital image splicing
+detection technique using optimal threshold based local ternary pattern,’’
+Multimedia Tools Appl., vol. 79, nos. 19–20, pp. 12829–12846, May 2020.
+[6] N. Kaur, N. Jindal, and K. Singh, ‘‘A passive approach for the detection
+of splicing forgery in digital images,’’ Multimedia Tools Appl., vol. 79,
+nos. 43–44, pp. 32037–32063, Nov. 2020.
+[7] N. Kaur, ‘‘Hybrid image splicing detection: Integrating CLAHE, improved
+CNN, and SVM for digital image forensics,’’ Expert Syst. Appl., vol. 273,
+May 2025, Art. no. 126756.
+[8] S. Samir, E. Emary, K. El-Sayed, and H. Onsi, ‘‘Optimization of a pretrained AlexNet model for detecting and localizing image forgeries,’’
+Information, vol. 11, no. 5, p. 275, May 2020.
+[9] D. Pawar, R. Gowda, and K. Chandra, ‘‘Image forgery classification and
+localization through vision transformers,’’ Int. J. Multimedia Inf. Retr.,
+vol. 14, no. 1, pp. 1–11, Mar. 2025.
+[10] Z. Shi, X. Shen, H. Chen, and Y. Lyu, ‘‘Global semantic consistency
+network for image manipulation detection,’’ IEEE Signal Process. Lett.,
+vol. 27, pp. 1755–1759, 2020.
+VOLUME 13, 2025
+
+[11] H. Zhu, G. Cao, M. Zhao, H. Tian, and W. Lin, ‘‘Effective image tampering
+localization with multi-scale ConvNeXt feature fusion,’’ J. Vis. Commun.
+Image Represent., vol. 98, Feb. 2024, Art. no. 103981.
+[12] Z. Yang, B. Liu, X. Bi, B. Xiao, W. Li, G. Wang, and X. Gao, ‘‘DNet: A dual-encoder network for image splicing forgery detection and
+localization,’’ Pattern Recognit., vol. 155, Nov. 2024, Art. no. 110727.
+[13] K. Guo, G. Cao, Z. Lou, X. Huang, and J. Liu, ‘‘A lightweight and
+effective image tampering localization network with vision mamba,’’ 2025,
+arXiv:2502.09941.
+[14] Y. Zhou, H. Wang, Q. Zeng, R. Zhang, and S. Meng, ‘‘A contribution-aware
+noise feature representation model for image manipulation localization,’’
+Knowl.-Based Syst., vol. 298, Aug. 2024, Art. no. 111988.
+[15] L. Zhuo, S. Tan, B. Li, and J. Huang, ‘‘Self-adversarial training
+incorporating forgery attention for image forgery localization,’’ IEEE
+Trans. Inf. Forensics Security, vol. 17, pp. 819–834, 2022.
+[16] P. Zhuang, H. Li, R. Yang, and J. Huang, ‘‘ReLoc: A restoration-assisted
+framework for robust image tampering localization,’’ IEEE Trans. Inf.
+Forensics Security, vol. 18, pp. 5243–5257, 2023.
+[17] X. Yang, R. Zhang, S. Li, and G. Liang, ‘‘Image forgery localization
+integrating multi-scale and boundary features,’’ Comput. J., vol. 68, no. 3,
+pp. 306–321, Mar. 2025.
+[18] Z. Sheng, C. Yin, and W. Lu, ‘‘Exploring multi-scale forgery clues for
+stereo super-resolution image forgery localization,’’ Pattern Recognit.,
+vol. 161, May 2025, Art. no. 111230.
+[19] X. Liu, Y. Yang, H. Wang, Q. Ying, Z. Qian, X. Zhang, and S. Li,
+‘‘Multi-view feature extraction via tunable prompts is enough for image
+manipulation localization,’’ in Proc. 32nd ACM Int. Conf. Multimedia,
+Oct. 2024, pp. 9999–10007.
+[20] Q. Hao, R. Ren, S. Niu, K. Wang, M. Wang, and J. Zhang, ‘‘UGEENet: Uncertainty-guided and edge-enhanced network for image splicing
+localization,’’ Neural Netw., vol. 178, Oct. 2024, Art. no. 106430.
+[21] Z. Sheng, Z. Qu, W. Lu, X. Cao, and J. Huang, ‘‘DiRLoc: Disentanglement
+representation learning for robust image forgery localization,’’ IEEE Trans.
+Dependable Secure Comput., vol. 22, no. 3, pp. 2841–2854, May 2025.
+[22] P. Samanta and S. Jain, ‘‘SmartHash: Perceptual hashing for image
+tampering detection and authentication,’’ in Proc. 33rd ACM Int. Conf. Inf.
+Knowl. Manage., Oct. 2024, pp. 1983–1993.
+[23] Y. Seo and J. Kook, ‘‘DRRU-Net: DCT-coefficient-learning RRU-Net for
+detecting an image-splicing forgery,’’ Appl. Sci., vol. 13, no. 5, p. 2922,
+Feb. 2023.
+[24] T. Singh, Y. Goel, T. Yadav, and S. Seniaray, ‘‘Performance analysis of
+ELA-CNN model for image forgery detection,’’ in Proc. 4th Int. Conf.
+Emerg. Technol. (INCET), May 2023, pp. 1–6.
+[25] P. Zhuang, H. Li, S. Tan, B. Li, and J. Huang, ‘‘Image tampering
+localization using a dense fully convolutional network,’’ IEEE Trans. Inf.
+Forensics Security, vol. 16, pp. 2986–2999, 2021.
+[26] E. I. Abd El-Latif, A. Taha, and H. H. Zayed, ‘‘A passive approach for
+detecting image splicing based on deep learning and wavelet transform,’’
+Arabian J. Sci. Eng., vol. 45, no. 4, pp. 3379–3386, Apr. 2020.
+[27] S. Tyagi and D. Yadav, ‘‘ForensicNet: Modern convolutional neural
+network-based image forgery detection network,’’ J. Forensic Sci., vol. 68,
+no. 2, pp. 461–469, Mar. 2023.
+[28] C. Dong, X. Chen, R. Hu, J. Cao, and X. Li, ‘‘MVSS-Net: Multiview multi-scale supervised networks for image manipulation detection,’’
+IEEE Trans. Pattern Anal. Mach. Intell., vol. 45, no. 3, pp. 3539–3553,
+Mar. 2023.
+[29] X. Ma, B. Du, Z. Jiang, X. Du, A. Y. Al Hammadi, and J. Zhou, ‘‘IML-ViT:
+Benchmarking image manipulation localization by vision transformer,’’
+2023, arXiv:2307.14863.
+[30] Y. Shao, T. Wang, and L. Wang, ‘‘Image manipulation detection based on
+irrelevant information suppression and critical information enhancement,’’
+Eur. J. Artif. Intell., vol. 38, no. 1, pp. 79–95, Feb. 2025.
+[31] Y. Jiang, Y. Huang, H. Chen, and Y. Lyu, ‘‘Multi-modality boundaryguided network for generalizable image manipulation localization,’’
+Multimedia Syst., vol. 31, no. 1, pp. 1–13, Feb. 2025.
+[32] K. D. K. Yadav, I. Kavati, and R. Cheruku, ‘‘CCLHF-Net: Constrained
+convolution layer and hybrid features-based skip connection network
+for image forgery detection,’’ Arabian J. for Sci. Eng., vol. 50, no. 2,
+pp. 825–834, Jan. 2025.
+[33] C. Yang, H. Li, F. Lin, B. Jiang, and H. Zhao, ‘‘Constrained R-CNN: A
+general image manipulation detection model,’’ in Proc. IEEE Int. Conf.
+Multimedia Expo (ICME), Jul. 2020, pp. 1–6.
+157685
+
+P. Aryan et al.: Lightweight End-to-End Patch-Based Self-Attention Network
+
+[34] K. Guo, H. Zhu, and G. Cao, ‘‘Effective image tampering localization via
+enhanced transformer and co-attention fusion,’’ in Proc. IEEE Int. Conf.
+Acoust., Speech Signal Process. (ICASSP), Apr. 2024, pp. 4895–4899.
+[35] X. Lin, S. Wang, J. Deng, Y. Fu, X. Bai, X. Chen, X. Qu, and W.
+Tang, ‘‘Image manipulation detection by multiple tampering traces and
+edge artifact enhancement,’’ Pattern Recognit., vol. 133, Jan. 2023,
+Art. no. 109026.
+[36] A. Rozsa, T. E. Boult, and Z. Zhong, ‘‘Adversarial attack on deep learningbased splice localization,’’ in Proc. IEEE/CVF Conf. Comput. Vis. Pattern
+Recognit. Workshops (CVPRW), Jun. 2020, pp. 2757–2765.
+[37] X. Chen, C. Dong, J. Ji, J. Cao, and X. Li, ‘‘Image manipulation detection
+by multi-view multi-scale supervision,’’ in Proc. IEEE/CVF Int. Conf.
+Comput. Vis. (ICCV), Oct. 2021, pp. 14165–14173.
+[38] P. Zhou, B.-C. Chen, X. Han, M. Najibi, A. Shrivastava, S. N. Lim, and L.
+S. Davis, ‘‘Generate, segment and refine: Towards generic manipulation
+segmentation,’’ in Proc. AAAI Conf. Artif. Intell., 2018, pp. 13058–13065.
+[39] X. Guo, X. Liu, Z. Ren, S. Grosz, I. Masi, and X. Liu, ‘‘Hierarchical
+fine-grained image forgery detection and localization,’’ in Proc. IEEE/CVF
+Conf. Comput. Vis. Pattern Recognit. (CVPR), Jun. 2023, pp. 3155–3165.
+[40] H. Wu, J. Zhou, J. Tian, and J. Liu, ‘‘Robust image forgery detection over
+online social network shared images,’’ in Proc. IEEE/CVF Conf. Comput.
+Vis. Pattern Recognit. (CVPR), Jun. 2022, pp. 13430–13439.
+[41] Z. Lou, G. Cao, K. Guo, S. Weng, and L. Yu, ‘‘Image forgery localization
+with state space models,’’ 2024, arXiv:2412.11214.
+[42] Z. Lou, G. Cao, K. Guo, L. Yu, and S. Weng, ‘‘Exploring multi-view pixel
+contrast for general and robust image forgery localization,’’ IEEE Trans.
+Inf. Forensics Security, vol. 20, pp. 2329–2341, 2025.
+[43] F. Li, Z. Pei, X. Zhang, and C. Qin, ‘‘Image manipulation localization using
+multi-scale feature fusion and adaptive edge supervision,’’ IEEE Trans.
+Multimedia, vol. 25, pp. 7851–7866, 2023.
+[44] L. Dou, M. Chen, J. Qiu, and J. Wang, ‘‘MSF-Net: Multi-stream fusion
+network for image manipulation detection and localization,’’ Digit. Signal
+Process., vol. 161, Jun. 2025, Art. no. 105114.
+[45] J. Zhou, X. Ma, X. Du, A. Y. Alhammadi, and W. Feng, ‘‘Pre-trainingfree image manipulation localization through non-mutually exclusive
+contrastive learning,’’ in Proc. IEEE/CVF Int. Conf. Comput. Vis. (ICCV),
+Oct. 2023, pp. 22289–22299.
+[46] Y. Zhou, H. Wang, Q. Zeng, R. Zhang, and S. Meng, ‘‘A discriminative
+multi-channel noise feature representation model for image manipulation
+localization,’’ in Proc. IEEE Int. Conf. Acoust., Speech Signal Process.
+(ICASSP), Jun. 2023, pp. 1–5.
+[47] H. Wu, J. Zhou, J. Tian, J. Liu, and Y. Qiao, ‘‘Robust image forgery
+detection against transmission over online social networks,’’ IEEE Trans.
+Inf. Forensics Security, vol. 17, pp. 443–456, 2022.
+[48] Y. Zeng, B. Zhao, S. Qiu, T. Dai, and S.-T. Xia, ‘‘Toward effective image
+manipulation detection with proposal contrastive learning,’’ IEEE Trans.
+Circuits Syst. Video Technol., vol. 33, no. 9, pp. 4703–4714, Sep. 2023.
+[49] X. Liu, Y. Liu, J. Chen, and X. Liu, ‘‘PSCC-Net: Progressive spatiochannel correlation network for image manipulation detection and
+localization,’’ IEEE Trans. Circuits Syst. Video Technol., vol. 32, no. 11,
+pp. 7505–7517, Nov. 2022.
+[50] Z. Gao, C. Sun, Z. Cheng, W. Guan, A. Liu, and M. Wang, ‘‘TBNet: A twostream boundary-aware network for generic image manipulation localization,’’ IEEE Trans. Knowl. Data Eng., vol. 35, no. 7, pp. 7541–7556,
+Jul. 2022.
+[51] S. Li, S. Xu, W. Ma, and Q. Zong, ‘‘Image manipulation localization using
+attentional cross-domain CNN features,’’ IEEE Trans. Neural Netw. Learn.
+Syst., vol. 34, no. 9, pp. 5614–5628, Sep. 2023.
+[52] J. Hao, Z. Zhang, S. Yang, D. Xie, and S. Pu, ‘‘TransForensics: Image
+forgery localization with dense self-attention,’’ in Proc. IEEE/CVF Int.
+Conf. Comput. Vis. (ICCV), Oct. 2021, pp. 15035–15044.
+[53] F. Guillaro, D. Cozzolino, A. Sud, N. Dufour, and L. Verdoliva, ‘‘TruFor:
+Leveraging all-round clues for trustworthy image forgery detection and
+localization,’’ in Proc. IEEE/CVF Conf. Comput. Vis. Pattern Recognit.
+(CVPR), Jun. 2023, pp. 20606–20615.
+[54] B. Xiao, Y. Wei, X. Bi, W. Li, and J. Ma, ‘‘Image splicing forgery detection
+combining coarse to refined convolutional neural network and adaptive
+clustering,’’ Inf. Sci., vol. 511, pp. 172–191, Feb. 2020.
+[55] M.-J. Kwon, I.-J. Yu, S.-H. Nam, and H.-K. Lee, ‘‘CAT-Net: Compression
+artifact tracing network for detection and localization of image splicing,’’
+in Proc. IEEE Winter Conf. Appl. Comput. Vis. (WACV), Jan. 2021,
+pp. 375–384.
+157686
+
+[56] M.-J. Kwon, S.-H. Nam, I.-J. Yu, H.-K. Lee, and C. Kim, ‘‘Learning JPEG
+compression artifacts for image manipulation detection and localization,’’
+Int. J. Comput. Vis., vol. 130, no. 8, pp. 1875–1895, Aug. 2022.
+[57] D. Cozzolino and L. Verdoliva, ‘‘Noiseprint: A CNN-based camera model
+fingerprint,’’ IEEE Trans. Inf. Forensics Security, vol. 15, pp. 144–159,
+2020.
+
+POLICE ARYAN is currently pursuing the degree
+with the Amrita School of Artificial Intelligence,
+Amrita Vishwa Vidyapeetham, Coimbatore, India.
+His work focuses on developing efficient and
+lightweight deep learning models for detecting
+and localizing digital image manipulations. His
+research interests include digital image forensics,
+deep learning, computer vision, image tampering
+detection, hybrid neural architectures, vision transformers (ViT), and multimedia security.
+RAMA MUNI REDDY YANAMALA (Student
+Member, IEEE) received the master’s degree from
+Indian Institute of Technology Madras, India,
+and the Ph.D. degree from the National Institute
+of Technology Warangal, India. He is currently
+an Assistant Professor with the Department of
+Electronics and Communication Engineering,
+Indian Institute of Information Technology Design
+and Manufacturing (IIITDM) Kancheepuram,
+Chennai, India. His research interests include
+hardware accelerators for deep learning applications, FPGA-based designs,
+the IoT-based edge device applications, embedded projects, and RISC-V
+debugger design using Bluespec language.
+ARCHANA PALLAKONDA (Student Member,
+IEEE) received the master’s degree from Kakatiya
+University, Warangal, India. She is currently
+a Research Scholar with the National Institute
+of Technology, Warangal. Her research interests
+include biometric security, machine learning,
+cybersecurity, deep learning, cryptography, image
+processing, transformation techniques, cloud computing, network security, and bioinformatics.
+
+RAYAPPA DAVID AMAR RAJ received the
+master’s degree from NIT Agartala, India, and the
+Ph.D. degree from NIT Warangal, India. He is
+currently an Assistant Professor with the Amrita
+School of Artificial Intelligence, Amrita Vishwa
+Vidyapeetham, Coimbatore, Chennai, India. His
+research interests include fault detection and
+classification in PV systems, power systems,
+cybersecurity smart grids, image processing,
+image encryption, neural networks, deep learning, dynamic reconfiguration strategies, PV array optimization, and
+cybersecurity.
+K. KRISHNA PRAKASHA (Senior Member,
+IEEE) received the B.E. and M.Tech. degrees from
+Viswesvaraya Technological University, Belagavi,
+and the Ph.D. degree in network security from
+Manipal Academy of Higher Education (MAHE)
+University, Manipal, India. He is currently an
+Associate Professor with the School of Computer
+Engineering, Manipal Institute of Technology,
+MAHE. He has more than 35 publications in
+national and international conferences and journals. His current research interests include information security, network
+security, algorithms, real-time systems, and wireless sensor networks.
+
+VOLUME 13, 2025
+
+
