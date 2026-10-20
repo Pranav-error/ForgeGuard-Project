@@ -16,7 +16,7 @@
   td { border: 0.75pt solid #000; padding: 3pt 5pt; vertical-align: top; width: 50%; }
   ul { margin: 0 0 8pt; padding-left: 28pt; }
   li { margin-bottom: 3pt; }
-  pre.diagram { border: 0.75pt solid #000; padding: 8pt 10pt; font-family: 'Courier New', monospace; font-size: 9pt; line-height: 1.25; white-space: pre; overflow-x: auto; margin: 6pt 0 14pt; page-break-inside: avoid; }
+  svg.diagram { display: block; width: 100%; height: auto; margin: 6pt 0 14pt; page-break-inside: avoid; }
   table.schema td { width: auto; font-size: 10pt; }
   table.schema td:first-child { font-weight: 700; width: 18%; }
   table.map td { width: auto; }
@@ -47,43 +47,81 @@
 <h2>2. Architecture Overview</h2>
 <p>ForgeGuard is a single backend service exposed through one REST API (FR-P1), fronted by a web client, with four detector workers and a fusion stage orchestrated per request. The assigned module, Document Tamper Detection and Localisation, is one of the four workers.</p>
 
-<pre class="diagram">
-                              +-------------------+
-                              |     Web Client     |  (FR-U1..U4)
-                              +---------+---------+
-                                        | HTTPS (JSON + file upload)
-                                        v
-                              +-------------------+
-                              |     API Gateway    |  auth, rate limit, RBAC (NFR-9)
-                              +---------+---------+
-                                        v
-                              +-------------------+
-                              |   Verification      |  FR-P1 - single entry point
-                              |   Orchestrator      |  for every client
-                              +--+------+------+---+
-                                 |      |      |
-             +-------------------+   +--+--+   +-------------------+
-             v                       v     v                       v
-   +-------------------+   +----------------+   +-------------------+   +-------------------+
-   |  Signature Verif.  |   |  Tamper        |   |  OCR / Field      |   |  Fusion & Scoring  |
-   |  Service           |   |  Localisation   |-->|  Validation       |-->|  Service            |
-   |  (FR-S1..S3)       |-->|  (FR-D1,D2)     |   |  (FR-D3,D4)       |   |  (FR-D5,D6)         |
-   +--------+-----------+   +---+--------+----+   +---------+---------+   +----------+----------+
-            |                   |        |                  |                        |
-            | crop + ref        | SRM/ELA| heatmap          | fields/arith           | score, label,
-            | compare            | maps   | + tamper sub-   | sub-score              | heatmap, reasons
-            v                   v        v score            v                        v
-   +---------------------------------------------------------------------------------------------+
-   |                              Shared Storage                                                   |
-   |  Object store: uploaded docs, crops, heatmaps (encrypted, NFR-3)                               |
-   |  Postgres: users, signatures, documents, verifications, audit_log (NFR-8), feedback (FR-A2)    |
-   +---------------------------------------------------------------------------------------------+
-                                        ^
-                                        |
-                              +-------------------+
-                              |   Admin Console    |  FR-A1..A3
-                              +-------------------+
-</pre>
+<svg class="diagram" viewBox="0 0 760 660" xmlns="http://www.w3.org/2000/svg" font-family="Carlito, Calibri, Arial, sans-serif">
+<defs>
+  <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+    <path d="M0,0 L10,5 L0,10 z" fill="#000"/>
+  </marker>
+</defs>
+<style>
+  .box { fill:#f4f4f4; stroke:#000; stroke-width:1.1; }
+  .box-hl { fill:#e2e2e2; stroke:#000; stroke-width:1.8; }
+  .lbl { font-size:12px; font-weight:700; fill:#000; }
+  .sub { font-size:9.5px; fill:#000; }
+  .edge { fill:none; stroke:#000; stroke-width:1.1; marker-end:url(#arrow); }
+  .edge2 { fill:none; stroke:#000; stroke-width:1.1; marker-end:url(#arrow); marker-start:url(#arrow); }
+</style>
+
+<!-- Web Client -->
+<rect class="box" x="290" y="12" width="180" height="42" rx="7"/>
+<text class="lbl" x="380" y="30" text-anchor="middle">Web Client</text>
+<text class="sub" x="380" y="44" text-anchor="middle">FR-U1..U4</text>
+
+<!-- API Gateway -->
+<rect class="box" x="270" y="86" width="220" height="42" rx="7"/>
+<text class="lbl" x="380" y="104" text-anchor="middle">API Gateway</text>
+<text class="sub" x="380" y="118" text-anchor="middle">auth, rate limit, RBAC (NFR-9)</text>
+
+<!-- Orchestrator -->
+<rect class="box" x="240" y="160" width="280" height="46" rx="7"/>
+<text class="lbl" x="380" y="180" text-anchor="middle">Verification Orchestrator</text>
+<text class="sub" x="380" y="195" text-anchor="middle">FR-P1 - single entry point for every client</text>
+
+<!-- Row of three detector services -->
+<rect class="box" x="20" y="252" width="210" height="72" rx="7"/>
+<text class="lbl" x="125" y="275" text-anchor="middle">Signature Verification</text>
+<text class="sub" x="125" y="290" text-anchor="middle">FR-S1..S3, NFR-6</text>
+<text class="sub" x="125" y="304" text-anchor="middle">crop, clean, compare to refs</text>
+
+<rect class="box-hl" x="275" y="252" width="210" height="72" rx="7"/>
+<text class="lbl" x="380" y="272" text-anchor="middle">Tamper Localisation</text>
+<text class="sub" x="380" y="286" text-anchor="middle">FR-D1, FR-D2, FR-D6</text>
+<text class="sub" x="380" y="300" text-anchor="middle">SRM + RGB streams -&gt; heatmap</text>
+<text class="sub" x="380" y="314" text-anchor="middle" font-style="italic">(assigned module)</text>
+
+<rect class="box" x="530" y="252" width="210" height="72" rx="7"/>
+<text class="lbl" x="635" y="275" text-anchor="middle">OCR / Field Validation</text>
+<text class="sub" x="635" y="290" text-anchor="middle">FR-D3, FR-D4</text>
+<text class="sub" x="635" y="304" text-anchor="middle">fields, arithmetic gate</text>
+
+<!-- Fusion -->
+<rect class="box" x="230" y="364" width="300" height="52" rx="7"/>
+<text class="lbl" x="380" y="386" text-anchor="middle">Fusion &amp; Scoring Service</text>
+<text class="sub" x="380" y="401" text-anchor="middle">FR-D5, FR-D6 - score, label, heatmap, reason</text>
+
+<!-- Shared Storage -->
+<rect class="box" x="20" y="456" width="720" height="76" rx="7"/>
+<text class="lbl" x="380" y="478" text-anchor="middle">Shared Storage</text>
+<text class="sub" x="380" y="494" text-anchor="middle">Object store: documents, crops, heatmaps (encrypted, NFR-3)</text>
+<text class="sub" x="380" y="508" text-anchor="middle">Postgres: users, signatures, documents, verifications, audit_log (NFR-8), feedback (FR-A2)</text>
+
+<!-- Admin Console -->
+<rect class="box" x="560" y="572" width="180" height="42" rx="7"/>
+<text class="lbl" x="650" y="593" text-anchor="middle">Admin Console</text>
+<text class="sub" x="650" y="606" text-anchor="middle">FR-A1..A3</text>
+
+<!-- Edges -->
+<path class="edge" d="M380,54 L380,84"/>
+<path class="edge" d="M380,128 L380,158"/>
+<path class="edge" d="M330,206 L160,250"/>
+<path class="edge" d="M380,206 L380,250"/>
+<path class="edge" d="M430,206 L600,250"/>
+<path class="edge" d="M160,324 Q160,350 290,372"/>
+<path class="edge" d="M380,324 L380,362"/>
+<path class="edge" d="M600,324 Q600,350 460,372"/>
+<path class="edge" d="M380,416 L380,454"/>
+<path class="edge2" d="M650,570 L650,534"/>
+</svg>
 
 <p><b>2.1 Why this shape.</b> The orchestrator calls the four workers in the fixed order shown (signature and tamper run independently, OCR can run in parallel with either, fusion runs last), because FR-D5 requires all three evidence streams before a score is produced. Each worker is a separate process behind the same request/response contract, so NFR-7 is met by construction: replacing the tamper localiser with a newer model only changes that one box.</p>
 
