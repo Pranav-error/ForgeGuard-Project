@@ -1,6 +1,6 @@
 # Fill author names in paper.html and print the IEEE-style paper to PDF with headless Chrome.
 import subprocess, pathlib
-AUTHORS = ["[Author 1]", "[Author 2]", "[Author 3]", "[Author 4]"]
+AUTHORS = ["Ruchikesha S", "Suhil Prasanth S", "Tara C", "Pavani V Reddy", "R Sai Pranav"]
 AFF = "School of Computer Science &amp; Engineering<br>REVA University, Yelahanka, Bengaluru, India"
 h = pathlib.Path("paper.html").read_text().replace(
     "{{AUTHORS}}", "".join(f'<div><div class="n">{a}</div>{AFF}</div>' for a in AUTHORS))

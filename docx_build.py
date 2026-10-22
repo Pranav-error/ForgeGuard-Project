@@ -85,15 +85,16 @@ sec.top_margin, sec.bottom_margin = Inches(0.75), Inches(0.9)
 
 paras = list(d.paragraphs)
 last_head = None
+auth = []
 for p in paras:
     t = p.text
     sn = p.style.name
     if "@@TITLE@@" in t:
         strip(p, "@@TITLE@@"); fmt(p, 22, False, align=WD_ALIGN_PARAGRAPH.CENTER, after=12)
     elif "@@AUTH@@" in t:
-        strip(p, "@@AUTH@@"); fmt(p, 10.5, align=WD_ALIGN_PARAGRAPH.CENTER, before=6, after=1)
+        strip(p, "@@AUTH@@"); fmt(p, 10.5, align=WD_ALIGN_PARAGRAPH.CENTER, before=6, after=1); auth.append(p)
     elif "@@AFF@@" in t:
-        strip(p, "@@AFF@@"); fmt(p, 9, align=WD_ALIGN_PARAGRAPH.CENTER, after=2); last_head = p
+        strip(p, "@@AFF@@"); fmt(p, 9, align=WD_ALIGN_PARAGRAPH.CENTER, after=2); last_head = p; auth.append(p)
     elif "@@ABS@@" in t or "@@KW@@" in t:
         tag = "@@ABS@@" if "@@ABS@@" in t else "@@KW@@"
         strip(p, tag); fmt(p, 9, True, indent=10, after=4)
@@ -137,7 +138,6 @@ for p in d.paragraphs:
     if p.style.name in ("Title", "Subtitle"): p._p.getparent().remove(p._p)
 
 # authors: 2-column borderless grid instead of a stacked list
-auth = [p for p in d.paragraphs if p.text.startswith("[Author") or p.text.startswith("School of Computer")]
 if auth:
     pairs = [(auth[i].text, auth[i + 1].text) for i in range(0, len(auth), 2)]
     g = d.add_table(rows=(len(pairs) + 1) // 2, cols=2)

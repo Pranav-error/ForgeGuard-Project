@@ -1,7 +1,7 @@
 # Fill placeholders in report.html and print to PDF with headless Chrome.
 import subprocess, pathlib
 V = {
- "NAME": "[Your Name]", "USN": "[Your USN]",
+ "NAME": "R Sai Pranav", "USN": "[Your USN]",
  "TITLE": "ForgeGuard: An AI-Based Document Forgery Detection and Verification System",
  "SHORT": "ForgeGuard", "TRACK": "[Track]", "CENTRE": "[Centre]", "GUIDE": "[Faculty Guide]",
  "DATE": "12 October 2026",
