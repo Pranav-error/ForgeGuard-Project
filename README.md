@@ -19,8 +19,9 @@ This is a college major project (REVA University, School of Computer Science & E
 
 | File | Description |
 |---|---|
-| `Literature_Survey_Report.pdf` | Survey of 52 IEEE papers (2018–2026) across four themes — signature verification, image tampering localisation, document/financial/legal forgery detection, and blockchain-anchored credential verification — with the functional/non-functional requirements derived from the gaps found. |
-| `System_Design_Document.pdf` | Architecture, per-module design, data schema, API design, and the NFR-to-design-decision mapping, built directly from the requirements above. |
+| `Literature_Survey_Report.pdf` | Survey of 52 IEEE papers (2018–2026) across four themes — signature verification, image tampering localisation, document/financial/legal forgery detection, and blockchain-anchored credential verification — with 9 literature gaps and the functional/non-functional requirements derived from them. |
+| `Project_Objectives.pdf` | Objectives O1–O9, one per literature gap, each traced to the requirement IDs it is implemented through. |
+| `System_Design_Document.pdf` | Architecture, per-module design, data schema, API design, and the NFR-to-design-decision mapping — implements objectives O1–O9. |
 | `ForgeGuard_IEEE_Paper.docx` / `.pdf` | IEEE-format paper draft. |
 | `report.html`, `design.html`, `paper.html` | Source HTML for the three documents above. |
 | `papers/` | The 52 source papers (PDF) reviewed in the literature survey. |
@@ -33,10 +34,11 @@ Each `*_build.py` script fills placeholders (name, USN, date, etc.) in its match
 and prints it to PDF with headless Chrome:
 
 ```bash
-python3 build.py          # -> Literature_Survey_Report.pdf
-python3 design_build.py   # -> System_Design_Document.pdf
-python3 paper_build.py    # -> ForgeGuard_IEEE_Paper.pdf
-python3 docx_build.py     # -> ForgeGuard_IEEE_Paper.docx
+python3 build.py             # -> Literature_Survey_Report.pdf
+python3 objectives_build.py  # -> Project_Objectives.pdf
+python3 design_build.py      # -> System_Design_Document.pdf
+python3 paper_build.py       # -> ForgeGuard_IEEE_Paper.pdf
+python3 docx_build.py        # -> ForgeGuard_IEEE_Paper.docx
 ```
 
 Requires Google Chrome installed at the default macOS path.

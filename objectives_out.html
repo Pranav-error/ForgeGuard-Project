@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Project Objectives</title>
+<link href="https://fonts.googleapis.com/css2?family=Carlito:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  @page { size: letter; margin: 1in 1in 1in 1in; }
+  body { font-family: 'Carlito', 'Calibri', Arial, sans-serif; font-size: 11pt; line-height: 1.38; color: #000; background: #fff; margin: 0; }
+  h1 { font-size: 15pt; font-weight: 700; margin: 0 0 8pt; }
+  h2 { font-size: 13pt; font-weight: 700; margin: 16pt 0 6pt; page-break-after: avoid; }
+  h3 { font-size: 11.5pt; font-weight: 700; margin: 12pt 0 4pt; page-break-after: avoid; }
+  p { margin: 0 0 8pt; text-align: left; }
+  .sub { margin-bottom: 10pt; }
+  table { border-collapse: collapse; width: 100%; margin: 4pt 0 14pt; }
+  td { border: 0.75pt solid #000; padding: 3pt 5pt; vertical-align: top; width: 50%; }
+  table.obj td { width: auto; vertical-align: top; }
+  table.obj td:first-child { font-weight: 700; width: 8%; }
+  table.obj td:nth-child(3) { width: 22%; font-size: 10pt; }
+  ul { margin: 0 0 8pt; padding-left: 28pt; }
+  li { margin-bottom: 3pt; }
+</style>
+</head>
+<body>
+
+<h1>PROJECT OBJECTIVES</h1>
+<p class="sub"><b>REVA Internship Opportunities (RIO)</b> | School of Computer Science and Engineering, REVA University, Bengaluru</p>
+
+<table>
+<tr><td>Particulars</td><td>Details</td></tr>
+<tr><td>Task</td><td>Project Objectives, derived from Section 3 (Literature Gaps) of the Literature Survey Report</td></tr>
+<tr><td>Name of Student</td><td>[Your Name]</td></tr>
+<tr><td>University Seat Number (USN)</td><td>[Your USN]</td></tr>
+<tr><td>Project Title</td><td>ForgeGuard: An AI-Based Document Forgery Detection and Verification System</td></tr>
+<tr><td>Track</td><td>[Track]</td></tr>
+<tr><td>Centre</td><td>[Centre]</td></tr>
+<tr><td>Faculty Guide</td><td>[Faculty Guide]</td></tr>
+<tr><td>Date of Submission</td><td>22 October 2026</td></tr>
+</table>
+
+<h2>1. Introduction</h2>
+<p><b>1.1 Purpose.</b> This document converts the nine literature gaps identified in Section 3 of the Literature Survey and Requirement Analysis Report into a fixed set of project objectives. Each objective names the gap it closes and the requirement identifiers (Section 4 of that report) through which it is implemented, so objectives, requirements and the System Design Document all trace against the same identifiers.</p>
+<p><b>1.2 Primary objective.</b> To build ForgeGuard, a system that accepts a scanned or photographed document and returns an explainable, evidence-based authenticity decision &mdash; by combining signature verification, pixel-level tamper localisation, OCR/field validation and a fused authenticity score &mdash; rather than a single opaque genuine/forged label.</p>
+
+<h2>2. Objectives Derived from the Literature Gaps</h2>
+<p>Each objective below is numbered O1&ndash;O9 to match Gap 1&ndash;Gap 9 in the Literature Survey Report.</p>
+
+<table class="obj">
+<tr><td><b>#</b></td><td><b>Objective</b></td><td><b>Closes / Implemented via</b></td></tr>
+
+<tr><td>O1</td><td>Detect and clean the signature region directly on the uploaded page, instead of assuming a pre-cropped, clean signature image.</td><td>Gap 1 &rarr; FR-S1, FR-S2</td></tr>
+
+<tr><td>O2</td><td>Verify a questioned signature against 1&ndash;5 stored references using a writer-independent similarity model, so a new signer can be verified with no retraining.</td><td>Gap 2 &rarr; FR-S3, NFR-6</td></tr>
+
+<tr><td>O3</td><td>Train and evaluate tamper localisation on document images (not natural photographs), producing a pixel-level mask rather than a whole-image label.</td><td>Gap 3 &rarr; FR-D1, FR-D2</td></tr>
+
+<tr><td>O4</td><td>Reduce reliance on JPEG/compression artefacts by fusing a noise-residual (SRM) stream with a semantic RGB stream, using ELA only as one supporting signal.</td><td>Gap 4 &rarr; FR-D1, FR-D2</td></tr>
+
+<tr><td>O5</td><td>Fuse visual, signature and OCR/arithmetic evidence into a single authenticity score, so forgeries invisible to any one modality are still caught.</td><td>Gap 5 &rarr; FR-D3, FR-D4, FR-D5</td></tr>
+
+<tr><td>O6</td><td>Make every decision explainable to a non-expert verifier: a 0&ndash;100 score, a label, a heatmap, per-check sub-scores and a plain-language reason.</td><td>Gap 6 &rarr; FR-D5, FR-D6, NFR-4</td></tr>
+
+<tr><td>O7</td><td>Evaluate every model with precision, recall, F1 and AUC on held-out data, and handle class imbalance explicitly, rather than quoting accuracy alone on small datasets.</td><td>Gap 7 &rarr; NFR-5</td></tr>
+
+<tr><td>O8</td><td>Keep each detector behind a fixed, replaceable interface, so an anomaly detector or a newer model for an unseen forgery type can be added later without redesigning the pipeline.</td><td>Gap 8 &rarr; NFR-7</td></tr>
+
+<tr><td>O9</td><td>Maintain a tamper-evident, append-only audit record (document hash plus result) for every verification, so the system's own decisions stay checkable &mdash; and the design stays ready for blockchain anchoring in Phase 2.</td><td>Gap 9 &rarr; FR-P2, FR-A3, NFR-8</td></tr>
+</table>
+
+<h2>3. Scope Boundary</h2>
+<p>Objectives O1&ndash;O9 define Phase 1 and are the ones the System Design Document implements. Two items raised by the survey are explicitly out of scope for Phase 1: full blockchain anchoring of the document hash (papers [50], [51]) and hyperspectral ink analysis (paper [45]), both of which need hardware or infrastructure beyond a single web service. O9 keeps the design ready for the former by storing the hash now.</p>
+
+<h2>4. Conclusion</h2>
+<p>These nine objectives are exhaustive with respect to the gaps found in the survey: every gap in Section 3 maps to exactly one objective, and every objective maps to the requirement identifiers carried into the System Design Document. No objective is added without a corresponding gap, and no gap is left without an objective.</p>
+
+</body>
+</html>
