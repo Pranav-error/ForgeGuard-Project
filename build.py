@@ -1,9 +1,9 @@
 # Fill placeholders in report.html and print to PDF with headless Chrome.
 import subprocess, pathlib
 V = {
- "NAME": "R Sai Pranav", "USN": "[Your USN]",
+ "NAME": "R Sai Pranav", "USN": "R23EM069",
  "TITLE": "ForgeGuard: An AI-Based Document Forgery Detection and Verification System",
- "SHORT": "ForgeGuard", "TRACK": "[Track]", "CENTRE": "[Centre]", "GUIDE": "[Faculty Guide]",
+ "SHORT": "ForgeGuard", "TRACK": "PS 109", "GUIDE": "Mala B M",
  "DATE": "12 October 2026",
  "MODULE_INTRO": "The requirements that apply directly to the assigned module, Document Tamper Detection and Localisation, are listed below. The module takes a pre-processed document image, computes noise-residual (SRM) and ELA maps, runs a dual-stream localisation network (an SRM stream and a semantic RGB stream with an encoder-decoder), and returns a pixel-level heatmap and a tamper sub-score to the fusion stage. It runs server-side behind the common API and is shared by the web interface and any future client.",
  "MODULE_ITEMS": "\n".join(f"<li>{x}</li>" for x in [

@@ -1,9 +1,9 @@
 # Fill placeholders in design.html and print the System Design Document to PDF with headless Chrome.
 import subprocess, pathlib
 V = {
- "NAME": "R Sai Pranav", "USN": "[Your USN]",
+ "NAME": "R Sai Pranav", "USN": "R23EM069",
  "TITLE": "ForgeGuard: An AI-Based Document Forgery Detection and Verification System",
- "SHORT": "ForgeGuard", "TRACK": "[Track]", "CENTRE": "[Centre]", "GUIDE": "[Faculty Guide]",
+ "SHORT": "ForgeGuard", "TRACK": "PS 109", "GUIDE": "Mala B M",
  "DATE": "20 October 2026",
 }
 h = pathlib.Path("design.html").read_text()
