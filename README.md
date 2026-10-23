@@ -21,7 +21,7 @@ This is a college major project (REVA University, School of Computer Science & E
 |---|---|
 | `Literature_Survey_Report.pdf` | Survey of 52 IEEE papers (2018–2026) across four themes — signature verification, image tampering localisation, document/financial/legal forgery detection, and blockchain-anchored credential verification — with 9 literature gaps and the functional/non-functional requirements derived from them. |
 | `Project_Objectives.pdf` / `.docx` | Objectives O1–O9, one per literature gap, each traced to the requirement IDs it is implemented through. The `.docx` is editable. |
-| `System_Design_Document.pdf` | Architecture, per-module design, data schema, API design, and the NFR-to-design-decision mapping — implements objectives O1–O9. |
+| `System_Design_Document.pdf` / `.docx` | Architecture, per-module design, data schema, API design, and the NFR-to-design-decision mapping — implements objectives O1–O9. The `.docx` is editable. |
 | `ForgeGuard_IEEE_Paper.docx` / `.pdf` | IEEE-format paper draft. |
 | `report.html`, `design.html`, `paper.html` | Source HTML for the three documents above. |
 | `papers/` | The 52 source papers (PDF) reviewed in the literature survey. |
@@ -38,6 +38,7 @@ python3 build.py             # -> Literature_Survey_Report.pdf
 python3 objectives_build.py       # -> Project_Objectives.pdf
 python3 objectives_docx_build.py  # -> Project_Objectives.docx (editable, run after objectives_build.py)
 python3 design_build.py      # -> System_Design_Document.pdf
+python3 design_docx_build.py # -> System_Design_Document.docx (editable, run after design_build.py)
 python3 paper_build.py       # -> ForgeGuard_IEEE_Paper.pdf
 python3 docx_build.py        # -> ForgeGuard_IEEE_Paper.docx
 ```
