@@ -27,6 +27,7 @@ This is a college major project (REVA University, School of Computer Science & E
 | `papers/` | The 52 source papers (PDF) reviewed in the literature survey. |
 | `txt/` | Plain-text extractions of each paper in `papers/`. |
 | `build.py`, `design_build.py`, `paper_build.py`, `docx_build.py` | Scripts that render the HTML sources to PDF/DOCX via headless Chrome. |
+| `tamper_localisation/` | Prototype implementation of the assigned module (dual-stream tamper localiser) — see below. |
 
 ## Building the documents
 
@@ -45,10 +46,29 @@ python3 docx_build.py        # -> ForgeGuard_IEEE_Paper.docx
 
 Requires Google Chrome installed at the default macOS path.
 
+## Tamper Localisation Module (assigned module — FR-D1, FR-D2, FR-D6)
+
+`tamper_localisation/` is a working prototype of the assigned module from the System Design
+Document: a dual-stream (fixed SRM noise-residual + semantic RGB) encoder-decoder behind one
+fixed interface, `TamperLocalisationService.predict(image)`, returning a pixel mask, heatmap,
+0–100 tamper sub-score and the largest suspicious regions with coordinates.
+
+```bash
+pip install -r tamper_localisation/requirements.txt
+python3 -m tamper_localisation.test_module              # self-check (no dataset needed)
+python3 -m tamper_localisation.train --epochs 5 --out checkpoint.pt
+python3 -m tamper_localisation.evaluate --checkpoint checkpoint.pt   # precision/recall/F1/IoU/AUC, NFR-5
+```
+
+Training and evaluation currently run against `dataset.py`'s synthetic splice generator, a
+stand-in for the FSD dataset (paper [29]) until real document scans are available — reported
+metrics should not be trusted as final numbers until trained on that data (see the `ponytail:`
+note in `dataset.py`).
+
 ## Status
 
-Phase 1 (this repo): tamper localisation, signature verification, OCR/field validation, fusion
-and scoring, and an audit log.
+Phase 1 (this repo): tamper localisation (prototype implemented), signature verification,
+OCR/field validation, fusion and scoring, and an audit log.
 
 Phase 2 (future work): blockchain anchoring of the stored document hash, and an anomaly-detection
 worker for forgery types outside the training distribution — both designed to slot in behind the
