@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Detailed Design Document</title>
+<link href="https://fonts.googleapis.com/css2?family=Carlito:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  @page { size: letter; margin: 1in 1in 1in 1in; }
+  body { font-family: 'Carlito', 'Calibri', Arial, sans-serif; font-size: 11pt; line-height: 1.38; color: #000; background: #fff; margin: 0; }
+  h1 { font-size: 15pt; font-weight: 700; margin: 0 0 8pt; }
+  h2 { font-size: 13pt; font-weight: 700; margin: 16pt 0 6pt; page-break-after: avoid; }
+  h3 { font-size: 11.5pt; font-weight: 700; margin: 12pt 0 4pt; page-break-after: avoid; }
+  p { margin: 0 0 8pt; text-align: left; }
+  .sub { margin-bottom: 10pt; }
+  table { border-collapse: collapse; width: 100%; margin: 4pt 0 14pt; }
+  td { border: 0.75pt solid #000; padding: 3pt 5pt; vertical-align: top; width: 50%; }
+  table.wide td { width: auto; }
+  table.wide td:first-child { font-weight: 700; width: 16%; }
+  ul, ol { margin: 0 0 8pt; padding-left: 28pt; }
+  li { margin-bottom: 3pt; }
+  code { font-family: 'Courier New', monospace; font-size: 10pt; }
+  pre.code { border: 0.75pt solid #000; background: #f7f7f7; padding: 8pt 10pt; font-family: 'Courier New', monospace; font-size: 9pt; line-height: 1.3; white-space: pre-wrap; margin: 6pt 0 14pt; page-break-inside: avoid; }
+  svg.diagram { display: block; width: 100%; height: auto; margin: 6pt 0 14pt; page-break-inside: avoid; }
+</style>
+</head>
+<body>
+
+<h1>DETAILED DESIGN DOCUMENT</h1>
+<p class="sub"><b>REVA Internship Opportunities (RIO)</b> | School of Computer Science and Engineering, REVA University, Bengaluru</p>
+
+<table>
+<tr><td>Particulars</td><td>Details</td></tr>
+<tr><td>Task</td><td>Task 4 (SL 4), Project Track: Detailed Design of the Module</td></tr>
+<tr><td>Name of Student</td><td>R Sai Pranav</td></tr>
+<tr><td>University Seat Number (USN)</td><td>R23EM069</td></tr>
+<tr><td>Project Title</td><td>ForgeGuard: An AI-Based Document Forgery Detection and Verification System</td></tr>
+<tr><td>Track</td><td>PS 109</td></tr>
+<tr><td>Faculty Guide</td><td>Mala B M</td></tr>
+<tr><td>Date of Submission</td><td>2 November 2026</td></tr>
+</table>
+
+<h2>1. Introduction</h2>
+<p><b>1.1 Purpose.</b> The System Design Document fixed the architecture: four detector services behind one orchestrator, one API, one data model. This document goes one level deeper, into the classes, algorithms, data structures and interfaces that implement that architecture, so the design is detailed enough to code (or, for the assigned module, already has been). Identifiers carry over unchanged from the Literature Survey (Gap N), Project Objectives (O1&ndash;O9) and System Design Document (FR/NFR) so all four documents trace against each other.</p>
+<p><b>1.2 Scope.</b> Section 2 gives full detailed design &mdash; classes, algorithms, interfaces, error handling &mdash; for the assigned module, Document Tamper Detection and Localisation, matching the working prototype in <code>tamper_localisation/</code>. Section 3 gives the same depth of detail for the remaining three services and the orchestrator at the algorithm/pseudocode level, since they are designed but not yet implemented. Section 4 gives a message-level sequence diagram for one verification request. Section 5 covers system-wide error handling. Section 6 is the full traceability table for this document.</p>
+
+<h2>2. Detailed Design &mdash; Tamper Detection and Localisation (assigned module)</h2>
+
+<h3>2.1 Component breakdown</h3>
+<table class="wide">
+<tr><td>Component</td><td>Responsibility</td></tr>
+<tr><td><code>SRMFilter</code></td><td>Fixed, non-trainable depthwise convolution applying 3 high-pass kernels (horizontal residual, vertical residual, Laplacian-style) to each input channel. 3-channel RGB in &rarr; 9-channel noise-residual tensor out. Implements the noise-residual half of FR-D1/FR-D2.</td></tr>
+<tr><td><code>preprocess()</code></td><td>FR-D1: deskew (row-variance search over &plusmn;10&deg;), resize/normalise to 256&times;256 in [0,1], compute the ELA map (JPEG re-save at quality 90, pixel-wise difference). Returns the RGB tensor and the single-channel ELA map.</td></tr>
+<tr><td><code>TamperLocaliser</code> (model)</td><td>The dual-stream encoder-decoder itself: two independent encoders (RGB+ELA, SRM residual), a fusion layer, and a decoder that outputs a per-pixel tamper logit map. Pure <code>nn.Module</code>, no I/O.</td></tr>
+<tr><td><code>SyntheticTamperDataset</code></td><td>Generates document-like images with a randomly spliced patch and a pixel-accurate mask, plus rotation/blur/noise/recompression augmentation (NFR-10). Stand-in for FSD (paper [29]) until real scans are available.</td></tr>
+<tr><td><code>TamperLocalisationService</code></td><td>The module's only external surface (NFR-7): <code>predict(image)</code> runs preprocessing, the model, thresholding, connected-component region extraction and scoring, and returns the fixed output contract. Everything above is an implementation detail behind this one method.</td></tr>
+</table>
+
+<h3>2.2 Internal data flow</h3>
+<svg class="diagram" viewBox="0 0 760 650" xmlns="http://www.w3.org/2000/svg" font-family="Carlito, Calibri, Arial, sans-serif">
+<defs>
+  <marker id="arrow2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+    <path d="M0,0 L10,5 L0,10 z" fill="#000"/>
+  </marker>
+</defs>
+<style>
+  .b { fill:#f4f4f4; stroke:#000; stroke-width:1.1; }
+  .bh { fill:#e2e2e2; stroke:#000; stroke-width:1.8; }
+  .t { font-size:12px; font-weight:700; fill:#000; }
+  .s { font-size:9.5px; fill:#000; }
+  .e { fill:none; stroke:#000; stroke-width:1.1; marker-end:url(#arrow2); }
+</style>
+
+<rect class="b" x="280" y="10" width="200" height="38" rx="6"/>
+<text class="t" x="380" y="34" text-anchor="middle">Input document image</text>
+
+<rect class="b" x="220" y="74" width="320" height="50" rx="6"/>
+<text class="t" x="380" y="94" text-anchor="middle">Preprocess (FR-D1)</text>
+<text class="s" x="380" y="109" text-anchor="middle">deskew, resize/normalise 256x256, compute ELA</text>
+
+<rect class="b" x="30" y="150" width="320" height="40" rx="6"/>
+<text class="t" x="190" y="166" text-anchor="middle">RGB + ELA stream (4ch)</text>
+<text class="s" x="190" y="180" text-anchor="middle">normalised RGB concat with ELA map</text>
+
+<rect class="b" x="410" y="150" width="320" height="40" rx="6"/>
+<text class="t" x="570" y="166" text-anchor="middle">SRM stream (9ch)</text>
+<text class="s" x="570" y="180" text-anchor="middle">3 fixed high-pass kernels per RGB channel</text>
+
+<rect class="b" x="30" y="216" width="320" height="48" rx="6"/>
+<text class="t" x="190" y="236" text-anchor="middle">RGB encoder</text>
+<text class="s" x="190" y="250" text-anchor="middle">3 conv blocks, 32 -&gt; 64 -&gt; 128 ch, /8 downsample</text>
+
+<rect class="b" x="410" y="216" width="320" height="48" rx="6"/>
+<text class="t" x="570" y="236" text-anchor="middle">SRM encoder</text>
+<text class="s" x="570" y="250" text-anchor="middle">3 conv blocks, 32 -&gt; 64 -&gt; 128 ch, /8 downsample</text>
+
+<rect class="bh" x="280" y="286" width="200" height="44" rx="6"/>
+<text class="t" x="380" y="306" text-anchor="middle">Fuse</text>
+<text class="s" x="380" y="320" text-anchor="middle">concat 256ch -&gt; 1x1 conv -&gt; 128ch</text>
+
+<rect class="b" x="230" y="348" width="300" height="48" rx="6"/>
+<text class="t" x="380" y="368" text-anchor="middle">Decoder</text>
+<text class="s" x="380" y="382" text-anchor="middle">3x transpose-conv upsample 128-&gt;64-&gt;32-&gt;16, 1x1 conv -&gt; 1 logit</text>
+
+<rect class="b" x="230" y="414" width="300" height="40" rx="6"/>
+<text class="t" x="380" y="430" text-anchor="middle">Sigmoid + resize to input size</text>
+<text class="s" x="380" y="444" text-anchor="middle">heatmap in [0, 1]</text>
+
+<rect class="b" x="170" y="474" width="420" height="78" rx="6"/>
+<text class="t" x="380" y="494" text-anchor="middle">Threshold (&gt;= 0.5) -&gt; binary mask</text>
+<text class="s" x="380" y="509" text-anchor="middle">scipy.ndimage.label -&gt; top-5 regions by area (bbox, confidence)</text>
+<text class="s" x="380" y="524" text-anchor="middle">score = round(100 x (0.6 x peak-confidence + 0.4 x coverage))</text>
+<text class="s" x="380" y="539" text-anchor="middle">coverage saturates at 1.0 once &gt;=20% of the page is flagged</text>
+
+<rect class="bh" x="230" y="584" width="300" height="42" rx="6"/>
+<text class="t" x="380" y="602" text-anchor="middle">Output: {mask, heatmap, score, regions}</text>
+<text class="s" x="380" y="616" text-anchor="middle">to the Fusion &amp; Scoring Service (FR-D5)</text>
+
+<path class="e" d="M380,48 L380,72"/>
+<path class="e" d="M300,124 L190,148"/>
+<path class="e" d="M460,124 L570,148"/>
+<path class="e" d="M190,190 L190,214"/>
+<path class="e" d="M570,190 L570,214"/>
+<path class="e" d="M250,264 Q250,280 320,286"/>
+<path class="e" d="M510,264 Q510,280 440,286"/>
+<path class="e" d="M380,330 L380,346"/>
+<path class="e" d="M380,396 L380,412"/>
+<path class="e" d="M380,454 L380,472"/>
+<path class="e" d="M380,552 L380,582"/>
+</svg>
+
+<h3>2.3 Algorithm detail</h3>
+<p><b>Deskew.</b> For angle in [-10&deg;, +10&deg;] stepped by 1&deg;, rotate the grayscale page and score it by the variance of row-wise pixel-intensity sums (text rows create high-variance peaks when horizontal; a skewed page blurs them together). Keep the angle with the highest variance. Cheap, needs no extra dependency, and good enough for the small scan tilts the problem calls for.</p>
+<p><b>ELA.</b> Re-save the page as JPEG at quality 90 and take the per-pixel absolute difference against the original, averaged over the 3 colour channels, normalised to [0, 1]. Untouched regions re-compress almost losslessly; edited regions (pasted from a different source, or re-saved at a different quality) show a brighter residual. Used only as one input channel alongside the RGB stream (Gap 4): the model is free to learn how much to trust it, rather than thresholding on it directly.</p>
+<p><b>SRM kernels</b> (applied per RGB channel, zero-padding, fixed weights, never updated by backprop):</p>
+<pre class="code">horizontal residual   [[ 0,  0, 0], [0, -1, 1], [0,  0, 0]]
+vertical residual     [[ 0,  0, 0], [0, -1, 0], [0,  1, 0]]
+Laplacian residual    [[ 0,  1, 0], [1, -4, 1], [0,  1, 0]]</pre>
+<p><b>Loss.</b> <code>BCEWithLogits(logits, mask) + DiceLoss(logits, mask)</code>, where <code>DiceLoss = 1 - (2|P&cap;T| + &epsilon;) / (|P| + |T| + &epsilon;)</code> on sigmoid probabilities <code>P</code> against ground truth <code>T</code>. BCE alone is dominated by the large background class on a sparsely-tampered page; Dice pulls the gradient toward getting the (small) tampered region right, which is what IoU in the NFR-5 evaluation actually measures.</p>
+<p><b>Region extraction.</b> Threshold the heatmap at 0.5, label connected components with <code>scipy.ndimage.label</code>, rank components by pixel area, keep the top 5, and report each as <code>{bbox: [x, y, w, h], confidence: mean heatmap value inside the component}</code> &mdash; this is the "largest suspicious regions with coordinates" FR-D6 asks for.</p>
+<p><b>Tamper sub-score.</b> <code>score = round(100 &times; (0.6 &times; peak_confidence + 0.4 &times; coverage_term))</code>, where <code>peak_confidence</code> is the heatmap's maximum value and <code>coverage_term = min(flagged_area_fraction / 0.2, 1.0)</code>. A small, high-confidence edit and a large, lower-confidence one can both reach a high score; a few stray low-confidence pixels cannot.</p>
+
+<h3>2.4 Interface specification (NFR-7)</h3>
+<table class="wide">
+<tr><td>Method</td><td><code>TamperLocalisationService.predict(image: PIL.Image, threshold: float = 0.5) -&gt; dict</code></td></tr>
+<tr><td>Input</td><td><code>image</code>: a full page as a PIL image, any size. <code>threshold</code>: mask/region cutoff on the [0,1] heatmap.</td></tr>
+<tr><td>Output</td><td><code>mask</code>: uint8 array, 256&times;256, values {0, 255}. <code>heatmap</code>: float array, 256&times;256, [0, 1]. <code>score</code>: int, 0&ndash;100. <code>regions</code>: list of up to 5 <code>{bbox, confidence}</code> dicts, largest first.</td></tr>
+<tr><td>Construction</td><td><code>TamperLocalisationService(checkpoint=None, device=None, img_size=256)</code>. A missing checkpoint runs the (untrained) architecture &mdash; useful for interface/contract tests, never for a real score.</td></tr>
+<tr><td>Replaceability</td><td>The orchestrator only ever calls <code>predict()</code>. A newer localiser (different backbone, added anomaly head for Gap 8/O8) is a drop-in replacement for this class as long as it keeps the same method signature and output keys.</td></tr>
+</table>
+
+<h3>2.5 Error handling and edge cases</h3>
+<ul>
+<li><b>No tamper present.</b> <code>regions</code> is an empty list and <code>score</code> is low; this is a normal, expected output, not an error.</li>
+<li><b>Degenerate AUC.</b> If a batch's ground truth is all-genuine or all-forged, <code>roc_auc_score</code> is undefined; <code>evaluate.py</code> reports <code>nan</code> for that batch rather than raising, so a batch imbalance does not crash an evaluation run (NFR-5).</li>
+<li><b>Untrained / missing checkpoint.</b> <code>TamperLocalisationService</code> runs with random weights if no checkpoint is given; callers must not treat that output as a real decision (see Section 2.4, Construction).</li>
+<li><b>Device fallback.</b> <code>device</code> defaults to CUDA if available, else CPU, satisfying NFR-2 without any caller-side branching.</li>
+<li><b>Oversized/undersized pages.</b> <code>preprocess()</code> resizes to a fixed 256&times;256 before the model ever sees the image, so input resolution cannot change the model's memory footprint or runtime.</li>
+</ul>
+
+<h2>3. Detailed Design &mdash; Remaining Services (design-level, not yet implemented)</h2>
+
+<h3>3.1 Signature Verification Service (FR-S1&ndash;S3, O1, O2)</h3>
+<ul>
+<li><code>SignatureDetector.detect(page) -&gt; bbox</code>: object detector locating the signature region on the full page (paper [13]).</li>
+<li><code>SignatureCleaner.clean(crop) -&gt; crop</code>: removes ruled lines, stamps and background noise from the detected crop (FR-S2).</li>
+<li><code>SignatureEncoder.embed(crop) -&gt; vector</code>: writer-independent Siamese/metric-learning encoder (papers [3], [6], [12]); frozen at inference.</li>
+<li><code>SignatureService.verify(page, signer_id) -&gt; {similarity, decision, bbox}</code>: runs the three steps above, then compares the embedding against the signer's 1&ndash;5 stored reference embeddings by cosine distance and thresholds the result. Adding a signer is an <code>INSERT</code> into <code>signatures</code>, never a retrain (NFR-6).</li>
+</ul>
+
+<h3>3.2 OCR / Field Validation Service (FR-D3, FR-D4)</h3>
+<ul>
+<li><code>OCREngine.extract(page) -&gt; {field: text}</code>: text extraction, consensus across engines for financial documents (paper [39]).</li>
+<li><code>FieldValidator.check(fields, doc_type) -&gt; {field: pass|fail}</code>: per-document-type regex/format rules on names, dates and ID numbers (FR-D3).</li>
+<li><code>ArithmeticGate.check(fields) -&gt; bool</code>: for financial documents, <code>abs(total - (net + tax)) &lt;= tolerance</code> (FR-D4, paper [39]).</li>
+</ul>
+
+<h3>3.3 Fusion &amp; Scoring Service (FR-D5, FR-D6, O5, O6)</h3>
+<pre class="code">final_score = w_sig * signature_sub_score
+            + w_tmp * tamper_sub_score
+            + w_ocr * ocr_sub_score          # weights configurable, sum to 1
+
+label = "Genuine"    if final_score >= 80
+      = "Suspicious"  if 40 <= final_score < 80
+      = "Forged"      if final_score < 40
+
+reason = template(lowest-scoring sub-check, its threshold, its evidence)
+       # e.g. "signature similarity 0.41 (below 0.6 threshold)"</pre>
+<p>A weighted rule, not a learned end-to-end classifier (Gap 5/O5): each sub-score and the reason it produced stay inspectable, which a black-box classifier would not give (Gap 6/O6).</p>
+
+<h3>3.4 Verification Orchestrator (FR-P1)</h3>
+<pre class="code">def verify(document):
+    pre = preprocess(document)                       # FR-D1
+    tamper = tamper_service.predict(pre.image)        # parallel
+    signature = signature_service.verify(pre.image, signer_id)
+    ocr = ocr_service.check(pre.image, doc_type)
+    # fan-in: wait for all three, with a per-service timeout (NFR-1)
+    result = fusion_service.score(signature, tamper, ocr)
+    audit_log.write(document.id, result)              # NFR-8, append-only
+    return result</pre>
+<p>If one service times out or errors, the orchestrator does not fail the whole request: it records that sub-score as unavailable, lowers the confidence of the final label to at most Suspicious, and notes the missing check in the reason text &mdash; an unreachable detector degrades the decision rather than silently skipping a check.</p>
+
+<h2>4. Verification Sequence (message level)</h2>
+<svg class="diagram" viewBox="0 0 760 360" xmlns="http://www.w3.org/2000/svg" font-family="Carlito, Calibri, Arial, sans-serif">
+<defs>
+  <marker id="arrow3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+    <path d="M0,0 L10,5 L0,10 z" fill="#000"/>
+  </marker>
+</defs>
+<style>
+  .lb { fill:#f4f4f4; stroke:#000; stroke-width:1.1; }
+  .lt { font-size:11px; font-weight:700; fill:#000; text-anchor:middle; }
+  .ll { stroke:#000; stroke-width:1; stroke-dasharray:3,3; }
+  .mc { fill:none; stroke:#000; stroke-width:1.1; marker-end:url(#arrow3); }
+  .mr { fill:none; stroke:#000; stroke-width:1.1; stroke-dasharray:5,3; marker-end:url(#arrow3); }
+  .ml { font-size:9.5px; fill:#000; }
+  .note { fill:#fafafa; stroke:#000; stroke-width:0.8; stroke-dasharray:2,2; }
+</style>
+
+<rect class="lb" x="30" y="10" width="120" height="32" rx="5"/><text class="lt" x="90" y="30">Client</text>
+<rect class="lb" x="250" y="10" width="140" height="32" rx="5"/><text class="lt" x="320" y="30">Orchestrator</text>
+<rect class="lb" x="480" y="10" width="170" height="32" rx="5"/><text class="lt" x="565" y="30">TamperLocalisationService</text>
+<rect class="lb" x="690" y="10" width="0" height="0"/>
+
+<line class="ll" x1="90" y1="42" x2="90" y2="340"/>
+<line class="ll" x1="320" y1="42" x2="320" y2="340"/>
+<line class="ll" x1="565" y1="42" x2="565" y2="340"/>
+
+<path class="mc" d="M90,80 H320"/>
+<text class="ml" x="95" y="75">POST /documents (file)</text>
+
+<path class="mc" d="M320,120 H565"/>
+<text class="ml" x="325" y="115">predict(image)  [parallel with signature, OCR services]</text>
+
+<rect class="note" x="585" y="140" width="150" height="70"/>
+<text class="ml" x="592" y="155">preprocess (FR-D1)</text>
+<text class="ml" x="592" y="169">dual-stream model</text>
+<text class="ml" x="592" y="183">sigmoid, threshold</text>
+<text class="ml" x="592" y="197">regions, score (2.3)</text>
+<path class="mc" d="M565,135 H583"/>
+
+<path class="mr" d="M565,230 H320"/>
+<text class="ml" x="330" y="225">{mask, heatmap, score, regions}</text>
+
+<path class="mc" d="M320,265 H90"/>
+<text class="ml" x="95" y="260" text-anchor="start" dx="-60">fuse with signature/OCR sub-scores (3.3), write audit_log (NFR-8)</text>
+
+<path class="mr" d="M320,300 H90"/>
+<text class="ml" x="95" y="295">verification result (score, label, heatmap, reason)</text>
+</svg>
+
+<h2>5. System-Wide Error Handling</h2>
+<ul>
+<li><b>Invalid file / unsupported type.</b> Rejected at the API gateway before reaching the orchestrator; never silently coerced into a wrong document type.</li>
+<li><b>Detector timeout or failure.</b> Handled by the orchestrator as in Section 3.4: the request still completes, with a capped confidence and an explicit note in the reason text, rather than a 500 error.</li>
+<li><b>Auth / role failure.</b> API gateway returns 401/403 before any detector runs (NFR-9); nothing is logged to <code>audit_log</code> as a verification attempt.</li>
+<li><b>Concurrent admin decisions on the same document.</b> <code>feedback</code> inserts are append-only; the latest row is treated as authoritative, and all prior ones remain in the table for audit (NFR-8).</li>
+</ul>
+
+<h2>6. Traceability</h2>
+<table class="wide">
+<tr><td>Section</td><td>Traces to</td></tr>
+<tr><td>2.1&ndash;2.5 (assigned module)</td><td>O1&ndash;O4, O6&ndash;O8; FR-D1, FR-D2, FR-D6; NFR-2, NFR-5, NFR-7, NFR-10; Gap 3, Gap 4</td></tr>
+<tr><td>3.1 (signature)</td><td>O1, O2; FR-S1&ndash;S3; NFR-6; Gap 1, Gap 2</td></tr>
+<tr><td>3.2 (OCR/field)</td><td>FR-D3, FR-D4; Gap 5</td></tr>
+<tr><td>3.3 (fusion)</td><td>O5, O6; FR-D5, FR-D6; Gap 5, Gap 6</td></tr>
+<tr><td>3.4 (orchestrator)</td><td>FR-P1; NFR-1</td></tr>
+<tr><td>5 (error handling)</td><td>NFR-1, NFR-8, NFR-9</td></tr>
+</table>
+
+<h2>7. Conclusion</h2>
+<p>The assigned module is now detailed to the level of running code: the component breakdown, the internal data flow diagram and the algorithm descriptions in Section 2 match <code>tamper_localisation/</code> line for line. The remaining services are detailed to the same depth in pseudocode, so that implementing them means filling in the classes and functions named here against the same interfaces and data contracts already fixed in the System Design Document.</p>
+
+</body>
+</html>
