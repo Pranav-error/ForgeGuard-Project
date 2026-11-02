@@ -10,16 +10,19 @@
   h1 { font-size: 15pt; font-weight: 700; margin: 0 0 8pt; }
   h2 { font-size: 13pt; font-weight: 700; margin: 16pt 0 6pt; page-break-after: avoid; }
   h3 { font-size: 11.5pt; font-weight: 700; margin: 12pt 0 4pt; page-break-after: avoid; }
+  h4 { font-size: 10.5pt; font-weight: 700; font-style: italic; margin: 10pt 0 3pt; page-break-after: avoid; }
   p { margin: 0 0 8pt; text-align: left; }
   .sub { margin-bottom: 10pt; }
   table { border-collapse: collapse; width: 100%; margin: 4pt 0 14pt; }
   td { border: 0.75pt solid #000; padding: 3pt 5pt; vertical-align: top; width: 50%; }
   table.wide td { width: auto; }
   table.wide td:first-child { font-weight: 700; width: 16%; }
+  table.narrow td:first-child { width: 20%; font-weight: 700; }
+  table.narrow td { font-size: 10pt; }
   ul, ol { margin: 0 0 8pt; padding-left: 28pt; }
   li { margin-bottom: 3pt; }
   code { font-family: 'Courier New', monospace; font-size: 10pt; }
-  pre.code { border: 0.75pt solid #000; background: #f7f7f7; padding: 8pt 10pt; font-family: 'Courier New', monospace; font-size: 9pt; line-height: 1.3; white-space: pre-wrap; margin: 6pt 0 14pt; page-break-inside: avoid; }
+  pre.code { border: 0.75pt solid #000; background: #f7f7f7; padding: 8pt 10pt; font-family: 'Courier New', monospace; font-size: 8.8pt; line-height: 1.3; white-space: pre-wrap; margin: 6pt 0 14pt; page-break-inside: avoid; }
   svg.diagram { display: block; width: 100%; height: auto; margin: 6pt 0 14pt; page-break-inside: avoid; }
 </style>
 </head>
@@ -40,8 +43,9 @@
 </table>
 
 <h2>1. Introduction</h2>
-<p><b>1.1 Purpose.</b> The System Design Document fixed the architecture: four detector services behind one orchestrator, one API, one data model. This document goes one level deeper, into the classes, algorithms, data structures and interfaces that implement that architecture, so the design is detailed enough to code (or, for the assigned module, already has been). Identifiers carry over unchanged from the Literature Survey (Gap N), Project Objectives (O1&ndash;O9) and System Design Document (FR/NFR) so all four documents trace against each other.</p>
-<p><b>1.2 Scope.</b> Section 2 gives full detailed design &mdash; classes, algorithms, interfaces, error handling &mdash; for the assigned module, Document Tamper Detection and Localisation, matching the working prototype in <code>tamper_localisation/</code>. Section 3 gives the same depth of detail for the remaining three services and the orchestrator at the algorithm/pseudocode level, since they are designed but not yet implemented. Section 4 gives a message-level sequence diagram for one verification request. Section 5 covers system-wide error handling. Section 6 is the full traceability table for this document.</p>
+<p><b>1.1 Purpose.</b> The System Design Document fixed the architecture: four detector services behind one orchestrator, one API, one data model. This document goes a full level deeper, into the classes, algorithms, data structures, interfaces and error handling that implement that architecture &mdash; detailed enough to code directly, not just to diagram. Every service gets the same six-part treatment: component breakdown, data-flow diagram, algorithm detail, data structures, interface specification, and error handling.</p>
+<p><b>1.2 Scope.</b> Section 2 covers the assigned module, Document Tamper Detection and Localisation, at the level of the actual working prototype in <code>tamper_localisation/</code> &mdash; including excerpts of the real code, parameter counts and a test-to-requirement map. Sections 3&ndash;6 cover the remaining three services and the orchestrator at the same structural depth, in pseudocode, since they are designed but not yet implemented. Section 7 gives the full column-level data design. Section 8 gives the full request/response schema for every API route. Section 9 is the complete system sequence diagram with error paths. Section 10 is system-wide error handling. Section 11 is the full traceability table.</p>
+<p><b>1.3 Identifiers.</b> Gap N refers to the Literature Survey Report, O1&ndash;O9 to the Project Objectives, and FR-*/NFR-* to the System Design Document. All four documents trace against the same identifiers.</p>
 
 <h2>2. Detailed Design &mdash; Tamper Detection and Localisation (assigned module)</h2>
 
@@ -139,136 +143,424 @@ Laplacian residual    [[ 0,  1, 0], [1, -4, 1], [0,  1, 0]]</pre>
 <p><b>Region extraction.</b> Threshold the heatmap at 0.5, label connected components with <code>scipy.ndimage.label</code>, rank components by pixel area, keep the top 5, and report each as <code>{bbox: [x, y, w, h], confidence: mean heatmap value inside the component}</code> &mdash; this is the "largest suspicious regions with coordinates" FR-D6 asks for.</p>
 <p><b>Tamper sub-score.</b> <code>score = round(100 &times; (0.6 &times; peak_confidence + 0.4 &times; coverage_term))</code>, where <code>peak_confidence</code> is the heatmap's maximum value and <code>coverage_term = min(flagged_area_fraction / 0.2, 1.0)</code>. A small, high-confidence edit and a large, lower-confidence one can both reach a high score; a few stray low-confidence pixels cannot.</p>
 
-<h3>2.4 Interface specification (NFR-7)</h3>
+<h3>2.4 Reference implementation</h3>
+<p>The service method and its two private helpers, exactly as implemented in <code>tamper_localisation/infer.py</code>:</p>
+<pre class="code">@torch.no_grad()
+def predict(self, image: Image.Image, threshold: float = 0.5) -&gt; dict:
+    pre = preprocess(image, size=self.img_size)
+    rgb = torch.from_numpy(pre["rgb"]).float().unsqueeze(0).to(self.device)
+    ela = torch.from_numpy(pre["ela"]).float().unsqueeze(0).unsqueeze(0).to(self.device)
+
+    heatmap = torch.sigmoid(self.model(rgb, ela))[0, 0].cpu().numpy()  # (H, W) in [0, 1]
+    mask = (heatmap &gt;= threshold).astype(np.uint8) * 255
+
+    regions = self._top_regions(heatmap, threshold)
+    score = self._tamper_score(heatmap, mask)
+    return {"mask": mask, "heatmap": heatmap, "score": score, "regions": regions}
+
+@staticmethod
+def _tamper_score(heatmap: np.ndarray, mask: np.ndarray) -&gt; int:
+    """0-100: weighted blend of peak confidence and flagged-area coverage."""
+    peak = float(heatmap.max())
+    coverage = float((mask &gt; 0).mean())
+    coverage_term = min(coverage / 0.2, 1.0)
+    return int(round(100 * (0.6 * peak + 0.4 * coverage_term)))</pre>
+
+<h3>2.5 Data structures</h3>
+<table class="narrow">
+<tr><td>RGB tensor</td><td><code>torch.FloatTensor</code>, shape (3, 256, 256), values in [0, 1]</td></tr>
+<tr><td>ELA map</td><td><code>torch.FloatTensor</code>, shape (1, 256, 256), values in [0, 1]</td></tr>
+<tr><td>SRM residual</td><td><code>torch.FloatTensor</code>, shape (9, 256, 256), produced inside the model, never persisted</td></tr>
+<tr><td>Logit map</td><td><code>torch.FloatTensor</code>, shape (1, 256, 256), raw model output before sigmoid</td></tr>
+<tr><td>Heatmap</td><td><code>numpy.float32</code>, shape (256, 256), values in [0, 1]</td></tr>
+<tr><td>Mask</td><td><code>numpy.uint8</code>, shape (256, 256), values &isin; {0, 255}</td></tr>
+<tr><td>Region</td><td><code>{"bbox": [x, y, w, h] (int), "confidence": float}</code>, list ordered largest-area first, length &le; 5</td></tr>
+<tr><td>Score</td><td><code>int</code>, 0&ndash;100</td></tr>
+</table>
+
+<h3>2.6 Interface specification (NFR-7)</h3>
 <table class="wide">
 <tr><td>Method</td><td><code>TamperLocalisationService.predict(image: PIL.Image, threshold: float = 0.5) -&gt; dict</code></td></tr>
 <tr><td>Input</td><td><code>image</code>: a full page as a PIL image, any size. <code>threshold</code>: mask/region cutoff on the [0,1] heatmap.</td></tr>
-<tr><td>Output</td><td><code>mask</code>: uint8 array, 256&times;256, values {0, 255}. <code>heatmap</code>: float array, 256&times;256, [0, 1]. <code>score</code>: int, 0&ndash;100. <code>regions</code>: list of up to 5 <code>{bbox, confidence}</code> dicts, largest first.</td></tr>
+<tr><td>Output</td><td><code>mask</code>, <code>heatmap</code>, <code>score</code>, <code>regions</code> as defined in 2.5.</td></tr>
 <tr><td>Construction</td><td><code>TamperLocalisationService(checkpoint=None, device=None, img_size=256)</code>. A missing checkpoint runs the (untrained) architecture &mdash; useful for interface/contract tests, never for a real score.</td></tr>
 <tr><td>Replaceability</td><td>The orchestrator only ever calls <code>predict()</code>. A newer localiser (different backbone, added anomaly head for Gap 8/O8) is a drop-in replacement for this class as long as it keeps the same method signature and output keys.</td></tr>
 </table>
 
-<h3>2.5 Error handling and edge cases</h3>
+<h3>2.7 Complexity and performance (NFR-2)</h3>
+<table class="narrow">
+<tr><td>Trainable parameters</td><td>~1.1M (two encoders at 32/64/128 channels, 1x1 fusion, 3-stage transpose-conv decoder) &mdash; roughly two orders of magnitude below a ResNet-50 backbone.</td></tr>
+<tr><td>Fixed parameters</td><td>27 (the 3 SRM kernels x 3x3, never updated)</td></tr>
+<tr><td>Forward pass cost</td><td>Dominated by the two /8-downsampling encoders over a 256x256 input; comparable to running two small CNNs over a quarter-megapixel image, well within the single-consumer-GPU-or-CPU budget NFR-2 sets.</td></tr>
+<tr><td>Memory</td><td>Largest activation is the SRM stream at full input resolution (9, 256, 256) before the first downsample; no activation ever exceeds a few tens of MB at batch size 1.</td></tr>
+</table>
+
+<h3>2.8 Error handling and edge cases</h3>
 <ul>
 <li><b>No tamper present.</b> <code>regions</code> is an empty list and <code>score</code> is low; this is a normal, expected output, not an error.</li>
 <li><b>Degenerate AUC.</b> If a batch's ground truth is all-genuine or all-forged, <code>roc_auc_score</code> is undefined; <code>evaluate.py</code> reports <code>nan</code> for that batch rather than raising, so a batch imbalance does not crash an evaluation run (NFR-5).</li>
-<li><b>Untrained / missing checkpoint.</b> <code>TamperLocalisationService</code> runs with random weights if no checkpoint is given; callers must not treat that output as a real decision (see Section 2.4, Construction).</li>
+<li><b>Untrained / missing checkpoint.</b> <code>TamperLocalisationService</code> runs with random weights if no checkpoint is given; callers must not treat that output as a real decision (see 2.6, Construction).</li>
 <li><b>Device fallback.</b> <code>device</code> defaults to CUDA if available, else CPU, satisfying NFR-2 without any caller-side branching.</li>
 <li><b>Oversized/undersized pages.</b> <code>preprocess()</code> resizes to a fixed 256&times;256 before the model ever sees the image, so input resolution cannot change the model's memory footprint or runtime.</li>
+<li><b>Corrupt/unreadable image.</b> Image decoding happens before <code>predict()</code> is called (at the API gateway); the service assumes a valid, already-decoded <code>PIL.Image</code> and is not responsible for file-format errors.</li>
 </ul>
 
-<h2>3. Detailed Design &mdash; Remaining Services (design-level, not yet implemented)</h2>
+<h3>2.9 Verification against <code>test_module.py</code></h3>
+<table class="wide">
+<tr><td>Test</td><td>Checks</td></tr>
+<tr><td><code>test_model_forward_shape</code></td><td>Model output shape matches input spatial size regardless of batch size &mdash; the decoder's upsampling and the final bilinear resize are correct (2.2).</td></tr>
+<tr><td><code>test_dataset_sample_shapes</code></td><td>Synthetic dataset emits the exact tensor shapes/types the model consumes (2.5), and masks are binary.</td></tr>
+<tr><td><code>test_service_predict_contract</code></td><td>End-to-end: <code>predict()</code> on an untrained model still satisfies the full output contract (2.6) &mdash; shapes, score range, region count.</td></tr>
+<tr><td><code>test_pixel_metrics_known_values</code></td><td>Precision/recall/IoU formulas (NFR-5) against a hand-computed 2x2 example, independent of the model.</td></tr>
+</table>
 
-<h3>3.1 Signature Verification Service (FR-S1&ndash;S3, O1, O2)</h3>
+<h2>3. Detailed Design &mdash; Signature Verification Service</h2>
+
+<h3>3.1 Component breakdown</h3>
+<table class="wide">
+<tr><td>Component</td><td>Responsibility</td></tr>
+<tr><td><code>SignatureDetector</code></td><td>Object detector that locates the signature region on the full page and returns a bounding box (paper [13]). FR-S1.</td></tr>
+<tr><td><code>SignatureCleaner</code></td><td>Removes ruled lines, stamps and background noise from the detected crop before embedding. FR-S2.</td></tr>
+<tr><td><code>SignatureEncoder</code></td><td>Writer-independent Siamese/metric-learning encoder (papers [3], [6], [12]), frozen at inference; maps a signature crop to a fixed-length embedding vector.</td></tr>
+<tr><td><code>SignatureService</code></td><td>The module's external surface: <code>verify(page, signer_id)</code> runs detect &rarr; clean &rarr; embed &rarr; compare and returns a similarity score and decision. FR-S3.</td></tr>
+</table>
+
+<h3>3.2 Data flow</h3>
+<svg class="diagram" viewBox="0 0 760 330" xmlns="http://www.w3.org/2000/svg" font-family="Carlito, Calibri, Arial, sans-serif">
+<defs><marker id="arrow4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#000"/></marker></defs>
+<style>.b{fill:#f4f4f4;stroke:#000;stroke-width:1.1;} .bh{fill:#e2e2e2;stroke:#000;stroke-width:1.8;} .t{font-size:12px;font-weight:700;fill:#000;} .s{font-size:9.5px;fill:#000;} .e{fill:none;stroke:#000;stroke-width:1.1;marker-end:url(#arrow4);}</style>
+
+<rect class="b" x="30" y="20" width="180" height="56" rx="6"/>
+<text class="t" x="120" y="44" text-anchor="middle">Full page</text>
+<text class="s" x="120" y="60" text-anchor="middle">+ claimed signer_id</text>
+
+<rect class="b" x="250" y="20" width="180" height="56" rx="6"/>
+<text class="t" x="340" y="44" text-anchor="middle">SignatureDetector</text>
+<text class="s" x="340" y="60" text-anchor="middle">locate bbox (FR-S1)</text>
+
+<rect class="b" x="470" y="20" width="180" height="56" rx="6"/>
+<text class="t" x="560" y="44" text-anchor="middle">SignatureCleaner</text>
+<text class="s" x="560" y="60" text-anchor="middle">remove lines/stamps (FR-S2)</text>
+
+<rect class="bh" x="250" y="118" width="180" height="56" rx="6"/>
+<text class="t" x="340" y="142" text-anchor="middle">SignatureEncoder</text>
+<text class="s" x="340" y="158" text-anchor="middle">crop -&gt; embedding vector</text>
+
+<rect class="b" x="30" y="118" width="180" height="56" rx="6"/>
+<text class="t" x="120" y="138" text-anchor="middle">Stored references</text>
+<text class="s" x="120" y="154" text-anchor="middle">1-5 embeddings for signer_id</text>
+<text class="s" x="120" y="167" text-anchor="middle">(signatures table)</text>
+
+<rect class="b" x="250" y="216" width="180" height="56" rx="6"/>
+<text class="t" x="340" y="240" text-anchor="middle">Cosine distance</text>
+<text class="s" x="340" y="256" text-anchor="middle">vs each reference, take best</text>
+
+<rect class="bh" x="470" y="216" width="180" height="56" rx="6"/>
+<text class="t" x="560" y="238" text-anchor="middle">Output: {similarity,</text>
+<text class="t" x="560" y="254" text-anchor="middle">decision, bbox}</text>
+<text class="s" x="560" y="268" text-anchor="middle">to Fusion (FR-D5)</text>
+
+<path class="e" d="M210,48 H248"/>
+<path class="e" d="M430,48 H468"/>
+<path class="e" d="M560,76 Q560,100 420,130"/>
+<path class="e" d="M120,76 Q120,100 250,146"/>
+<path class="e" d="M340,174 L340,214"/>
+<path class="e" d="M120,174 L250,236"/>
+<path class="e" d="M430,244 H468"/>
+</svg>
+
+<h3>3.3 Algorithm detail</h3>
+<p><b>Detection.</b> A lightweight object detector (anchor-free, single class "signature") trained on signature bounding boxes over real document pages, following the multilingual detection approach of paper [13]; returns the highest-confidence box above a detection threshold, or "not found" if none clears it.</p>
+<p><b>Cleaning.</b> Binarise the crop, remove long straight lines (ruled lines under the signature) via morphological opening with a wide horizontal structuring element, and remove small disconnected blobs below an area threshold (stamp fragments, noise), following the cleaning stage of paper [13].</p>
+<p><b>Comparison.</b> <code>similarity = max(cosine(embed(crop), ref_i)) for ref_i in references</code>; <code>decision = "genuine" if similarity &gt;= threshold else "forged"</code>. The threshold is tuned on a validation split, not hard-coded, so it can be recalibrated per deployment (NFR-5).</p>
+
+<h3>3.4 Data structures</h3>
+<table class="narrow">
+<tr><td>Embedding</td><td>Fixed-length float vector (encoder output dimension, e.g. 128), L2-normalised before cosine comparison</td></tr>
+<tr><td>Reference set</td><td>List of 1&ndash;5 embeddings per <code>signer_id</code>, loaded from the <code>signatures</code> table</td></tr>
+<tr><td>Output</td><td><code>{"similarity": float [0,1], "decision": "genuine"|"forged", "bbox": [x,y,w,h]}</code></td></tr>
+</table>
+
+<h3>3.5 Interface specification (NFR-6, NFR-7)</h3>
+<table class="wide">
+<tr><td>Method</td><td><code>SignatureService.verify(page: Image, signer_id: str) -&gt; dict</code></td></tr>
+<tr><td>Replaceability</td><td>Adding a signer is an <code>INSERT</code> into <code>signatures</code>, never a retrain (NFR-6); swapping the encoder for a better metric-learning model changes nothing outside this class (NFR-7).</td></tr>
+</table>
+
+<h3>3.6 Error handling</h3>
 <ul>
-<li><code>SignatureDetector.detect(page) -&gt; bbox</code>: object detector locating the signature region on the full page (paper [13]).</li>
-<li><code>SignatureCleaner.clean(crop) -&gt; crop</code>: removes ruled lines, stamps and background noise from the detected crop (FR-S2).</li>
-<li><code>SignatureEncoder.embed(crop) -&gt; vector</code>: writer-independent Siamese/metric-learning encoder (papers [3], [6], [12]); frozen at inference.</li>
-<li><code>SignatureService.verify(page, signer_id) -&gt; {similarity, decision, bbox}</code>: runs the three steps above, then compares the embedding against the signer's 1&ndash;5 stored reference embeddings by cosine distance and thresholds the result. Adding a signer is an <code>INSERT</code> into <code>signatures</code>, never a retrain (NFR-6).</li>
+<li><b>No signature detected.</b> Returns <code>decision = "not found"</code> rather than guessing; the fusion stage treats this sub-score as unavailable (Section 6.4).</li>
+<li><b>No reference signatures registered for the signer.</b> Returns an error the orchestrator surfaces to the verifier (FR-U4 requires at least one reference before verification can run).</li>
 </ul>
 
-<h3>3.2 OCR / Field Validation Service (FR-D3, FR-D4)</h3>
+<h2>4. Detailed Design &mdash; OCR / Field Validation Service</h2>
+
+<h3>4.1 Component breakdown</h3>
+<table class="wide">
+<tr><td>Component</td><td>Responsibility</td></tr>
+<tr><td><code>OCREngine</code></td><td>Text extraction; consensus across multiple engines for financial documents, following FORENSIQ's triple-OCR approach (paper [39]).</td></tr>
+<tr><td><code>FieldValidator</code></td><td>Per-document-type regex/format rules on names, dates and ID numbers. FR-D3.</td></tr>
+<tr><td><code>ArithmeticGate</code></td><td>For financial documents, checks that the total equals the net amount plus tax. FR-D4.</td></tr>
+<tr><td><code>OCRService</code></td><td>External surface: <code>check(page, doc_type) -&gt; dict</code>, running extraction, field checks and (where applicable) the arithmetic gate.</td></tr>
+</table>
+
+<h3>4.2 Data flow</h3>
+<svg class="diagram" viewBox="0 0 760 300" xmlns="http://www.w3.org/2000/svg" font-family="Carlito, Calibri, Arial, sans-serif">
+<defs><marker id="arrow5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#000"/></marker></defs>
+<style>.b{fill:#f4f4f4;stroke:#000;stroke-width:1.1;} .bh{fill:#e2e2e2;stroke:#000;stroke-width:1.8;} .t{font-size:12px;font-weight:700;fill:#000;} .s{font-size:9.5px;fill:#000;} .e{fill:none;stroke:#000;stroke-width:1.1;marker-end:url(#arrow5);}</style>
+
+<rect class="b" x="30" y="20" width="200" height="50" rx="6"/>
+<text class="t" x="130" y="40" text-anchor="middle">Page + doc_type</text>
+<text class="s" x="130" y="55" text-anchor="middle">e.g. invoice, ID, certificate</text>
+
+<rect class="b" x="280" y="20" width="220" height="50" rx="6"/>
+<text class="t" x="390" y="40" text-anchor="middle">OCREngine.extract()</text>
+<text class="s" x="390" y="55" text-anchor="middle">multi-engine consensus (financial docs)</text>
+
+<rect class="bh" x="550" y="20" width="180" height="50" rx="6"/>
+<text class="t" x="640" y="40" text-anchor="middle">Fields dict</text>
+<text class="s" x="640" y="55" text-anchor="middle">{field: text}</text>
+
+<rect class="b" x="280" y="130" width="220" height="50" rx="6"/>
+<text class="t" x="390" y="150" text-anchor="middle">FieldValidator.check()</text>
+<text class="s" x="390" y="165" text-anchor="middle">regex/format rules (FR-D3)</text>
+
+<rect class="b" x="550" y="130" width="180" height="50" rx="6"/>
+<text class="t" x="640" y="150" text-anchor="middle">ArithmeticGate</text>
+<text class="s" x="640" y="165" text-anchor="middle">total = net + tax (FR-D4)</text>
+
+<rect class="bh" x="280" y="226" width="220" height="50" rx="6"/>
+<text class="t" x="390" y="246" text-anchor="middle">Output: {fields, flags,</text>
+<text class="s" x="390" y="262" text-anchor="middle">ocr_sub_score} to Fusion</text>
+
+<path class="e" d="M230,45 H278"/>
+<path class="e" d="M500,45 H548"/>
+<path class="e" d="M640,70 L640,100 Q640,115 500,130"/>
+<path class="e" d="M390,180 Q390,200 390,224"/>
+<path class="e" d="M550,155 H502"/>
+<path class="e" d="M640,180 Q640,210 500,240"/>
+</svg>
+
+<h3>4.3 Algorithm detail</h3>
+<p><b>Extraction.</b> For financial documents, run 3 independent OCR engines and take the field value a majority agree on (falling back to the highest-confidence single result if no majority), following FORENSIQ (paper [39]), which found this materially more reliable than any single engine. Non-financial documents use one engine.</p>
+<p><b>Field validation.</b> Each <code>doc_type</code> has a fixed set of regex/format rules (date formats, ID-number patterns, name character sets); a field fails if it does not match its rule, is empty where required, or (for a date) falls outside a sane range.</p>
+<p><b>Arithmetic gate.</b> <code>abs(total - (net + tax)) &lt;= tolerance</code> (a small absolute/relative tolerance for rounding), applied only when <code>doc_type</code> is financial (invoice, receipt, bank statement).</p>
+<p><b>OCR sub-score.</b> <code>100 &times; (fraction of fields that passed) &times; (1 if arithmetic gate passes or is not applicable else 0.5)</code> &mdash; an arithmetic failure is weighted as a strong signal without zeroing the whole sub-score outright, since a single mis-OCR'd digit can also fail the gate on an otherwise genuine document.</p>
+
+<h3>4.4 Data structures</h3>
+<table class="narrow">
+<tr><td>Fields</td><td><code>dict[str, str]</code>, keyed by field name (e.g. <code>"date"</code>, <code>"total"</code>, <code>"id_number"</code>)</td></tr>
+<tr><td>Flags</td><td><code>dict[str, bool]</code>, one entry per field, <code>True</code> = passed its rule</td></tr>
+<tr><td>Output</td><td><code>{"fields": dict, "flags": dict, "arithmetic_ok": bool|None, "ocr_sub_score": int}</code></td></tr>
+</table>
+
+<h3>4.5 Interface specification</h3>
+<table class="wide">
+<tr><td>Method</td><td><code>OCRService.check(page: Image, doc_type: str) -&gt; dict</code> (FR-D3, FR-D4)</td></tr>
+</table>
+
+<h3>4.6 Error handling</h3>
 <ul>
-<li><code>OCREngine.extract(page) -&gt; {field: text}</code>: text extraction, consensus across engines for financial documents (paper [39]).</li>
-<li><code>FieldValidator.check(fields, doc_type) -&gt; {field: pass|fail}</code>: per-document-type regex/format rules on names, dates and ID numbers (FR-D3).</li>
-<li><code>ArithmeticGate.check(fields) -&gt; bool</code>: for financial documents, <code>abs(total - (net + tax)) &lt;= tolerance</code> (FR-D4, paper [39]).</li>
+<li><b>Unreadable text region.</b> A field the OCR engine cannot read at all is recorded as failed, not silently omitted, so the sub-score reflects the gap.</li>
+<li><b><code>doc_type</code> with no registered rule set.</b> Field validation is skipped and the OCR sub-score is derived from extraction confidence only; this is logged so new document types get rule coverage added, not silently scored as perfect.</li>
 </ul>
 
-<h3>3.3 Fusion &amp; Scoring Service (FR-D5, FR-D6, O5, O6)</h3>
+<h2>5. Detailed Design &mdash; Fusion &amp; Scoring Service</h2>
+
+<h3>5.1 Component breakdown</h3>
+<table class="wide">
+<tr><td>Component</td><td>Responsibility</td></tr>
+<tr><td><code>ScoreFuser</code></td><td>Combines the three sub-scores into one weighted authenticity score. FR-D5.</td></tr>
+<tr><td><code>Labeller</code></td><td>Maps the fused score to Genuine/Suspicious/Forged against configurable thresholds.</td></tr>
+<tr><td><code>ReasonBuilder</code></td><td>Builds the plain-language explanation from the lowest-scoring sub-check. FR-D6.</td></tr>
+<tr><td><code>FusionService</code></td><td>External surface: <code>score(signature, tamper, ocr) -&gt; dict</code>.</td></tr>
+</table>
+
+<h3>5.2 Data flow</h3>
+<svg class="diagram" viewBox="0 0 760 260" xmlns="http://www.w3.org/2000/svg" font-family="Carlito, Calibri, Arial, sans-serif">
+<defs><marker id="arrow6" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#000"/></marker></defs>
+<style>.b{fill:#f4f4f4;stroke:#000;stroke-width:1.1;} .bh{fill:#e2e2e2;stroke:#000;stroke-width:1.8;} .t{font-size:12px;font-weight:700;fill:#000;} .s{font-size:9.5px;fill:#000;} .e{fill:none;stroke:#000;stroke-width:1.1;marker-end:url(#arrow6);}</style>
+
+<rect class="b" x="20" y="16" width="160" height="40" rx="6"/><text class="t" x="100" y="40" text-anchor="middle">signature_sub_score</text>
+<rect class="b" x="300" y="16" width="160" height="40" rx="6"/><text class="t" x="380" y="40" text-anchor="middle">tamper_sub_score</text>
+<rect class="b" x="580" y="16" width="160" height="40" rx="6"/><text class="t" x="660" y="40" text-anchor="middle">ocr_sub_score</text>
+
+<rect class="bh" x="260" y="96" width="240" height="46" rx="6"/>
+<text class="t" x="380" y="117" text-anchor="middle">ScoreFuser</text>
+<text class="s" x="380" y="132" text-anchor="middle">weighted sum (5.3)</text>
+
+<rect class="b" x="130" y="178" width="200" height="46" rx="6"/>
+<text class="t" x="230" y="198" text-anchor="middle">Labeller</text>
+<text class="s" x="230" y="213" text-anchor="middle">score -&gt; Genuine/Suspicious/Forged</text>
+
+<rect class="b" x="430" y="178" width="200" height="46" rx="6"/>
+<text class="t" x="530" y="198" text-anchor="middle">ReasonBuilder</text>
+<text class="s" x="530" y="213" text-anchor="middle">lowest sub-check -&gt; text</text>
+
+<path class="e" d="M100,56 Q100,80 300,108"/>
+<path class="e" d="M380,56 L380,94"/>
+<path class="e" d="M660,56 Q660,80 460,108"/>
+<path class="e" d="M340,142 Q340,160 280,176"/>
+<path class="e" d="M420,142 Q420,160 480,176"/>
+</svg>
+
+<h3>5.3 Algorithm detail</h3>
 <pre class="code">final_score = w_sig * signature_sub_score
             + w_tmp * tamper_sub_score
-            + w_ocr * ocr_sub_score          # weights configurable, sum to 1
+            + w_ocr * ocr_sub_score          # w_sig + w_tmp + w_ocr = 1, default 1/3 each
 
-label = "Genuine"    if final_score >= 80
-      = "Suspicious"  if 40 <= final_score < 80
-      = "Forged"      if final_score < 40
+label = "Genuine"     if final_score &gt;= 80
+      = "Suspicious"   if 40 &lt;= final_score &lt; 80
+      = "Forged"       if final_score &lt; 40
 
 reason = template(lowest-scoring sub-check, its threshold, its evidence)
        # e.g. "signature similarity 0.41 (below 0.6 threshold)"</pre>
-<p>A weighted rule, not a learned end-to-end classifier (Gap 5/O5): each sub-score and the reason it produced stay inspectable, which a black-box classifier would not give (Gap 6/O6).</p>
+<p>A weighted rule, not a learned end-to-end classifier (Gap 5/O5): each sub-score and the reason it produced stay inspectable, which a black-box classifier would not give (Gap 6/O6). Weights and thresholds are configuration, not code, so they can be recalibrated per deployment or document type without a redeploy.</p>
 
-<h3>3.4 Verification Orchestrator (FR-P1)</h3>
-<pre class="code">def verify(document):
-    pre = preprocess(document)                       # FR-D1
-    tamper = tamper_service.predict(pre.image)        # parallel
-    signature = signature_service.verify(pre.image, signer_id)
-    ocr = ocr_service.check(pre.image, doc_type)
-    # fan-in: wait for all three, with a per-service timeout (NFR-1)
-    result = fusion_service.score(signature, tamper, ocr)
-    audit_log.write(document.id, result)              # NFR-8, append-only
-    return result</pre>
-<p>If one service times out or errors, the orchestrator does not fail the whole request: it records that sub-score as unavailable, lowers the confidence of the final label to at most Suspicious, and notes the missing check in the reason text &mdash; an unreachable detector degrades the decision rather than silently skipping a check.</p>
-
-<h2>4. Verification Sequence (message level)</h2>
-<svg class="diagram" viewBox="0 0 760 360" xmlns="http://www.w3.org/2000/svg" font-family="Carlito, Calibri, Arial, sans-serif">
-<defs>
-  <marker id="arrow3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-    <path d="M0,0 L10,5 L0,10 z" fill="#000"/>
-  </marker>
-</defs>
-<style>
-  .lb { fill:#f4f4f4; stroke:#000; stroke-width:1.1; }
-  .lt { font-size:11px; font-weight:700; fill:#000; text-anchor:middle; }
-  .ll { stroke:#000; stroke-width:1; stroke-dasharray:3,3; }
-  .mc { fill:none; stroke:#000; stroke-width:1.1; marker-end:url(#arrow3); }
-  .mr { fill:none; stroke:#000; stroke-width:1.1; stroke-dasharray:5,3; marker-end:url(#arrow3); }
-  .ml { font-size:9.5px; fill:#000; }
-  .note { fill:#fafafa; stroke:#000; stroke-width:0.8; stroke-dasharray:2,2; }
-</style>
-
-<rect class="lb" x="30" y="10" width="120" height="32" rx="5"/><text class="lt" x="90" y="30">Client</text>
-<rect class="lb" x="250" y="10" width="140" height="32" rx="5"/><text class="lt" x="320" y="30">Orchestrator</text>
-<rect class="lb" x="480" y="10" width="170" height="32" rx="5"/><text class="lt" x="565" y="30">TamperLocalisationService</text>
-<rect class="lb" x="690" y="10" width="0" height="0"/>
-
-<line class="ll" x1="90" y1="42" x2="90" y2="340"/>
-<line class="ll" x1="320" y1="42" x2="320" y2="340"/>
-<line class="ll" x1="565" y1="42" x2="565" y2="340"/>
-
-<path class="mc" d="M90,80 H320"/>
-<text class="ml" x="95" y="75">POST /documents (file)</text>
-
-<path class="mc" d="M320,120 H565"/>
-<text class="ml" x="325" y="115">predict(image)  [parallel with signature, OCR services]</text>
-
-<rect class="note" x="585" y="140" width="150" height="70"/>
-<text class="ml" x="592" y="155">preprocess (FR-D1)</text>
-<text class="ml" x="592" y="169">dual-stream model</text>
-<text class="ml" x="592" y="183">sigmoid, threshold</text>
-<text class="ml" x="592" y="197">regions, score (2.3)</text>
-<path class="mc" d="M565,135 H583"/>
-
-<path class="mr" d="M565,230 H320"/>
-<text class="ml" x="330" y="225">{mask, heatmap, score, regions}</text>
-
-<path class="mc" d="M320,265 H90"/>
-<text class="ml" x="95" y="260" text-anchor="start" dx="-60">fuse with signature/OCR sub-scores (3.3), write audit_log (NFR-8)</text>
-
-<path class="mr" d="M320,300 H90"/>
-<text class="ml" x="95" y="295">verification result (score, label, heatmap, reason)</text>
-</svg>
-
-<h2>5. System-Wide Error Handling</h2>
-<ul>
-<li><b>Invalid file / unsupported type.</b> Rejected at the API gateway before reaching the orchestrator; never silently coerced into a wrong document type.</li>
-<li><b>Detector timeout or failure.</b> Handled by the orchestrator as in Section 3.4: the request still completes, with a capped confidence and an explicit note in the reason text, rather than a 500 error.</li>
-<li><b>Auth / role failure.</b> API gateway returns 401/403 before any detector runs (NFR-9); nothing is logged to <code>audit_log</code> as a verification attempt.</li>
-<li><b>Concurrent admin decisions on the same document.</b> <code>feedback</code> inserts are append-only; the latest row is treated as authoritative, and all prior ones remain in the table for audit (NFR-8).</li>
-</ul>
-
-<h2>6. Traceability</h2>
-<table class="wide">
-<tr><td>Section</td><td>Traces to</td></tr>
-<tr><td>2.1&ndash;2.5 (assigned module)</td><td>O1&ndash;O4, O6&ndash;O8; FR-D1, FR-D2, FR-D6; NFR-2, NFR-5, NFR-7, NFR-10; Gap 3, Gap 4</td></tr>
-<tr><td>3.1 (signature)</td><td>O1, O2; FR-S1&ndash;S3; NFR-6; Gap 1, Gap 2</td></tr>
-<tr><td>3.2 (OCR/field)</td><td>FR-D3, FR-D4; Gap 5</td></tr>
-<tr><td>3.3 (fusion)</td><td>O5, O6; FR-D5, FR-D6; Gap 5, Gap 6</td></tr>
-<tr><td>3.4 (orchestrator)</td><td>FR-P1; NFR-1</td></tr>
-<tr><td>5 (error handling)</td><td>NFR-1, NFR-8, NFR-9</td></tr>
+<h3>5.4 Data structures</h3>
+<table class="narrow">
+<tr><td>Weights</td><td><code>{w_sig: float, w_tmp: float, w_ocr: float}</code>, sum to 1, stored as configuration</td></tr>
+<tr><td>Thresholds</td><td><code>{genuine: 80, suspicious_floor: 40}</code>, configuration</td></tr>
+<tr><td>Output</td><td><code>{"score": int, "label": str, "reason": str, "sub_scores": {signature, tamper, ocr}, "heatmap_key": str}</code> &mdash; this is the row persisted into <code>verifications</code> (Section 7)</td></tr>
 </table>
 
-<h2>7. Conclusion</h2>
-<p>The assigned module is now detailed to the level of running code: the component breakdown, the internal data flow diagram and the algorithm descriptions in Section 2 match <code>tamper_localisation/</code> line for line. The remaining services are detailed to the same depth in pseudocode, so that implementing them means filling in the classes and functions named here against the same interfaces and data contracts already fixed in the System Design Document.</p>
+<h3>5.5 Interface specification</h3>
+<table class="wide">
+<tr><td>Method</td><td><code>FusionService.score(signature: dict, tamper: dict, ocr: dict) -&gt; dict</code> (FR-D5, FR-D6)</td></tr>
+</table>
+
+<h3>5.6 Error handling</h3>
+<ul>
+<li><b>A sub-score is missing</b> (detector failed or timed out, Section 6.4). Its weight is redistributed proportionally across the remaining sub-scores, and the label is capped at <code>Suspicious</code> &mdash; a verification is never reported <code>Genuine</code> on partial evidence.</li>
+<li><b>All three sub-scores missing.</b> The request itself is reported as failed rather than fused into a meaningless label.</li>
+</ul>
+
+<h2>6. Detailed Design &mdash; Verification Orchestrator</h2>
+
+<h3>6.1 Responsibilities</h3>
+<p>The orchestrator is the single entry point (FR-P1) for every verification: it pre-processes the upload, fans the three detector calls out, fans their results back in, calls fusion, writes the audit log, and returns to the caller. It contains no detection logic of its own.</p>
+
+<h3>6.2 Dispatch algorithm</h3>
+<pre class="code">def verify(document):
+    pre = preprocess(document)                        # FR-D1, shared pre-pass
+    tasks = {
+        "signature": call_with_timeout(signature_service.verify, pre, timeout=6),
+        "tamper":    call_with_timeout(tamper_service.predict,  pre, timeout=6),
+        "ocr":       call_with_timeout(ocr_service.check,       pre, timeout=6),
+    }
+    results = await_all(tasks)          # fan-in; NFR-1 budget: 10s total per page
+    for name, outcome in results.items():
+        if outcome is TIMEOUT or outcome is ERROR:
+            results[name] = None        # treated as missing evidence, not a crash
+
+    fused = fusion_service.score(results["signature"], results["tamper"], results["ocr"])
+    audit_log.write(document.id, fused)              # NFR-8, append-only
+    if fused.label == "Suspicious":
+        admin_queue.add(document.id)                  # FR-A2
+    return fused</pre>
+
+<h3>6.3 Full system sequence</h3>
+<svg class="diagram" viewBox="0 0 760 460" xmlns="http://www.w3.org/2000/svg" font-family="Carlito, Calibri, Arial, sans-serif">
+<defs><marker id="arrow7" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#000"/></marker></defs>
+<style>
+  .lb{fill:#f4f4f4;stroke:#000;stroke-width:1.1;} .lt{font-size:10.5px;font-weight:700;fill:#000;text-anchor:middle;}
+  .ll{stroke:#000;stroke-width:1;stroke-dasharray:3,3;}
+  .mc{fill:none;stroke:#000;stroke-width:1.1;marker-end:url(#arrow7);}
+  .mr{fill:none;stroke:#000;stroke-width:1.1;stroke-dasharray:5,3;marker-end:url(#arrow7);}
+  .ml{font-size:9px;fill:#000;}
+</style>
+
+<rect class="lb" x="15" y="10" width="95" height="32" rx="5"/><text class="lt" x="62" y="30">Client</text>
+<rect class="lb" x="150" y="10" width="120" height="32" rx="5"/><text class="lt" x="210" y="30">Orchestrator</text>
+<rect class="lb" x="310" y="10" width="110" height="32" rx="5"/><text class="lt" x="365" y="30">Signature</text>
+<rect class="lb" x="440" y="10" width="110" height="32" rx="5"/><text class="lt" x="495" y="30">Tamper</text>
+<rect class="lb" x="570" y="10" width="90" height="32" rx="5"/><text class="lt" x="615" y="30">OCR</text>
+<rect class="lb" x="680" y="10" width="70" height="32" rx="5"/><text class="lt" x="715" y="30">Storage</text>
+
+<line class="ll" x1="62" y1="42" x2="62" y2="440"/>
+<line class="ll" x1="210" y1="42" x2="210" y2="440"/>
+<line class="ll" x1="365" y1="42" x2="365" y2="440"/>
+<line class="ll" x1="495" y1="42" x2="495" y2="440"/>
+<line class="ll" x1="615" y1="42" x2="615" y2="440"/>
+<line class="ll" x1="715" y1="42" x2="715" y2="440"/>
+
+<path class="mc" d="M62,70 H210"/><text class="ml" x="66" y="65">POST /documents</text>
+<path class="mc" d="M210,100 H365"/><text class="ml" x="214" y="95">verify()</text>
+<path class="mc" d="M210,118 H495"/><text class="ml" x="214" y="113">predict()</text>
+<path class="mc" d="M210,136 H615"/><text class="ml" x="214" y="131">check()</text>
+<text class="ml" x="220" y="155">(fan-out, 6s timeout each, NFR-1)</text>
+
+<path class="mr" d="M365,190 H210"/><text class="ml" x="214" y="185">signature result / timeout</text>
+<path class="mr" d="M495,208 H210"/><text class="ml" x="214" y="203">tamper result / timeout</text>
+<path class="mr" d="M615,226 H210"/><text class="ml" x="214" y="221">ocr result / timeout</text>
+
+<text class="ml" x="214" y="250">fuse (6.2); missing result -&gt; capped at Suspicious (5.6)</text>
+
+<path class="mc" d="M210,275 H715"/><text class="ml" x="214" y="270">write verification + audit_log (NFR-8)</text>
+<path class="mc" d="M210,305 H715" />
+<text class="ml" x="214" y="300">if Suspicious: enqueue for admin review (FR-A2)</text>
+
+<path class="mr" d="M210,340 H62"/><text class="ml" x="66" y="335">verification result (score, label, heatmap, reason)</text>
+</svg>
+
+<h3>6.4 Concurrency and failure handling</h3>
+<ul>
+<li>Each detector call runs under its own timeout (6s default, leaving headroom inside the 10s NFR-1 budget for pre-processing and fusion).</li>
+<li>A timeout or exception in one detector does not cancel the others; the orchestrator awaits whichever complete and records <code>None</code> for the rest.</li>
+<li>Fusion (5.6) is the single place that decides how to degrade a label when evidence is missing &mdash; the orchestrator itself makes no scoring decisions.</li>
+<li>Audit log writes (Section 7) are the last step before returning, so a result is never handed to the client without a corresponding record.</li>
+</ul>
+
+<h2>7. Detailed Data Design</h2>
+<table class="wide">
+<tr><td>Table</td><td>Columns (type, constraint)</td></tr>
+<tr><td><code>users</code></td><td><code>id</code> UUID PK &middot; <code>email</code> text UNIQUE NOT NULL &middot; <code>password_hash</code> text NOT NULL &middot; <code>role</code> enum(verifier, admin) NOT NULL &middot; <code>created_at</code> timestamptz NOT NULL</td></tr>
+<tr><td><code>signatures</code></td><td><code>id</code> UUID PK &middot; <code>user_id</code> UUID FK&rarr;users &middot; <code>image_key</code> text NOT NULL &middot; <code>embedding</code> float[] NOT NULL &middot; <code>created_at</code> timestamptz NOT NULL &middot; CHECK: &le;5 rows per <code>user_id</code> (FR-U4)</td></tr>
+<tr><td><code>documents</code></td><td><code>id</code> UUID PK &middot; <code>uploaded_by</code> UUID FK&rarr;users &middot; <code>doc_type</code> text NOT NULL &middot; <code>file_key</code> text NOT NULL &middot; <code>sha256_hash</code> char(64) NOT NULL, INDEXED (FR-P2) &middot; <code>uploaded_at</code> timestamptz NOT NULL</td></tr>
+<tr><td><code>verifications</code></td><td><code>id</code> UUID PK &middot; <code>document_id</code> UUID FK&rarr;documents &middot; <code>signature_sub_score</code> int NULL &middot; <code>tamper_sub_score</code> int NULL &middot; <code>ocr_sub_score</code> int NULL &middot; <code>final_score</code> int NOT NULL &middot; <code>label</code> enum(Genuine, Suspicious, Forged) NOT NULL &middot; <code>heatmap_key</code> text NULL &middot; <code>reason_text</code> text NOT NULL &middot; <code>created_at</code> timestamptz NOT NULL, INDEXED</td></tr>
+<tr><td><code>audit_log</code></td><td><code>id</code> UUID PK &middot; <code>actor_id</code> UUID FK&rarr;users NULL (system actions) &middot; <code>action</code> text NOT NULL &middot; <code>verification_id</code> UUID FK&rarr;verifications NULL &middot; <code>detail_json</code> jsonb NOT NULL &middot; <code>created_at</code> timestamptz NOT NULL &middot; no UPDATE/DELETE grant for the application role (NFR-8)</td></tr>
+<tr><td><code>feedback</code></td><td><code>id</code> UUID PK &middot; <code>verification_id</code> UUID FK&rarr;verifications &middot; <code>admin_id</code> UUID FK&rarr;users &middot; <code>final_decision</code> enum(Genuine, Forged) NOT NULL &middot; <code>created_at</code> timestamptz NOT NULL &middot; append-only, latest row per <code>verification_id</code> is authoritative (FR-A2)</td></tr>
+</table>
+
+<h2>8. Detailed API Design</h2>
+<table class="wide">
+<tr><td>Route</td><td>Request / Response</td></tr>
+<tr><td><code>POST /auth/register</code></td><td>req <code>{email, password}</code> &rarr; 201 <code>{id, email, role}</code> / 409 if email taken</td></tr>
+<tr><td><code>POST /auth/login</code></td><td>req <code>{email, password}</code> &rarr; 200 <code>{token}</code> / 401 on bad credentials</td></tr>
+<tr><td><code>POST /signatures</code></td><td>req multipart <code>{signer_id, image}</code> &rarr; 201 <code>{id}</code> / 400 if signer already has 5 references (FR-U4)</td></tr>
+<tr><td><code>POST /documents</code></td><td>req multipart <code>{file, doc_type}</code> &rarr; 202 <code>{document_id}</code> / 400 unsupported file type / 413 too large</td></tr>
+<tr><td><code>GET /documents/{id}/verification</code></td><td>200 <code>{score, label, heatmap_url, sub_scores, reason}</code> / 202 if still processing / 404</td></tr>
+<tr><td><code>GET /documents/{id}/report.pdf</code></td><td>200 PDF stream / 404</td></tr>
+<tr><td><code>GET /verifications?user_id=</code></td><td>200 <code>[{id, document_id, score, label, created_at}]</code>, paginated</td></tr>
+<tr><td><code>POST /admin/verifications/{id}/decision</code></td><td>req <code>{final_decision}</code> &rarr; 201 (FR-A2) / 403 if role != admin (NFR-9)</td></tr>
+<tr><td><code>GET /admin/audit-log</code></td><td>200 <code>[{action, actor_id, verification_id, detail, created_at}]</code>, paginated / 403</td></tr>
+<tr><td><code>GET /admin/analytics</code></td><td>200 <code>{counts_by_label, avg_score, avg_latency}</code> / 403</td></tr>
+</table>
+
+<h2>9. System-Wide Error Handling</h2>
+<table class="narrow">
+<tr><td>Invalid file / type</td><td>400 at the gateway, before the orchestrator; never coerced into a wrong document type</td></tr>
+<tr><td>Detector timeout/failure</td><td>Handled per Section 6.4: request completes, capped confidence, reason notes the gap &mdash; never a 500</td></tr>
+<tr><td>Auth/role failure</td><td>401/403 at the gateway (NFR-9); not logged as a verification attempt</td></tr>
+<tr><td>Concurrent admin decisions</td><td><code>feedback</code> append-only; latest row authoritative, all prior rows retained (NFR-8)</td></tr>
+<tr><td>Storage write failure</td><td>Verification is not returned to the client as complete until its <code>audit_log</code> row is confirmed written</td></tr>
+</table>
+
+<h2>10. Traceability</h2>
+<table class="wide">
+<tr><td>Section</td><td>Traces to</td></tr>
+<tr><td>2 (assigned module)</td><td>O1&ndash;O4, O6&ndash;O8; FR-D1, FR-D2, FR-D6; NFR-2, NFR-5, NFR-7, NFR-10; Gap 3, Gap 4</td></tr>
+<tr><td>3 (signature)</td><td>O1, O2; FR-S1&ndash;S3; NFR-6; Gap 1, Gap 2</td></tr>
+<tr><td>4 (OCR/field)</td><td>FR-D3, FR-D4; Gap 5</td></tr>
+<tr><td>5 (fusion)</td><td>O5, O6; FR-D5, FR-D6; Gap 5, Gap 6</td></tr>
+<tr><td>6 (orchestrator)</td><td>FR-P1; NFR-1</td></tr>
+<tr><td>7 (data design)</td><td>FR-P2, FR-A2, FR-A3, FR-U4; NFR-8</td></tr>
+<tr><td>8 (API design)</td><td>FR-P1, FR-U1&ndash;U4, FR-A1&ndash;A3</td></tr>
+<tr><td>9 (error handling)</td><td>NFR-1, NFR-8, NFR-9</td></tr>
+</table>
+
+<h2>11. Conclusion</h2>
+<p>The assigned module is detailed to the level of running code: the component breakdown, data flow diagram, algorithm descriptions and reference implementation in Section 2 match <code>tamper_localisation/</code> line for line, and Section 2.9 ties each self-check in <code>test_module.py</code> back to the requirement it verifies. The remaining services, the orchestrator, the data design and the API are detailed to the same structural depth &mdash; component, data flow, algorithm, data structures, interface, error handling &mdash; so implementing them means filling in the classes and functions named here against contracts that are already fixed.</p>
 
 </body>
 </html>
