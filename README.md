@@ -28,7 +28,11 @@ This is a college major project (REVA University, School of Computer Science & E
 | `papers/` | The 52 source papers (PDF) reviewed in the literature survey. |
 | `txt/` | Plain-text extractions of each paper in `papers/`. |
 | `build.py`, `design_build.py`, `paper_build.py`, `docx_build.py` | Scripts that render the HTML sources to PDF/DOCX via headless Chrome. |
-| `tamper_localisation/` | Prototype implementation of the assigned module (dual-stream tamper localiser) — see below. |
+| `tamper_localisation/` | Dual-stream tamper localiser (assigned module) — see below. |
+| `signature_verification/` | Signature detection, cleaning and writer-independent metric-learning verification. |
+| `ocr_validation/` | OCR (via the `tesseract` binary), field-format checks and the financial arithmetic gate. |
+| `fusion/` | Combines the three sub-scores into one authenticity score, label and reason. |
+| `api/` | FastAPI orchestrator wiring all four services together, with SQLite persistence and a minimal test web page. |
 
 ## Building the documents
 
@@ -49,29 +53,46 @@ python3 docx_build.py        # -> ForgeGuard_IEEE_Paper.docx
 
 Requires Google Chrome installed at the default macOS path.
 
-## Tamper Localisation Module (assigned module — FR-D1, FR-D2, FR-D6)
+## Running the full system
 
-`tamper_localisation/` is a working prototype of the assigned module from the System Design
-Document: a dual-stream (fixed SRM noise-residual + semantic RGB) encoder-decoder behind one
-fixed interface, `TamperLocalisationService.predict(image)`, returning a pixel mask, heatmap,
-0–100 tamper sub-score and the largest suspicious regions with coordinates.
+All four services (tamper localisation, signature verification, OCR/field validation, fusion)
+plus the orchestrator API are implemented and working end to end.
 
 ```bash
-pip install -r tamper_localisation/requirements.txt
-python3 -m tamper_localisation.test_module              # self-check (no dataset needed)
-python3 -m tamper_localisation.train --epochs 5 --out checkpoint.pt
-python3 -m tamper_localisation.evaluate --checkpoint checkpoint.pt   # precision/recall/F1/IoU/AUC, NFR-5
+pip install -r requirements.txt      # torch, fastapi, uvicorn, etc.
+brew install tesseract               # OCR binary, shelled out to directly
+
+# self-check each service (no dataset needed for any of them)
+python3 -m tamper_localisation.test_module
+python3 -m signature_verification.test_module
+python3 -m ocr_validation.test_module
+python3 -m fusion.test_module
+
+# run the API
+uvicorn api.main:app --reload
+# open http://127.0.0.1:8000  -- register a reference signature, then upload a document
 ```
 
-Training and evaluation currently run against `dataset.py`'s synthetic splice generator, a
-stand-in for the FSD dataset (paper [29]) until real document scans are available — reported
-metrics should not be trusted as final numbers until trained on that data (see the `ponytail:`
-note in `dataset.py`).
+`POST /signatures` registers a reference signature for a signer; `POST /documents` runs the full
+pipeline (preprocess → signature/tamper/OCR in sequence → fusion → persist) and returns the score,
+label, reason, sub-scores and a heatmap overlay URL; `GET /documents/{id}/verification` re-fetches
+a past result from SQLite. If a detector fails or a signer has no registered reference, the
+orchestrator degrades gracefully (that sub-score is recorded as missing and the label is capped
+below Genuine) instead of failing the request — see `api/orchestrator.py`.
+
+Training and evaluation for the two learned models (`tamper_localisation`, `signature_verification`)
+currently run against synthetic data generators — stand-ins for the FSD dataset (paper [29]) and
+CEDAR/BHSig260 (papers [1]–[17]) respectively, until real labelled data is available. Reported
+metrics should not be trusted as final numbers until trained on real data (see the `ponytail:`
+notes in each module's `dataset.py`). The OCR, fusion, API and persistence layers run against real
+inputs (actual Tesseract OCR, actual SQLite writes) with no synthetic stand-in.
 
 ## Status
 
-Phase 1 (this repo): tamper localisation (prototype implemented), signature verification,
-OCR/field validation, fusion and scoring, and an audit log.
+Phase 1 (this repo): all four services implemented and wired end to end through a working API
+(tamper localisation, signature verification, OCR/field validation, fusion and scoring), with
+SQLite persistence and an append-only audit log. Not yet built: a non-minimal web client, real
+training data for the two learned models, and request-level auth/RBAC (NFR-9).
 
 Phase 2 (future work): blockchain anchoring of the stored document hash, and an anomaly-detection
 worker for forgery types outside the training distribution — both designed to slot in behind the

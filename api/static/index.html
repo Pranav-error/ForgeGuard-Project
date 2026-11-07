@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>ForgeGuard</title>
+<style>
+  body { font-family: -apple-system, Arial, sans-serif; max-width: 640px; margin: 40px auto; padding: 0 16px; }
+  h1 { font-size: 20px; }
+  fieldset { margin-bottom: 20px; }
+  label { display: block; margin: 8px 0 4px; font-size: 13px; }
+  button { margin-top: 10px; padding: 6px 14px; }
+  pre { background: #f4f4f4; padding: 10px; white-space: pre-wrap; font-size: 12px; }
+  img { max-width: 100%; margin-top: 10px; border: 1px solid #ccc; }
+</style>
+</head>
+<body>
+<h1>ForgeGuard</h1>
+
+<fieldset>
+<legend>1. Register a reference signature</legend>
+<form id="sigForm">
+  <label>Signer ID</label>
+  <input name="signer_id" required>
+  <label>Signature crop image</label>
+  <input type="file" name="image" accept="image/*" required>
+  <button type="submit">Register</button>
+</form>
+<pre id="sigOut"></pre>
+</fieldset>
+
+<fieldset>
+<legend>2. Upload a document for verification</legend>
+<form id="docForm">
+  <label>Document type</label>
+  <select name="doc_type">
+    <option value="identity">identity</option>
+    <option value="certificate">certificate</option>
+    <option value="invoice">invoice</option>
+    <option value="legal">legal</option>
+  </select>
+  <label>Signer ID (optional, for signature check)</label>
+  <input name="signer_id">
+  <label>Document image</label>
+  <input type="file" name="file" accept="image/*" required>
+  <button type="submit">Verify</button>
+</form>
+<pre id="docOut"></pre>
+<img id="heatmap" style="display:none">
+</fieldset>
+
+<script>
+document.getElementById('sigForm').onsubmit = async (e) => {
+  e.preventDefault();
+  const r = await fetch('/signatures', { method: 'POST', body: new FormData(e.target) });
+  document.getElementById('sigOut').textContent = JSON.stringify(await r.json(), null, 2);
+};
+
+document.getElementById('docForm').onsubmit = async (e) => {
+  e.preventDefault();
+  const r = await fetch('/documents', { method: 'POST', body: new FormData(e.target) });
+  const data = await r.json();
+  document.getElementById('docOut').textContent = JSON.stringify(data, null, 2);
+  const img = document.getElementById('heatmap');
+  if (data.heatmap_url) { img.src = data.heatmap_url; img.style.display = 'block'; }
+  else { img.style.display = 'none'; }
+};
+</script>
+</body>
+</html>

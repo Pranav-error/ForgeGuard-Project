@@ -1,0 +1,12 @@
+# Full system (tamper localisation, signature verification, OCR/field validation, fusion, API).
+# Also requires the `tesseract` binary on PATH (brew install tesseract) -- shelled out to
+# directly, not via a Python wrapper package.
+torch>=2.0
+numpy
+scipy
+scikit-learn
+pillow
+fastapi
+uvicorn
+python-multipart
+requests
