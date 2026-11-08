@@ -30,6 +30,7 @@ documents is implemented, trained, tested, and verified working end to end throu
   5. [Fusion & Scoring](#5-fusion--scoring-fusion)
 - [The Ledger (Phase 2 — blockchain-style anchoring)](#the-ledger-phase-2--blockchain-style-anchoring-ledger)
 - [The Orchestrator and API (`api/`)](#the-orchestrator-and-api-api)
+- [The Web Frontend (`web/`)](#the-web-frontend-web)
 - [Data design](#data-design)
 - [Setup and running the system](#setup-and-running-the-system)
 - [Training results](#training-results)
@@ -128,7 +129,7 @@ ForgeGuard-Project/
 ├── fusion/                  # Service 5 — combines all of the above
 ├── ledger/                  # Phase 2 — hash-chain anchoring (pure logic)
 ├── api/                     # Orchestrator, SQLite persistence, auth/RBAC, REST routes
-│   └── static/index.html    #   minimal browser test page
+├── web/                     # React + Vite + TypeScript + Tailwind frontend (see below)
 ├── storage/heatmaps/        # Rendered heatmap overlays (generated at runtime, gitignored)
 ├── papers/, txt/            # The 52 literature-survey source papers (PDF) and text extracts
 ├── *.html, *_build.py       # Source templates + build scripts for the 5 project documents
@@ -311,7 +312,8 @@ non-expiring — documented as a prototype-grade implementation (see the `ponyta
 | `GET /documents/{id}/anchor` | verifier | The ledger block anchoring this document's hash |
 | `GET /admin/audit-log` | admin | The append-only audit trail |
 | `GET /admin/ledger/verify` | admin | Re-derive every ledger block's hash and report whether the chain is unbroken |
-| `GET /` | — | A minimal static test page (register/login, register a reference signature, upload a document, view the heatmap) |
+| `GET /verifications` | verifier | The signed-in user's own past verifications (History page) |
+| `GET /{anything-else}` | — | Falls through to the React app's `index.html` (client-side routing) — see [The Web Frontend](#the-web-frontend-web) |
 
 A `POST /documents` response looks like:
 
@@ -330,6 +332,60 @@ A `POST /documents` response looks like:
 }
 ```
 
+## The Web Frontend (`web/`)
+
+A real React app — Vite + React + TypeScript + Tailwind CSS v4, React Router for client-side
+routing, no CDN dependency at runtime (everything is compiled at build time). It replaced an
+earlier single-page vanilla-HTML version after that version both looked unconvincing (one long
+scrolling form, no real navigation) and had a real bug: it loaded Tailwind from
+`cdn.tailwindcss.com`, which never loaded in the browser-automation environment used to test it,
+silently breaking the entire layout. A real build step has no such runtime dependency to fail.
+
+**Pages**, each a real route (`/`, `/login`, `/dashboard`, `/verify`, `/history`, `/admin`):
+
+| Route | Purpose |
+|---|---|
+| `/` | Public landing page — what ForgeGuard is, the four services, a "Get started" CTA. |
+| `/login` | Sign in / create account (tab-switched), stores the session in `sessionStorage`. |
+| `/dashboard` | Signed-in home — links to Verify and History (and Admin, if the role is `admin`). |
+| `/verify` | Register a reference signature, upload a document, see the full result (score, label, reason, four sub-score bars, heatmap overlay, raw JSON). |
+| `/history` | Every document *this user* has verified (needs `documents.uploaded_by`, added for this). |
+| `/admin` | Audit log table + a button that runs the ledger integrity check live. Guarded client-side; the API enforces the real guard (`auth.require_admin`). |
+
+**Auth across pages:** the bearer token, role and email live in `sessionStorage` (not just a JS
+variable — that would lose the session on every navigation in a real multi-page app), read into a
+React context (`src/lib/auth.tsx`) that every page consumes via `useAuth()`. `ProtectedRoute` and
+`AdminRoute` (`src/components/ProtectedRoute.tsx`) redirect to `/login` (or show a "for
+administrators only" message) before rendering anything that needs a session.
+
+**Heatmap images are fetched, not `<img src>`'d directly** — `GET /documents/{id}/heatmap`
+requires the same bearer token every other route does, and `<img>` can't attach custom headers.
+Caught this live (broken-image icon in the browser); fixed by fetching the PNG with the header and
+handing the `<img>` a `URL.createObjectURL()` blob instead (`api.fetchHeatmap` in `src/lib/api.ts`).
+
+**The heatmap visualisation itself was also fixed.** The first version blended the continuous
+heatmap over the whole page; on a genuinely out-of-distribution input (a random photo, tried live
+while reviewing this) the model's output saturates almost everywhere and the overlay became a
+solid red wash — reads as "broken," not "here's the suspicious region." `api/visualize.py` now
+tints only the thresholded mask and draws numbered boxes around the actual top regions, so it
+stays legible even on nonsense input.
+
+**Build/serve:** `npm run build` in `web/` produces `web/dist/`; `api/main.py` serves it from the
+same FastAPI process (`/assets/*` for the hashed JS/CSS bundles, everything else falls through to
+`index.html` so React Router's own client-side routes work on a hard refresh — a plain
+`StaticFiles(html=True)` mount only does that fallback for `/` itself, not for `/dashboard` etc.,
+which 404'd until this was added). One Docker image, one Render service, same as before — see
+[Deploying to Render](#deploying-to-render); the Dockerfile now multi-stage builds the frontend
+with `node:20-slim` before the Python stage copies in `web/dist/`.
+
+For local development: run the backend (`uvicorn api.main:app --reload`) and, separately,
+`npm run dev` in `web/` — its dev server proxies `/auth`, `/signatures`, `/documents`,
+`/verifications`, `/admin/audit-log`, `/admin/ledger/*` and `/health` back to the backend (see
+`web/vite.config.ts`). That proxy config deliberately does **not** use a bare `/admin` prefix —
+it would also swallow requests to the SPA's own `/admin` *page* route, which shares the prefix
+with the `/admin/*` API routes (caught live: a hard refresh on `/admin` returned the backend's
+raw 404 JSON instead of the page).
+
 ## Data design
 
 | Table | Columns |
@@ -337,7 +393,7 @@ A `POST /documents` response looks like:
 | `users` | `id`, `email` (unique), `password_hash`, `role` (`verifier`\|`admin`), `created_at` |
 | `sessions` | `token` (PK), `user_id`, `created_at` |
 | `signatures` | `id`, `signer_id`, `embedding` (JSON float array), `created_at` — 1–5 rows per signer |
-| `documents` | `id`, `doc_type`, `sha256_hash`, `uploaded_at` |
+| `documents` | `id`, `uploaded_by`, `doc_type`, `sha256_hash`, `uploaded_at` |
 | `verifications` | `id`, `document_id`, `signature_sub_score`, `tamper_sub_score`, `ocr_sub_score`, `anomaly_sub_score`, `final_score`, `label`, `reason_text`, `created_at` |
 | `ledger_blocks` | `block_index` (PK), `document_id`, `verification_id`, `document_hash`, `prev_hash`, `block_hash`, `created_at` |
 | `audit_log` | `id`, `action`, `verification_id`, `detail_json`, `created_at` — append-only, no `UPDATE`/`DELETE` path in application code |
@@ -353,13 +409,25 @@ for m in tamper_localisation signature_verification ocr_validation fusion anomal
   python3 -m $m.test_module
 done
 
-# run the API
+# run the backend
 uvicorn api.main:app --reload
-# open http://127.0.0.1:8000 -- register an account, log in, register a reference
-# signature, then upload a document (the page handles the bearer token for you)
+
+# in a second terminal: run the frontend dev server (proxies API calls to the backend above)
+cd web && npm install && npm run dev
+# open http://localhost:5173 -- register an account, sign in, register a reference
+# signature, then upload a document
 
 # bootstrap an admin account (self-registration only ever creates "verifier")
 python3 -m api.create_admin admin@example.com somepassword
+```
+
+To run it the way it's actually deployed — one process, no separate dev server — build the
+frontend and let the backend serve it:
+
+```bash
+cd web && npm install && npm run build && cd ..
+uvicorn api.main:app --reload
+# open http://127.0.0.1:8000
 ```
 
 `api/main.py` automatically loads `tamper_checkpoint.pt`, `signature_checkpoint.pt`, and
@@ -392,8 +460,7 @@ billed to whoever connects the repo, since that requires a Render account and pa
    ```
    (`FORGEGUARD_DATA_DIR=/data` is already set from `render.yaml`, so this writes to the
    persistent disk, not the container's throwaway filesystem.)
-5. Open the service URL — `GET /` serves the same static test page as local dev, now talking to
-   the hosted API.
+5. Open the service URL — the same React app as local dev, now talking to the hosted API.
 
 Local development is unaffected: `FORGEGUARD_DATA_DIR` defaults to the repo root when unset, which
 is what running `uvicorn api.main:app --reload` on your own machine still does.
@@ -503,13 +570,15 @@ by design.
   distribution) and a hash-chain ledger anchoring every verification's document hash — both
   implemented behind the same replaceable-detector interface as Phase 1, with no changes required
   to the orchestrator's existing detector-calling pattern beyond adding the new calls.
+- **Frontend**: a real React + Vite + TypeScript + Tailwind single-page app (`web/`) with six
+  routes, persistent sessions, and role-gated pages — not a single scrolling form — served by the
+  same backend in one Docker image. See [The Web Frontend](#the-web-frontend-web).
 
 What remains explicitly out of scope, by original design choice, not as incomplete work: a public
 blockchain network (the ledger is intentionally local/permissioned — see
-[The Ledger](#the-ledger-phase-2--blockchain-style-anchoring-ledger)), and a polished production
-web client (the static test page is functional, not a design deliverable). Real training datasets
-for the three learned models remain the one dependency outside this repository's control — the
-system is fully built and ready to retrain the moment that data is available.
+[The Ledger](#the-ledger-phase-2--blockchain-style-anchoring-ledger)). Real training datasets for
+the three learned models remain the one dependency outside this repository's control — the system
+is fully built and ready to retrain the moment that data is available.
 
 ## License
 

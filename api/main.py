@@ -7,6 +7,13 @@ DB and heatmap files are *data*, not app code: they live under
 FORGEGUARD_DATA_DIR (defaults to ROOT for local dev) so a hosting platform
 can point it at a persistent volume -- e.g. Render's disk mounted at /data --
 without surviving only as long as the container does.
+
+The frontend is the React app in web/ (Vite + React Router). Its production
+build (web/dist/, produced by the Dockerfile) is served from "/" with
+html=True so client-side routes (e.g. /dashboard on a hard refresh) fall
+back to index.html -- mounted *after* every API route below so it never
+shadows them. For local development, run the backend here and `npm run dev`
+in web/ separately (its Vite dev server proxies API calls back to this app).
 """
 import os
 import sqlite3
@@ -26,9 +33,9 @@ DATA_DIR = Path(os.environ.get("FORGEGUARD_DATA_DIR", str(ROOT)))
 STORAGE = DATA_DIR / "storage" / "heatmaps"
 STORAGE.mkdir(parents=True, exist_ok=True)
 DB_PATH = str(DATA_DIR / "forgeguard.db")
+STATIC_DIR = ROOT / "web" / "dist"  # the built React app (web/) -- see Dockerfile
 
 app = FastAPI(title="ForgeGuard")
-app.mount("/static", StaticFiles(directory=str(Path(__file__).parent / "static")), name="static")
 
 orchestrator: Orchestrator | None = None
 
@@ -63,11 +70,6 @@ def current_user(
     return auth.get_current_user(conn, authorization)
 
 
-@app.get("/")
-def index():
-    return FileResponse(str(Path(__file__).parent / "static" / "index.html"))
-
-
 @app.get("/health")
 def health():
     return {"status": "ok"}
@@ -88,7 +90,7 @@ def login(email: str = Form(...), password: str = Form(...), conn: sqlite3.Conne
         raise HTTPException(401, "invalid credentials")
     token = auth.new_token()
     db.add_session(conn, user["id"], token)
-    return {"token": token, "role": user["role"]}
+    return {"token": token, "role": user["role"], "email": user["email"]}
 
 
 @app.post("/signatures")
@@ -115,18 +117,23 @@ async def upload_document(
     user: dict = Depends(current_user),
 ):
     page = Image.open(file.file).convert("RGB")
-    result = orchestrator.verify(conn, page, doc_type, signer_id)
+    result = orchestrator.verify(conn, page, doc_type, signer_id, uploaded_by=user["id"])
 
     heatmap = result.pop("_heatmap")
     heatmap_url = None
     if heatmap is not None:
-        overlay = overlay_heatmap(page, heatmap)
+        overlay = overlay_heatmap(page, heatmap, result.get("tamper_regions") or [])
         out_path = STORAGE / f"{result['document_id']}.png"
         overlay.save(out_path)
         heatmap_url = f"/documents/{result['document_id']}/heatmap"
 
     result["heatmap_url"] = heatmap_url
     return JSONResponse(result)
+
+
+@app.get("/verifications")
+def list_verifications(conn: sqlite3.Connection = Depends(get_db), user: dict = Depends(current_user)):
+    return db.list_verifications_for_user(conn, user["id"])
 
 
 @app.get("/documents/{document_id}/verification")
@@ -167,3 +174,16 @@ def verify_ledger(conn: sqlite3.Connection = Depends(get_db), user: dict = Depen
     """Phase 2: re-derive every block's hash and check the chain is unbroken."""
     auth.require_admin(user)
     return db.verify_chain(conn)
+
+
+# Registered last so neither ever shadows an API route above:
+# - /assets/* are the hashed JS/CSS bundles Vite's build produces.
+# - every other path (/, /dashboard, /verify on a hard refresh, ...) gets the SPA shell;
+#   StaticFiles(html=True) alone only does this for "/" itself, not for client-side routes
+#   that don't correspond to a real file (confirmed live: GET /dashboard 404'd without this).
+app.mount("/assets", StaticFiles(directory=str(STATIC_DIR / "assets")), name="assets")
+
+
+@app.get("/{full_path:path}")
+def spa_fallback(full_path: str):
+    return FileResponse(str(STATIC_DIR / "index.html"))

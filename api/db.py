@@ -33,6 +33,7 @@ CREATE TABLE IF NOT EXISTS signatures (
 );
 CREATE TABLE IF NOT EXISTS documents (
     id TEXT PRIMARY KEY,
+    uploaded_by TEXT NOT NULL REFERENCES users(id),
     doc_type TEXT NOT NULL,
     sha256_hash TEXT NOT NULL,
     uploaded_at TEXT NOT NULL
@@ -131,13 +132,23 @@ def get_references(conn: sqlite3.Connection, signer_id: str):
     return [np.array(json.loads(r["embedding"]), dtype=np.float32) for r in rows]
 
 
-def add_document(conn: sqlite3.Connection, doc_type: str, sha256_hash: str) -> str:
+def add_document(conn: sqlite3.Connection, uploaded_by: str, doc_type: str, sha256_hash: str) -> str:
     row_id = str(uuid.uuid4())
     conn.execute(
-        "INSERT INTO documents (id, doc_type, sha256_hash, uploaded_at) VALUES (?, ?, ?, ?)",
-        (row_id, doc_type, sha256_hash, _now()),
+        "INSERT INTO documents (id, uploaded_by, doc_type, sha256_hash, uploaded_at) VALUES (?, ?, ?, ?, ?)",
+        (row_id, uploaded_by, doc_type, sha256_hash, _now()),
     )
     return row_id
+
+
+def list_verifications_for_user(conn: sqlite3.Connection, user_id: str, limit: int = 50):
+    rows = conn.execute(
+        """SELECT v.*, d.doc_type, d.uploaded_at FROM verifications v
+           JOIN documents d ON d.id = v.document_id
+           WHERE d.uploaded_by = ? ORDER BY v.created_at DESC LIMIT ?""",
+        (user_id, limit),
+    ).fetchall()
+    return [dict(r) for r in rows]
 
 
 def add_verification(conn: sqlite3.Connection, document_id: str, fused: dict) -> str:

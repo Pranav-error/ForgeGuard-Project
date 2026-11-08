@@ -66,9 +66,9 @@ class Orchestrator:
             logger.exception("anomaly detection failed; degrading to missing evidence")
             return None
 
-    def verify(self, conn, image: Image.Image, doc_type: str, signer_id: str | None) -> dict:
+    def verify(self, conn, image: Image.Image, doc_type: str, signer_id: str | None, uploaded_by: str) -> dict:
         doc_hash = hashlib.sha256(image.tobytes()).hexdigest()  # FR-P2
-        document_id = db.add_document(conn, doc_type, doc_hash)
+        document_id = db.add_document(conn, uploaded_by, doc_type, doc_hash)
 
         tamper_out = self._run_tamper(image)
         signature_out = self._run_signature(image, conn, signer_id)

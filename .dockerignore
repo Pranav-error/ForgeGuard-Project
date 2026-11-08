@@ -2,9 +2,11 @@ papers/
 txt/
 *.pdf
 *.docx
-*.html
+/*.html
 storage/
 forgeguard.db
 __pycache__/
 *.pyc
 .git/
+web/node_modules/
+web/dist/

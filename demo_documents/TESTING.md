@@ -9,10 +9,13 @@ resets on redeploy (no persistent disk on the free tier).
 
 ## 1. Sign in
 
-Create an account (any email/password) under "Account", then switch to "Sign in" and log in.
-Steps 2 and 3 unlock once you're signed in.
+From the landing page, click **Get started**. Create an account (any email/password) on the
+"Create account" tab, then switch to "Sign in" and log in — you'll land on the Dashboard with
+Verify and History links (and Admin, if you're an admin — see step 5).
 
 ## 2. Register a reference signature
+
+Go to **Verify** from the top nav.
 
 - **Signer ID:** `demo_signer`
 - **Signature crop image:** `reference_signature.png`
@@ -46,10 +49,11 @@ Upload any document **without** a Signer ID. `sub_scores.signature` comes back `
 reason text says `missing evidence: signature`, and the label is capped below "Genuine" even if
 everything else looks good — the fusion stage never reaches "Genuine" on partial evidence.
 
-## 5. Admin-only routes (optional)
+## 5. Admin page (optional)
 
-These aren't in the web UI (no admin screens were built — just the two routes). To try them,
-you need an admin account:
+There's a real **Admin** page in the nav (only visible/accessible to the `admin` role), showing
+the audit log and a "Run integrity check" button for the ledger. You need an admin account to
+see it — self-registration always creates `verifier`, so create one from a shell:
 
 ```bash
 # locally
@@ -59,16 +63,10 @@ python3 -m api.create_admin you@example.com yourpassword
 # added first for `render ssh` / direct ssh to work — the Shell tab in the browser doesn't)
 ```
 
-Then, with that account's token:
-
-```bash
-curl -s <base-url>/admin/audit-log -H "Authorization: Bearer <admin-token>"
-curl -s <base-url>/admin/ledger/verify -H "Authorization: Bearer <admin-token>"
-```
-
-`ledger/verify` re-derives every block's hash and reports whether the chain is unbroken —
-try editing a block's `document_hash` directly in `forgeguard.db` with a raw `UPDATE`
-statement and re-running it to see it catch the tamper at the exact block (this is exactly
+Then sign in with that account and open **Admin** from the nav. The integrity check re-derives
+every ledger block's hash and reports whether the chain is unbroken — try editing a block's
+`document_hash` directly in `forgeguard.db` with a raw `UPDATE` statement and re-running it to
+see it catch the tamper at the exact block (this is exactly
 how it was verified while building the ledger — see the README).
 
 ## Regenerating these documents
