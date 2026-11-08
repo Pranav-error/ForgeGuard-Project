@@ -2,14 +2,15 @@
 
     uvicorn api.main:app --reload
 """
+import sqlite3
 from pathlib import Path
 
-from fastapi import FastAPI, Form, HTTPException, UploadFile
+from fastapi import Depends, FastAPI, Form, Header, HTTPException, UploadFile
 from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from PIL import Image
 
-from . import db
+from . import auth, db
 from .orchestrator import Orchestrator
 from .visualize import overlay_heatmap
 
@@ -31,6 +32,22 @@ def startup():
     orchestrator = Orchestrator()
 
 
+def get_db():
+    conn = db.connect(DB_PATH)
+    try:
+        yield conn
+        conn.commit()
+    finally:
+        conn.close()
+
+
+def current_user(
+    conn: sqlite3.Connection = Depends(get_db),
+    authorization: str | None = Header(default=None),
+) -> dict:
+    return auth.get_current_user(conn, authorization)
+
+
 @app.get("/")
 def index():
     return FileResponse(str(Path(__file__).parent / "static" / "index.html"))
@@ -41,14 +58,36 @@ def health():
     return {"status": "ok"}
 
 
+@app.post("/auth/register")
+def register(email: str = Form(...), password: str = Form(...), conn: sqlite3.Connection = Depends(get_db)):
+    if db.get_user_by_email(conn, email):
+        raise HTTPException(409, "email already registered")
+    user_id = db.add_user(conn, email, auth.hash_password(password), role="verifier")
+    return {"id": user_id, "email": email, "role": "verifier"}
+
+
+@app.post("/auth/login")
+def login(email: str = Form(...), password: str = Form(...), conn: sqlite3.Connection = Depends(get_db)):
+    user = db.get_user_by_email(conn, email)
+    if user is None or not auth.verify_password(password, user["password_hash"]):
+        raise HTTPException(401, "invalid credentials")
+    token = auth.new_token()
+    db.add_session(conn, user["id"], token)
+    return {"token": token, "role": user["role"]}
+
+
 @app.post("/signatures")
-async def register_signature(signer_id: str = Form(...), image: UploadFile = None):
+async def register_signature(
+    signer_id: str = Form(...),
+    image: UploadFile = None,
+    conn: sqlite3.Connection = Depends(get_db),
+    user: dict = Depends(current_user),
+):
     if image is None:
         raise HTTPException(400, "image file required")
     crop = Image.open(image.file)
     embedding = orchestrator.signature.embed(crop)
-    with db.session(DB_PATH) as conn:
-        row_id = db.add_signature(conn, signer_id, embedding)
+    row_id = db.add_signature(conn, signer_id, embedding)
     return {"id": row_id, "signer_id": signer_id}
 
 
@@ -57,11 +96,11 @@ async def upload_document(
     file: UploadFile,
     doc_type: str = Form(...),
     signer_id: str | None = Form(None),
+    conn: sqlite3.Connection = Depends(get_db),
+    user: dict = Depends(current_user),
 ):
     page = Image.open(file.file).convert("RGB")
-
-    with db.session(DB_PATH) as conn:
-        result = orchestrator.verify(conn, page, doc_type, signer_id)
+    result = orchestrator.verify(conn, page, doc_type, signer_id)
 
     heatmap = result.pop("_heatmap")
     heatmap_url = None
@@ -76,9 +115,8 @@ async def upload_document(
 
 
 @app.get("/documents/{document_id}/verification")
-def get_verification(document_id: str):
-    with db.session(DB_PATH) as conn:
-        row = db.get_verification(conn, document_id)
+def get_verification(document_id: str, conn: sqlite3.Connection = Depends(get_db), user: dict = Depends(current_user)):
+    row = db.get_verification(conn, document_id)
     if row is None:
         raise HTTPException(404, "not found")
     heatmap_path = STORAGE / f"{document_id}.png"
@@ -87,8 +125,14 @@ def get_verification(document_id: str):
 
 
 @app.get("/documents/{document_id}/heatmap")
-def get_heatmap(document_id: str):
+def get_heatmap(document_id: str, user: dict = Depends(current_user)):
     path = STORAGE / f"{document_id}.png"
     if not path.exists():
         raise HTTPException(404, "not found")
     return FileResponse(str(path))
+
+
+@app.get("/admin/audit-log")
+def audit_log(conn: sqlite3.Connection = Depends(get_db), user: dict = Depends(current_user)):
+    auth.require_admin(user)
+    return db.list_audit_log(conn)

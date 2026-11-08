@@ -2,5 +2,6 @@
 __pycache__/
 *.pyc
 checkpoint.pt
+*_checkpoint.pt
 *.db
 storage/heatmaps/*.png

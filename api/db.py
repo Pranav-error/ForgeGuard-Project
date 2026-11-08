@@ -13,6 +13,18 @@ from contextlib import contextmanager
 from datetime import datetime, timezone
 
 SCHEMA = """
+CREATE TABLE IF NOT EXISTS users (
+    id TEXT PRIMARY KEY,
+    email TEXT NOT NULL UNIQUE,
+    password_hash TEXT NOT NULL,
+    role TEXT NOT NULL CHECK (role IN ('verifier', 'admin')),
+    created_at TEXT NOT NULL
+);
+CREATE TABLE IF NOT EXISTS sessions (
+    token TEXT PRIMARY KEY,
+    user_id TEXT NOT NULL REFERENCES users(id),
+    created_at TEXT NOT NULL
+);
 CREATE TABLE IF NOT EXISTS signatures (
     id TEXT PRIMARY KEY,
     signer_id TEXT NOT NULL,
@@ -51,7 +63,10 @@ def _now() -> str:
 
 
 def connect(path: str = "forgeguard.db") -> sqlite3.Connection:
-    conn = sqlite3.connect(path)
+    # check_same_thread=False: FastAPI runs sync route dependencies in a worker
+    # thread but the async route body on the event-loop thread; one connection
+    # per request (never shared across concurrent requests) makes this safe.
+    conn = sqlite3.connect(path, check_same_thread=False)
     conn.row_factory = sqlite3.Row
     conn.executescript(SCHEMA)
     return conn
@@ -65,6 +80,29 @@ def session(path: str = "forgeguard.db"):
         conn.commit()
     finally:
         conn.close()
+
+
+def add_user(conn: sqlite3.Connection, email: str, password_hash: str, role: str = "verifier") -> str:
+    row_id = str(uuid.uuid4())
+    conn.execute(
+        "INSERT INTO users (id, email, password_hash, role, created_at) VALUES (?, ?, ?, ?, ?)",
+        (row_id, email, password_hash, role, _now()),
+    )
+    return row_id
+
+
+def get_user_by_email(conn: sqlite3.Connection, email: str):
+    row = conn.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchone()
+    return dict(row) if row else None
+
+
+def add_session(conn: sqlite3.Connection, user_id: str, token: str) -> None:
+    conn.execute("INSERT INTO sessions (token, user_id, created_at) VALUES (?, ?, ?)", (token, user_id, _now()))
+
+
+def list_audit_log(conn: sqlite3.Connection, limit: int = 100):
+    rows = conn.execute("SELECT * FROM audit_log ORDER BY created_at DESC LIMIT ?", (limit,)).fetchall()
+    return [dict(r) for r in rows]
 
 
 def add_signature(conn: sqlite3.Connection, signer_id: str, embedding) -> str:

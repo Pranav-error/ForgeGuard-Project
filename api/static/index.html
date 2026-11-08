@@ -11,10 +11,25 @@
   button { margin-top: 10px; padding: 6px 14px; }
   pre { background: #f4f4f4; padding: 10px; white-space: pre-wrap; font-size: 12px; }
   img { max-width: 100%; margin-top: 10px; border: 1px solid #ccc; }
+  #authStatus { font-size: 12px; color: #555; }
 </style>
 </head>
 <body>
 <h1>ForgeGuard</h1>
+<p id="authStatus">Not logged in.</p>
+
+<fieldset>
+<legend>0. Account</legend>
+<form id="registerForm">
+  <label>Email</label>
+  <input name="email" type="email" required>
+  <label>Password</label>
+  <input name="password" type="password" required>
+  <button type="submit">Register</button>
+  <button type="submit" formaction="#" id="loginBtn">Log in</button>
+</form>
+<pre id="authOut"></pre>
+</fieldset>
 
 <fieldset>
 <legend>1. Register a reference signature</legend>
@@ -49,15 +64,35 @@
 </fieldset>
 
 <script>
+let token = null;
+
+function authHeaders() {
+  return token ? { 'Authorization': 'Bearer ' + token } : {};
+}
+
+document.getElementById('registerForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const submitter = e.submitter;
+  const fd = new FormData(e.target);
+  const path = submitter && submitter.id === 'loginBtn' ? '/auth/login' : '/auth/register';
+  const r = await fetch(path, { method: 'POST', body: fd });
+  const data = await r.json();
+  document.getElementById('authOut').textContent = JSON.stringify(data, null, 2);
+  if (data.token) {
+    token = data.token;
+    document.getElementById('authStatus').textContent = 'Logged in (role: ' + data.role + ')';
+  }
+});
+
 document.getElementById('sigForm').onsubmit = async (e) => {
   e.preventDefault();
-  const r = await fetch('/signatures', { method: 'POST', body: new FormData(e.target) });
+  const r = await fetch('/signatures', { method: 'POST', body: new FormData(e.target), headers: authHeaders() });
   document.getElementById('sigOut').textContent = JSON.stringify(await r.json(), null, 2);
 };
 
 document.getElementById('docForm').onsubmit = async (e) => {
   e.preventDefault();
-  const r = await fetch('/documents', { method: 'POST', body: new FormData(e.target) });
+  const r = await fetch('/documents', { method: 'POST', body: new FormData(e.target), headers: authHeaders() });
   const data = await r.json();
   document.getElementById('docOut').textContent = JSON.stringify(data, null, 2);
   const img = document.getElementById('heatmap');
