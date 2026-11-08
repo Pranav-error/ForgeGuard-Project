@@ -1,7 +1,14 @@
 """ForgeGuard REST API -- FR-P1 (Detailed Design Document Section 8).
 
     uvicorn api.main:app --reload
+
+Checkpoints are part of the app image and always load from ROOT. The SQLite
+DB and heatmap files are *data*, not app code: they live under
+FORGEGUARD_DATA_DIR (defaults to ROOT for local dev) so a hosting platform
+can point it at a persistent volume -- e.g. Render's disk mounted at /data --
+without surviving only as long as the container does.
 """
+import os
 import sqlite3
 from pathlib import Path
 
@@ -15,9 +22,10 @@ from .orchestrator import Orchestrator
 from .visualize import overlay_heatmap
 
 ROOT = Path(__file__).resolve().parent.parent
-STORAGE = ROOT / "storage" / "heatmaps"
+DATA_DIR = Path(os.environ.get("FORGEGUARD_DATA_DIR", str(ROOT)))
+STORAGE = DATA_DIR / "storage" / "heatmaps"
 STORAGE.mkdir(parents=True, exist_ok=True)
-DB_PATH = str(ROOT / "forgeguard.db")
+DB_PATH = str(DATA_DIR / "forgeguard.db")
 
 app = FastAPI(title="ForgeGuard")
 app.mount("/static", StaticFiles(directory=str(Path(__file__).parent / "static")), name="static")

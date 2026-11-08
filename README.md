@@ -363,8 +363,40 @@ python3 -m api.create_admin admin@example.com somepassword
 ```
 
 `api/main.py` automatically loads `tamper_checkpoint.pt`, `signature_checkpoint.pt`, and
-`anomaly_checkpoint.pt` from the repo root if present (all gitignored — train your own, or run
-untrained for interface/contract testing only).
+`anomaly_checkpoint.pt` from the repo root if present. The three checkpoints trained for this
+project (see [Training results](#training-results)) are committed to the repo — small enough
+(~3.4MB total) that there's no reason to make a hosted deployment retrain on boot. Retrain your
+own with the commands below any time; the new files overwrite the committed ones.
+
+### Deploying to Render
+
+The app is Dockerised (`Dockerfile`) because it needs the `tesseract` binary installed alongside
+the Python/torch stack, and `render.yaml` describes it as a Render **Blueprint**: an always-on web
+service with a 1GB persistent disk mounted at `/data`, so the SQLite DB, uploaded-document hashes,
+heatmaps, and the ledger survive restarts and redeploys — not just the container's own filesystem.
+
+This needs a paid plan: Render's **free tier has no persistent-disk support and spins the service
+down after 15 minutes of inactivity**, which fails both "always-on" and "persistent." The
+Blueprint requests the **Starter** plan (~$7/month) plus the disk's own small monthly cost — both
+billed to whoever connects the repo, since that requires a Render account and payment method.
+
+1. Push this repo to GitHub (already done) and sign in to Render with that GitHub account.
+2. **New** → **Blueprint**, select this repo. Render reads `render.yaml` and proposes the
+   `forgeguard` web service with its disk already configured — review and **Apply**.
+3. First boot builds the Docker image (a few minutes, mostly the torch install) and starts
+   `uvicorn` bound to Render's `$PORT`. Check `https://<your-service>.onrender.com/health`.
+4. Create an admin account on the deployed instance — Render's dashboard has a **Shell** tab for
+   the running service:
+   ```bash
+   python3 -m api.create_admin admin@example.com somepassword
+   ```
+   (`FORGEGUARD_DATA_DIR=/data` is already set from `render.yaml`, so this writes to the
+   persistent disk, not the container's throwaway filesystem.)
+5. Open the service URL — `GET /` serves the same static test page as local dev, now talking to
+   the hosted API.
+
+Local development is unaffected: `FORGEGUARD_DATA_DIR` defaults to the repo root when unset, which
+is what running `uvicorn api.main:app --reload` on your own machine still does.
 
 ### Training each model
 

@@ -1,0 +1,10 @@
+papers/
+txt/
+*.pdf
+*.docx
+*.html
+storage/
+forgeguard.db
+__pycache__/
+*.pyc
+.git/

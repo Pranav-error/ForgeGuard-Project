@@ -3,6 +3,10 @@ __pycache__/
 *.pyc
 checkpoint.pt
 *_checkpoint.pt
+# ...except the three trained checkpoints the app actually ships with (small, needed for hosting)
+!/tamper_checkpoint.pt
+!/signature_checkpoint.pt
+!/anomaly_checkpoint.pt
 *.db
 storage/heatmaps/*.png
 out.html

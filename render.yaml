@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: forgeguard
+    runtime: docker
+    plan: starter          # paid plan required for an always-on instance + a disk
+    healthCheckPath: /health
+    envVars:
+      - key: FORGEGUARD_DATA_DIR
+        value: /data
+    disk:
+      name: forgeguard-data
+      mountPath: /data
+      sizeGB: 1

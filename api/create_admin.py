@@ -2,13 +2,15 @@
 
     python3 -m api.create_admin admin@example.com somepassword
 """
+import os
 import sys
 from pathlib import Path
 
 from . import auth, db
 
 ROOT = Path(__file__).resolve().parent.parent
-DB_PATH = str(ROOT / "forgeguard.db")
+DATA_DIR = Path(os.environ.get("FORGEGUARD_DATA_DIR", str(ROOT)))
+DB_PATH = str(DATA_DIR / "forgeguard.db")
 
 
 def main():
