@@ -89,10 +89,24 @@ label is capped below Genuine) instead of failing the request — see `api/orche
 
 Training and evaluation for the two learned models (`tamper_localisation`, `signature_verification`)
 currently run against synthetic data generators — stand-ins for the FSD dataset (paper [29]) and
-CEDAR/BHSig260 (papers [1]–[17]) respectively, until real labelled data is available. Reported
-metrics should not be trusted as final numbers until trained on real data (see the `ponytail:`
-notes in each module's `dataset.py`). The OCR, fusion, API and persistence layers run against real
-inputs (actual Tesseract OCR, actual SQLite writes) with no synthetic stand-in.
+CEDAR/BHSig260 (papers [1]–[17]) respectively, until real labelled data is available. A 15-epoch
+run on each (`python3 -m tamper_localisation.train --epochs 15 ...` /
+`python3 -m signature_verification.train --epochs 15 ...`) gave, on held-out synthetic data:
+
+| Model | Metrics |
+|---|---|
+| Tamper localisation | precision 0.929, recall 0.966, F1 0.947, IoU 0.900, AUC 0.997 |
+| Signature verification | EER 1.6%, accuracy 98.4% at the EER threshold (0.88) |
+
+These numbers describe how well each model learned its *synthetic* task, not real-document
+accuracy — don't quote them as the latter (see the `ponytail:` notes in each module's
+`dataset.py`). What they do confirm, verified live end to end with the trained checkpoints: the
+pipeline correctly ranks a genuine signature crop above an impostor's (55 vs. 14 on a held-out
+test page, via the full detect→clean→embed path, not just on clean training-style renders) and a
+tampered page below a genuine one (21 vs. 45). The OCR, fusion, API and persistence layers run
+against real inputs (actual Tesseract OCR, actual SQLite writes) with no synthetic stand-in.
+`api/main.py` loads `tamper_checkpoint.pt` / `signature_checkpoint.pt` from the repo root
+automatically if present (gitignored — train your own with the commands above).
 
 ## Status
 

@@ -9,7 +9,8 @@ from PIL import Image
 from scipy import ndimage
 
 INK_THRESHOLD = 180       # pixels darker than this (0-255 grayscale) count as ink
-MIN_AREA = 200             # reject specks
+MIN_AREA = 60              # reject specks; genuine pen strokes are thin, so this stays low --
+                           # the aspect filter below is what actually rejects ruled lines
 MAX_ASPECT = 8.0           # reject long thin ruled lines (width/height or height/width)
 SEARCH_BAND = (0.5, 1.0)   # fraction of page height to search (signatures sit low on a page)
 

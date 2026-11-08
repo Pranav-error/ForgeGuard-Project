@@ -29,7 +29,12 @@ orchestrator: Orchestrator | None = None
 def startup():
     global orchestrator
     db.connect(DB_PATH).close()  # ensure schema exists
-    orchestrator = Orchestrator()
+    tamper_ckpt = ROOT / "tamper_checkpoint.pt"
+    signature_ckpt = ROOT / "signature_checkpoint.pt"
+    orchestrator = Orchestrator(
+        tamper_checkpoint=str(tamper_ckpt) if tamper_ckpt.exists() else None,
+        signature_checkpoint=str(signature_ckpt) if signature_ckpt.exists() else None,
+    )
 
 
 def get_db():
