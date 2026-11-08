@@ -18,7 +18,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 WORKDIR /app
 
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# CPU-only torch wheel: plain `pip install torch` on Linux pulls the full CUDA runtime
+# (cudnn/nccl/cusparselt, ~1.5GB extra) even though this service only ever runs on CPU
+# (NFR-2) -- confirmed live, it timed out a build entirely downloading GPU deps nothing
+# here will ever use. The CPU wheel index skips all of that.
+RUN pip install --no-cache-dir --timeout 180 torch --index-url https://download.pytorch.org/whl/cpu \
+    && pip install --no-cache-dir --timeout 180 -r requirements.txt
 
 COPY api/ api/
 COPY tamper_localisation/ tamper_localisation/
