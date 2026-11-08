@@ -43,9 +43,19 @@ CREATE TABLE IF NOT EXISTS verifications (
     signature_sub_score INTEGER,
     tamper_sub_score INTEGER,
     ocr_sub_score INTEGER,
+    anomaly_sub_score INTEGER,
     final_score INTEGER,
     label TEXT NOT NULL,
     reason_text TEXT NOT NULL,
+    created_at TEXT NOT NULL
+);
+CREATE TABLE IF NOT EXISTS ledger_blocks (
+    block_index INTEGER PRIMARY KEY,
+    document_id TEXT NOT NULL REFERENCES documents(id),
+    verification_id TEXT NOT NULL REFERENCES verifications(id),
+    document_hash TEXT NOT NULL,
+    prev_hash TEXT NOT NULL,
+    block_hash TEXT NOT NULL,
     created_at TEXT NOT NULL
 );
 CREATE TABLE IF NOT EXISTS audit_log (
@@ -136,10 +146,10 @@ def add_verification(conn: sqlite3.Connection, document_id: str, fused: dict) ->
     conn.execute(
         """INSERT INTO verifications
            (id, document_id, signature_sub_score, tamper_sub_score, ocr_sub_score,
-            final_score, label, reason_text, created_at)
-           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+            anomaly_sub_score, final_score, label, reason_text, created_at)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
         (row_id, document_id, subs.get("signature"), subs.get("tamper"), subs.get("ocr"),
-         fused.get("score"), fused["label"], fused["reason"], _now()),
+         subs.get("anomaly"), fused.get("score"), fused["label"], fused["reason"], _now()),
     )
     return row_id
 
@@ -149,6 +159,45 @@ def add_audit(conn: sqlite3.Connection, action: str, verification_id: str | None
         "INSERT INTO audit_log (id, action, verification_id, detail_json, created_at) VALUES (?, ?, ?, ?, ?)",
         (str(uuid.uuid4()), action, verification_id, json.dumps(detail), _now()),
     )
+
+
+def add_block(conn: sqlite3.Connection, document_id: str, verification_id: str, document_hash: str) -> dict:
+    """Append the next block to the hash chain (Phase 2 -- Gap 9 / O9)."""
+    from ledger import make_block, GENESIS_HASH
+
+    last = conn.execute("SELECT * FROM ledger_blocks ORDER BY block_index DESC LIMIT 1").fetchone()
+    index = (last["block_index"] + 1) if last else 0
+    prev_hash = last["block_hash"] if last else GENESIS_HASH
+    block = make_block(index, document_id, verification_id, document_hash, prev_hash, _now())
+    conn.execute(
+        """INSERT INTO ledger_blocks
+           (block_index, document_id, verification_id, document_hash, prev_hash, block_hash, created_at)
+           VALUES (?, ?, ?, ?, ?, ?, ?)""",
+        (block.index, block.document_id, block.verification_id, block.document_hash,
+         block.prev_hash, block.block_hash, block.created_at),
+    )
+    return block.__dict__
+
+
+def get_block_for_document(conn: sqlite3.Connection, document_id: str):
+    row = conn.execute(
+        "SELECT * FROM ledger_blocks WHERE document_id = ? ORDER BY block_index DESC LIMIT 1", (document_id,)
+    ).fetchone()
+    return dict(row) if row else None
+
+
+def verify_chain(conn: sqlite3.Connection) -> dict:
+    """Re-derive every block's hash and check the linkage (Phase 2 integrity check)."""
+    from ledger import Block, verify_links
+
+    rows = conn.execute("SELECT * FROM ledger_blocks ORDER BY block_index ASC").fetchall()
+    blocks = [
+        Block(r["block_index"], r["document_id"], r["verification_id"], r["document_hash"],
+              r["prev_hash"], r["created_at"], r["block_hash"])
+        for r in rows
+    ]
+    valid, broken_at = verify_links(blocks)
+    return {"valid": valid, "length": len(blocks), "broken_at": broken_at}
 
 
 def get_verification(conn: sqlite3.Connection, document_id: str):

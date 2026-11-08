@@ -5,3 +5,8 @@ checkpoint.pt
 *_checkpoint.pt
 *.db
 storage/heatmaps/*.png
+out.html
+design_out.html
+objectives_out.html
+detailed_design_out.html
+paper_out.html

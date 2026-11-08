@@ -1,4 +1,7 @@
 """Fusion & Scoring -- FR-D5, FR-D6, O5, O6 (Detailed Design Document Section 5).
+Extended in Phase 2 with a fourth, optional evidence source: the anomaly detector
+(Gap 8 / O8). The interface stays additive -- callers that only ever pass
+signature/tamper/ocr (anomaly=None) see unchanged behaviour.
 
 Each input sub-score is normalised to a common "evidence toward genuine"
 direction (0 = fully forged, 100 = fully genuine) before weighting:
@@ -7,23 +10,27 @@ direction (0 = fully forged, 100 = fully genuine) before weighting:
     so it is inverted here: tamper_sub_score = 100 - tamper["score"].
   - the OCR sub-score is already genuine-direction (fraction of fields/
     arithmetic that passed).
+  - the anomaly detector's score is anomaly-confidence (higher = less like a
+    genuine page), so it is inverted the same way as tamper.
 A missing sub-score never lets the result reach "Genuine" (5.6 in the
 Detailed Design Document): its weight is redistributed across whatever
 evidence is available, and the label is capped at "Suspicious".
 """
-DEFAULT_WEIGHTS = {"signature": 1 / 3, "tamper": 1 / 3, "ocr": 1 / 3}
+DEFAULT_WEIGHTS = {"signature": 0.3, "tamper": 0.3, "ocr": 0.2, "anomaly": 0.2}
 GENUINE_THRESHOLD = 80
 SUSPICIOUS_FLOOR = 40
 
 
-def _normalise(signature: dict | None, tamper: dict | None, ocr: dict | None) -> dict:
-    subs = {"signature": None, "tamper": None, "ocr": None}
+def _normalise(signature: dict | None, tamper: dict | None, ocr: dict | None, anomaly: dict | None) -> dict:
+    subs = {"signature": None, "tamper": None, "ocr": None, "anomaly": None}
     if signature and signature.get("similarity") is not None:
         subs["signature"] = round(100 * signature["similarity"])
     if tamper and tamper.get("score") is not None:
         subs["tamper"] = 100 - tamper["score"]
     if ocr and ocr.get("ocr_sub_score") is not None:
         subs["ocr"] = ocr["ocr_sub_score"]
+    if anomaly and anomaly.get("score") is not None:
+        subs["anomaly"] = 100 - anomaly["score"]
     return subs
 
 
@@ -37,9 +44,15 @@ def _reason(available: dict, missing: set) -> str:
     return "; ".join(parts) if parts else "all checks passed with high confidence"
 
 
-def score(signature: dict | None, tamper: dict | None, ocr: dict | None, weights: dict | None = None) -> dict:
+def score(
+    signature: dict | None,
+    tamper: dict | None,
+    ocr: dict | None,
+    anomaly: dict | None = None,
+    weights: dict | None = None,
+) -> dict:
     weights = weights or DEFAULT_WEIGHTS
-    subs = _normalise(signature, tamper, ocr)
+    subs = _normalise(signature, tamper, ocr, anomaly)
     available = {k: v for k, v in subs.items() if v is not None}
     missing = set(subs) - set(available)
 

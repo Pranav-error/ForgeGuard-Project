@@ -31,9 +31,11 @@ def startup():
     db.connect(DB_PATH).close()  # ensure schema exists
     tamper_ckpt = ROOT / "tamper_checkpoint.pt"
     signature_ckpt = ROOT / "signature_checkpoint.pt"
+    anomaly_ckpt = ROOT / "anomaly_checkpoint.pt"
     orchestrator = Orchestrator(
         tamper_checkpoint=str(tamper_ckpt) if tamper_ckpt.exists() else None,
         signature_checkpoint=str(signature_ckpt) if signature_ckpt.exists() else None,
+        anomaly_checkpoint=str(anomaly_ckpt) if anomaly_ckpt.exists() else None,
     )
 
 
@@ -141,3 +143,19 @@ def get_heatmap(document_id: str, user: dict = Depends(current_user)):
 def audit_log(conn: sqlite3.Connection = Depends(get_db), user: dict = Depends(current_user)):
     auth.require_admin(user)
     return db.list_audit_log(conn)
+
+
+@app.get("/documents/{document_id}/anchor")
+def get_anchor(document_id: str, conn: sqlite3.Connection = Depends(get_db), user: dict = Depends(current_user)):
+    """Phase 2: the ledger block that anchors this document's hash (Gap 9 / O9)."""
+    block = db.get_block_for_document(conn, document_id)
+    if block is None:
+        raise HTTPException(404, "not found")
+    return block
+
+
+@app.get("/admin/ledger/verify")
+def verify_ledger(conn: sqlite3.Connection = Depends(get_db), user: dict = Depends(current_user)):
+    """Phase 2: re-derive every block's hash and check the chain is unbroken."""
+    auth.require_admin(user)
+    return db.verify_chain(conn)
