@@ -72,7 +72,19 @@ export function GhostButton({
   )
 }
 
-export function FilePicker({ label, onChange, required }: { label: string; onChange: (f: File | null) => void; required?: boolean }) {
+export function FilePicker({
+  label,
+  onChange,
+  onMultiChange,
+  multiple,
+  required,
+}: {
+  label: string
+  onChange?: (f: File | null) => void
+  onMultiChange?: (files: File[]) => void
+  multiple?: boolean
+  required?: boolean
+}) {
   return (
     <label className="flex items-center gap-2.5 border-[1.5px] border-dashed border-slate-300 rounded-[10px] px-3.5 py-2.5 text-[13px] text-slate-500 cursor-pointer hover:border-brand-600 hover:bg-indigo-50/40">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -84,9 +96,13 @@ export function FilePicker({ label, onChange, required }: { label: string; onCha
       <input
         type="file"
         accept="image/*"
+        multiple={multiple}
         required={required}
         className="hidden"
-        onChange={(e) => onChange(e.target.files?.[0] ?? null)}
+        onChange={(e) => {
+          onChange?.(e.target.files?.[0] ?? null)
+          onMultiChange?.(Array.from(e.target.files ?? []))
+        }}
       />
     </label>
   )

@@ -10,7 +10,7 @@ import json
 import sqlite3
 import uuid
 from contextlib import contextmanager
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS users (
@@ -216,3 +216,45 @@ def get_verification(conn: sqlite3.Connection, document_id: str):
         "SELECT * FROM verifications WHERE document_id = ? ORDER BY created_at DESC LIMIT 1", (document_id,)
     ).fetchone()
     return dict(row) if row else None
+
+
+def get_document(conn: sqlite3.Connection, document_id: str):
+    row = conn.execute("SELECT * FROM documents WHERE id = ?", (document_id,)).fetchone()
+    return dict(row) if row else None
+
+
+def analytics_for_user(conn: sqlite3.Connection, user_id: str, days: int = 14) -> dict:
+    """Aggregate stats for the Analytics page: label breakdown, score averages, a daily count
+    series for the last `days` days. Computed in Python over a small per-user row set rather
+    than SQL aggregates -- simplest thing that works at this scale (NFR-1 budget is per-request
+    latency, not report generation)."""
+    rows = list_verifications_for_user(conn, user_id, limit=1000)
+
+    by_label: dict[str, int] = {}
+    scores = []
+    sub_sums = {"signature": [], "tamper": [], "ocr": [], "anomaly": []}
+    by_day: dict[str, int] = {}
+    cutoff = datetime.now(timezone.utc).date()
+    for r in rows:
+        by_label[r["label"]] = by_label.get(r["label"], 0) + 1
+        if r["final_score"] is not None:
+            scores.append(r["final_score"])
+        for k in sub_sums:
+            v = r.get(f"{k}_sub_score")
+            if v is not None:
+                sub_sums[k].append(v)
+        day = r["created_at"][:10]
+        by_day[day] = by_day.get(day, 0) + 1
+
+    day_series = []
+    for i in range(days - 1, -1, -1):
+        d = (cutoff - timedelta(days=i)).isoformat()
+        day_series.append({"date": d, "count": by_day.get(d, 0)})
+
+    return {
+        "total": len(rows),
+        "by_label": by_label,
+        "avg_score": round(sum(scores) / len(scores), 1) if scores else None,
+        "avg_sub_scores": {k: (round(sum(v) / len(v), 1) if v else None) for k, v in sub_sums.items()},
+        "daily": day_series,
+    }

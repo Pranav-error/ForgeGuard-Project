@@ -2,6 +2,7 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { AdminRoute, ProtectedRoute } from './components/ProtectedRoute'
 import { AuthProvider } from './lib/auth'
 import { Admin } from './pages/Admin'
+import { Analytics } from './pages/Analytics'
 import { Dashboard } from './pages/Dashboard'
 import { History } from './pages/History'
 import { Landing } from './pages/Landing'
@@ -20,6 +21,7 @@ export default function App() {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/verify" element={<Verify />} />
             <Route path="/history" element={<History />} />
+            <Route path="/analytics" element={<Analytics />} />
           </Route>
 
           <Route element={<AdminRoute />}>

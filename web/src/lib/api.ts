@@ -48,6 +48,19 @@ export interface AuditLogRow {
   created_at: string
 }
 
+export interface Analytics {
+  total: number
+  by_label: Record<string, number>
+  avg_score: number | null
+  avg_sub_scores: SubScores
+  daily: { date: string; count: number }[]
+}
+
+export interface BatchResultRow extends Partial<VerificationResult> {
+  filename: string
+  error?: string
+}
+
 class ApiError extends Error {}
 
 function authHeaders(session: AuthSession | null): HeadersInit {
@@ -112,6 +125,34 @@ export const api = {
     return unwrap<{ valid: boolean; length: number; broken_at: number | null }>(
       await fetch('/admin/ledger/verify', { headers: authHeaders(session) }),
     )
+  },
+
+  async analytics(session: AuthSession) {
+    return unwrap<Analytics>(await fetch('/analytics/summary', { headers: authHeaders(session) }))
+  },
+
+  async verifyBatch(session: AuthSession, files: File[], docType: string, signerId: string) {
+    const fd = new FormData()
+    for (const f of files) fd.append('files', f)
+    fd.set('doc_type', docType)
+    if (signerId) fd.set('signer_id', signerId)
+    return unwrap<BatchResultRow[]>(
+      await fetch('/documents/batch', { method: 'POST', body: fd, headers: authHeaders(session) }),
+    )
+  },
+
+  /** Fetches the PDF with the auth header (a plain <a href> can't carry one) and triggers a
+   * browser download via a throwaway object URL + anchor click. */
+  async downloadReport(session: AuthSession, documentId: string) {
+    const res = await fetch(`/documents/${documentId}/report.pdf`, { headers: authHeaders(session) })
+    if (!res.ok) throw new ApiError('Could not generate report')
+    const blob = await res.blob()
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `forgeguard-report-${documentId.slice(0, 8)}.pdf`
+    a.click()
+    URL.revokeObjectURL(url)
   },
 }
 

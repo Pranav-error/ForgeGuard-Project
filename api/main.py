@@ -20,12 +20,13 @@ import sqlite3
 from pathlib import Path
 
 from fastapi import Depends, FastAPI, Form, Header, HTTPException, UploadFile
-from fastapi.responses import FileResponse, JSONResponse
+from fastapi.responses import FileResponse, JSONResponse, Response
 from fastapi.staticfiles import StaticFiles
 from PIL import Image
 
 from . import auth, db
 from .orchestrator import Orchestrator
+from .report import build_report_pdf
 from .visualize import overlay_heatmap
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -108,15 +109,8 @@ async def register_signature(
     return {"id": row_id, "signer_id": signer_id}
 
 
-@app.post("/documents")
-async def upload_document(
-    file: UploadFile,
-    doc_type: str = Form(...),
-    signer_id: str | None = Form(None),
-    conn: sqlite3.Connection = Depends(get_db),
-    user: dict = Depends(current_user),
-):
-    page = Image.open(file.file).convert("RGB")
+def _verify_one(conn: sqlite3.Connection, user: dict, page: Image.Image, doc_type: str, signer_id: str | None) -> dict:
+    """Shared by /documents and /documents/batch -- same pipeline call, same heatmap handling."""
     result = orchestrator.verify(conn, page, doc_type, signer_id, uploaded_by=user["id"])
 
     heatmap = result.pop("_heatmap")
@@ -128,7 +122,66 @@ async def upload_document(
         heatmap_url = f"/documents/{result['document_id']}/heatmap"
 
     result["heatmap_url"] = heatmap_url
-    return JSONResponse(result)
+    return result
+
+
+@app.post("/documents")
+async def upload_document(
+    file: UploadFile,
+    doc_type: str = Form(...),
+    signer_id: str | None = Form(None),
+    conn: sqlite3.Connection = Depends(get_db),
+    user: dict = Depends(current_user),
+):
+    page = Image.open(file.file).convert("RGB")
+    return JSONResponse(_verify_one(conn, user, page, doc_type, signer_id))
+
+
+@app.post("/documents/batch")
+async def upload_batch(
+    files: list[UploadFile],
+    doc_type: str = Form(...),
+    signer_id: str | None = Form(None),
+    conn: sqlite3.Connection = Depends(get_db),
+    user: dict = Depends(current_user),
+):
+    """Batch verification -- the same single-document pipeline run once per file, in one
+    request. Competing products (Onfido, Jumio, AU10TIX) all offer bulk/batch processing;
+    this is the minimal real version of that, not a separate queueing system."""
+    results = []
+    for f in files:
+        try:
+            page = Image.open(f.file).convert("RGB")
+            r = _verify_one(conn, user, page, doc_type, signer_id)
+            results.append({"filename": f.filename, **r})
+        except Exception as e:
+            results.append({"filename": f.filename, "error": str(e)})
+    return JSONResponse(results)
+
+
+@app.get("/documents/{document_id}/report.pdf")
+def get_report(document_id: str, conn: sqlite3.Connection = Depends(get_db), user: dict = Depends(current_user)):
+    """FR-U3: a downloadable verification report -- every competing product in this space
+    ships one; this was declared in the design docs from the start but never built until now."""
+    document = db.get_document(conn, document_id)
+    verification = db.get_verification(conn, document_id)
+    if document is None or verification is None:
+        raise HTTPException(404, "not found")
+    heatmap_path = STORAGE / f"{document_id}.png"
+    pdf_bytes = build_report_pdf(document, verification, str(heatmap_path) if heatmap_path.exists() else None)
+    return Response(
+        content=pdf_bytes,
+        media_type="application/pdf",
+        headers={"Content-Disposition": f'inline; filename="forgeguard-report-{document_id[:8]}.pdf"'},
+    )
+
+
+@app.get("/analytics/summary")
+def analytics(conn: sqlite3.Connection = Depends(get_db), user: dict = Depends(current_user)):
+    # not bare "/analytics": that's also the SPA's own page route, so a hard refresh or direct
+    # navigation there would hit this handler first (no auth header on a plain navigation) and
+    # show raw JSON instead of the page -- caught live, same bug class as the earlier /admin fix.
+    return db.analytics_for_user(conn, user["id"])
 
 
 @app.get("/verifications")

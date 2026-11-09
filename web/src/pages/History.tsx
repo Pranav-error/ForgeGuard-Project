@@ -1,7 +1,7 @@
 import { Fragment, useEffect, useState } from 'react'
 import { api, type HistoryRow } from '../lib/api'
 import { useAuth } from '../lib/auth'
-import { LabelPill } from '../components/ui'
+import { GhostButton, LabelPill } from '../components/ui'
 
 function formatDate(iso: string) {
   return new Date(iso).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' })
@@ -11,11 +11,22 @@ export function History() {
   const { session } = useAuth()
   const [rows, setRows] = useState<HistoryRow[] | null>(null)
   const [expanded, setExpanded] = useState<string | null>(null)
+  const [downloadingId, setDownloadingId] = useState<string | null>(null)
 
   useEffect(() => {
     if (!session) return
     api.history(session).then(setRows).catch(() => setRows([]))
   }, [session])
+
+  async function handleDownload(documentId: string) {
+    if (!session) return
+    setDownloadingId(documentId)
+    try {
+      await api.downloadReport(session, documentId)
+    } finally {
+      setDownloadingId(null)
+    }
+  }
 
   return (
     <div className="max-w-3xl mx-auto px-5">
@@ -59,12 +70,23 @@ export function History() {
                         <div className="bg-slate-50 border border-slate-200 rounded-[10px] px-4 py-3 text-[13px] text-slate-600 mb-2">
                           {r.reason_text}
                         </div>
-                        <div className="grid grid-cols-4 gap-2 text-[12px] text-slate-500">
+                        <div className="grid grid-cols-4 gap-2 text-[12px] text-slate-500 mb-3">
                           <div>Signature: {r.signature_sub_score ?? 'N/A'}</div>
                           <div>Tamper: {r.tamper_sub_score ?? 'N/A'}</div>
                           <div>OCR: {r.ocr_sub_score ?? 'N/A'}</div>
                           <div>Anomaly: {r.anomaly_sub_score ?? 'N/A'}</div>
                         </div>
+                        <GhostButton
+                          className="!px-3.5 !py-2 !text-xs"
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            handleDownload(r.document_id)
+                          }}
+                          loading={downloadingId === r.document_id}
+                          loadingText="Generating…"
+                        >
+                          Download report
+                        </GhostButton>
                       </td>
                     </tr>
                   )}

@@ -14,6 +14,8 @@ export default defineConfig({
       // not a bare '/admin' prefix: that also matches the SPA's own /admin page route
       '/admin/audit-log': 'http://127.0.0.1:8000',
       '/admin/ledger': 'http://127.0.0.1:8000',
+      // same reasoning: /analytics/summary (API), not bare /analytics (the SPA page)
+      '/analytics/summary': 'http://127.0.0.1:8000',
       '/health': 'http://127.0.0.1:8000',
     },
   },

@@ -31,6 +31,7 @@ documents is implemented, trained, tested, and verified working end to end throu
 - [The Ledger (Phase 2 — blockchain-style anchoring)](#the-ledger-phase-2--blockchain-style-anchoring-ledger)
 - [The Orchestrator and API (`api/`)](#the-orchestrator-and-api-api)
 - [The Web Frontend (`web/`)](#the-web-frontend-web)
+- [Competitive research behind this round](#competitive-research-behind-this-round)
 - [Data design](#data-design)
 - [Setup and running the system](#setup-and-running-the-system)
 - [Training results](#training-results)
@@ -307,12 +308,15 @@ non-expiring — documented as a prototype-grade implementation (see the `ponyta
 | `POST /auth/login` | — | Get a bearer token |
 | `POST /signatures` | verifier | Register a reference signature for a signer |
 | `POST /documents` | verifier | Upload a document; runs the full 5-service pipeline synchronously and returns the fused result |
+| `POST /documents/batch` | verifier | Same pipeline, one `doc_type` applied to any number of files in one request — competing products (Onfido, Jumio, AU10TIX) all offer bulk processing; this is the minimal real version |
 | `GET /documents/{id}/verification` | verifier | Re-fetch a past result from SQLite |
 | `GET /documents/{id}/heatmap` | verifier | The rendered tamper-heatmap overlay (PNG) |
+| `GET /documents/{id}/report.pdf` | verifier | A downloadable PDF verification report (`api/report.py`, reportlab) — declared as FR-U3 from the first design draft, not actually built until now |
 | `GET /documents/{id}/anchor` | verifier | The ledger block anchoring this document's hash |
 | `GET /admin/audit-log` | admin | The append-only audit trail |
 | `GET /admin/ledger/verify` | admin | Re-derive every ledger block's hash and report whether the chain is unbroken |
 | `GET /verifications` | verifier | The signed-in user's own past verifications (History page) |
+| `GET /analytics/summary` | verifier | Label breakdown, score averages, 14-day activity series (Analytics page) — not bare `/analytics`, see below |
 | `GET /{anything-else}` | — | Falls through to the React app's `index.html` (client-side routing) — see [The Web Frontend](#the-web-frontend-web) |
 
 A `POST /documents` response looks like:
@@ -341,15 +345,16 @@ scrolling form, no real navigation) and had a real bug: it loaded Tailwind from
 `cdn.tailwindcss.com`, which never loaded in the browser-automation environment used to test it,
 silently breaking the entire layout. A real build step has no such runtime dependency to fail.
 
-**Pages**, each a real route (`/`, `/login`, `/dashboard`, `/verify`, `/history`, `/admin`):
+**Pages**, each a real route (`/`, `/login`, `/dashboard`, `/verify`, `/history`, `/analytics`, `/admin`):
 
 | Route | Purpose |
 |---|---|
 | `/` | Public landing page — what ForgeGuard is, the four services, a "Get started" CTA. |
 | `/login` | Sign in / create account (tab-switched), stores the session in `sessionStorage`. |
-| `/dashboard` | Signed-in home — links to Verify and History (and Admin, if the role is `admin`). |
-| `/verify` | Register a reference signature, upload a document, see the full result (score, label, reason, four sub-score bars, heatmap overlay, raw JSON). |
-| `/history` | Every document *this user* has verified (needs `documents.uploaded_by`, added for this). |
+| `/dashboard` | Signed-in home — links to Verify, History and Analytics (and Admin, if the role is `admin`). |
+| `/verify` | Register a reference signature, upload a document, see the full result (score, label, reason, four sub-score bars, heatmap overlay, raw JSON, a PDF report download) — and a third card for batch-verifying several documents at once, results in a table. |
+| `/history` | Every document *this user* has verified (needs `documents.uploaded_by`, added for this), each row expandable with a report-download button. |
+| `/analytics` | Total verifications, average score, label-breakdown bars, average sub-scores, and a 14-day activity chart — hand-rolled SVG/CSS, no charting library pulled in for four small visualisations. |
 | `/admin` | Audit log table + a button that runs the ledger integrity check live. Guarded client-side; the API enforces the real guard (`auth.require_admin`). |
 
 **Auth across pages:** the bearer token, role and email live in `sessionStorage` (not just a JS
@@ -384,7 +389,24 @@ For local development: run the backend (`uvicorn api.main:app --reload`) and, se
 `web/vite.config.ts`). That proxy config deliberately does **not** use a bare `/admin` prefix —
 it would also swallow requests to the SPA's own `/admin` *page* route, which shares the prefix
 with the `/admin/*` API routes (caught live: a hard refresh on `/admin` returned the backend's
-raw 404 JSON instead of the page).
+raw 404 JSON instead of the page). The same collision bit `/analytics` directly: the API route
+was originally bare `GET /analytics`, *identical* to the page's own path, so a hard refresh there
+always hit the API handler first and showed `{"detail":"missing bearer token"}` instead of the
+page — caught live after reconnecting the browser mid-session. Fixed by moving the API route to
+`/analytics/summary`, matching the `/admin/audit-log` pattern: the bare path is always the page.
+
+## Competitive research behind this round
+
+Every major competitor in this space (Onfido, Jumio, Veriff, AU10TIX) converges on the same
+feature set: document authenticity + biometric/liveness checks + configurable risk scoring +
+downloadable compliance reports + analytics dashboards + batch processing. ForgeGuard already had
+strong document authenticity (four fused detectors) and configurable risk scoring (fusion
+weights); the honestly-missing pieces were a downloadable report (declared as FR-U3 since the
+first design draft, never built), analytics, and batch processing — all three closed this round.
+Biometric/liveness checks (selfie-to-ID face matching) remain explicitly out of scope: building
+one honestly needs real face data this project doesn't have, the same reasoning that kept the
+other learned models on synthetic stand-ins rather than a weaker, unconvincing version of a
+pretrained-face-model wrapper.
 
 ## Data design
 
@@ -570,9 +592,12 @@ by design.
   distribution) and a hash-chain ledger anchoring every verification's document hash — both
   implemented behind the same replaceable-detector interface as Phase 1, with no changes required
   to the orchestrator's existing detector-calling pattern beyond adding the new calls.
-- **Frontend**: a real React + Vite + TypeScript + Tailwind single-page app (`web/`) with six
-  routes, persistent sessions, and role-gated pages — not a single scrolling form — served by the
-  same backend in one Docker image. See [The Web Frontend](#the-web-frontend-web).
+- **Frontend**: a real React + Vite + TypeScript + Tailwind single-page app (`web/`) with seven
+  routes — including Analytics and batch verification — persistent sessions, and role-gated pages,
+  served by the same backend in one Docker image. See [The Web Frontend](#the-web-frontend-web).
+- **Closed the competitive gaps found by researching Onfido/Jumio/Veriff/AU10TIX**: a downloadable
+  PDF verification report (`api/report.py`, declared as FR-U3 since the first design draft, never
+  built until now), an Analytics dashboard, and batch document verification.
 
 What remains explicitly out of scope, by original design choice, not as incomplete work: a public
 blockchain network (the ledger is intentionally local/permissioned — see

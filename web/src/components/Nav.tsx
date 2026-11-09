@@ -5,6 +5,7 @@ const LINKS = [
   { to: '/dashboard', label: 'Dashboard' },
   { to: '/verify', label: 'Verify' },
   { to: '/history', label: 'History' },
+  { to: '/analytics', label: 'Analytics' },
 ]
 
 export function Nav() {

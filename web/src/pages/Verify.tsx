@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { api, ApiError, type VerificationResult } from '../lib/api'
+import { api, ApiError, type BatchResultRow, type VerificationResult } from '../lib/api'
 import { useAuth } from '../lib/auth'
 import {
   Card,
@@ -37,6 +37,12 @@ export function Verify() {
   const [result, setResult] = useState<VerificationResult | null>(null)
   const [heatmapSrc, setHeatmapSrc] = useState<string | null>(null)
   const [verifyError, setVerifyError] = useState<string | null>(null)
+  const [reportLoading, setReportLoading] = useState(false)
+
+  const [batchFiles, setBatchFiles] = useState<File[]>([])
+  const [batchDocType, setBatchDocType] = useState('identity')
+  const [batchLoading, setBatchLoading] = useState(false)
+  const [batchResults, setBatchResults] = useState<BatchResultRow[] | null>(null)
 
   async function handleRegisterSignature(e: React.FormEvent) {
     e.preventDefault()
@@ -66,6 +72,30 @@ export function Verify() {
       setVerifyError(err instanceof ApiError ? err.message : 'Verification failed')
     } finally {
       setVerifyLoading(false)
+    }
+  }
+
+  async function handleDownloadReport() {
+    if (!session || !result) return
+    setReportLoading(true)
+    try {
+      await api.downloadReport(session, result.document_id)
+    } catch {
+      // non-critical; the result panel itself already succeeded
+    } finally {
+      setReportLoading(false)
+    }
+  }
+
+  async function handleBatchVerify(e: React.FormEvent) {
+    e.preventDefault()
+    if (!session || batchFiles.length === 0) return
+    setBatchLoading(true)
+    setBatchResults(null)
+    try {
+      setBatchResults(await api.verifyBatch(session, batchFiles, batchDocType, ''))
+    } finally {
+      setBatchLoading(false)
     }
   }
 
@@ -125,7 +155,12 @@ export function Verify() {
 
       {result && (
         <Card>
-          <CardHead title="Result" />
+          <div className="flex items-start justify-between mb-4.5">
+            <CardHead title="Result" />
+            <GhostButton className="!px-3.5 !py-2 !text-xs" onClick={handleDownloadReport} loading={reportLoading} loadingText="Generating…">
+              Download report
+            </GhostButton>
+          </div>
           <div className="flex items-baseline gap-3 mb-4.5">
             <LabelPill label={result.label} />
             <span className={`text-[32px] font-extrabold tracking-tight ${scoreColor(result.label)}`}>{result.score ?? '—'}</span>
@@ -156,6 +191,63 @@ export function Verify() {
           </details>
         </Card>
       )}
+
+      <Card>
+        <CardHead step={3} title="Batch verify multiple documents" hint="optional" />
+        <form onSubmit={handleBatchVerify}>
+          <Field label="Document type">
+            <select className={inputClass} value={batchDocType} onChange={(e) => setBatchDocType(e.target.value)}>
+              {DOC_TYPES.map((d) => (
+                <option key={d.value} value={d.value}>
+                  {d.label}
+                </option>
+              ))}
+            </select>
+          </Field>
+          <Field label="Document images">
+            <FilePicker
+              label={batchFiles.length > 0 ? `${batchFiles.length} file(s) selected` : 'Choose multiple images…'}
+              multiple
+              onMultiChange={setBatchFiles}
+            />
+          </Field>
+          <PrimaryButton type="submit" loading={batchLoading} loadingText={`Verifying ${batchFiles.length}…`} disabled={batchFiles.length === 0}>
+            Verify batch
+          </PrimaryButton>
+        </form>
+
+        {batchResults && (
+          <table className="w-full border-collapse text-[13px] mt-5">
+            <thead>
+              <tr>
+                {['File', 'Score', 'Label', 'Reason'].map((h) => (
+                  <th key={h} className="text-left text-[11px] font-bold text-slate-400 uppercase tracking-wide pb-2.5 border-b border-slate-200">
+                    {h}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {batchResults.map((r, i) => (
+                <tr key={i}>
+                  <td className="py-2.5 border-b border-slate-100">{r.filename}</td>
+                  {r.error ? (
+                    <td colSpan={3} className="py-2.5 border-b border-slate-100 text-red-600">
+                      {r.error}
+                    </td>
+                  ) : (
+                    <>
+                      <td className="py-2.5 border-b border-slate-100 font-semibold">{r.score ?? '—'}</td>
+                      <td className="py-2.5 border-b border-slate-100">{r.label && <LabelPill label={r.label} />}</td>
+                      <td className="py-2.5 border-b border-slate-100 text-slate-500 text-[12px]">{r.reason}</td>
+                    </>
+                  )}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </Card>
     </div>
   )
 }
