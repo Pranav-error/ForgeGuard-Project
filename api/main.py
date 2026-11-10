@@ -27,6 +27,7 @@ from PIL import Image
 from . import auth, db
 from .orchestrator import Orchestrator
 from .report import build_report_pdf
+from .validation import load_image, require_doc_type
 from .visualize import overlay_heatmap
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -103,7 +104,7 @@ async def register_signature(
 ):
     if image is None:
         raise HTTPException(400, "image file required")
-    crop = Image.open(image.file)
+    crop = await load_image(image)
     embedding = orchestrator.signature.embed(crop)
     row_id = db.add_signature(conn, signer_id, embedding)
     return {"id": row_id, "signer_id": signer_id}
@@ -133,7 +134,8 @@ async def upload_document(
     conn: sqlite3.Connection = Depends(get_db),
     user: dict = Depends(current_user),
 ):
-    page = Image.open(file.file).convert("RGB")
+    require_doc_type(doc_type)
+    page = await load_image(file)
     return JSONResponse(_verify_one(conn, user, page, doc_type, signer_id))
 
 
@@ -148,12 +150,15 @@ async def upload_batch(
     """Batch verification -- the same single-document pipeline run once per file, in one
     request. Competing products (Onfido, Jumio, AU10TIX) all offer bulk/batch processing;
     this is the minimal real version of that, not a separate queueing system."""
+    require_doc_type(doc_type)
     results = []
     for f in files:
         try:
-            page = Image.open(f.file).convert("RGB")
+            page = await load_image(f)
             r = _verify_one(conn, user, page, doc_type, signer_id)
             results.append({"filename": f.filename, **r})
+        except HTTPException as e:
+            results.append({"filename": f.filename, "error": e.detail})
         except Exception as e:
             results.append({"filename": f.filename, "error": str(e)})
     return JSONResponse(results)
