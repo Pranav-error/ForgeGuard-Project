@@ -300,6 +300,15 @@ bootstraps an admin for testing. Passwords are SHA-256 hashed, tokens are opaque
 non-expiring — documented as a prototype-grade implementation (see the `ponytail:` note in
 `api/auth.py`) that proves role separation end to end, not a hardened auth system.
 
+**Input validation at trust boundaries** (`api/validation.py`): every route that accepts an
+upload (`/signatures`, `/documents`, `/documents/batch`) routes through `load_image()`, which
+caps upload size (10MB), rejects empty bodies, and decodes the file through PIL — a non-image
+upload now returns a clean `400` instead of an unhandled `500` crashing out of `Image.open()`.
+`require_doc_type()` allowlists `doc_type` the same way, so an unrecognized value is rejected
+up front instead of silently falling through downstream. Batch upload validates `doc_type` once
+for the whole request, then isolates per-file failures into that file's result row instead of
+failing the entire batch.
+
 **Routes:**
 
 | Route | Auth | Description |
