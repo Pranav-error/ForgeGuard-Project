@@ -24,7 +24,12 @@ SUSPICIOUS_FLOOR = 40
 def _normalise(signature: dict | None, tamper: dict | None, ocr: dict | None, anomaly: dict | None) -> dict:
     subs = {"signature": None, "tamper": None, "ocr": None, "anomaly": None}
     if signature and signature.get("similarity") is not None:
-        subs["signature"] = round(100 * signature["similarity"])
+        # similarity is cosine similarity between L2-normalised embeddings (encoder.py),
+        # so it ranges over [-1, 1], not [0, 1] -- round(100 * similarity) let a strongly
+        # dissimilar (impostor) signature produce a negative sub-score, breaking the 0-100
+        # contract every caller (UI, PDF report, README) assumes. Found live by testing the
+        # impostor_signature.png demo document, not by the synthetic self-check fixtures.
+        subs["signature"] = round(100 * max(-1.0, min(1.0, signature["similarity"])) / 2 + 50)
     if tamper and tamper.get("score") is not None:
         subs["tamper"] = 100 - tamper["score"]
     if ocr and ocr.get("ocr_sub_score") is not None:

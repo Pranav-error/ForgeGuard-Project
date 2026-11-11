@@ -29,6 +29,12 @@ async def load_image(upload: UploadFile) -> Image.Image:
     if not data:
         raise HTTPException(400, "empty file")
     try:
-        return Image.open(io.BytesIO(data)).convert("RGB")
-    except UnidentifiedImageError:
+        img = Image.open(io.BytesIO(data))
+        return img.convert("RGB")
+    except (UnidentifiedImageError, OSError):
+        # UnidentifiedImageError: the header isn't a format PIL recognises.
+        # OSError: the header looked valid but the pixel data is truncated/corrupt --
+        # PIL only decodes pixels lazily in .load() (triggered here by .convert()), so a
+        # truncated file passes Image.open() and only fails here. Found live: a PNG sliced
+        # off mid-stream 500'd instead of returning a clean 400.
         raise HTTPException(400, f"'{upload.filename}' is not a readable image")
