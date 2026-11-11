@@ -41,7 +41,7 @@ export function Analytics() {
   return (
     <div className="max-w-3xl mx-auto px-5">
       <div className="py-9">
-        <h1 className="text-[22px] font-extrabold tracking-tight mb-1.5">Analytics</h1>
+        <h1 className="font-display text-[26px] font-semibold tracking-tight mb-1.5">Analytics</h1>
         <p className="text-[13.5px] text-slate-500">A summary of your verification activity.</p>
       </div>
 

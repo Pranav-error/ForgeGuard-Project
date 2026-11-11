@@ -2,15 +2,34 @@
 
 @theme {
   --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
-  --color-brand-50: #eef0ff;
-  --color-brand-500: #6366f1;
-  --color-brand-600: #4f46e5;
-  --color-brand-700: #4338ca;
+  --font-display: 'Fraunces', 'Georgia', serif;
+
+  /* Deep ink-navy primary -- a forensic/security product reads as more serious and less
+     "generic SaaS demo" than the default indigo-600 every AI-scaffolded app reaches for. */
+  --color-brand-50: #eef2f6;
+  --color-brand-100: #dce4ec;
+  --color-brand-500: #2c4a6e;
+  --color-brand-600: #16283d;
+  --color-brand-700: #0d1a29;
+
+  /* Brass/gold accent, used sparingly: underlines, badges, the one highlighted number on a
+     page -- evokes a seal/certification mark rather than a marketing-purple gradient. */
+  --color-gold-100: #faf0da;
+  --color-gold-500: #b6872f;
+  --color-gold-600: #96701f;
 }
 
 body {
-  background: radial-gradient(circle at top, #f8fafc 0%, #eef0f6 55%, #e9ebf3 100%);
+  background-color: #faf9f6;
+  background-image:
+    radial-gradient(ellipse 900px 500px at 15% -10%, rgba(22, 40, 61, 0.05), transparent 60%),
+    radial-gradient(ellipse 700px 500px at 100% 0%, rgba(182, 135, 47, 0.06), transparent 55%),
+    linear-gradient(rgba(15, 23, 42, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(15, 23, 42, 0.035) 1px, transparent 1px);
+  background-size: auto, auto, 28px 28px, 28px 28px;
   min-height: 100vh;
 }
+
+.font-display { font-family: var(--font-display); font-weight: 600; letter-spacing: -0.01em; }
 
 .bar-fill { transition: width .4s ease; }

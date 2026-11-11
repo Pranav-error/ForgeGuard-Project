@@ -31,11 +31,11 @@ export function History() {
   return (
     <div className="max-w-3xl mx-auto px-5">
       <div className="py-9">
-        <h1 className="text-[22px] font-extrabold tracking-tight mb-1.5">History</h1>
+        <h1 className="font-display text-[26px] font-semibold tracking-tight mb-1.5">History</h1>
         <p className="text-[13.5px] text-slate-500">Every document you've verified.</p>
       </div>
 
-      <section className="bg-white border border-slate-200 rounded-2xl p-6">
+      <section className="bg-white border border-slate-200 rounded-xl p-6">
         {rows === null && <p className="text-center py-12 text-slate-400 text-sm">Loading…</p>}
         {rows?.length === 0 && <p className="text-center py-12 text-slate-400 text-[13.5px]">No verifications yet — try the Verify page.</p>}
         {rows && rows.length > 0 && (

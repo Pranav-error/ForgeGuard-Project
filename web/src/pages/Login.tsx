@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { api, ApiError } from '../lib/api'
 import { useAuth } from '../lib/auth'
-import { Card, inputClass, Msg, PrimaryButton } from '../components/ui'
+import { Card, inputClass, Logo, Msg, PrimaryButton } from '../components/ui'
 
 export function Login() {
   const [mode, setMode] = useState<'login' | 'register'>('login')
@@ -38,14 +38,8 @@ export function Login() {
 
   return (
     <div className="max-w-md mx-auto px-5 py-20">
-      <Link to="/" className="flex items-center gap-2.5 font-extrabold text-[15px] text-slate-900 mb-8 no-underline justify-center">
-        <span className="w-7 h-7 rounded-lg bg-brand-600 flex items-center justify-center">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M12 2 4 5v6c0 5.25 3.4 9.74 8 11 4.6-1.26 8-5.75 8-11V5l-8-3Z" />
-            <path d="m9 12 2 2 4-4" />
-          </svg>
-        </span>
-        ForgeGuard
+      <Link to="/" className="flex justify-center mb-8 no-underline">
+        <Logo />
       </Link>
 
       <Card>

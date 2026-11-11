@@ -42,7 +42,7 @@ export function Dashboard() {
   return (
     <div className="max-w-3xl mx-auto px-5">
       <div className="py-9">
-        <h1 className="text-[22px] font-extrabold tracking-tight mb-1.5">Welcome back</h1>
+        <h1 className="font-display text-[26px] font-semibold tracking-tight mb-1.5">Welcome back</h1>
         <p className="text-[13.5px] text-slate-500">
           Signed in as {session?.email} · {session?.role}
         </p>
@@ -75,7 +75,7 @@ export function Dashboard() {
           <Link
             key={l.to}
             to={l.to}
-            className="block bg-white border border-slate-200 rounded-2xl p-5 hover:border-brand-600 hover:shadow-[0_2px_8px_rgba(79,70,229,.08)] no-underline"
+            className="block bg-white border border-slate-200 rounded-xl p-5 hover:border-brand-600 hover:shadow-[0_2px_8px_rgba(22,40,61,.08)] no-underline"
           >
             <div className="w-9 h-9 rounded-[10px] bg-brand-50 text-brand-600 flex items-center justify-center mb-3.5">{l.icon}</div>
             <h3 className="text-[14.5px] font-bold text-slate-800 mb-1">{l.title}</h3>
@@ -85,7 +85,7 @@ export function Dashboard() {
         {session?.role === 'admin' && (
           <Link
             to="/admin"
-            className="block bg-white border border-slate-200 rounded-2xl p-5 hover:border-brand-600 hover:shadow-[0_2px_8px_rgba(79,70,229,.08)] no-underline"
+            className="block bg-white border border-slate-200 rounded-xl p-5 hover:border-brand-600 hover:shadow-[0_2px_8px_rgba(22,40,61,.08)] no-underline"
           >
             <div className="w-9 h-9 rounded-[10px] bg-brand-50 text-brand-600 flex items-center justify-center mb-3.5">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
