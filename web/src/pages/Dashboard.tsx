@@ -1,4 +1,6 @@
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { api, type Analytics as AnalyticsData } from '../lib/api'
 import { useAuth } from '../lib/auth'
 
 const LINKS = [
@@ -30,6 +32,12 @@ const LINKS = [
 
 export function Dashboard() {
   const { session } = useAuth()
+  const [stats, setStats] = useState<AnalyticsData | null>(null)
+
+  useEffect(() => {
+    if (!session) return
+    api.analytics(session).then(setStats).catch(() => setStats(null))
+  }, [session])
 
   return (
     <div className="max-w-3xl mx-auto px-5">
@@ -40,7 +48,29 @@ export function Dashboard() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+      {stats && stats.total > 0 && (
+        <div className="grid grid-cols-3 gap-3.5 mb-5">
+          <div className="bg-slate-50 border border-slate-200 rounded-xl px-4 py-3.5">
+            <div className="text-[10.5px] font-bold text-slate-400 uppercase tracking-wide mb-1">Total verifications</div>
+            <div className="text-2xl font-extrabold text-slate-800">{stats.total}</div>
+          </div>
+          <div className="bg-slate-50 border border-slate-200 rounded-xl px-4 py-3.5">
+            <div className="text-[10.5px] font-bold text-slate-400 uppercase tracking-wide mb-1">Average score</div>
+            <div className="text-2xl font-extrabold text-slate-800">{stats.avg_score ?? '—'}</div>
+          </div>
+          <Link
+            to="/analytics"
+            className="block bg-slate-50 border border-slate-200 rounded-xl px-4 py-3.5 hover:border-brand-600 no-underline"
+          >
+            <div className="text-[10.5px] font-bold text-slate-400 uppercase tracking-wide mb-1">Most common result</div>
+            <div className="text-2xl font-extrabold text-slate-800">
+              {Object.entries(stats.by_label).sort((a, b) => b[1] - a[1])[0]?.[0] ?? '—'}
+            </div>
+          </Link>
+        </div>
+      )}
+
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
         {LINKS.map((l) => (
           <Link
             key={l.to}
