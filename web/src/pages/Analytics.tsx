@@ -30,7 +30,7 @@ export function Analytics() {
 
   if (!data) {
     return (
-      <div className="max-w-3xl mx-auto px-5 py-20 text-center text-slate-400 text-sm">Loading…</div>
+      <div className="max-w-4xl mx-auto px-8 py-20 text-center text-slate-400 text-sm">Loading…</div>
     )
   }
 
@@ -39,9 +39,9 @@ export function Analytics() {
   const maxDaily = Math.max(1, ...data.daily.map((d) => d.count))
 
   return (
-    <div className="max-w-3xl mx-auto px-5">
-      <div className="py-9">
-        <h1 className="font-display text-[26px] font-semibold tracking-tight mb-1.5">Analytics</h1>
+    <div className="max-w-4xl mx-auto px-8 py-10">
+      <div className="mb-8">
+        <h1 className="font-display text-[28px] font-semibold tracking-tight mb-1.5">Analytics</h1>
         <p className="text-[13.5px] text-slate-500">A summary of your verification activity.</p>
       </div>
 

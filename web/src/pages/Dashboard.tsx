@@ -1,100 +1,142 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { api, type Analytics as AnalyticsData } from '../lib/api'
+import { api, type Analytics as AnalyticsData, type HistoryRow } from '../lib/api'
 import { useAuth } from '../lib/auth'
+import { LabelPill } from '../components/ui'
 
-const LINKS = [
+function formatDate(iso: string) {
+  return new Date(iso).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' })
+}
+
+function StatTile({ label, value, href }: { label: string; value: string | number; href?: string }) {
+  const body = (
+    <>
+      <div className="text-[10.5px] font-bold text-slate-400 uppercase tracking-wide mb-1">{label}</div>
+      <div className="text-[26px] font-extrabold text-slate-800 leading-none">{value}</div>
+    </>
+  )
+  const cls = 'bg-white border border-slate-200 rounded-xl px-5 py-4'
+  return href ? (
+    <Link to={href} className={`block ${cls} hover:border-brand-600 no-underline`}>
+      {body}
+    </Link>
+  ) : (
+    <div className={cls}>{body}</div>
+  )
+}
+
+const STEPS = [
   {
+    title: 'Register a reference signature',
+    body: 'Optional, but lets the signature check compare a document against someone’s real signature instead of reporting it as missing evidence.',
     to: '/verify',
-    title: 'Verify a document',
-    body: 'Register a reference signature and run the full 5-service pipeline on an upload.',
-    icon: (
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 2 4 5v6c0 5.25 3.4 9.74 8 11 4.6-1.26 8-5.75 8-11V5l-8-3Z" /><path d="m9 12 2 2 4-4" /></svg>
-    ),
+    cta: 'Register a signature',
   },
   {
-    to: '/history',
-    title: 'History',
-    body: 'Every document you have verified, with its score, label and reason.',
-    icon: (
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 3" /></svg>
-    ),
+    title: 'Verify your first document',
+    body: 'Upload a scanned or photographed document and get a 0–100 score, a reason, and a tamper heatmap back in seconds.',
+    to: '/verify',
+    cta: 'Verify a document',
   },
   {
+    title: 'Check Analytics and the audit trail',
+    body: 'Every verification is scored, explained, and anchored to a tamper-evident ledger you can review later.',
     to: '/analytics',
-    title: 'Analytics',
-    body: 'Label breakdown, score averages, and a 14-day activity chart.',
-    icon: (
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 3v18h18" /><path d="M18 17V9" /><path d="M13 17V5" /><path d="M8 17v-3" /></svg>
-    ),
+    cta: 'Open Analytics',
   },
 ]
 
 export function Dashboard() {
   const { session } = useAuth()
   const [stats, setStats] = useState<AnalyticsData | null>(null)
+  const [recent, setRecent] = useState<HistoryRow[] | null>(null)
 
   useEffect(() => {
     if (!session) return
     api.analytics(session).then(setStats).catch(() => setStats(null))
+    api.history(session).then((rows) => setRecent(rows.slice(0, 5))).catch(() => setRecent([]))
   }, [session])
 
+  const isNew = stats !== null && stats.total === 0
+
   return (
-    <div className="max-w-3xl mx-auto px-5">
-      <div className="py-9">
-        <h1 className="font-display text-[26px] font-semibold tracking-tight mb-1.5">Welcome back</h1>
+    <div className="max-w-4xl mx-auto px-8 py-10">
+      <div className="mb-8">
+        <h1 className="font-display text-[28px] font-semibold tracking-tight mb-1.5">Welcome back</h1>
         <p className="text-[13.5px] text-slate-500">
           Signed in as {session?.email} · {session?.role}
         </p>
       </div>
 
-      {stats && stats.total > 0 && (
-        <div className="grid grid-cols-3 gap-3.5 mb-5">
-          <div className="bg-slate-50 border border-slate-200 rounded-xl px-4 py-3.5">
-            <div className="text-[10.5px] font-bold text-slate-400 uppercase tracking-wide mb-1">Total verifications</div>
-            <div className="text-2xl font-extrabold text-slate-800">{stats.total}</div>
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+        <StatTile label="Total verifications" value={stats ? stats.total : '—'} />
+        <StatTile label="Average score" value={stats?.avg_score ?? '—'} />
+        <StatTile
+          label="Most common result"
+          value={stats && stats.total > 0 ? Object.entries(stats.by_label).sort((a, b) => b[1] - a[1])[0]?.[0] ?? '—' : '—'}
+          href="/analytics"
+        />
+      </div>
+
+      {isNew && (
+        <div className="mb-8">
+          <h2 className="text-[13px] font-bold text-slate-400 uppercase tracking-wide mb-3">Getting started</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {STEPS.map((s, i) => (
+              <div key={s.title} className="bg-white border border-slate-200 rounded-xl p-5">
+                <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-brand-50 text-brand-600 text-[12px] font-bold mb-3">
+                  {i + 1}
+                </span>
+                <h3 className="text-[13.5px] font-bold text-slate-800 mb-1.5">{s.title}</h3>
+                <p className="text-[12px] text-slate-500 leading-relaxed mb-3.5">{s.body}</p>
+                <Link to={s.to} className="text-[12.5px] font-semibold text-brand-600 hover:text-brand-700 no-underline">
+                  {s.cta} →
+                </Link>
+              </div>
+            ))}
           </div>
-          <div className="bg-slate-50 border border-slate-200 rounded-xl px-4 py-3.5">
-            <div className="text-[10.5px] font-bold text-slate-400 uppercase tracking-wide mb-1">Average score</div>
-            <div className="text-2xl font-extrabold text-slate-800">{stats.avg_score ?? '—'}</div>
-          </div>
-          <Link
-            to="/analytics"
-            className="block bg-slate-50 border border-slate-200 rounded-xl px-4 py-3.5 hover:border-brand-600 no-underline"
-          >
-            <div className="text-[10.5px] font-bold text-slate-400 uppercase tracking-wide mb-1">Most common result</div>
-            <div className="text-2xl font-extrabold text-slate-800">
-              {Object.entries(stats.by_label).sort((a, b) => b[1] - a[1])[0]?.[0] ?? '—'}
-            </div>
-          </Link>
         </div>
       )}
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
-        {LINKS.map((l) => (
-          <Link
-            key={l.to}
-            to={l.to}
-            className="block bg-white border border-slate-200 rounded-xl p-5 hover:border-brand-600 hover:shadow-[0_2px_8px_rgba(22,40,61,.08)] no-underline"
-          >
-            <div className="w-9 h-9 rounded-[10px] bg-brand-50 text-brand-600 flex items-center justify-center mb-3.5">{l.icon}</div>
-            <h3 className="text-[14.5px] font-bold text-slate-800 mb-1">{l.title}</h3>
-            <p className="text-[12.5px] text-slate-500 m-0">{l.body}</p>
-          </Link>
-        ))}
-        {session?.role === 'admin' && (
-          <Link
-            to="/admin"
-            className="block bg-white border border-slate-200 rounded-xl p-5 hover:border-brand-600 hover:shadow-[0_2px_8px_rgba(22,40,61,.08)] no-underline"
-          >
-            <div className="w-9 h-9 rounded-[10px] bg-brand-50 text-brand-600 flex items-center justify-center mb-3.5">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M12 2 4 5v6c0 5.25 3.4 9.74 8 11 4.6-1.26 8-5.75 8-11V5l-8-3Z" />
-              </svg>
-            </div>
-            <h3 className="text-[14.5px] font-bold text-slate-800 mb-1">Admin</h3>
-            <p className="text-[12.5px] text-slate-500 m-0">Audit log and the hash-chain ledger's integrity check.</p>
-          </Link>
+      <div className="bg-white border border-slate-200 rounded-xl p-6">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-[15px] font-bold m-0">Recent verifications</h2>
+          {recent && recent.length > 0 && (
+            <Link to="/history" className="text-[12.5px] font-semibold text-brand-600 hover:text-brand-700 no-underline">
+              View all →
+            </Link>
+          )}
+        </div>
+        {recent === null && <p className="text-center py-10 text-slate-400 text-sm">Loading…</p>}
+        {recent?.length === 0 && (
+          <p className="text-center py-10 text-slate-400 text-[13.5px]">
+            Nothing yet — <Link to="/verify" className="text-brand-600 font-semibold no-underline">verify your first document</Link> to see it here.
+          </p>
+        )}
+        {recent && recent.length > 0 && (
+          <table className="w-full border-collapse text-[13px]">
+            <thead>
+              <tr>
+                {['When', 'Type', 'Score', 'Label'].map((h) => (
+                  <th key={h} className="text-left text-[11px] font-bold text-slate-400 uppercase tracking-wide pb-2.5 border-b border-slate-200">
+                    {h}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {recent.map((r) => (
+                <tr key={r.id}>
+                  <td className="py-2.5 border-b border-slate-100">{formatDate(r.created_at)}</td>
+                  <td className="py-2.5 border-b border-slate-100 capitalize">{r.doc_type}</td>
+                  <td className="py-2.5 border-b border-slate-100 font-semibold">{r.final_score ?? '—'}</td>
+                  <td className="py-2.5 border-b border-slate-100">
+                    <LabelPill label={r.label} />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         )}
       </div>
     </div>
