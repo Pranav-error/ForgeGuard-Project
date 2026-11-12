@@ -9,6 +9,9 @@ checkpoint.pt
 !/anomaly_checkpoint.pt
 *.db
 storage/heatmaps/*.png
+# third-party real-dataset images (SIDTD/MIDV-2020) -- not ours to redistribute, re-fetch with
+# scripts/fetch_sidtd.py (see tamper_localisation/README_REAL_DATA.md)
+/data/sidtd/
 out.html
 design_out.html
 objectives_out.html
