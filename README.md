@@ -35,6 +35,7 @@ documents is implemented, trained, tested, and verified working end to end throu
 - [Data design](#data-design)
 - [Setup and running the system](#setup-and-running-the-system)
 - [Training results](#training-results)
+- [Real-data fine-tuning (Phase 2)](#real-data-fine-tuning-phase-2)
 - [Testing](#testing)
 - [What's real vs. what's a documented stand-in](#whats-real-vs-whats-a-documented-stand-in)
 - [Status](#status)
@@ -131,6 +132,9 @@ ForgeGuard-Project/
 ├── ledger/                  # Phase 2 — hash-chain anchoring (pure logic)
 ├── api/                     # Orchestrator, SQLite persistence, auth/RBAC, REST routes
 ├── web/                     # React + Vite + TypeScript + Tailwind frontend (see below)
+├── scripts/                 # fetch_sidtd.py, eval_real_data.py -- real-data fine-tuning tooling
+├── data/sidtd/              # Real SIDTD/MIDV-2020 images (gitignored, not ours to redistribute;
+│                             #   re-fetch with scripts/fetch_sidtd.py)
 ├── storage/heatmaps/        # Rendered heatmap overlays (generated at runtime, gitignored)
 ├── papers/, txt/            # The 52 literature-survey source papers (PDF) and text extracts
 ├── *.html, *_build.py       # Source templates + build scripts for the 5 project documents
@@ -165,11 +169,18 @@ excerpts. Detects and localises pixel-level image tampering (splicing, inpaintin
   or one consumer GPU.
 - **`dataset.py`** — a synthetic splice generator (a document-like page with a randomly pasted
   patch and a pixel-accurate ground-truth mask), with rotation/blur/noise/JPEG-recompression
-  augmentation standing in for real print-scan degradation, until the FSD dataset (or real scans)
-  is available.
+  augmentation standing in for real print-scan degradation.
+- **`real_data.py`** (added in Phase 2, after a real false positive) — real document images from
+  the public **SIDTD** dataset (built on MIDV-2020), composited onto a synthetic background with
+  perspective warp and specular glare (`compose_on_background`) so the model sees a document *as
+  a photographed object*, not just a rendered page. See
+  [Real-data fine-tuning](#real-data-fine-tuning-phase-2) below and
+  `tamper_localisation/README_REAL_DATA.md` for the full story, provenance and how to reproduce it.
 - **`train.py` / `evaluate.py`** — a training loop (BCE + soft-Dice loss) and an evaluation script
   reporting precision/recall/F1/IoU/AUC on held-out data (never accuracy alone, per the
-  literature's class-imbalance warning).
+  literature's class-imbalance warning). `train.py --real-data` mixes `real_data.py`'s dataset
+  in alongside the synthetic generator; `scripts/eval_real_data.py` is the before/after check
+  against a real photo plus held-out SIDTD pairs.
 - **`infer.py`** — `TamperLocalisationService`, the module's only external surface:
   `predict(image) -> {mask, heatmap, score, regions}`. `score` is a 0–100 tamper-confidence value
   (`round(100 × (0.6 × peak-confidence + 0.4 × flagged-area-coverage))`); `regions` are the top 5
@@ -552,6 +563,57 @@ not just the offline eval scripts:
 - The ledger anchors every verification, and tampering a past block's stored hash directly in the
   database — bypassing the API — is detected by `GET /admin/ledger/verify` at the exact block.
 
+## Real-data fine-tuning (Phase 2)
+
+Found live, not in the literature survey: a real photo of a physical, laminated REVA University
+ID card — background behind it, a camera angle, glare — was scored **"Forged", 14/100**, with
+the tamper heatmap flagging **95% of the frame at 100% confidence**. The root cause, confirmed by
+running the model directly: `tamper_localisation/dataset.py`'s synthetic generator always fills
+the *entire* frame edge-to-edge with a flat page. It never once showed the model a document as a
+physical object on a background, at an angle, under uneven light — so any real phone photo was
+wildly out-of-distribution, and the model reacted by flagging almost everything.
+
+**The fix** (`tamper_localisation/real_data.py`):
+
+- Pulled real images from the public **SIDTD** dataset (Ramos Terrades et al., built on
+  **MIDV-2020**) — 196 real + 220 forged ID-template images, and 260 actual camera photos of
+  printed mock documents on real backgrounds. Only the ~700 files actually used were downloaded
+  (via `remotezip`'s ranged HTTP reads), not the full 1.3GB/23GB source archives.
+- Real/fake template pairs are pixel-aligned (same template, one field edited), so a thresholded
+  pixel diff *is* an accurate ground-truth tamper mask — no manual annotation needed.
+- `compose_on_background()` places a document on a synthetic background with a PIL-only
+  perspective warp and a soft specular-glare overlay, carrying the tamper mask through the exact
+  same transform so supervision stays pixel-accurate in the final composited frame.
+- The real camera photos (genuine, zero-mask) are the more direct fix: the model had never seen
+  a *genuine* example that looked photographed, only flat synthetic pages — so anything
+  photographed read as anomalous. These teach it what a genuine photographed document looks like
+  directly, no synthetic compositing involved.
+- Fine-tuned 8 epochs mixing this real data in alongside the existing synthetic generator
+  (`train.py --real-data`).
+
+**Result, verified live through the actual running API** on the exact photo that exposed the bug:
+
+| | Before | After |
+|---|---|---|
+| Score / label | 14 / **Forged** | 43 / **Suspicious** |
+| Tamper sub-score (genuine-direction) | ~0 | 68 |
+| Flagged area of the frame | 95% | ~0–1% |
+| Synthetic-benchmark IoU (unaffected check) | 0.900 | 0.770 — still clearly functional |
+
+**Reported honestly, not papered over**: pixel-precise localisation of small, subtle real-world
+edits (a single changed digit or date, under 1% of pixels) is still weak — held-out SIDTD pixel
+IoU measured ~0.000 both before and after this fine-tuning run. A follow-up attempt to fix this
+by upweighting the rare positive-pixel class (`--pos-weight`) made the real-photo result *worse*
+(score regressed to 60, flagged area back up to ~1%) without improving IoU at all, so it was not
+kept in the shipped checkpoint. Likely causes: severe class imbalance in real tamper masks
+(<1% positive pixels, versus the synthetic generator's much larger splice patches) and the
+model's documented lack of skip connections (`model.py`'s own `ponytail:` note) limiting
+fine-grained boundary precision. Left as explicit next work, not claimed as solved — full
+writeup, reproduction steps and data provenance in `tamper_localisation/README_REAL_DATA.md`.
+
+Only the assigned module (tamper localisation) has been retrained on real data so far; signature
+verification and anomaly detection still train on their synthetic generators only.
+
 ## Testing
 
 Every service ships a dependency-free self-check runnable with no dataset and no trained
@@ -565,9 +627,19 @@ impostor, tamper-direction inversion, anomaly-direction inversion). All six curr
 Beyond the self-checks, the full system has been exercised live end to end multiple times through
 a running `uvicorn` server with real HTTP requests — registration, login, role-based 401/403s,
 signature registration, document upload with and without a registered signer, heatmap retrieval,
-audit-log listing, ledger anchoring, and ledger-tampering detection — catching and fixing two real
-bugs in the process (a SQLite thread-affinity crash under FastAPI's threadpool, and an
-overly-strict signature-detector area threshold that rejected genuine thin pen strokes).
+audit-log listing, ledger anchoring, and ledger-tampering detection — plus a 39-case automated
+HTTP battery (`test_suite.py`) covering upload boundaries (byte-exact size limits, truncated
+files, invalid `doc_type`), batch isolation, reports and admin routes. This live-testing habit has
+caught and fixed real bugs along the way, not just the two originally documented here (a SQLite
+thread-affinity crash under FastAPI's threadpool, and an overly-strict signature-detector area
+threshold that rejected genuine thin pen strokes): a truncated-but-header-valid upload that 500'd
+instead of returning a clean 400 (PIL only decodes pixels lazily, so the existing exception
+handler didn't catch it), a signature sub-score that could go negative (cosine similarity ranges
+over [-1, 1], not [0, 1] as the scoring code assumed), and — the most consequential — a real
+photo of a genuine, physical ID card scoring "Forged" at 14/100 because the tamper model had
+never once been trained on anything but a flat, full-bleed synthetic page; see
+[Real-data fine-tuning](#real-data-fine-tuning-phase-2) for how that one was actually fixed, not
+just patched around.
 
 ## What's real vs. what's a documented stand-in
 
@@ -576,19 +648,25 @@ ceiling and what to upgrade to. The short version:
 
 | Real, not a stand-in | Documented stand-in (training data) |
 |---|---|
-| Tesseract OCR (actual binary, actual text extraction) | `tamper_localisation`'s splice generator (stand-in for FSD, paper [29]) |
-| SQLite persistence (actual writes/reads) | `signature_verification`'s signer-style generator (stand-in for CEDAR/BHSig260) |
-| The hash-chain ledger and its tamper-detection property | `anomaly_detection`'s genuine-page generator |
+| Tesseract OCR (actual binary, actual text extraction) | `signature_verification`'s signer-style generator (stand-in for CEDAR/BHSig260) |
+| SQLite persistence (actual writes/reads) | `anomaly_detection`'s genuine-page generator |
+| The hash-chain ledger and its tamper-detection property | `tamper_localisation`'s real-world *tampered* examples — real for genuine-but-photographed inputs (SIDTD/MIDV-2020), still synthetically-composited for tampered-and-photographed ones; see below |
 | Auth/RBAC role separation | |
 | Fusion's scoring/weighting/missing-evidence logic | |
 | Every detector's fixed interface and the orchestrator's failure isolation | |
 
-The **models trained on synthetic data** (tamper localisation, signature verification, anomaly
-detection) have real, working training/evaluation pipelines producing real metrics — but those
-metrics describe synthetic-task performance, not real-document accuracy, until each is retrained
-on real labelled data. Swapping in real data means replacing one `dataset.py` per module; every
-other file (model, service, training loop, evaluation script, orchestrator wiring) is unaffected,
-by design.
+The **models trained on synthetic data** (signature verification, anomaly detection) have real,
+working training/evaluation pipelines producing real metrics — but those metrics describe
+synthetic-task performance, not real-document accuracy, until each is retrained on real labelled
+data. Swapping in real data means replacing one `dataset.py` per module; every other file
+(model, service, training loop, evaluation script, orchestrator wiring) is unaffected, by design.
+
+**Tamper localisation is the exception**: it is now partly retrained on real data (see
+[Real-data fine-tuning](#real-data-fine-tuning-phase-2)) — real genuine photographs, and real
+forged *templates* recomposited onto a synthetic photographed-looking scene. The one piece still
+missing is a real photograph of an *actual* tampered physical document; what exists instead is a
+synthetic approximation of that specific case, clearly scoped as such in
+`tamper_localisation/README_REAL_DATA.md`.
 
 ## Status
 
@@ -608,11 +686,16 @@ by design.
   PDF verification report (`api/report.py`, declared as FR-U3 since the first design draft, never
   built until now), an Analytics dashboard, and batch document verification.
 
+- **Real-data fine-tuning has started**: tamper localisation (the assigned module) now trains on
+  real SIDTD/MIDV-2020 images as well as the synthetic generator, after a real false positive on
+  a photographed document was found, traced and fixed live — see
+  [Real-data fine-tuning](#real-data-fine-tuning-phase-2). Signature verification and anomaly
+  detection are still synthetic-only; the system is fully built and ready to retrain either the
+  moment comparable real data is sourced for them.
+
 What remains explicitly out of scope, by original design choice, not as incomplete work: a public
 blockchain network (the ledger is intentionally local/permissioned — see
-[The Ledger](#the-ledger-phase-2--blockchain-style-anchoring-ledger)). Real training datasets for
-the three learned models remain the one dependency outside this repository's control — the system
-is fully built and ready to retrain the moment that data is available.
+[The Ledger](#the-ledger-phase-2--blockchain-style-anchoring-ledger)).
 
 ## License
 
