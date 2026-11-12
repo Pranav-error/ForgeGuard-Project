@@ -183,7 +183,7 @@ class RealCardDataset:
     """Real (not synthetic) ID-template images, composited onto a photographed-looking scene.
     Loads from data/sidtd/ (see README_REAL_DATA.md for how that folder is populated)."""
 
-    def __init__(self, size: int = 256, seed: int = 0, holdout: int = 20, split: str = "train"):
+    def __init__(self, size: int = 256, seed: int = 0, holdout: int = 40, split: str = "train"):
         """`holdout` manifest entries are reserved for evaluate_real_data.py's generalisation
         check and never seen by `split="train"` -- without this, "the model's IoU on SIDTD
         pairs" would just be re-measuring memorised training examples."""
