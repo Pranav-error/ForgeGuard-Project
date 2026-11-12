@@ -164,9 +164,13 @@ excerpts. Detects and localises pixel-level image tampering (splicing, inpaintin
   quality 90, pixel-wise diff) as one *supporting* signal alongside the SRM stream — not the sole
   signal, because the literature survey found ELA alone fails on clean, high-quality scans.
 - **`model.py`** — `TamperLocaliser`: two independent encoders (an RGB+ELA stream, an SRM-residual
-  stream, 32→64→128 channels each), fused with a 1×1 conv, decoded back up with 3 transpose-conv
-  stages to a per-pixel tamper logit map. ~1.1M trainable parameters — small enough to run on CPU
-  or one consumer GPU.
+  stream, 32→64→128 channels each), fused with a 1×1 conv at the bottleneck, decoded back up with
+  3 transpose-conv stages to a per-pixel tamper logit map. U-Net-style skip connections run from
+  the RGB+ELA encoder to the matching decoder stage (added in Phase 2's real-data fine-tuning
+  Round 2, after held-out real-edit IoU came back at 0.0000 without them — see
+  [Real-data fine-tuning](#real-data-fine-tuning-phase-2)); the SRM stream fuses only at the
+  bottleneck, as noise-residual evidence rather than spatial detail. ~436K trainable parameters
+  — small enough to run on CPU or one consumer GPU.
 - **`dataset.py`** — a synthetic splice generator (a document-like page with a randomly pasted
   patch and a pixel-accurate ground-truth mask), with rotation/blur/noise/JPEG-recompression
   augmentation standing in for real print-scan degradation.
@@ -576,9 +580,9 @@ wildly out-of-distribution, and the model reacted by flagging almost everything.
 **The fix** (`tamper_localisation/real_data.py`):
 
 - Pulled real images from the public **SIDTD** dataset (Ramos Terrades et al., built on
-  **MIDV-2020**) — 196 real + 220 forged ID-template images, and 260 actual camera photos of
-  printed mock documents on real backgrounds. Only the ~700 files actually used were downloaded
-  (via `remotezip`'s ranged HTTP reads), not the full 1.3GB/23GB source archives.
+  **MIDV-2020**) — 328 real + 400 forged ID-template images, and 509 actual camera photos of
+  printed mock documents on real backgrounds. Only the files actually used were downloaded (via
+  `remotezip`'s ranged HTTP reads), not the full 1.3GB/23GB source archives.
 - Real/fake template pairs are pixel-aligned (same template, one field edited), so a thresholded
   pixel diff *is* an accurate ground-truth tamper mask — no manual annotation needed.
 - `compose_on_background()` places a document on a synthetic background with a PIL-only
@@ -588,28 +592,30 @@ wildly out-of-distribution, and the model reacted by flagging almost everything.
   a *genuine* example that looked photographed, only flat synthetic pages — so anything
   photographed read as anomalous. These teach it what a genuine photographed document looks like
   directly, no synthetic compositing involved.
-- Fine-tuned 8 epochs mixing this real data in alongside the existing synthetic generator
-  (`train.py --real-data`).
+- **Round 2**: after Round 1 left held-out real-edit IoU at a dead 0.0000, added U-Net-style
+  skip connections to `model.py` (its own `ponytail:` note already named this as the fix for
+  exactly this situation), and roughly doubled the real data above. Retrained from scratch —
+  the architecture change means Round 1's checkpoint doesn't load into it.
 
 **Result, verified live through the actual running API** on the exact photo that exposed the bug:
 
-| | Before | After |
-|---|---|---|
-| Score / label | 14 / **Forged** | 43 / **Suspicious** |
-| Tamper sub-score (genuine-direction) | ~0 | 68 |
-| Flagged area of the frame | 95% | ~0–1% |
-| Synthetic-benchmark IoU (unaffected check) | 0.900 | 0.770 — still clearly functional |
+| | Original | Round 1 | Round 2 |
+|---|---|---|---|
+| Fusion score / label | 14 / **Forged** | 43 / **Suspicious** | 51 / **Suspicious** |
+| Tamper sub-score (genuine-direction) | ~0 | 68 | 86 |
+| Flagged area of the frame | 95% | ~0% | 0% |
+| Held-out real-edit pixel IoU (40 pairs) | — | 0.0000 | **0.0282** |
+| Synthetic-benchmark IoU (unaffected check) | 0.900 | 0.770 | 0.790 — still clearly functional |
 
-**Reported honestly, not papered over**: pixel-precise localisation of small, subtle real-world
-edits (a single changed digit or date, under 1% of pixels) is still weak — held-out SIDTD pixel
-IoU measured ~0.000 both before and after this fine-tuning run. A follow-up attempt to fix this
-by upweighting the rare positive-pixel class (`--pos-weight`) made the real-photo result *worse*
-(score regressed to 60, flagged area back up to ~1%) without improving IoU at all, so it was not
-kept in the shipped checkpoint. Likely causes: severe class imbalance in real tamper masks
-(<1% positive pixels, versus the synthetic generator's much larger splice patches) and the
-model's documented lack of skip connections (`model.py`'s own `ponytail:` note) limiting
-fine-grained boundary precision. Left as explicit next work, not claimed as solved — full
-writeup, reproduction steps and data provenance in `tamper_localisation/README_REAL_DATA.md`.
+**Reported honestly, not papered over**: 0.0282 IoU is a real, measured step off zero — the
+model can now localise *some* real, subtle edits it previously missed entirely — but it's still
+far below a localiser you'd want to rely on for a precise boundary. Pixel-precise localisation
+of small real-world edits (a single changed digit or date, under 1% of pixels) remains the
+weakest part of this module. A Round-1 attempt to fix this by upweighting the rare
+positive-pixel class (`--pos-weight`) made the real-photo result *worse* without improving IoU,
+so it wasn't kept; Round 2's architecture change (skip connections) is what actually moved the
+number. Full writeup, per-forgery-type breakdown and reproduction steps in
+`tamper_localisation/README_REAL_DATA.md`.
 
 Only the assigned module (tamper localisation) has been retrained on real data so far; signature
 verification and anomaly detection still train on their synthetic generators only.
